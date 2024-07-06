@@ -5,9 +5,11 @@
 /* Theme Variables */
 :root {
   --background: #27374D;
+  --light-background:#f5f5f5;
   --surface: #526D82;
   --primary-text: #9DB2BF;
   --secondary-text: #DDE6ED;
+  --dark-text: #111111;
   --divider: #DDE6ED;
   --shadow: rgba(0, 0, 0, 0.25);
   --primary: #526D82;
@@ -74,9 +76,9 @@ body {
 }
 
 .tab.active {
-  background: var(--background);
+  background: var(--light-background);
   border-bottom: 1px solid var(--surface);
-  color: var(--secondary-text);
+  color: var(--dark-text);
 }
 
 .tab-content {
@@ -179,4 +181,19 @@ select:hover, select:focus, input[type="text"]:hover, input[type="text"]:focus, 
 select option {
   background-color: var(--surface);
   color: var(--primary-text);
+}
+
+
+.history-item:hover .delete-icon {
+  display: inline;
+}
+.delete-icon {
+  display: none;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
 }

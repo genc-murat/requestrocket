@@ -8,6 +8,7 @@
   import 'prismjs/themes/prism-solarizedlight.css';
 
   type HistoryItem = {
+    id: number;
     url: string;
     method: string;
     body: string;
@@ -94,7 +95,7 @@
       response.set(res);
 
       // Save to history
-      const newHistoryItem: HistoryItem = { url: $url, method: $method, body: $body, response: JSON.stringify(res) };
+      const newHistoryItem: HistoryItem = { id: Date.now(), url: $url, method: $method, body: $body, response: JSON.stringify(res) };
       history.update(h => {
         const newHistory = [...h, newHistoryItem];
         saveHistory(newHistoryItem); // Save history to IndexedDB
@@ -126,6 +127,18 @@
       history.set(allHistoryItems);
     } catch (error) {
       console.error('Failed to load history:', error instanceof Error ? error.message : error);
+    }
+  }
+
+  async function deleteHistoryItem(id: number) {
+    console.log('Deleting history item:', id);
+    try {
+      const db = await dbPromise;
+      await db.delete('history', id);
+      history.update(h => h.filter(item => item.id !== id));
+      console.log('History item deleted successfully.');
+    } catch (error) {
+      console.error('Error deleting history item:', error instanceof Error ? error.message : error);
     }
   }
 
@@ -173,12 +186,12 @@
 </script>
 
 <style>
-  pre {
-    background: #2d2d2d; /* match the theme */
-    color: #ccc; /* match the theme */
-    padding: 1em;
-    border-radius: 5px;
-  }
+ pre {
+  background: #f5f5f5; /* match the theme */
+  color: #ccc; /* match the theme */
+  padding: 1em;
+  border-radius: 5px;
+}
 </style>
 
 <div class="flex h-screen">
@@ -186,11 +199,21 @@
     <h2 class="text-xl font-bold mb-4">History</h2>
     <ul>
       {#each $history as item}
-        <li class="mb-2">
+        <li class="mb-2 history-item flex justify-between items-center">
           <button type="button" class="w-full text-left" on:click={() => selectHistoryItem(item)}>
             <strong class="px-2 py-1 rounded {item.method === 'GET' ? 'bg-green-500' : ''} {item.method === 'POST' ? 'bg-blue-500' : ''} {item.method === 'PUT' ? 'bg-yellow-500' : ''} {item.method === 'DELETE' ? 'bg-red-500' : ''} text-white">
               {item.method}
             </strong> <span class="url">{item.url}</span>
+          </button>
+          <button 
+            class="delete-icon text-red-500" 
+            aria-label="Delete history item" 
+            on:click={() => deleteHistoryItem(item.id)}
+            on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') deleteHistoryItem(item.id); }}
+          >
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M3 6h18v2H3V6zm2 2h14v14H5V8zm6 0V4h2v4h-2zm0 0h2v2h-2V8zm0 0h2v12h-2V8zM8 10v10H6V10h2zm0 0h2v10H8V10zm8 0v10h-2V10h2zm0 0h-2v10h2V10z"/>
+            </svg>
           </button>
         </li>
       {/each}
