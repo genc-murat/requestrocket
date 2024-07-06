@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { writable } from 'svelte/store';
   import { invoke } from '@tauri-apps/api/tauri';
+  import { writeTextFile, readTextFile, BaseDirectory } from '@tauri-apps/api/fs';
   import Prism from 'prismjs';
   import 'prismjs/components/prism-json';
   import 'prismjs/themes/prism-solarizedlight.css';
@@ -85,10 +86,33 @@
       response.set(res);
 
       // Save to history
-      history.update(h => [...h, { url: $url, method: $method, body: $body, response: JSON.stringify(res) }]);
+      const newHistoryItem: HistoryItem = { url: $url, method: $method, body: $body, response: JSON.stringify(res) };
+      history.update(h => {
+        const newHistory = [...h, newHistoryItem];
+        saveHistory(newHistory); // Save history to local storage
+        return newHistory;
+      });
     } catch (error) {
       console.error('Request failed:', error);
       response.set(null);
+    }
+  }
+
+  async function saveHistory(history: HistoryItem[]) {
+    console.log('Saving history:', history);
+    await writeTextFile('request-history.json', JSON.stringify(history), { dir: BaseDirectory.App });
+  }
+
+  async function loadHistory() {
+    console.log('Loading history...');
+    try {
+      const savedHistory = await readTextFile('request-history.json', { dir: BaseDirectory.App });
+      console.log('Saved history:', savedHistory);
+      if (savedHistory) {
+        history.set(JSON.parse(savedHistory));
+      }
+    } catch (error) {
+      console.error('Failed to load history:', error);
     }
   }
 
@@ -126,6 +150,7 @@
   }
 
   onMount(() => {
+    loadHistory(); // Load history from local storage on mount
     response.subscribe(value => {
       if (value) {
         Prism.highlightAll();
@@ -148,10 +173,12 @@
     <h2 class="text-xl font-bold mb-4">History</h2>
     <ul>
       {#each $history as item}
-        <li class="mb-2 cursor-pointer" on:click={() => selectHistoryItem(item)}>
-          <strong class="px-2 py-1 rounded {item.method === 'GET' ? 'bg-green-500' : ''} {item.method === 'POST' ? 'bg-blue-500' : ''} {item.method === 'PUT' ? 'bg-yellow-500' : ''} {item.method === 'DELETE' ? 'bg-red-500' : ''} text-white">
-            {item.method}
-          </strong> <span class="url">{item.url}</span>
+        <li class="mb-2">
+          <button type="button" class="w-full text-left" on:click={() => selectHistoryItem(item)}>
+            <strong class="px-2 py-1 rounded {item.method === 'GET' ? 'bg-green-500' : ''} {item.method === 'POST' ? 'bg-blue-500' : ''} {item.method === 'PUT' ? 'bg-yellow-500' : ''} {item.method === 'DELETE' ? 'bg-red-500' : ''} text-white">
+              {item.method}
+            </strong> <span class="url">{item.url}</span>
+          </button>
         </li>
       {/each}
     </ul>
