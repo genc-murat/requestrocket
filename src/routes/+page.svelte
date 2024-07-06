@@ -4,7 +4,7 @@
   import { invoke } from '@tauri-apps/api/tauri';
   import Prism from 'prismjs';
   import 'prismjs/components/prism-json';
-  import 'prismjs/themes/prism-tomorrow.css';
+  import 'prismjs/themes/prism-solarizedlight.css';
 
   type HistoryItem = {
     url: string;
@@ -108,7 +108,7 @@
 
   function formatJson(json: string): string {
     try {
-      json = JSON.stringify(JSON.parse(json), null, 2);
+      json = JSON.stringify(JSON.parse(json.trim()), null, 2);
       return Prism.highlight(json, Prism.languages.json, 'json');
     } catch (e) {
       return json;
