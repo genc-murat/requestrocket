@@ -4,9 +4,7 @@
   import { invoke } from '@tauri-apps/api/tauri';
   import Prism from 'prismjs';
   import 'prismjs/components/prism-json';
-  import 'prismjs/plugins/line-numbers/prism-line-numbers';
   import 'prismjs/themes/prism-tomorrow.css';
-  import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
 
   type HistoryItem = {
     url: string;
@@ -127,12 +125,11 @@
 </script>
 
 <style>
-  .line-numbers .line-numbers-rows {
-    border-right-color: #444;
-  }
-
-  pre.line-numbers {
-    padding-left: 3.8em;
+  pre {
+    background: #2d2d2d; /* match the theme */
+    color: #ccc; /* match the theme */
+    padding: 1em;
+    border-radius: 5px;
   }
 </style>
 
@@ -220,7 +217,7 @@
       </div>
       <div class="tab-content">
         {#if $selectedTab === 'response'}
-          <pre class="line-numbers bg-secondary text-background p-2 rounded">
+          <pre class="bg-secondary text-background p-2 rounded">
             {@html formatJson($response.body)}
           </pre>
         {:else}
