@@ -34,7 +34,7 @@
   let formData = writable<Header[]>([{ key: '', value: '' }]); // Used for form-data and form-urlencoded
   let response = writable<ResponseData | null>(null);
   let history = writable<HistoryItem[]>([]);
-  let selectedTab = writable('body');
+  let selectedTab = writable('response');
 
   function addHeader() {
     headers.update(h => [...h, { key: '', value: '' }]);
