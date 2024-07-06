@@ -95,7 +95,7 @@ pre {
   white-space: pre-wrap;
   word-break: break-word;
   overflow-y: auto;
-  max-height: 98%;
+  max-height: 100%;
 }
 
 ul {
@@ -156,11 +156,25 @@ td:first-child {
 select {
   color: var(--primary-text);
   border: 1px solid var(--divider);
-  border-radius: 4px;
-  padding: 0.5rem;
+  border-radius: 1px;
+  padding: 0rem;
   appearance: none;
   cursor: pointer;
   transition: border-color 0.3s ease;
+  font-size: x-small;
+  font-weight: bold;
+  width: 11%;
+}
+
+select:hover, select:focus, input[type="text"]:hover, input[type="text"]:focus, textarea:hover, textarea:focus {
+  border-color: var(--info);
+}
+
+select option {
+  background-color: var(--surface);
+  color: var(--primary-text);
+  font-size: x-small;
+  padding: 0%;
 }
 
 input[type="text"], textarea {
@@ -173,16 +187,6 @@ input[type="text"], textarea {
   cursor: pointer;
   transition: border-color 0.3s ease;
 }
-
-select:hover, select:focus, input[type="text"]:hover, input[type="text"]:focus, textarea:hover, textarea:focus {
-  border-color: var(--info);
-}
-
-select option {
-  background-color: var(--surface);
-  color: var(--primary-text);
-}
-
 
 .history-item:hover .delete-icon {
   display: inline;
