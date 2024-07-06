@@ -115,6 +115,16 @@
     }
   }
 
+  function selectHistoryItem(item: HistoryItem) {
+    url.set(item.url);
+    method.set(item.method);
+    body.set(item.body);
+    // Reset headers and form data
+    headers.set([]);
+    formData.set([{ key: '', value: '' }]);
+    response.set(JSON.parse(item.response));
+  }
+
   onMount(() => {
     response.subscribe(value => {
       if (value) {
@@ -138,7 +148,7 @@
     <h2 class="text-xl font-bold mb-4">History</h2>
     <ul>
       {#each $history as item}
-        <li class="mb-2">
+        <li class="mb-2 cursor-pointer" on:click={() => selectHistoryItem(item)}>
           <strong class="px-2 py-1 rounded {item.method === 'GET' ? 'bg-green-500' : ''} {item.method === 'POST' ? 'bg-blue-500' : ''} {item.method === 'PUT' ? 'bg-yellow-500' : ''} {item.method === 'DELETE' ? 'bg-red-500' : ''} text-white">
             {item.method}
           </strong> <span class="url">{item.url}</span>
