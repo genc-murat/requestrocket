@@ -3,7 +3,8 @@
     "beforeBuildCommand": "npm run build",
     "beforeDevCommand": "npm run dev",
     "devPath": "http://localhost:5173",
-    "distDir": "../build"
+    "distDir": "../build",
+    "withGlobalTauri":false
   },
   "package": {
     "productName": "requestrocket",
@@ -11,7 +12,13 @@
   },
   "tauri": {
     "allowlist": {
-      "all": false
+      "fs": {
+        "readFile": true,
+        "writeFile": true,
+        "createDir": true,
+        "exists": true,
+        "scope": ["$APPDATA/databases/*"]
+      }
     },
     "bundle": {
       "active": true,

@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { writable } from 'svelte/store';
   import { invoke } from '@tauri-apps/api/tauri';
-  import { writeTextFile, readTextFile, BaseDirectory } from '@tauri-apps/api/fs';
+  import { writeTextFile, readTextFile, createDir, exists, BaseDirectory } from '@tauri-apps/api/fs';
   import Prism from 'prismjs';
   import 'prismjs/components/prism-json';
   import 'prismjs/themes/prism-solarizedlight.css';
@@ -36,6 +36,8 @@
   let response = writable<ResponseData | null>(null);
   let history = writable<HistoryItem[]>([]);
   let selectedTab = writable('response');
+
+  const historyFilePath = 'databases/request-history.json';
 
   function addHeader() {
     headers.update(h => [...h, { key: '', value: '' }]);
@@ -100,19 +102,40 @@
 
   async function saveHistory(history: HistoryItem[]) {
     console.log('Saving history:', history);
-    await writeTextFile('request-history.json', JSON.stringify(history), { dir: BaseDirectory.App });
+    try {
+      // Ensure the directory exists
+      // const dirExists = await exists('databases', { dir: BaseDirectory.AppData });
+      // if (!dirExists) {
+      //   await createDir('databases', { dir: BaseDirectory.AppData, recursive: true });
+      // }
+
+      await writeTextFile(historyFilePath, JSON.stringify(history), { dir: BaseDirectory.AppData });
+      console.log('History saved successfully.');
+    } catch (error) {
+      console.error('Error saving history:', error instanceof Error ? error.message : error);
+    }
   }
 
   async function loadHistory() {
     console.log('Loading history...');
     try {
-      const savedHistory = await readTextFile('request-history.json', { dir: BaseDirectory.App });
+      // Ensure the directory exists
+      // const dirExists = await exists('databases', { dir: BaseDirectory.AppData });
+      // if (!dirExists) {
+      //   await createDir('databases', { dir: BaseDirectory.AppData, recursive: true });
+      // }
+
+      const savedHistory = await readTextFile(historyFilePath, { dir: BaseDirectory.AppData });
       console.log('Saved history:', savedHistory);
       if (savedHistory) {
         history.set(JSON.parse(savedHistory));
       }
     } catch (error) {
-      console.error('Failed to load history:', error);
+      if (error instanceof Error && error.message.includes('No such file or directory')) {
+        console.log('History file does not exist yet.');
+      } else {
+        console.error('Failed to load history:', error instanceof Error ? error.message : error);
+      }
     }
   }
 
