@@ -80,7 +80,7 @@
         console.log('Response received:', res);
         response.set(res);
   
-        // Geçmişe kaydet
+        // Save to history
         history.update(h => [...h, { url: $url, method: $method, body: $body, response: JSON.stringify(res) }]);
       } catch (error) {
         console.error('Request failed:', error);

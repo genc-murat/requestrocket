@@ -31,22 +31,22 @@ body {
 
 .panel {
   padding: 20px;
-  border-radius: 8px;
-  margin: 10px;
+  border-radius: 5px;
+  margin: 3px;
   background: var(--surface);
-  box-shadow: 0 4px 6px var(--shadow);
+  box-shadow: 0 2px 3px var(--shadow);
 }
 
 .history-panel {
-  flex: 1;
+  flex: 10 20%;
 }
 
 .request-panel {
-  flex: 2;
+  flex: 1 0 25%;
 }
 
 .response-panel {
-  flex: 2;
+  flex: 1 0 55%;
 }
 
 .tab {
@@ -98,7 +98,7 @@ th {
 }
 
 .button {
-  background-color: var(--primary);
+  background-color: var(--secondary);
   color: var(--surface);
   padding: 10px 20px;
   border: none;
@@ -108,7 +108,7 @@ th {
 }
 
 .button:hover {
-  background-color: var(--secondary);
+  background-color: var(--info);
 }
 
 .navbar {
