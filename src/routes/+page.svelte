@@ -112,11 +112,7 @@
   </script>
   
   <div>
-    <div class="navbar">
-      <!-- <div class="navbar-item">History</div>
-      <div class="navbar-item">Request</div>
-      <div class="navbar-item">Response</div> -->
-    </div>
+  
     <div class="flex h-screen">
       <div class="history-panel panel">
         <h2 class="text-xl font-bold mb-4">History</h2>
@@ -204,20 +200,16 @@
               <pre class="bg-secondary text-background p-2 rounded">{formatJson($response.body)}</pre>
             {:else}
               <table>
-                <thead>
-                  <tr>
-                    <th>Key</th>
-                    <th>Value</th>
-                  </tr>
-                </thead>
-                <tbody>
+               
+                  
+            
                   {#each $response.headers as [key, value]}
                     <tr>
                       <td>{key}</td>
                       <td>{value}</td>
                     </tr>
                   {/each}
-                </tbody>
+             
               </table>
             {/if}
           </div>
