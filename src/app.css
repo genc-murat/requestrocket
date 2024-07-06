@@ -1,3 +1,132 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Tema değişkenleri */
+:root {
+  --background: #F5F5F5;
+  --surface: #FFFFFF;
+  --primary-text: #212121;
+  --secondary-text: #757575;
+  --divider: #EEEEEE;
+  --shadow: #EEEEEE;
+  --primary: #2196F3;
+  --secondary: #4CAF50;
+  --warning: #FFC107;
+  --error: #F44336;
+  --info: #90CAF9;
+  --success: #66BB6A;
+}
+
+/* Genel Stiller */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--background);
+  color: var(--primary-text);
+}
+
+.flex {
+  display: flex;
+}
+
+.panel {
+  padding: 20px;
+  border-radius: 8px;
+  margin: 10px;
+  background: var(--surface);
+  box-shadow: 0 4px 6px var(--shadow);
+}
+
+.history-panel {
+  flex: 1;
+}
+
+.request-panel {
+  flex: 2;
+}
+
+.response-panel {
+  flex: 2;
+}
+
+.tab {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  border: 1px solid var(--divider);
+  border-bottom: none;
+  background: var(--surface);
+  border-radius: 8px 8px 0 0;
+}
+
+.tab.active {
+  background: var(--surface);
+  border-bottom: 1px solid var(--surface);
+}
+
+.tab-content {
+  border: 1px solid var(--divider);
+  padding: 1rem;
+  background: var(--surface);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid var(--divider);
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: var(--surface);
+}
+
+.url {
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+.button {
+  background-color: var(--primary);
+  color: var(--surface);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: var(--secondary);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-around;
+  background-color: var(--primary);
+  color: var(--surface);
+  padding: 10px;
+  border-radius: 0 0 8px 8px;
+}
+
+.navbar-item {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-item:hover {
+  background-color: var(--secondary);
+}
