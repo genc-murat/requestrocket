@@ -25,6 +25,7 @@ body {
   color: var(--primary-text);
   font-size: smaller;
   height: 100%;
+  width: 99.5%;
 }
 
 .flex {
@@ -39,7 +40,7 @@ body {
   box-shadow: 0 2px 3px var(--shadow);
   display: flex;
   flex-direction: column;
-  height: 99%;
+  height: 99.8%;
 }
 
 .history-panel {
