@@ -2,23 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Tema değişkenleri */
+/* Theme Variables */
 :root {
-  --background: #F5F5F5;
-  --surface: #FFFFFF;
-  --primary-text: #212121;
-  --secondary-text: #757575;
-  --divider: #EEEEEE;
-  --shadow: #EEEEEE;
-  --primary: #2196F3;
-  --secondary: #4CAF50;
+  --background: #27374D;
+  --surface: #526D82;
+  --primary-text: #9DB2BF;
+  --secondary-text: #DDE6ED;
+  --divider: #DDE6ED;
+  --shadow: rgba(0, 0, 0, 0.25);
+  --primary: #526D82;
+  --secondary: #9DB2BF;
   --warning: #FFC107;
-  --error: #F44336;
-  --info: #90CAF9;
-  --success: #66BB6A;
+  --error: #DC3545;
+  --info: #17A2B8;
+  --success: #28A745;
 }
 
-/* Genel Stiller */
+/* General Styles */
 body {
   font-family: 'Roboto', sans-serif;
   background-color: var(--background);
