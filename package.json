@@ -31,6 +31,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"idb": "^8.0.0",
 		"prismjs": "^1.29.0"
 	}
 }

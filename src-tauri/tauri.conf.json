@@ -13,11 +13,7 @@
   "tauri": {
     "allowlist": {
       "fs": {
-        "readFile": true,
-        "writeFile": true,
-        "createDir": true,
-        "exists": true,
-        "scope": ["$APPDATA/databases/*"]
+      "all":false
       }
     },
     "bundle": {

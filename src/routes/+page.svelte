@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { writable } from 'svelte/store';
+  import { openDB } from 'idb';
   import { invoke } from '@tauri-apps/api/tauri';
-  import { writeTextFile, readTextFile, createDir, exists, BaseDirectory } from '@tauri-apps/api/fs';
   import Prism from 'prismjs';
   import 'prismjs/components/prism-json';
   import 'prismjs/themes/prism-solarizedlight.css';
@@ -37,13 +37,19 @@
   let history = writable<HistoryItem[]>([]);
   let selectedTab = writable('response');
 
-  const historyFilePath = 'databases/request-history.json';
+  const dbPromise = openDB('request-rocket-db', 1, {
+    upgrade(db) {
+      if (!db.objectStoreNames.contains('history')) {
+        db.createObjectStore('history', { keyPath: 'id', autoIncrement: true });
+      }
+    },
+  });
 
-  function addHeader() {
+  async function addHeader() {
     headers.update(h => [...h, { key: '', value: '' }]);
   }
 
-  function addFormField() {
+  async function addFormField() {
     formData.update(f => [...f, { key: '', value: '' }]);
   }
 
@@ -91,7 +97,7 @@
       const newHistoryItem: HistoryItem = { url: $url, method: $method, body: $body, response: JSON.stringify(res) };
       history.update(h => {
         const newHistory = [...h, newHistoryItem];
-        saveHistory(newHistory); // Save history to local storage
+        saveHistory(newHistoryItem); // Save history to IndexedDB
         return newHistory;
       });
     } catch (error) {
@@ -100,16 +106,11 @@
     }
   }
 
-  async function saveHistory(history: HistoryItem[]) {
-    console.log('Saving history:', history);
+  async function saveHistory(historyItem: HistoryItem) {
+    console.log('Saving history:', historyItem);
     try {
-      // Ensure the directory exists
-      // const dirExists = await exists('databases', { dir: BaseDirectory.AppData });
-      // if (!dirExists) {
-      //   await createDir('databases', { dir: BaseDirectory.AppData, recursive: true });
-      // }
-
-      await writeTextFile(historyFilePath, JSON.stringify(history), { dir: BaseDirectory.AppData });
+      const db = await dbPromise;
+      await db.add('history', historyItem);
       console.log('History saved successfully.');
     } catch (error) {
       console.error('Error saving history:', error instanceof Error ? error.message : error);
@@ -119,23 +120,12 @@
   async function loadHistory() {
     console.log('Loading history...');
     try {
-      // Ensure the directory exists
-      // const dirExists = await exists('databases', { dir: BaseDirectory.AppData });
-      // if (!dirExists) {
-      //   await createDir('databases', { dir: BaseDirectory.AppData, recursive: true });
-      // }
-
-      const savedHistory = await readTextFile(historyFilePath, { dir: BaseDirectory.AppData });
-      console.log('Saved history:', savedHistory);
-      if (savedHistory) {
-        history.set(JSON.parse(savedHistory));
-      }
+      const db = await dbPromise;
+      const allHistoryItems = await db.getAll('history');
+      console.log('Saved history:', allHistoryItems);
+      history.set(allHistoryItems);
     } catch (error) {
-      if (error instanceof Error && error.message.includes('No such file or directory')) {
-        console.log('History file does not exist yet.');
-      } else {
-        console.error('Failed to load history:', error instanceof Error ? error.message : error);
-      }
+      console.error('Failed to load history:', error instanceof Error ? error.message : error);
     }
   }
 
@@ -173,7 +163,7 @@
   }
 
   onMount(() => {
-    loadHistory(); // Load history from local storage on mount
+    loadHistory(); // Load history from IndexedDB on mount
     response.subscribe(value => {
       if (value) {
         Prism.highlightAll();
