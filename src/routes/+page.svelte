@@ -142,17 +142,17 @@
     }
   }
 
-  function getStatusColor(status: number): string {
+  function getStatusClass(status: number): string {
     if (status >= 200 && status < 300) {
-      return 'text-green-500';
+      return 'bg-green-500';
     } else if (status >= 300 && status < 400) {
-      return 'text-blue-500';
+      return 'bg-blue-500';
     } else if (status >= 400 && status < 500) {
-      return 'text-yellow-500';
+      return 'bg-yellow-500';
     } else if (status >= 500) {
-      return 'text-red-500';
+      return 'bg-red-500';
     } else {
-      return 'text-gray-500';
+      return 'bg-gray-500';
     }
   }
 
@@ -186,12 +186,13 @@
 </script>
 
 <style>
- pre {
-  background: #f5f5f5; /* match the theme */
-  color: #ccc; /* match the theme */
-  padding: 1em;
-  border-radius: 5px;
-}
+  pre {
+    background: #f5f5f5; /* match the theme */
+    color: #ccc; /* match the theme */
+    padding: 1em;
+    border-radius: 5px;
+  }
+
 </style>
 
 <div class="flex h-screen">
@@ -259,17 +260,19 @@
   <div class="response-panel panel">
     <h2 class="text-xl font-bold mb-4">Results</h2>
     {#if $response}
-      <div class="flex space-x-4 mb-4">
-        <div class="flex-1">
-          <div>Status Code: <span class="{getStatusColor($response.status)}">{$response.status}</span></div>
+    <div class="status-box border border-gray-500 p-4 mb-4 rounded">
+      <div class="flex justify-end">
+        <div class="flex items-center">
+          <span class="text-white px-2 py-1 rounded {getStatusClass($response.status)}">{$response.status} { $response.status === 200 ? 'OK' : '' }</span>
         </div>
-        <div class="flex-1">
-          <div>Duration: {$response.duration} ms</div>
+        <div class="flex items-center ml-2">
+          <span>{$response.duration} ms</span>
         </div>
-        <div class="flex-1">
-          <div>Size: {$response.size} bytes</div>
+        <div class="flex items-center ml-2">
+          <span>{($response.size / 1024).toFixed(2)} KB</span>
         </div>
       </div>
+    </div>
       <div class="flex mb-4">
         <button 
           type="button" 

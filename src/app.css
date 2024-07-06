@@ -191,13 +191,44 @@ input[type="text"], textarea {
 .history-item:hover .delete-icon {
   display: inline;
 }
+
 .delete-icon {
   display: none;
   cursor: pointer;
   margin-left: 10px;
 }
+
 .icon {
   width: 16px;
   height: 16px;
   fill: currentColor;
+}
+
+.status-box {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.status-box .bg-green-500 {
+  background-color: #4caf50;
+}
+
+.status-box .bg-blue-500 {
+  background-color: #2196f3;
+}
+
+.status-box .bg-yellow-500 {
+  background-color: #ffeb3b;
+}
+
+.status-box .bg-red-500 {
+  background-color: #f44336;
+}
+
+.status-box .bg-gray-500 {
+  background-color: #9e9e9e;
 }
