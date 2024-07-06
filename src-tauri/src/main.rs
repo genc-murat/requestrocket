@@ -4,7 +4,10 @@
 )]
 
 use reqwest::Client;
+use reqwest::header::{HeaderMap, HeaderName, HeaderValue, CONTENT_TYPE};
+use reqwest::multipart;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use tauri::State;
 
 #[derive(Serialize, Deserialize)]
@@ -12,6 +15,8 @@ struct RequestData {
   url: String,
   method: String,
   body: Option<String>,
+  headers: Option<HashMap<String, String>>,
+  content_type: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -27,13 +32,63 @@ struct ResponseData {
 async fn send_request(client: State<'_, Client>, request_data: RequestData) -> Result<ResponseData, String> {
   let client = client.inner();
   let start = std::time::Instant::now();
-  let response = match request_data.method.as_str() {
-      "GET" => client.get(&request_data.url).send().await,
-      "POST" => client.post(&request_data.url).body(request_data.body.unwrap_or_default()).send().await,
-      "PUT" => client.put(&request_data.url).body(request_data.body.unwrap_or_default()).send().await,
-      "DELETE" => client.delete(&request_data.url).send().await,
+
+  let mut headers = HeaderMap::new();
+  if let Some(header_map) = request_data.headers {
+      for (key, value) in header_map.iter() {
+          match HeaderName::from_bytes(key.as_bytes()) {
+              Ok(header_name) => match HeaderValue::from_str(value) {
+                  Ok(header_value) => { headers.insert(header_name, header_value); },
+                  Err(_) => return Err(format!("Invalid header value for key: {}", key)),
+              },
+              Err(_) => return Err(format!("Invalid header name: {}", key)),
+          }
+      }
+  }
+
+  let mut request = match request_data.method.as_str() {
+      "GET" => client.get(&request_data.url),
+      "POST" => client.post(&request_data.url),
+      "PUT" => client.put(&request_data.url),
+      "DELETE" => client.delete(&request_data.url),
       _ => return Err("Unsupported method".to_string()),
   };
+
+  if let Some(content_type) = request_data.content_type {
+      headers.insert(CONTENT_TYPE, HeaderValue::from_str(&content_type).unwrap());
+      match content_type.as_str() {
+          "application/json" | "application/xml" => {
+              if let Some(body) = request_data.body {
+                  request = request.headers(headers.clone()).body(body);
+              } else {
+                  request = request.headers(headers.clone());
+              }
+          }
+          "multipart/form-data" => {
+              let mut form = multipart::Form::new();
+              if let Some(body) = request_data.body {
+                  let fields: HashMap<String, String> = serde_json::from_str(&body).unwrap();
+                  for (key, value) in fields {
+                      form = form.text(key, value);
+                  }
+              }
+              request = request.headers(headers.clone()).multipart(form);
+          }
+          "application/x-www-form-urlencoded" => {
+              if let Some(body) = request_data.body {
+                  request = request.headers(headers.clone()).body(body);
+              } else {
+                  request = request.headers(headers.clone());
+              }
+          }
+          _ => return Err("Unsupported content type".to_string()),
+      }
+  } else {
+      request = request.headers(headers.clone());
+  }
+
+  let response = request.send().await;
+
   let duration = start.elapsed().as_millis();
 
   match response {
