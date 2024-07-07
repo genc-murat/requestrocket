@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { writable } from 'svelte/store';
+  import type { Writable } from 'svelte/store';
   import { openDB } from 'idb';
   import { invoke } from '@tauri-apps/api/tauri';
   import Prism from 'prismjs';
@@ -213,6 +214,11 @@
     loadHistory(group); // Load history based on selected group
   }
 
+  function clearInput(store: Writable<string>) {
+    store.set('');
+    response.set(null);
+  }
+
   onMount(() => {
     loadGroups();
     response.subscribe(value => {
@@ -279,6 +285,12 @@
   .group-card:hover {
     background-color: #f0f0f0;
   }
+  .input-container {
+    position: relative;
+    width: 100%;
+  }
+
+  
 </style>
 
 <div class="flex h-screen">
@@ -339,7 +351,18 @@
         <option value="PUT">PUT</option>
         <option value="DELETE">DELETE</option>
       </select>
-      <input type="text" id="url" bind:value={$url} placeholder="https://api.example.com/data" class="flex-1 p-2 border rounded text-primary bg-accent" />
+      
+      
+      <div class="input-container">
+        <input type="text" id="url" bind:value={$url} placeholder="https://api.example.com/data" class="flex-1 p-2 border rounded text-primary bg-accent" />
+    
+        {#if $url}
+          <span class="clear-icon" on:click={() => clearInput(url)}>×</span>
+        {/if}
+      </div>
+
+
+
     </div>
     <div class="mb-4">
       <label for="bodyType" class="block mb-2">Body Type</label>

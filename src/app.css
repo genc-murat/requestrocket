@@ -232,3 +232,26 @@ input[type="text"], textarea {
 .status-box .bg-gray-500 {
   background-color: #9e9e9e;
 }
+
+.clear-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: var(--secondary-text);
+  transition: color 0.3s ease;
+  user-select: none;
+}
+
+.clear-icon:hover {
+  color: var(--error);
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding-right: 30px; /* Adjust padding to make room for clear icon */
+  box-sizing: border-box; /* Ensure padding-right is included in the width */
+}
