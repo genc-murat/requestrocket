@@ -38,7 +38,7 @@
   let response = writable<ResponseData | null>(null);
   let history = writable<HistoryItem[]>([]);
   let selectedTab = writable('response');
-  let group = writable('');
+  let selectedGroup = writable(''); // String yerine writable olarak tanımlandı
   let groups = writable<string[]>([]);
   let newGroupName = writable('');
   let modalOpen = writable(true);
@@ -62,8 +62,9 @@
   function createNewGroup() {
     if ($newGroupName) {
       groups.update(g => [...g, $newGroupName]);
-      group.set($newGroupName);
+      selectedGroup.set($newGroupName);
       newGroupName.set('');
+      modalOpen.set(false);
     }
   }
 
@@ -113,7 +114,7 @@
         method: $method, 
         body: $body, 
         response: JSON.stringify(res),
-        group: $group // Save the group information
+        group: $selectedGroup // Save the group information
       };
 
       history.update(h => {
@@ -206,12 +207,10 @@
     response.set(JSON.parse(item.response));
   }
 
-  function handleGroupSelect(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    const selectedGroup = selectElement.value;
-    group.set(selectedGroup);
+  function handleGroupSelect(group: string) {
+    selectedGroup.set(group);
     modalOpen.set(false);
-    loadHistory(selectedGroup); // Load history based on selected group
+    loadHistory(group); // Load history based on selected group
   }
 
   onMount(() => {
@@ -268,27 +267,45 @@
   .shadow-lg {
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
+
+  .group-card {
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .group-card:hover {
+    background-color: #f0f0f0;
+  }
 </style>
 
 <div class="flex h-screen">
   {#if $modalOpen}
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white p-4 rounded shadow-lg">
+    <div class="bg-white p-4 rounded shadow-lg w-1/2">
       <h2 class="text-lg font-bold mb-4">Select Group</h2>
-      <select class="w-full p-2 border rounded" on:change={handleGroupSelect}>
-        <option value="" disabled selected>Select a group</option>
+      <div class="grid grid-cols-2 gap-4">
         {#each $groups as group}
-          <option value={group}>{group}</option>
+          <div class="group-card" on:click={() => handleGroupSelect(group)}>
+            {group}
+          </div>
         {/each}
-      </select>
+      </div>
+      <div class="mt-4">
+        <input type="text" placeholder="New Group Name" bind:value={$newGroupName} class="w-full mb-2 p-2 border rounded text-primary bg-accent" />
+        <button type="button" on:click={createNewGroup} class="w-full p-2 bg-primary text-background rounded">Add Group</button>
+      </div>
     </div>
   </div>
   {/if}
   <div class="history-panel panel">
     <h2 class="text-xl font-bold mb-4">History</h2>
-    {#if $group}
+    {#if $selectedGroup}
       <div class="group">
-        <h3 class="text-lg font-semibold mb-2">{$group}</h3>
+        <h3 class="text-lg font-semibold mb-2">{$selectedGroup}</h3>
         <ul>
           {#each $history as item}
             <li class="mb-2 history-item flex justify-between items-center">
@@ -349,13 +366,13 @@
     </div>
     <div class="mb-4">
       <label for="group" class="block mb-2">Group</label>
-      <select id="group" bind:value={$group} class="w-full mb-4 p-2 border rounded text-primary bg-accent">
+      <select id="group" bind:value={$selectedGroup} class="w-full mb-4 p-2 border rounded text-primary bg-accent">
         {#each $groups as group}
           <option value={group}>{group}</option>
         {/each}
         <option value="new">+ Create New Group</option>
       </select>
-      {#if $group === 'new'}
+      {#if $selectedGroup === 'new'}
         <input type="text" placeholder="New Group Name" bind:value={$newGroupName} class="w-full mb-4 p-2 border rounded text-primary bg-accent" on:blur={createNewGroup} />
       {/if}
     </div>
