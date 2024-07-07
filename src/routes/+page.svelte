@@ -1,4 +1,5 @@
 <script lang="ts">
+  // Importing necessary modules and components
   import { onMount } from 'svelte';
   import { writable } from 'svelte/store';
   import type { Writable } from 'svelte/store';
@@ -11,8 +12,10 @@
   import { library } from '@fortawesome/fontawesome-svg-core';
   import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
 
-  library.add(faPlus, faTrashAlt, faClone); 
+  // Adding FontAwesome icons to the library
+  library.add(faPlus, faTrashAlt, faClone);
 
+  // Type definitions
   type HistoryItem = {
     id: number;
     url: string;
@@ -42,22 +45,24 @@
     headers: [string, string][];
   };
 
+  // Svelte stores
   let url = writable('');
   let method = writable('GET');
-  let body = writable('{"key": "value"}'); // Set default JSON value
+  let body = writable('{"key": "value"}');
   let headers = writable<Header[]>([]);
   let params = writable<Param[]>([]);
-  let bodyType = writable('json'); // Default to JSON
+  let bodyType = writable('json');
   let formData = writable<Header[]>([{ key: '', value: '' }]);
   let response = writable<ResponseData | null>(null);
   let history = writable<HistoryItem[]>([]);
-  let selectedTab = writable('response'); // For results section
-  let selectedRequestTab = writable('body'); // For request section
+  let selectedTab = writable('response');
+  let selectedRequestTab = writable('body');
   let selectedGroup = writable('');
   let groups = writable<string[]>([]);
   let newGroupName = writable('');
   let modalOpen = writable(true);
 
+  // IndexedDB setup
   const dbPromise = openDB('request-rocket-db', 1, {
     upgrade(db) {
       if (!db.objectStoreNames.contains('history')) {
@@ -66,6 +71,7 @@
     },
   });
 
+  // Functions to manipulate headers, params, and form fields
   async function addHeader() {
     headers.update(h => [...h, { key: '', value: '' }]);
   }
@@ -88,6 +94,7 @@
     updateUrl();
   }
 
+  // Functions to manage groups
   function createNewGroup() {
     if ($newGroupName) {
       groups.update(g => [...g, $newGroupName]);
@@ -165,7 +172,7 @@
           headers: $headers,
           params: $params,
           response: JSON.stringify(res),
-          group: $selectedGroup // Save the group information
+          group: $selectedGroup
         };
         history.update(h => {
           const newHistory = [...h, newHistoryItem];
@@ -179,6 +186,7 @@
     }
   }
 
+  // Functions to handle history operations
   async function saveHistory(historyItem: HistoryItem) {
     console.log('Saving history:', historyItem);
     try {
@@ -254,6 +262,7 @@
     selectHistoryItem(newHistoryItem);
   }
 
+  // Utility functions
   function getStatusClass(status: number): string {
     if (status >= 200 && status < 300) {
       return 'bg-green-500';
@@ -281,24 +290,25 @@
     url.set(item.url);
     method.set(item.method);
     body.set(item.body);
-    headers.set(item.headers || []); // Ensure headers is an array
-    params.set(item.params || []); // Ensure params is an array
-    response.set(item.response ? JSON.parse(item.response) : null); // Ensure response is properly parsed
+    headers.set(item.headers || []);
+    params.set(item.params || []);
+    response.set(item.response ? JSON.parse(item.response) : null);
   }
 
   function handleGroupSelect(group: string) {
     selectedGroup.set(group);
     modalOpen.set(false);
-    loadHistory(group); // Load history based on selected group
+    loadHistory(group);
   }
 
   function clearInput(store: Writable<string>) {
     store.set('');
-    headers.set([]); // Clear headers
-    params.set([]); // Clear params
+    headers.set([]);
+    params.set([]);
     response.set(null);
   }
 
+  // Lifecycle method
   onMount(() => {
     loadGroups();
     response.subscribe(value => {
@@ -312,6 +322,7 @@
 </script>
 
 <style>
+  /* Styles for the application */
   pre {
     background: #f5f5f5;
     color: #ccc;
@@ -448,15 +459,15 @@
   .top-buttons {
   display: flex;
   justify-content: flex-end;
-  align-items: center; /* Vertically center content if needed */
-  gap: 1rem;          /* Increase gap between buttons and separator */
+  align-items: center;
+  gap: 1rem;
   margin-bottom: 1rem;
 }
 
 .separator {
-  width: 1px;          /* Adjust separator width as needed */
-  height: 20px;         /* Adjust separator height as needed */
-  background-color: #ccc;/* Adjust separator color as needed */
+  width: 1px;
+  height: 20px;
+  background-color: #ccc;
 }
 
   .btn {
@@ -480,6 +491,7 @@
   }
 </style>
 
+<!-- HTML structure for the application -->
 <div class="flex h-screen">
   {#if $modalOpen}
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -538,7 +550,6 @@
   <div class="request-panel panel">
     <h2 class="text-xl font-bold mb-4">Request</h2>
     
-  
     <div class="flex mb-4">
       <select id="method" bind:value={$method} class="p-2 border rounded text-primary bg-accent mr-2">
         <option value="GET">GET</option>
@@ -609,23 +620,16 @@
           <button type="button" on:click={addFormField} class="w-full p-2 bg-primary text-background rounded">Add Field</button>
         {/if}
       {:else if $selectedRequestTab === 'params'}
-   
-
-      <div class="top-buttons">
-        <button type="button" on:click={addParam} class="">
-          <FontAwesomeIcon icon="plus" size="lg"/> Add
-        </button>
-        <span class="separator"></span> <button
-        type="button"
-        on:click={clearHeaders}
-        class="text-red-700"
-      >
-        <button type="button" on:click={clearParams} class="text-red-700">
-          <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
-        </button>
-      </div>
+        <div class="top-buttons">
+          <button type="button" on:click={addParam} class="">
+            <FontAwesomeIcon icon="plus" size="lg"/> Add
+          </button>
+          <span class="separator"></span>
+          <button type="button" on:click={clearParams} class="text-red-700">
+            <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
+          </button>
+        </div>
         <div class="params-container">
-          
           {#each $params as param, index}
             <div class="header-row">
               <input type="text" placeholder="Key" bind:value={param.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
@@ -637,27 +641,22 @@
           {/each}
         </div>
       {:else if $selectedRequestTab === 'headers'}
-      <div class="top-buttons">
-        <button type="button" on:click={addHeader} class="">
-          <FontAwesomeIcon icon="plus" size="lg"/> Add
-        </button>
-        <span class="separator"></span> <button
-        type="button"
-        on:click={clearHeaders}
-        class="text-red-700"
-      >
-        <button type="button" on:click={clearHeaders} class="text-red-700">
-          <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
-        </button>
-      </div>
+        <div class="top-buttons">
+          <button type="button" on:click={addHeader} class="">
+            <FontAwesomeIcon icon="plus" size="lg"/> Add
+          </button>
+          <span class="separator"></span>
+          <button type="button" on:click={clearHeaders} class="text-red-700">
+            <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
+          </button>
+        </div>
         <div class="header-container">
-       
           {#each $headers as header, index}
             <div class="header-row">
               <input type="text" placeholder="Key" bind:value={header.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
               <input type="text" placeholder="Value" bind:value={header.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
               <button type="button" on:click={() => headers.update(h => h.filter((_, i) => i !== index))} class="text-red-500">
-                <FontAwesomeIcon icon="trash-alt" />
+                <FontAwesomeIcon icon="trash-alt" size="lg" />
               </button>
             </div>
           {/each}
@@ -682,19 +681,19 @@
   <div class="response-panel panel">
     <h2 class="text-xl font-bold mb-4">Results</h2>
     {#if $response}
-    <div class="status-box border border-gray-500 p-4 mb-4 rounded">
-      <div class="flex justify-end">
-        <div class="flex items-center">
-          <span class="text-white px-2 py-1 rounded {getStatusClass($response.status)}">{$response.status} { $response.status === 200 ? 'OK' : '' }</span>
-        </div>
-        <div class="flex items-center ml-2">
-          <span>{$response.duration} ms</span>
-        </div>
-        <div class="flex items-center ml-2">
-          <span>{($response.size / 1024).toFixed(2)} KB</span>
+      <div class="status-box border border-gray-500 p-4 mb-4 rounded">
+        <div class="flex justify-end">
+          <div class="flex items-center">
+            <span class="text-white px-2 py-1 rounded {getStatusClass($response.status)}">{$response.status} { $response.status === 200 ? 'OK' : '' }</span>
+          </div>
+          <div class="flex items-center ml-2">
+            <span>{$response.duration} ms</span>
+          </div>
+          <div class="flex items-center ml-2">
+            <span>{($response.size / 1024).toFixed(2)} KB</span>
+          </div>
         </div>
       </div>
-    </div>
       <div class="flex mb-4">
         <button 
           type="button" 
