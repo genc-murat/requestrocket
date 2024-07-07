@@ -132,22 +132,33 @@
       console.log('Response received:', res);
       response.set(res);
 
-      const newHistoryItem: HistoryItem = { 
-        id: Date.now(), 
-        url: $url, 
-        method: $method, 
-        body: $body, 
-        headers: $headers,
-        params: $params,
-        response: JSON.stringify(res),
-        group: $selectedGroup // Save the group information
-      };
-
-      history.update(h => {
-        const newHistory = [...h, newHistoryItem];
-        saveHistory(newHistoryItem);
-        return newHistory;
-      });
+      const existingHistoryItem = $history.find(item => item.url === $url && item.method === $method && item.group === $selectedGroup);
+      if (existingHistoryItem) {
+        const updatedHistoryItem: HistoryItem = { 
+          ...existingHistoryItem,
+          body: $body, 
+          headers: $headers,
+          params: $params,
+          response: JSON.stringify(res),
+        };
+        updateHistoryItem(updatedHistoryItem);
+      } else {
+        const newHistoryItem: HistoryItem = { 
+          id: Date.now(), 
+          url: $url, 
+          method: $method, 
+          body: $body, 
+          headers: $headers,
+          params: $params,
+          response: JSON.stringify(res),
+          group: $selectedGroup // Save the group information
+        };
+        history.update(h => {
+          const newHistory = [...h, newHistoryItem];
+          saveHistory(newHistoryItem);
+          return newHistory;
+        });
+      }
     } catch (error) {
       console.error('Request failed:', error);
       response.set(null);
@@ -162,6 +173,18 @@
       console.log('History saved successfully.');
     } catch (error) {
       console.error('Error saving history:', error instanceof Error ? error.message : error);
+    }
+  }
+
+  async function updateHistoryItem(historyItem: HistoryItem) {
+    console.log('Updating history:', historyItem);
+    try {
+      const db = await dbPromise;
+      await db.put('history', historyItem);
+      console.log('History updated successfully.');
+      history.update(h => h.map(item => item.id === historyItem.id ? historyItem : item));
+    } catch (error) {
+      console.error('Error updating history:', error instanceof Error ? error.message : error);
     }
   }
 
