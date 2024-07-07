@@ -13,6 +13,7 @@
     method: string;
     body: string;
     response: string;
+    group: string;
   };
 
   type Header = {
@@ -32,11 +33,14 @@
   let method = writable('GET');
   let body = writable('');
   let headers = writable<Header[]>([]);
-  let bodyType = writable('json'); // 'json', 'xml', 'form-data', 'form-urlencoded'
-  let formData = writable<Header[]>([{ key: '', value: '' }]); // Used for form-data and form-urlencoded
+  let bodyType = writable('json');
+  let formData = writable<Header[]>([{ key: '', value: '' }]);
   let response = writable<ResponseData | null>(null);
   let history = writable<HistoryItem[]>([]);
   let selectedTab = writable('response');
+  let group = writable('');
+  let groups = writable<string[]>([]);
+  let newGroupName = writable('');
 
   const dbPromise = openDB('request-rocket-db', 1, {
     upgrade(db) {
@@ -52,6 +56,14 @@
 
   async function addFormField() {
     formData.update(f => [...f, { key: '', value: '' }]);
+  }
+
+  function createNewGroup() {
+    if ($newGroupName) {
+      groups.update(g => [...g, $newGroupName]);
+      group.set($newGroupName);
+      newGroupName.set('');
+    }
   }
 
   async function sendRequest() {
@@ -94,11 +106,18 @@
       console.log('Response received:', res);
       response.set(res);
 
-      // Save to history
-      const newHistoryItem: HistoryItem = { id: Date.now(), url: $url, method: $method, body: $body, response: JSON.stringify(res) };
+      const newHistoryItem: HistoryItem = { 
+        id: Date.now(), 
+        url: $url, 
+        method: $method, 
+        body: $body, 
+        response: JSON.stringify(res),
+        group: $group // Save the group information
+      };
+
       history.update(h => {
         const newHistory = [...h, newHistoryItem];
-        saveHistory(newHistoryItem); // Save history to IndexedDB
+        saveHistory(newHistoryItem);
         return newHistory;
       });
     } catch (error) {
@@ -125,6 +144,8 @@
       const allHistoryItems = await db.getAll('history');
       console.log('Saved history:', allHistoryItems);
       history.set(allHistoryItems);
+      const uniqueGroups = [...new Set(allHistoryItems.map(item => item.group))];
+      groups.set(uniqueGroups);
     } catch (error) {
       console.error('Failed to load history:', error instanceof Error ? error.message : error);
     }
@@ -169,14 +190,13 @@
     url.set(item.url);
     method.set(item.method);
     body.set(item.body);
-    // Reset headers and form data
     headers.set([]);
     formData.set([{ key: '', value: '' }]);
     response.set(JSON.parse(item.response));
   }
 
   onMount(() => {
-    loadHistory(); // Load history from IndexedDB on mount
+    loadHistory();
     response.subscribe(value => {
       if (value) {
         Prism.highlightAll();
@@ -187,38 +207,42 @@
 
 <style>
   pre {
-    background: #f5f5f5; /* match the theme */
-    color: #ccc; /* match the theme */
+    background: #f5f5f5; 
+    color: #ccc; 
     padding: 1em;
     border-radius: 5px;
   }
-
 </style>
 
 <div class="flex h-screen">
   <div class="history-panel panel">
     <h2 class="text-xl font-bold mb-4">History</h2>
-    <ul>
-      {#each $history as item}
-        <li class="mb-2 history-item flex justify-between items-center">
-          <button type="button" class="w-full text-left" on:click={() => selectHistoryItem(item)}>
-            <strong class="px-2 py-1 rounded {item.method === 'GET' ? 'bg-green-500' : ''} {item.method === 'POST' ? 'bg-blue-500' : ''} {item.method === 'PUT' ? 'bg-yellow-500' : ''} {item.method === 'DELETE' ? 'bg-red-500' : ''} text-white">
-              {item.method}
-            </strong> <span class="url">{item.url}</span>
-          </button>
-          <button 
-            class="delete-icon text-red-500" 
-            aria-label="Delete history item" 
-            on:click={() => deleteHistoryItem(item.id)}
-            on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') deleteHistoryItem(item.id); }}
-          >
-            <svg class="icon" viewBox="0 0 24 24">
-              <path d="M3 6h18v2H3V6zm2 2h14v14H5V8zm6 0V4h2v4h-2zm0 0h2v2h-2V8zm0 0h2v12h-2V8zM8 10v10H6V10h2zm0 0h2v10H8V10zm8 0v10h-2V10h2zm0 0h-2v10h2V10z"/>
-            </svg>
-          </button>
-        </li>
-      {/each}
-    </ul>
+    {#each $groups as group}
+      <div class="group">
+        <h3 class="text-lg font-semibold mb-2">{group}</h3>
+        <ul>
+          {#each $history.filter(item => item.group === group) as item}
+            <li class="mb-2 history-item flex justify-between items-center">
+              <button type="button" class="w-full text-left" on:click={() => selectHistoryItem(item)}>
+                <strong class="px-2 py-1 rounded {item.method === 'GET' ? 'bg-green-500' : ''} {item.method === 'POST' ? 'bg-blue-500' : ''} {item.method === 'PUT' ? 'bg-yellow-500' : ''} {item.method === 'DELETE' ? 'bg-red-500' : ''} text-white">
+                  {item.method}
+                </strong> <span class="url">{item.url}</span>
+              </button>
+              <button 
+                class="delete-icon text-red-500" 
+                aria-label="Delete history item" 
+                on:click={() => deleteHistoryItem(item.id)}
+                on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') deleteHistoryItem(item.id); }}
+              >
+                <svg class="icon" viewBox="0 0 24 24">
+                  <path d="M3 6h18v2H3V6zm2 2h14v14H5V8zm6 0V4h2v4h-2zm0 0h2v2h-2V8zm0 0h2v12h-2V8zM8 10v10H6V10h2zm0 0h2v10H8V10zm8 0v10h-2V10h2zm0 0h-2v10h2V10z"/>
+                </svg>
+              </button>
+            </li>
+          {/each}
+        </ul>
+      </div>
+    {/each}
   </div>
 
   <div class="request-panel panel">
@@ -253,6 +277,18 @@
           <button type="button" on:click={addFormField} class="w-full p-2 bg-primary text-background rounded">Add Field</button>
         {/if}
       </div>
+    </div>
+    <div class="mb-4">
+      <label for="group" class="block mb-2">Group</label>
+      <select id="group" bind:value={$group} class="w-full mb-4 p-2 border rounded text-primary bg-accent">
+        {#each $groups as group}
+          <option value={group}>{group}</option>
+        {/each}
+        <option value="new">+ Create New Group</option>
+      </select>
+      {#if $group === 'new'}
+        <input type="text" placeholder="New Group Name" bind:value={$newGroupName} class="w-full mb-4 p-2 border rounded text-primary bg-accent" on:blur={createNewGroup} />
+      {/if}
     </div>
     <button type="button" on:click={sendRequest} class="button">Send Request</button>
   </div>
