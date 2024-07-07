@@ -14,6 +14,7 @@
     method: string;
     body: string;
     response: string;
+    headers: Header[];
     group: string;
   };
 
@@ -39,10 +40,12 @@
   let response = writable<ResponseData | null>(null);
   let history = writable<HistoryItem[]>([]);
   let selectedTab = writable('response');
-  let selectedGroup = writable(''); // String yerine writable olarak tanımlandı
+  let selectedGroup = writable('');
   let groups = writable<string[]>([]);
   let newGroupName = writable('');
   let modalOpen = writable(true);
+  let editingGroupIndex = writable<number | null>(null);
+  let editedGroupName = writable('');
 
   const dbPromise = openDB('request-rocket-db', 1, {
     upgrade(db) {
@@ -114,6 +117,7 @@
         url: $url, 
         method: $method, 
         body: $body, 
+        headers: $headers,
         response: JSON.stringify(res),
         group: $selectedGroup // Save the group information
       };
@@ -203,9 +207,8 @@
     url.set(item.url);
     method.set(item.method);
     body.set(item.body);
-    headers.set([]);
-    formData.set([{ key: '', value: '' }]);
-    response.set(JSON.parse(item.response));
+    headers.set(item.headers || []); // Ensure headers is an array
+    response.set(item.response ? JSON.parse(item.response) : null); // Ensure response is properly parsed
   }
 
   function handleGroupSelect(group: string) {
@@ -216,6 +219,7 @@
 
   function clearInput(store: Writable<string>) {
     store.set('');
+    headers.set([]); // Clear headers
     response.set(null);
   }
 
@@ -228,6 +232,8 @@
     });
   });
 </script>
+
+
 
 <style>
   pre {
@@ -290,7 +296,32 @@
     width: 100%;
   }
 
-  
+  .clear-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+
+  .header-container {
+    margin-top: 1rem;
+  }
+
+  .header-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .header-row input {
+    flex: 1;
+    margin-right: 0.5rem;
+  }
+
+  .header-row button {
+    margin-left: 0.5rem;
+  }
 </style>
 
 <div class="flex h-screen">
@@ -380,6 +411,19 @@
         {/if}
       </div>
     </div>
+
+    <div class="header-container">
+      <label for="headers" class="block mb-2">Headers</label>
+      {#each $headers as header, index}
+        <div class="header-row">
+          <input type="text" placeholder="Key" bind:value={header.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
+          <input type="text" placeholder="Value" bind:value={header.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
+          <button type="button" on:click={() => headers.update(h => h.filter((_, i) => i !== index))} class="p-2 bg-red-500 text-white rounded">Delete</button>
+        </div>
+      {/each}
+      <button type="button" on:click={addHeader} class="w-full p-2 bg-primary text-background rounded">Add Header</button>
+    </div>
+
     <div class="mb-4">
       <label for="group" class="block mb-2">Group</label>
       <select id="group" bind:value={$selectedGroup} class="w-full mb-4 p-2 border rounded text-primary bg-accent">
