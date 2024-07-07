@@ -270,9 +270,8 @@
 
   .group-card {
     border: 1px solid #ccc;
-    padding: 0.5rem;
-    border-radius: 0.25rem;
-    margin-bottom: 0.5rem;
+    padding: 0.4rem;
+    margin-bottom: 0.1rem;
     cursor: pointer;
     text-align: center;
   }
@@ -287,7 +286,7 @@
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
     <div class="bg-white p-4 rounded shadow-lg w-1/2">
       <h2 class="text-lg font-bold mb-4">Select Group</h2>
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-4 gap-2">
         {#each $groups as group}
           <div class="group-card" on:click={() => handleGroupSelect(group)}>
             {group}
