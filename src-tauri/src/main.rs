@@ -8,7 +8,7 @@ use reqwest::header::{HeaderMap, HeaderName, HeaderValue, CONTENT_TYPE};
 use reqwest::multipart;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use tauri::State;
+use tauri::{CustomMenuItem, Menu, MenuItem, Submenu,State};
 
 #[derive(Serialize, Deserialize)]
 struct RequestData {
@@ -115,7 +115,25 @@ async fn send_request(client: State<'_, Client>, request_data: RequestData) -> R
 
 #[tokio::main]
 async fn main() {
+    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
+
+    let submenu = Submenu::new("File", Menu::new().add_item(quit));
+    let menu = Menu::new()
+      .add_native_item(MenuItem::Copy)
+      .add_submenu(submenu);
+
+
   tauri::Builder::default()
+      .menu(menu)
+      .on_menu_event(|event| {
+        match event.menu_item_id() {
+          "quit" => {
+            std::process::exit(0);
+          }
+        
+          _ => {}
+        }
+      })
       .manage(Client::new())
       .invoke_handler(tauri::generate_handler![send_request])
       .run(tauri::generate_context!())

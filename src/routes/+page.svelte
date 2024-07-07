@@ -351,18 +351,12 @@
         <option value="PUT">PUT</option>
         <option value="DELETE">DELETE</option>
       </select>
-      
-      
       <div class="input-container">
         <input type="text" id="url" bind:value={$url} placeholder="https://api.example.com/data" class="flex-1 p-2 border rounded text-primary bg-accent" />
-    
         {#if $url}
           <span class="clear-icon" on:click={() => clearInput(url)}>×</span>
         {/if}
       </div>
-
-
-
     </div>
     <div class="mb-4">
       <label for="bodyType" class="block mb-2">Body Type</label>
