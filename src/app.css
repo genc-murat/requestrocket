@@ -25,7 +25,7 @@ body {
   font-family: 'Roboto', sans-serif;
   background-color: var(--background);
   color: var(--primary-text);
-  font-size: smaller;
+  font-size: 0.65rem;
   height: 100%;
   width: 99.5%;
 }
@@ -104,6 +104,16 @@ ul {
   word-break: break-word;
   overflow-y: auto;
   max-height: 98%;
+}
+
+li{
+  border-bottom: 1px solid var(--divider) ;
+  padding:0 5px 5px 0; 
+}
+
+li:hover{
+ font-weight: bolder;
+ color: var(--dark-text);
 }
 
 table {
