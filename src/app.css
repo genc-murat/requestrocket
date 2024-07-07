@@ -141,6 +141,8 @@ th {
 td:first-child {
   background-color: var(--light-background);
   color: var(--dark-text);
+  font-weight: bolder;
+  width: 20%;
 }
 
 .url {

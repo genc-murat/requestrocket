@@ -356,7 +356,7 @@
     margin-left: 0.5rem;
   }
 
-  .tab {
+  /* .tab {
     cursor: pointer;
     padding: 0.3rem 0.6rem;
     margin-right: 0.3rem;
@@ -380,7 +380,7 @@
     word-break: break-word;
     overflow-y: auto;
     max-height: 100%;
-  }
+  } */
 </style>
 
 <div class="flex h-screen">
@@ -493,7 +493,7 @@
           <option value="form-urlencoded">Form URL Encoded</option>
         </select>
         {#if $bodyType === 'json' || $bodyType === 'xml'}
-          <textarea id="body" bind:value={$body} placeholder={$bodyType === 'json' ? '{"key": "value"}' : '<xml></xml>'} class="w-full mb-4 p-2 border rounded text-primary bg-accent"></textarea>
+          <textarea id="body" bind:value={$body} placeholder={$bodyType === 'json' ? '{"key": "value"}' : '<xml></xml>'} class="w-full mb-4 p-2 border rounded text-primary bg-accent h-40"></textarea>
         {:else}
           {#each $formData as field, index}
             <div class="flex mb-2">
