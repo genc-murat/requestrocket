@@ -31,6 +31,9 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@fortawesome/fontawesome-svg-core": "^6.5.2",
+		"@fortawesome/free-solid-svg-icons": "^6.5.2",
+		"@fortawesome/svelte-fontawesome": "^0.2.2",
 		"idb": "^8.0.0",
 		"prismjs": "^1.29.0"
 	}

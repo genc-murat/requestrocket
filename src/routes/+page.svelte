@@ -7,6 +7,11 @@
   import Prism from 'prismjs';
   import 'prismjs/components/prism-json';
   import 'prismjs/themes/prism-solarizedlight.css';
+  import { faPlus, faTrashAlt, faClone } from '@fortawesome/free-solid-svg-icons'; 
+  import { library } from '@fortawesome/fontawesome-svg-core';
+  import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
+
+  library.add(faPlus, faTrashAlt, faClone); 
 
   type HistoryItem = {
     id: number;
@@ -439,6 +444,32 @@
     overflow-y: auto;
     max-height: 100%;
   }
+
+  .top-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+  }
+
+  .btn-add {
+    background-color: var(--primary);
+    color: var(--background);
+  }
+
+  .btn-clear {
+    background-color: var(--error);
+    color: var(--background);
+  }
 </style>
 
 <div class="flex h-screen">
@@ -479,9 +510,7 @@
                 on:click={() => duplicateHistoryItem(item)}
                 on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') duplicateHistoryItem(item); }}
               >
-                <svg class="icon" viewBox="0 0 24 24">
-                  <path d="M3 6h18v2H3V6zm2 2h14v14H5V8zm6 0V4h2v4h-2zm0 0h2v2h-2V8zm0 0h2v12h-2V8zM8 10v10H6V10h2zm0 0h2v10H8V10zm8 0v10h-2V10h2zm0 0h-2v10h2V10z"/>
-                </svg>
+              <FontAwesomeIcon icon="clone" size="lg" />
               </button>
               <button 
                 class="delete-icon text-red-500" 
@@ -489,9 +518,7 @@
                 on:click={() => deleteHistoryItem(item.id)}
                 on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') deleteHistoryItem(item.id); }}
               >
-                <svg class="icon" viewBox="0 0 24 24">
-                  <path d="M3 6h18v2H3V6zm2 2h14v14H5V8zm6 0V4h2v4h-2zm0 0h2v2h-2V8zm0 0h2v12h-2V8zM8 10v10H6V10h2zm0 0h2v10H8V10zm8 0v10h-2V10h2zm0 0h-2v10h2V10z"/>
-                </svg>
+              <FontAwesomeIcon icon="trash-alt" size="lg" />
               </button>
             </li>
           {/each}
@@ -502,6 +529,8 @@
 
   <div class="request-panel panel">
     <h2 class="text-xl font-bold mb-4">Request</h2>
+    
+  
     <div class="flex mb-4">
       <select id="method" bind:value={$method} class="p-2 border rounded text-primary bg-accent mr-2">
         <option value="GET">GET</option>
@@ -572,30 +601,48 @@
           <button type="button" on:click={addFormField} class="w-full p-2 bg-primary text-background rounded">Add Field</button>
         {/if}
       {:else if $selectedRequestTab === 'params'}
+   
+
+      <div class="top-buttons">
+        <button type="button" on:click={addParam} class="btn btn-add">
+          <FontAwesomeIcon icon="plus" /> Add
+        </button>
+        <button type="button" on:click={clearParams} class="btn btn-clear">
+          <FontAwesomeIcon icon="trash-alt" /> Delete All
+        </button>
+      </div>
         <div class="params-container">
-          <label for="params" class="block mb-2">Params</label>
+          
           {#each $params as param, index}
             <div class="header-row">
               <input type="text" placeholder="Key" bind:value={param.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
               <input type="text" placeholder="Value" bind:value={param.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
-              <button type="button" on:click={() => params.update(p => p.filter((_, i) => i !== index))} class="p-2 bg-red-500 text-white rounded">Delete</button>
+              <button type="button" on:click={() => params.update(p => p.filter((_, i) => i !== index))}>
+                <FontAwesomeIcon icon="trash-alt" />
+              </button>
             </div>
           {/each}
-          <button type="button" on:click={addParam} class="w-full p-2 bg-primary text-background rounded">Add Param</button>
-          <button type="button" on:click={clearParams} class="w-full p-2 bg-red-500 text-background rounded mt-2">Clear All Params</button>
         </div>
       {:else if $selectedRequestTab === 'headers'}
+      <div class="top-buttons">
+        <button type="button" on:click={addHeader} class="btn btn-add">
+          <FontAwesomeIcon icon="plus" /> Add
+        </button>
+        <button type="button" on:click={clearHeaders} class="btn btn-clear">
+          <FontAwesomeIcon icon="trash-alt" /> Delete All
+        </button>
+      </div>
         <div class="header-container">
-          <label for="headers" class="block mb-2">Headers</label>
+       
           {#each $headers as header, index}
             <div class="header-row">
               <input type="text" placeholder="Key" bind:value={header.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
               <input type="text" placeholder="Value" bind:value={header.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
-              <button type="button" on:click={() => headers.update(h => h.filter((_, i) => i !== index))} class="p-2 bg-red-500 text-white rounded">Delete</button>
+              <button type="button" on:click={() => headers.update(h => h.filter((_, i) => i !== index))}>
+                <FontAwesomeIcon icon="trash-alt" />
+              </button>
             </div>
           {/each}
-          <button type="button" on:click={addHeader} class="w-full p-2 bg-primary text-background rounded">Add Header</button>
-          <button type="button" on:click={clearHeaders} class="w-full p-2 bg-red-500 text-background rounded mt-2">Clear All Headers</button>
         </div>
       {:else if $selectedRequestTab === 'group'}
         <div class="mb-4">
