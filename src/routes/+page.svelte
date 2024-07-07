@@ -1,5 +1,4 @@
 <script lang="ts">
-  // Importing necessary modules and components
   import { onMount } from 'svelte';
   import { writable } from 'svelte/store';
   import type { Writable } from 'svelte/store';
@@ -8,14 +7,12 @@
   import Prism from 'prismjs';
   import 'prismjs/components/prism-json';
   import 'prismjs/themes/prism-solarizedlight.css';
-  import { faPlus, faTrashAlt, faClone } from '@fortawesome/free-solid-svg-icons'; 
+  import { faPlus, faTrashAlt, faClone, faEdit } from '@fortawesome/free-solid-svg-icons';
   import { library } from '@fortawesome/fontawesome-svg-core';
   import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
 
-  // Adding FontAwesome icons to the library
-  library.add(faPlus, faTrashAlt, faClone);
+  library.add(faPlus, faTrashAlt, faClone, faEdit);
 
-  // Type definitions
   type HistoryItem = {
     id: number;
     url: string;
@@ -45,7 +42,6 @@
     headers: [string, string][];
   };
 
-  // Svelte stores
   let url = writable('');
   let method = writable('GET');
   let body = writable('{"key": "value"}');
@@ -62,16 +58,29 @@
   let newGroupName = writable('');
   let modalOpen = writable(true);
 
-  // IndexedDB setup
-  const dbPromise = openDB('request-rocket-db', 1, {
-    upgrade(db) {
+  let variables = writable<{ [key: string]: string }>({});
+  let newVariableKey = writable('');
+  let newVariableValue = writable('');
+
+  let variablesPanelOpen = writable(false);
+
+  const dbPromise = openDB('request-rocket-db', 2, {
+  upgrade(db, oldVersion) {
+    if (oldVersion < 1) {
       if (!db.objectStoreNames.contains('history')) {
         db.createObjectStore('history', { keyPath: 'id', autoIncrement: true });
       }
-    },
-  });
+    }
+    if (oldVersion < 2) {
+      if (!db.objectStoreNames.contains('variables')) {
+        db.createObjectStore('variables', { keyPath: 'key' });
+      }
+    }
+  },
+});
 
-  // Functions to manipulate headers, params, and form fields
+
+
   async function addHeader() {
     headers.update(h => [...h, { key: '', value: '' }]);
   }
@@ -94,7 +103,6 @@
     updateUrl();
   }
 
-  // Functions to manage groups
   function createNewGroup() {
     if ($newGroupName) {
       groups.update(g => [...g, $newGroupName]);
@@ -113,38 +121,43 @@
     url.set(urlWithParams);
   }
 
+  function replaceVariables(str: string, vars: { [key: string]: string }): string {
+    return str.replace(/{{(.*?)}}/g, (_, key) => vars[key.trim()] || '');
+  }
+
   async function sendRequest() {
+    const actualUrl = replaceVariables($url, $variables);
+    const actualHeaders = $headers.map(header => ({
+      key: replaceVariables(header.key, $variables),
+      value: replaceVariables(header.value, $variables)
+    }));
+
     let requestBody;
     if ($method === 'GET') {
       requestBody = null;
     } else {
       switch ($bodyType) {
         case 'json':
-          requestBody = $body;
-          break;
         case 'xml':
-          requestBody = $body;
+          requestBody = replaceVariables($body, $variables);
           break;
         case 'form-data':
           const formDataObject = new FormData();
-          $formData.forEach(field => formDataObject.append(field.key, field.value));
+          $formData.forEach(field => formDataObject.append(field.key, replaceVariables(field.value, $variables)));
           requestBody = formDataObject;
           break;
         case 'form-urlencoded':
-          requestBody = new URLSearchParams($formData.map(field => [field.key, field.value])).toString();
+          requestBody = new URLSearchParams($formData.map(field => [field.key, replaceVariables(field.value, $variables)])).toString();
           break;
       }
     }
 
     const requestData: any = {
-      url: $url,
+      url: actualUrl,
       method: $method,
-      body: requestBody
+      body: requestBody,
+      headers: Object.fromEntries(actualHeaders.map(header => [header.key, header.value]))
     };
-
-    if ($headers.length > 0) {
-      requestData.headers = Object.fromEntries($headers.map(header => [header.key, header.value]));
-    }
 
     console.log('Sending request with data:', requestData);
 
@@ -153,12 +166,12 @@
       console.log('Response received:', res);
       response.set(res);
 
-      const existingHistoryItem = $history.find(item => item.url === $url && item.method === $method && item.group === $selectedGroup);
+      const existingHistoryItem = $history.find(item => item.url === actualUrl && item.method === $method && item.group === $selectedGroup);
       if (existingHistoryItem) {
         const updatedHistoryItem: HistoryItem = { 
           ...existingHistoryItem,
           body: $body, 
-          headers: $headers,
+          headers: actualHeaders,
           params: $params,
           response: JSON.stringify(res),
         };
@@ -166,10 +179,10 @@
       } else {
         const newHistoryItem: HistoryItem = { 
           id: Date.now(), 
-          url: $url, 
+          url: actualUrl, 
           method: $method, 
           body: $body, 
-          headers: $headers,
+          headers: actualHeaders,
           params: $params,
           response: JSON.stringify(res),
           group: $selectedGroup
@@ -186,7 +199,6 @@
     }
   }
 
-  // Functions to handle history operations
   async function saveHistory(historyItem: HistoryItem) {
     console.log('Saving history:', historyItem);
     try {
@@ -261,8 +273,40 @@
 
     selectHistoryItem(newHistoryItem);
   }
+  async function saveVariable(key: string, value: string) {
+  console.log('Saving variable:', { key, value });
+  try {
+    const db = await dbPromise;
+    await db.put('variables', { key, value });
+    console.log('Variable saved successfully.');
+  } catch (error) {
+    console.error('Error saving variable:', error instanceof Error ? error.message : error);
+  }
+}
 
-  // Utility functions
+async function deleteVariableFromDb(key: string) {
+  console.log('Deleting variable:', key);
+  try {
+    const db = await dbPromise;
+    await db.delete('variables', key);
+    console.log('Variable deleted successfully.');
+  } catch (error) {
+    console.error('Error deleting variable:', error instanceof Error ? error.message : error);
+  }
+}
+
+async function loadVariables() {
+  console.log('Loading variables...');
+  try {
+    const db = await dbPromise;
+    const allVariables = await db.getAll('variables');
+    const variablesObject = Object.fromEntries(allVariables.map(v => [v.key, v.value]));
+    variables.set(variablesObject);
+  } catch (error) {
+    console.error('Failed to load variables:', error instanceof Error ? error.message : error);
+  }
+}
+
   function getStatusClass(status: number): string {
     if (status >= 200 && status < 300) {
       return 'bg-green-500';
@@ -308,15 +352,32 @@
     response.set(null);
   }
 
-  // Lifecycle method
-  onMount(() => {
-    loadGroups();
-    response.subscribe(value => {
-      if (value) {
-        Prism.highlightAll();
-      }
-    });
+  function addVariable() {
+  if ($newVariableKey && $newVariableValue) {
+    variables.update(vars => ({ ...vars, [$newVariableKey]: $newVariableValue }));
+    saveVariable($newVariableKey, $newVariableValue);
+    newVariableKey.set('');
+    newVariableValue.set('');
+  }
+}
+
+function deleteVariable(key: string) {
+  variables.update(vars => {
+    const { [key]: _, ...rest } = vars;
+    return rest;
   });
+  deleteVariableFromDb(key);
+}
+
+onMount(() => {
+  loadGroups();
+  loadVariables(); // Load variables on mount
+  response.subscribe(value => {
+    if (value) {
+      Prism.highlightAll();
+    }
+  });
+});
 
   $: $params, updateUrl(); // Update URL whenever params change
 </script>
@@ -457,18 +518,18 @@
   }
 
   .top-buttons {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
 
-.separator {
-  width: 1px;
-  height: 20px;
-  background-color: #ccc;
-}
+  .separator {
+    width: 1px;
+    height: 20px;
+    background-color: #ccc;
+  }
 
   .btn {
     display: flex;
@@ -489,33 +550,45 @@
     background-color: var(--error);
     color: var(--background);
   }
+
+  .variables-panel {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    margin-top: 1rem;
+    border-radius: 0.5rem;
+  }
 </style>
 
-<!-- HTML structure for the application -->
 <div class="flex h-screen">
   {#if $modalOpen}
-  <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white p-4 rounded shadow-lg w-1/2">
-      <h2 class="text-lg font-bold mb-4">Select Group</h2>
-      <div class="grid grid-cols-4 gap-2">
-        {#each $groups as group}
-          <div class="group-card" on:click={() => handleGroupSelect(group)}>
-            {group}
-          </div>
-        {/each}
-      </div>
-      <div class="mt-4">
-        <input type="text" placeholder="New Group Name" bind:value={$newGroupName} class="w-full mb-2 p-2 border rounded text-primary bg-accent" />
-        <button type="button" on:click={createNewGroup} class="w-full p-2 bg-primary text-background rounded">Add Group</button>
+    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div class="bg-white p-4 rounded shadow-lg w-1/2">
+        <h2 class="text-lg font-bold mb-4">Select Group</h2>
+        <div class="grid grid-cols-4 gap-2">
+          {#each $groups as group}
+            <div class="group-card" on:click={() => handleGroupSelect(group)}>
+              {group}
+            </div>
+          {/each}
+        </div>
+        <div class="mt-4">
+          <input type="text" placeholder="New Group Name" bind:value={$newGroupName} class="w-full mb-2 p-2 border rounded text-primary bg-accent" />
+          <button type="button" on:click={createNewGroup} class="w-full p-2 bg-primary text-background rounded">Add Group</button>
+        </div>
       </div>
     </div>
-  </div>
   {/if}
+
   <div class="history-panel panel">
     <h2 class="text-xl font-bold mb-4">History</h2>
     {#if $selectedGroup}
       <div class="group">
-        <h3 class="text-lg font-semibold mb-2">{$selectedGroup}</h3>
+        <div class="flex justify-between items-center">
+          <h3 class="text-lg font-semibold mb-2">{$selectedGroup}</h3>
+          <button type="button" on:click={() => variablesPanelOpen.set(true)} class="text-">
+            <FontAwesomeIcon icon="edit" size="lg" /> Variables
+          </button>
+        </div>
         <ul>
           {#each $history as item}
             <li class="mb-2 history-item flex justify-between items-center">
@@ -530,7 +603,7 @@
                 on:click={() => duplicateHistoryItem(item)}
                 on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') duplicateHistoryItem(item); }}
               >
-              <FontAwesomeIcon icon="clone" size="lg" />
+                <FontAwesomeIcon icon="clone" size="lg" />
               </button>
               <button 
                 class="delete-icon text-red-500" 
@@ -538,7 +611,7 @@
                 on:click={() => deleteHistoryItem(item.id)}
                 on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') deleteHistoryItem(item.id); }}
               >
-              <FontAwesomeIcon icon="trash-alt" size="lg" />
+                <FontAwesomeIcon icon="trash-alt" size="lg" />
               </button>
             </li>
           {/each}
@@ -601,7 +674,7 @@
     </div>
     <div class="tab-content">
       {#if $selectedRequestTab === 'body'}
-        <label for="bodyType" class="block mb-2">Body Type</label>
+   
         <select id="bodyType" bind:value={$bodyType} class="w-full mb-4 p-2 border rounded text-primary bg-accent">
           <option value="json">JSON</option>
           <option value="xml">XML</option>
@@ -663,7 +736,7 @@
         </div>
       {:else if $selectedRequestTab === 'group'}
         <div class="mb-4">
-          <label for="group" class="block mb-2">Group</label>
+      
           <select id="group" bind:value={$selectedGroup} class="w-full mb-4 p-2 border rounded text-primary bg-accent">
             {#each $groups as group}
               <option value={group}>{group}</option>
@@ -732,4 +805,31 @@
       <div>No response</div>
     {/if}
   </div>
+
+  {#if $variablesPanelOpen}
+    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div class="variables-panel bg-white p-4 rounded shadow-lg">
+        <h2 class="text-xl font-bold mb-4">Variables</h2>
+        <div class="flex mb-4">
+          <input type="text" placeholder="Key" bind:value={$newVariableKey} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
+          <input type="text" placeholder="Value" bind:value={$newVariableValue} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
+          <button type="button" on:click={addVariable} class="flex items-center">
+            <FontAwesomeIcon icon="plus" size="lg" class="mr-2" />Add
+          </button>
+        </div>
+        
+        <ul>
+          {#each Object.entries($variables) as [key, value]}
+            <li class="mb-2 flex justify-between items-center">
+              <strong class="text-primary">{key}:</strong> <span class="text-secondary">{value}</span>
+              <button type="button" on:click={() => deleteVariable(key)} class="text-red-500">
+                <FontAwesomeIcon icon="trash-alt"/> 
+              </button>
+            </li>
+          {/each}
+        </ul>
+        <button type="button" on:click={() => variablesPanelOpen.set(false)} class="">Close Panel</button>
+      </div>
+    </div>
+  {/if}
 </div>
