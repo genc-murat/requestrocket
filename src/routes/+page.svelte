@@ -33,19 +33,18 @@
 
   let url = writable('');
   let method = writable('GET');
-  let body = writable('');
+  let body = writable('{"key": "value"}'); // Set default JSON value
   let headers = writable<Header[]>([]);
-  let bodyType = writable('json');
+  let bodyType = writable('json'); // Default to JSON
   let formData = writable<Header[]>([{ key: '', value: '' }]);
   let response = writable<ResponseData | null>(null);
   let history = writable<HistoryItem[]>([]);
-  let selectedTab = writable('response');
+  let selectedTab = writable('response'); // For results section
+  let selectedRequestTab = writable('body'); // For request section
   let selectedGroup = writable('');
   let groups = writable<string[]>([]);
   let newGroupName = writable('');
   let modalOpen = writable(true);
-  let editingGroupIndex = writable<number | null>(null);
-  let editedGroupName = writable('');
 
   const dbPromise = openDB('request-rocket-db', 1, {
     upgrade(db) {
@@ -233,8 +232,6 @@
   });
 </script>
 
-
-
 <style>
   pre {
     background: #f5f5f5;
@@ -291,6 +288,7 @@
   .group-card:hover {
     background-color: #f0f0f0;
   }
+
   .input-container {
     position: relative;
     width: 100%;
@@ -302,6 +300,15 @@
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
+    font-size: 1rem;
+    color: var(--secondary-text);
+    transition: color 0.3s ease;
+    user-select: none;
+  }
+
+  .clear-icon:hover {
+    color: var(--error);
+    font-weight: bolder;
   }
 
   .header-container {
@@ -321,6 +328,32 @@
 
   .header-row button {
     margin-left: 0.5rem;
+  }
+
+  .tab {
+    cursor: pointer;
+    padding: 0.3rem 0.6rem;
+    margin-right: 0.3rem;
+    border: 1px solid var(--divider);
+    border-bottom: none;
+    background: var(--surface);
+    border-radius: 4px 4px 0 0;
+  }
+
+  .tab.active {
+    background: var(--light-background);
+    border-bottom: 1px solid var(--surface);
+    color: var(--dark-text);
+  }
+
+  .tab-content {
+    border: 1px solid var(--divider);
+    padding: 0.5rem;
+    background: var(--surface);
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-y: auto;
+    max-height: 100%;
   }
 </style>
 
@@ -389,15 +422,42 @@
         {/if}
       </div>
     </div>
-    <div class="mb-4">
-      <label for="bodyType" class="block mb-2">Body Type</label>
-      <select id="bodyType" bind:value={$bodyType} class="w-full mb-4 p-2 border rounded text-primary bg-accent">
-        <option value="json">JSON</option>
-        <option value="xml">XML</option>
-        <option value="form-data">Form Data</option>
-        <option value="form-urlencoded">Form URL Encoded</option>
-      </select>
-      <div class="tab-content">
+    <button type="button" on:click={sendRequest} class="button mb-4">Send Request</button>
+    <div class="tabs">
+      <button 
+        type="button" 
+        class="tab { $selectedRequestTab === 'body' ? 'active' : '' }" 
+        on:click={() => selectedRequestTab.set('body')} 
+        aria-label="Body Tab"
+      >
+        Body
+      </button>
+      <button 
+        type="button" 
+        class="tab { $selectedRequestTab === 'headers' ? 'active' : '' }" 
+        on:click={() => selectedRequestTab.set('headers')} 
+        aria-label="Headers Tab"
+      >
+        Headers
+      </button>
+      <button 
+        type="button" 
+        class="tab { $selectedRequestTab === 'group' ? 'active' : '' }" 
+        on:click={() => selectedRequestTab.set('group')} 
+        aria-label="Group Tab"
+      >
+        Group
+      </button>
+    </div>
+    <div class="tab-content">
+      {#if $selectedRequestTab === 'body'}
+        <label for="bodyType" class="block mb-2">Body Type</label>
+        <select id="bodyType" bind:value={$bodyType} class="w-full mb-4 p-2 border rounded text-primary bg-accent">
+          <option value="json">JSON</option>
+          <option value="xml">XML</option>
+          <option value="form-data">Form Data</option>
+          <option value="form-urlencoded">Form URL Encoded</option>
+        </select>
         {#if $bodyType === 'json' || $bodyType === 'xml'}
           <textarea id="body" bind:value={$body} placeholder={$bodyType === 'json' ? '{"key": "value"}' : '<xml></xml>'} class="w-full mb-4 p-2 border rounded text-primary bg-accent"></textarea>
         {:else}
@@ -409,34 +469,33 @@
           {/each}
           <button type="button" on:click={addFormField} class="w-full p-2 bg-primary text-background rounded">Add Field</button>
         {/if}
-      </div>
-    </div>
-
-    <div class="header-container">
-      <label for="headers" class="block mb-2">Headers</label>
-      {#each $headers as header, index}
-        <div class="header-row">
-          <input type="text" placeholder="Key" bind:value={header.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
-          <input type="text" placeholder="Value" bind:value={header.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
-          <button type="button" on:click={() => headers.update(h => h.filter((_, i) => i !== index))} class="p-2 bg-red-500 text-white rounded">Delete</button>
+      {:else if $selectedRequestTab === 'headers'}
+        <div class="header-container">
+          <label for="headers" class="block mb-2">Headers</label>
+          {#each $headers as header, index}
+            <div class="header-row">
+              <input type="text" placeholder="Key" bind:value={header.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
+              <input type="text" placeholder="Value" bind:value={header.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
+              <button type="button" on:click={() => headers.update(h => h.filter((_, i) => i !== index))} class="p-2 bg-red-500 text-white rounded">Delete</button>
+            </div>
+          {/each}
+          <button type="button" on:click={addHeader} class="w-full p-2 bg-primary text-background rounded">Add Header</button>
         </div>
-      {/each}
-      <button type="button" on:click={addHeader} class="w-full p-2 bg-primary text-background rounded">Add Header</button>
-    </div>
-
-    <div class="mb-4">
-      <label for="group" class="block mb-2">Group</label>
-      <select id="group" bind:value={$selectedGroup} class="w-full mb-4 p-2 border rounded text-primary bg-accent">
-        {#each $groups as group}
-          <option value={group}>{group}</option>
-        {/each}
-        <option value="new">+ Create New Group</option>
-      </select>
-      {#if $selectedGroup === 'new'}
-        <input type="text" placeholder="New Group Name" bind:value={$newGroupName} class="w-full mb-4 p-2 border rounded text-primary bg-accent" on:blur={createNewGroup} />
+      {:else if $selectedRequestTab === 'group'}
+        <div class="mb-4">
+          <label for="group" class="block mb-2">Group</label>
+          <select id="group" bind:value={$selectedGroup} class="w-full mb-4 p-2 border rounded text-primary bg-accent">
+            {#each $groups as group}
+              <option value={group}>{group}</option>
+            {/each}
+            <option value="new">+ Create New Group</option>
+          </select>
+          {#if $selectedGroup === 'new'}
+            <input type="text" placeholder="New Group Name" bind:value={$newGroupName} class="w-full mb-4 p-2 border rounded text-primary bg-accent" on:blur={createNewGroup} />
+          {/if}
+        </div>
       {/if}
     </div>
-    <button type="button" on:click={sendRequest} class="button">Send Request</button>
   </div>
 
   <div class="response-panel panel">
