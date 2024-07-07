@@ -115,25 +115,25 @@ async fn send_request(client: State<'_, Client>, request_data: RequestData) -> R
 
 #[tokio::main]
 async fn main() {
-    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
+    // let quit = CustomMenuItem::new("quit".to_string(), "Quit");
 
-    let submenu = Submenu::new("File", Menu::new().add_item(quit));
-    let menu = Menu::new()
-      .add_native_item(MenuItem::Copy)
-      .add_submenu(submenu);
+    // let submenu = Submenu::new("File", Menu::new().add_item(quit));
+    // let menu = Menu::new()
+    //   .add_native_item(MenuItem::Copy)
+    //   .add_submenu(submenu);
 
 
   tauri::Builder::default()
-      .menu(menu)
-      .on_menu_event(|event| {
-        match event.menu_item_id() {
-          "quit" => {
-            std::process::exit(0);
-          }
+    //   .menu(menu)
+    //   .on_menu_event(|event| {
+    //     match event.menu_item_id() {
+    //       "quit" => {
+    //         std::process::exit(0);
+    //       }
         
-          _ => {}
-        }
-      })
+    //       _ => {}
+    //     }
+    //   })
       .manage(Client::new())
       .invoke_handler(tauri::generate_handler![send_request])
       .run(tauri::generate_context!())

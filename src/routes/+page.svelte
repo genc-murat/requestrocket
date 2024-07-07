@@ -15,10 +15,16 @@
     body: string;
     response: string;
     headers: Header[];
+    params: Param[];
     group: string;
   };
 
   type Header = {
+    key: string;
+    value: string;
+  };
+
+  type Param = {
     key: string;
     value: string;
   };
@@ -35,6 +41,7 @@
   let method = writable('GET');
   let body = writable('{"key": "value"}'); // Set default JSON value
   let headers = writable<Header[]>([]);
+  let params = writable<Param[]>([]);
   let bodyType = writable('json'); // Default to JSON
   let formData = writable<Header[]>([{ key: '', value: '' }]);
   let response = writable<ResponseData | null>(null);
@@ -62,6 +69,11 @@
     formData.update(f => [...f, { key: '', value: '' }]);
   }
 
+  async function addParam() {
+    params.update(p => [...p, { key: '', value: '' }]);
+    updateUrl();
+  }
+
   function createNewGroup() {
     if ($newGroupName) {
       groups.update(g => [...g, $newGroupName]);
@@ -69,6 +81,15 @@
       newGroupName.set('');
       modalOpen.set(false);
     }
+  }
+
+  function updateUrl() {
+    let urlWithParams = $url;
+    if ($params.length > 0) {
+      const queryString = new URLSearchParams($params.map(param => [param.key, param.value])).toString();
+      urlWithParams = $url.split('?')[0] + `?${queryString}`;
+    }
+    url.set(urlWithParams);
   }
 
   async function sendRequest() {
@@ -117,6 +138,7 @@
         method: $method, 
         body: $body, 
         headers: $headers,
+        params: $params,
         response: JSON.stringify(res),
         group: $selectedGroup // Save the group information
       };
@@ -207,6 +229,7 @@
     method.set(item.method);
     body.set(item.body);
     headers.set(item.headers || []); // Ensure headers is an array
+    params.set(item.params || []); // Ensure params is an array
     response.set(item.response ? JSON.parse(item.response) : null); // Ensure response is properly parsed
   }
 
@@ -219,6 +242,7 @@
   function clearInput(store: Writable<string>) {
     store.set('');
     headers.set([]); // Clear headers
+    params.set([]); // Clear params
     response.set(null);
   }
 
@@ -230,6 +254,8 @@
       }
     });
   });
+
+  $: $params, updateUrl(); // Update URL whenever params change
 </script>
 
 <style>
@@ -434,6 +460,14 @@
       </button>
       <button 
         type="button" 
+        class="tab { $selectedRequestTab === 'params' ? 'active' : '' }" 
+        on:click={() => selectedRequestTab.set('params')} 
+        aria-label="Params Tab"
+      >
+        Params
+      </button>
+      <button 
+        type="button" 
         class="tab { $selectedRequestTab === 'headers' ? 'active' : '' }" 
         on:click={() => selectedRequestTab.set('headers')} 
         aria-label="Headers Tab"
@@ -469,6 +503,18 @@
           {/each}
           <button type="button" on:click={addFormField} class="w-full p-2 bg-primary text-background rounded">Add Field</button>
         {/if}
+      {:else if $selectedRequestTab === 'params'}
+        <div class="params-container">
+          <label for="params" class="block mb-2">Params</label>
+          {#each $params as param, index}
+            <div class="header-row">
+              <input type="text" placeholder="Key" bind:value={param.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
+              <input type="text" placeholder="Value" bind:value={param.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
+              <button type="button" on:click={() => params.update(p => p.filter((_, i) => i !== index))} class="p-2 bg-red-500 text-white rounded">Delete</button>
+            </div>
+          {/each}
+          <button type="button" on:click={addParam} class="w-full p-2 bg-primary text-background rounded">Add Param</button>
+        </div>
       {:else if $selectedRequestTab === 'headers'}
         <div class="header-container">
           <label for="headers" class="block mb-2">Headers</label>
