@@ -446,10 +446,18 @@
   }
 
   .top-buttons {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
+  display: flex;
+  justify-content: flex-end;
+  align-items: center; /* Vertically center content if needed */
+  gap: 1rem;          /* Increase gap between buttons and separator */
+  margin-bottom: 1rem;
+}
+
+.separator {
+  width: 1px;          /* Adjust separator width as needed */
+  height: 20px;         /* Adjust separator height as needed */
+  background-color: #ccc;/* Adjust separator color as needed */
+}
 
   .btn {
     display: flex;
@@ -604,11 +612,16 @@
    
 
       <div class="top-buttons">
-        <button type="button" on:click={addParam} class="btn btn-add">
-          <FontAwesomeIcon icon="plus" /> Add
+        <button type="button" on:click={addParam} class="">
+          <FontAwesomeIcon icon="plus" size="lg"/> Add
         </button>
-        <button type="button" on:click={clearParams} class="btn btn-clear">
-          <FontAwesomeIcon icon="trash-alt" /> Delete All
+        <span class="separator"></span> <button
+        type="button"
+        on:click={clearHeaders}
+        class="text-red-700"
+      >
+        <button type="button" on:click={clearParams} class="text-red-700">
+          <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
         </button>
       </div>
         <div class="params-container">
@@ -617,19 +630,24 @@
             <div class="header-row">
               <input type="text" placeholder="Key" bind:value={param.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
               <input type="text" placeholder="Value" bind:value={param.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
-              <button type="button" on:click={() => params.update(p => p.filter((_, i) => i !== index))}>
-                <FontAwesomeIcon icon="trash-alt" />
+              <button type="button" on:click={() => params.update(p => p.filter((_, i) => i !== index))} class="text-red-500">
+                <FontAwesomeIcon icon="trash-alt" size="lg" />
               </button>
             </div>
           {/each}
         </div>
       {:else if $selectedRequestTab === 'headers'}
       <div class="top-buttons">
-        <button type="button" on:click={addHeader} class="btn btn-add">
-          <FontAwesomeIcon icon="plus" /> Add
+        <button type="button" on:click={addHeader} class="">
+          <FontAwesomeIcon icon="plus" size="lg"/> Add
         </button>
-        <button type="button" on:click={clearHeaders} class="btn btn-clear">
-          <FontAwesomeIcon icon="trash-alt" /> Delete All
+        <span class="separator"></span> <button
+        type="button"
+        on:click={clearHeaders}
+        class="text-red-700"
+      >
+        <button type="button" on:click={clearHeaders} class="text-red-700">
+          <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
         </button>
       </div>
         <div class="header-container">
@@ -638,7 +656,7 @@
             <div class="header-row">
               <input type="text" placeholder="Key" bind:value={header.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
               <input type="text" placeholder="Value" bind:value={header.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
-              <button type="button" on:click={() => headers.update(h => h.filter((_, i) => i !== index))}>
+              <button type="button" on:click={() => headers.update(h => h.filter((_, i) => i !== index))} class="text-red-500">
                 <FontAwesomeIcon icon="trash-alt" />
               </button>
             </div>
