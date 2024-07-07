@@ -41,6 +41,7 @@
   let group = writable('');
   let groups = writable<string[]>([]);
   let newGroupName = writable('');
+  let modalOpen = writable(true);
 
   const dbPromise = openDB('request-rocket-db', 1, {
     upgrade(db) {
@@ -137,15 +138,25 @@
     }
   }
 
-  async function loadHistory() {
-    console.log('Loading history...');
+  async function loadGroups() {
+    console.log('Loading groups...');
     try {
       const db = await dbPromise;
       const allHistoryItems = await db.getAll('history');
-      console.log('Saved history:', allHistoryItems);
-      history.set(allHistoryItems);
       const uniqueGroups = [...new Set(allHistoryItems.map(item => item.group))];
       groups.set(uniqueGroups);
+    } catch (error) {
+      console.error('Failed to load groups:', error instanceof Error ? error.message : error);
+    }
+  }
+
+  async function loadHistory(selectedGroup: string) {
+    console.log('Loading history for group:', selectedGroup);
+    try {
+      const db = await dbPromise;
+      const allHistoryItems = await db.getAll('history');
+      const filteredHistory = allHistoryItems.filter(item => item.group === selectedGroup);
+      history.set(filteredHistory);
     } catch (error) {
       console.error('Failed to load history:', error instanceof Error ? error.message : error);
     }
@@ -195,8 +206,16 @@
     response.set(JSON.parse(item.response));
   }
 
+  function handleGroupSelect(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedGroup = selectElement.value;
+    group.set(selectedGroup);
+    modalOpen.set(false);
+    loadHistory(selectedGroup); // Load history based on selected group
+  }
+
   onMount(() => {
-    loadHistory();
+    loadGroups();
     response.subscribe(value => {
       if (value) {
         Prism.highlightAll();
@@ -207,21 +226,71 @@
 
 <style>
   pre {
-    background: #f5f5f5; 
-    color: #ccc; 
+    background: #f5f5f5;
+    color: #ccc;
     padding: 1em;
     border-radius: 5px;
+  }
+
+  .fixed {
+    position: fixed;
+  }
+  .inset-0 {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+  .flex {
+    display: flex;
+  }
+  .items-center {
+    align-items: center;
+  }
+  .justify-center {
+    justify-content: center;
+  }
+  .bg-black {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  .bg-opacity-50 {
+    background-opacity: 0.5;
+  }
+  .bg-white {
+    background-color: #ffffff;
+  }
+  .p-4 {
+    padding: 1rem;
+  }
+  .rounded {
+    border-radius: 0.5rem;
+  }
+  .shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
 </style>
 
 <div class="flex h-screen">
+  {#if $modalOpen}
+  <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-4 rounded shadow-lg">
+      <h2 class="text-lg font-bold mb-4">Select Group</h2>
+      <select class="w-full p-2 border rounded" on:change={handleGroupSelect}>
+        <option value="" disabled selected>Select a group</option>
+        {#each $groups as group}
+          <option value={group}>{group}</option>
+        {/each}
+      </select>
+    </div>
+  </div>
+  {/if}
   <div class="history-panel panel">
     <h2 class="text-xl font-bold mb-4">History</h2>
-    {#each $groups as group}
+    {#if $group}
       <div class="group">
-        <h3 class="text-lg font-semibold mb-2">{group}</h3>
+        <h3 class="text-lg font-semibold mb-2">{$group}</h3>
         <ul>
-          {#each $history.filter(item => item.group === group) as item}
+          {#each $history as item}
             <li class="mb-2 history-item flex justify-between items-center">
               <button type="button" class="w-full text-left" on:click={() => selectHistoryItem(item)}>
                 <strong class="px-2 py-1 rounded {item.method === 'GET' ? 'bg-green-500' : ''} {item.method === 'POST' ? 'bg-blue-500' : ''} {item.method === 'PUT' ? 'bg-yellow-500' : ''} {item.method === 'DELETE' ? 'bg-red-500' : ''} text-white">
@@ -242,7 +311,7 @@
           {/each}
         </ul>
       </div>
-    {/each}
+    {/if}
   </div>
 
   <div class="request-panel panel">
