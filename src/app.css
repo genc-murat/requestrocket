@@ -46,17 +46,17 @@ body {
 }
 
 .history-panel {
-  flex: 1 0 20%;
+  flex: 1 0 17%;
   overflow-y: auto;
 }
 
 .request-panel {
-  flex: 1 0 30%;
+  flex: 1 0 40%;
   overflow-y: auto;
 }
 
 .response-panel {
-  flex: 1 0 50%;
+  flex: 1 0 43%;
   overflow-y: auto;
 }
 
@@ -127,7 +127,7 @@ table {
 
 th, td {
   border: 1px solid var(--divider);
-  padding: 5px;
+  padding: 10px;
   text-align: left;
   color: var(--secondary-text);
 }
@@ -139,8 +139,8 @@ th {
 }
 
 td:first-child {
-  background-color: var(--background);
-  color: var(--secondary-text);
+  background-color: var(--light-background);
+  color: var(--dark-text);
 }
 
 .url {
