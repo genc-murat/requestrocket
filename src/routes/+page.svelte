@@ -40,6 +40,7 @@
     size: number;
     body: string;
     headers: [string, string][];
+    curl_command: string;
   };
 
   let url = writable('');
@@ -65,21 +66,19 @@
   let variablesPanelOpen = writable(false);
 
   const dbPromise = openDB('request-rocket-db', 2, {
-  upgrade(db, oldVersion) {
-    if (oldVersion < 1) {
-      if (!db.objectStoreNames.contains('history')) {
-        db.createObjectStore('history', { keyPath: 'id', autoIncrement: true });
+    upgrade(db, oldVersion) {
+      if (oldVersion < 1) {
+        if (!db.objectStoreNames.contains('history')) {
+          db.createObjectStore('history', { keyPath: 'id', autoIncrement: true });
+        }
       }
-    }
-    if (oldVersion < 2) {
-      if (!db.objectStoreNames.contains('variables')) {
-        db.createObjectStore('variables', { keyPath: 'key' });
+      if (oldVersion < 2) {
+        if (!db.objectStoreNames.contains('variables')) {
+          db.createObjectStore('variables', { keyPath: 'key' });
+        }
       }
-    }
-  },
-});
-
-
+    },
+  });
 
   async function addHeader() {
     headers.update(h => [...h, { key: '', value: '' }]);
@@ -273,39 +272,40 @@
 
     selectHistoryItem(newHistoryItem);
   }
+
   async function saveVariable(key: string, value: string) {
-  console.log('Saving variable:', { key, value });
-  try {
-    const db = await dbPromise;
-    await db.put('variables', { key, value });
-    console.log('Variable saved successfully.');
-  } catch (error) {
-    console.error('Error saving variable:', error instanceof Error ? error.message : error);
+    console.log('Saving variable:', { key, value });
+    try {
+      const db = await dbPromise;
+      await db.put('variables', { key, value });
+      console.log('Variable saved successfully.');
+    } catch (error) {
+      console.error('Error saving variable:', error instanceof Error ? error.message : error);
+    }
   }
-}
 
-async function deleteVariableFromDb(key: string) {
-  console.log('Deleting variable:', key);
-  try {
-    const db = await dbPromise;
-    await db.delete('variables', key);
-    console.log('Variable deleted successfully.');
-  } catch (error) {
-    console.error('Error deleting variable:', error instanceof Error ? error.message : error);
+  async function deleteVariableFromDb(key: string) {
+    console.log('Deleting variable:', key);
+    try {
+      const db = await dbPromise;
+      await db.delete('variables', key);
+      console.log('Variable deleted successfully.');
+    } catch (error) {
+      console.error('Error deleting variable:', error instanceof Error ? error.message : error);
+    }
   }
-}
 
-async function loadVariables() {
-  console.log('Loading variables...');
-  try {
-    const db = await dbPromise;
-    const allVariables = await db.getAll('variables');
-    const variablesObject = Object.fromEntries(allVariables.map(v => [v.key, v.value]));
-    variables.set(variablesObject);
-  } catch (error) {
-    console.error('Failed to load variables:', error instanceof Error ? error.message : error);
+  async function loadVariables() {
+    console.log('Loading variables...');
+    try {
+      const db = await dbPromise;
+      const allVariables = await db.getAll('variables');
+      const variablesObject = Object.fromEntries(allVariables.map(v => [v.key, v.value]));
+      variables.set(variablesObject);
+    } catch (error) {
+      console.error('Failed to load variables:', error instanceof Error ? error.message : error);
+    }
   }
-}
 
   function getStatusClass(status: number): string {
     if (status >= 200 && status < 300) {
@@ -353,31 +353,31 @@ async function loadVariables() {
   }
 
   function addVariable() {
-  if ($newVariableKey && $newVariableValue) {
-    variables.update(vars => ({ ...vars, [$newVariableKey]: $newVariableValue }));
-    saveVariable($newVariableKey, $newVariableValue);
-    newVariableKey.set('');
-    newVariableValue.set('');
-  }
-}
-
-function deleteVariable(key: string) {
-  variables.update(vars => {
-    const { [key]: _, ...rest } = vars;
-    return rest;
-  });
-  deleteVariableFromDb(key);
-}
-
-onMount(() => {
-  loadGroups();
-  loadVariables(); // Load variables on mount
-  response.subscribe(value => {
-    if (value) {
-      Prism.highlightAll();
+    if ($newVariableKey && $newVariableValue) {
+      variables.update(vars => ({ ...vars, [$newVariableKey]: $newVariableValue }));
+      saveVariable($newVariableKey, $newVariableValue);
+      newVariableKey.set('');
+      newVariableValue.set('');
     }
+  }
+
+  function deleteVariable(key: string) {
+    variables.update(vars => {
+      const { [key]: _, ...rest } = vars;
+      return rest;
+    });
+    deleteVariableFromDb(key);
+  }
+
+  onMount(() => {
+    loadGroups();
+    loadVariables(); // Load variables on mount
+    response.subscribe(value => {
+      if (value) {
+        Prism.highlightAll();
+      }
+    });
   });
-});
 
   $: $params, updateUrl(); // Update URL whenever params change
 </script>
@@ -385,10 +385,10 @@ onMount(() => {
 <style>
   /* Styles for the application */
   pre {
-    background: #f5f5f5;
-    color: #ccc;
-    padding: 1em;
-    border-radius: 5px;
+    background: var(--light-background);
+    color: var(--primary-text);
+    /* padding: 1em;
+    border-radius: 5px; */
   }
 
   .fixed {
@@ -784,13 +784,21 @@ onMount(() => {
         >
           Headers
         </button>
+        <button 
+          type="button" 
+          class="tab { $selectedTab === 'curl' ? 'active' : '' }" 
+          on:click={() => selectedTab.set('curl')} 
+          aria-label="Curl Command Tab"
+        >
+          Curl Command
+        </button>
       </div>
       <div class="tab-content">
         {#if $selectedTab === 'response'}
           <pre class="bg-secondary text-background p-2 rounded">
             {@html formatJson($response.body)}
           </pre>
-        {:else}
+        {:else if $selectedTab === 'headers'}
           <table>
             {#each $response.headers as [key, value]}
               <tr>
@@ -799,6 +807,10 @@ onMount(() => {
               </tr>
             {/each}
           </table>
+        {:else if $selectedTab === 'curl'}
+          <pre class="bg-secondary text-background p-2 rounded">
+            {@html $response.curl_command}
+          </pre>
         {/if}
       </div>
     {:else}
