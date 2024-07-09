@@ -808,9 +808,9 @@
             {/each}
           </table>
         {:else if $selectedTab === 'curl'}
-          <pre class="bg-secondary text-background p-2 rounded">
+          <span class="p-2 rounded">
             {@html $response.curl_command}
-          </pre>
+          </span>
         {/if}
       </div>
     {:else}

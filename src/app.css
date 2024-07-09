@@ -276,3 +276,12 @@ textarea {
   padding-right: 30px; /* Adjust padding to make room for clear icon */
   box-sizing: border-box; /* Ensure padding-right is included in the width */
 }
+
+.copy-icon {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  cursor: pointer;
+  display: none;
+  color: var(--primary);
+}
