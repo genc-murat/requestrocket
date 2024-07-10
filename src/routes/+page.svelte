@@ -7,14 +7,14 @@
   import Prism from 'prismjs';
   import 'prismjs/components/prism-json';
   import 'prismjs/themes/prism-solarizedlight.css';
-  import { faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload } from '@fortawesome/free-solid-svg-icons';
+  import { faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload } from '@fortawesome/free-solid-svg-icons';
   import { library } from '@fortawesome/fontawesome-svg-core';
   import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
-  import { writeTextFile } from '@tauri-apps/api/fs';
+  import { writeTextFile,readTextFile  } from '@tauri-apps/api/fs';
   import { dialog } from '@tauri-apps/api';
   import { sendNotification } from '@tauri-apps/api/notification';
 
-  library.add(faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload);
+  library.add(faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload);
 
   type HistoryItem = {
     id: number;
@@ -499,6 +499,49 @@
   function handleExport() {
     downloadPostmanCollection($history);
   }
+
+  async function importPostmanCollection() {
+    try {
+      const filePath = await dialog.open({
+        filters: [{
+          name: 'JSON',
+          extensions: ['json']
+        }]
+      });
+
+      if (typeof filePath === 'string') {
+        const postmanJson = await readTextFile(filePath);
+        const postmanCollection = JSON.parse(postmanJson);
+        const importedHistoryItems: HistoryItem[] = postmanCollection.item.map((item: any, index: number) => ({
+          id: Date.now() + index,
+          url: typeof item.request.url.raw === 'string' ? item.request.url.raw : '',
+          method: item.request.method,
+          body: item.request.body ? item.request.body.raw : '',
+          headers: item.request.header.map((header: any) => ({ key: header.key, value: header.value })),
+          params: [], // Assuming no initial params
+          response: '',
+          group: 'Imported'
+        }));
+
+        history.update(h => {
+          const newHistory = [...h, ...importedHistoryItems];
+          importedHistoryItems.forEach(item => saveHistory(item));
+          return newHistory;
+        });
+
+        sendNotification({
+          title: 'Success',
+          body: 'Postman collection imported successfully.'
+        });
+      }
+    } catch (error) {
+      console.error('Failed to import Postman collection:', error);
+      sendNotification({
+        title: 'Error',
+        body: 'Failed to import Postman collection.'
+      });
+    }
+  }
 </script>
 <style>
   pre {
@@ -710,6 +753,9 @@
           </button>
           <button type="button" on:click={handleExport}>
             <FontAwesomeIcon icon="download" size="lg" /> Export Group
+          </button>
+          <button type="button" on:click={importPostmanCollection}>
+            <FontAwesomeIcon icon="upload" size="lg" /> Import Postman Collection
           </button>
         </div>
        
