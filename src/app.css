@@ -318,3 +318,17 @@ textarea {
 .export-button:hover {
   background-color: var(--primary-dark);
 }
+
+
+@keyframes flash {
+  0% {
+    background-color: rgba(255, 255, 0, 0.2);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.flash {
+  animation: flash 0.5s ease-in-out;
+}
