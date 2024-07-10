@@ -49,7 +49,9 @@
   let headers = writable<Header[]>([]);
   let params = writable<Param[]>([]);
   let bodyType = writable('json');
-  let formData = writable<Header[]>([{ key: '', value: '' }]);
+  let pathParams = writable<Param[]>([]);
+  let queryParams = writable<Param[]>([]);
+  let formParams = writable<Param[]>([]);
   let response = writable<ResponseData | null>(null);
   let history = writable<HistoryItem[]>([]);
   let selectedTab = writable('response');
@@ -85,11 +87,11 @@
   }
 
   async function addFormField() {
-    formData.update(f => [...f, { key: '', value: '' }]);
+    formParams.update(f => [...f, { key: '', value: '' }]);
   }
 
   async function addParam() {
-    params.update(p => [...p, { key: '', value: '' }]);
+    queryParams.update(p => [...p, { key: '', value: '' }]);
     updateUrl();
   }
 
@@ -98,7 +100,7 @@
   }
 
   function clearParams() {
-    params.set([]);
+    queryParams.set([]);
     updateUrl();
   }
 
@@ -113,8 +115,8 @@
 
   function updateUrl() {
     let urlWithParams = $url;
-    if ($params.length > 0) {
-      const queryString = new URLSearchParams($params.map(param => [param.key, param.value])).toString();
+    if ($queryParams.length > 0) {
+      const queryString = new URLSearchParams($queryParams.map(param => [param.key, param.value])).toString();
       urlWithParams = $url.split('?')[0] + `?${queryString}`;
     }
     url.set(urlWithParams);
@@ -131,6 +133,10 @@
       value: replaceVariables(header.value, $variables)
     }));
 
+    const pathParamsObject = Object.fromEntries($pathParams.map(param => [param.key, param.value]));
+    const queryParamsObject = Object.fromEntries($queryParams.map(param => [param.key, param.value]));
+    const formParamsObject = Object.fromEntries($formParams.map(field => [field.key, field.value]));
+
     let requestBody;
     if ($method === 'GET') {
       requestBody = null;
@@ -141,12 +147,10 @@
           requestBody = replaceVariables($body, $variables);
           break;
         case 'form-data':
-          const formDataObject = new FormData();
-          $formData.forEach(field => formDataObject.append(field.key, replaceVariables(field.value, $variables)));
-          requestBody = formDataObject;
+          requestBody = null; // formParams zaten ayrı bir alan olarak gönderilecek
           break;
         case 'form-urlencoded':
-          requestBody = new URLSearchParams($formData.map(field => [field.key, replaceVariables(field.value, $variables)])).toString();
+          requestBody = new URLSearchParams($formParams.map(field => [field.key, replaceVariables(field.value, $variables)])).toString();
           break;
       }
     }
@@ -155,7 +159,11 @@
       url: actualUrl,
       method: $method,
       body: requestBody,
-      headers: Object.fromEntries(actualHeaders.map(header => [header.key, header.value]))
+      headers: Object.fromEntries(actualHeaders.map(header => [header.key, header.value])),
+      path_params: pathParamsObject,
+      query_params: queryParamsObject,
+      form_data: $bodyType === 'form-data' ? formParamsObject : undefined,
+      content_type: $bodyType === 'form-data' ? 'multipart/form-data' : $bodyType === 'form-urlencoded' ? 'application/x-www-form-urlencoded' : undefined
     };
 
     console.log('Sending request with data:', requestData);
@@ -412,7 +420,7 @@
     });
   });
 
-  $: $params, updateUrl(); // Update URL whenever params change
+  $: $queryParams, updateUrl(); // Update URL whenever params change
 </script>
 
 <style>
@@ -703,6 +711,30 @@
       >
         Group
       </button>
+      <button 
+        type="button" 
+        class="tab { $selectedRequestTab === 'path-params' ? 'active' : '' }" 
+        on:click={() => selectedRequestTab.set('path-params')} 
+        aria-label="Path Params Tab"
+      >
+        Path Params
+      </button>
+      <button 
+        type="button" 
+        class="tab { $selectedRequestTab === 'query-params' ? 'active' : '' }" 
+        on:click={() => selectedRequestTab.set('query-params')} 
+        aria-label="Query Params Tab"
+      >
+        Query Params
+      </button>
+      <button 
+        type="button" 
+        class="tab { $selectedRequestTab === 'form-data' ? 'active' : '' }" 
+        on:click={() => selectedRequestTab.set('form-data')} 
+        aria-label="Form Data Tab"
+      >
+        Form Data
+      </button>
     </div>
     <div class="tab-content">
       {#if $selectedRequestTab === 'body'}
@@ -716,7 +748,7 @@
         {#if $bodyType === 'json' || $bodyType === 'xml'}
           <textarea id="body" bind:value={$body} placeholder={$bodyType === 'json' ? '{"key": "value"}' : '<xml></xml>'} class="w-full mb-4 p-2 border rounded text-primary bg-accent h-40"></textarea>
         {:else}
-          {#each $formData as field, index}
+          {#each $formParams as field, index}
             <div class="flex mb-2">
               <input type="text" placeholder="Key" bind:value={field.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
               <input type="text" placeholder="Value" bind:value={field.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
@@ -735,11 +767,11 @@
           </button>
         </div>
         <div class="params-container">
-          {#each $params as param, index}
+          {#each $queryParams as param, index}
             <div class="header-row">
               <input type="text" placeholder="Key" bind:value={param.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
               <input type="text" placeholder="Value" bind:value={param.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
-              <button type="button" on:click={() => params.update(p => p.filter((_, i) => i !== index))} class="text-red-500">
+              <button type="button" on:click={() => queryParams.update(p => p.filter((_, i) => i !== index))} class="text-red-500">
                 <FontAwesomeIcon icon="trash-alt" size="lg" />
               </button>
             </div>
@@ -778,6 +810,48 @@
           {#if $selectedGroup === 'new'}
             <input type="text" placeholder="New Group Name" bind:value={$newGroupName} class="w-full mb-4 p-2 border rounded text-primary bg-accent" on:blur={createNewGroup} />
           {/if}
+        </div>
+      {:else if $selectedRequestTab === 'path-params'}
+        <div class="params-container">
+          <h3 class="text-lg font-semibold mb-2">Path Params</h3>
+          {#each $pathParams as param, index}
+            <div class="header-row">
+              <input type="text" placeholder="Key" bind:value={param.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
+              <input type="text" placeholder="Value" bind:value={param.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
+              <button type="button" on:click={() => pathParams.update(p => p.filter((_, i) => i !== index))} class="text-red-500">
+                <FontAwesomeIcon icon="trash-alt" size="lg" />
+              </button>
+            </div>
+          {/each}
+          <button type="button" on:click={() => pathParams.update(p => [...p, { key: '', value: '' }])} class="w-full p-2 bg-primary text-background rounded">Add Path Param</button>
+        </div>
+      {:else if $selectedRequestTab === 'query-params'}
+        <div class="params-container">
+          <h3 class="text-lg font-semibold mb-2">Query Params</h3>
+          {#each $queryParams as param, index}
+            <div class="header-row">
+              <input type="text" placeholder="Key" bind:value={param.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
+              <input type="text" placeholder="Value" bind:value={param.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
+              <button type="button" on:click={() => queryParams.update(p => p.filter((_, i) => i !== index))} class="text-red-500">
+                <FontAwesomeIcon icon="trash-alt" size="lg" />
+              </button>
+            </div>
+          {/each}
+          <button type="button" on:click={() => queryParams.update(p => [...p, { key: '', value: '' }])} class="w-full p-2 bg-primary text-background rounded">Add Query Param</button>
+        </div>
+      {:else if $selectedRequestTab === 'form-data'}
+        <div class="params-container">
+          <h3 class="text-lg font-semibold mb-2">Form Data</h3>
+          {#each $formParams as field, index}
+            <div class="header-row">
+              <input type="text" placeholder="Key" bind:value={field.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
+              <input type="text" placeholder="Value" bind:value={field.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
+              <button type="button" on:click={() => formParams.update(f => f.filter((_, i) => i !== index))} class="text-red-500">
+                <FontAwesomeIcon icon="trash-alt" size="lg" />
+              </button>
+            </div>
+          {/each}
+          <button type="button" on:click={() => formParams.update(f => [...f, { key: '', value: '' }])} class="w-full p-2 bg-primary text-background rounded">Add Form Data Field</button>
         </div>
       {/if}
     </div>
