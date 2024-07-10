@@ -286,11 +286,19 @@ textarea {
   box-sizing: border-box; /* Ensure padding-right is included in the width */
 }
 
-.copy-icon {
-  position: absolute;
-  top: 0.5rem;
+.response-container {
+  position: relative;
+}
+.copy-button {
+  position: sticky;
+  top: 0rem;
   right: 0.5rem;
+  background: none;
+  border: none;
   cursor: pointer;
-  display: none;
-  color: var(--primary);
+  z-index: 1;
+}
+.response-content {
+  max-height: auto; /* or any height you prefer */
+  overflow-y: auto;
 }

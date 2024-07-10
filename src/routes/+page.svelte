@@ -7,11 +7,11 @@
   import Prism from 'prismjs';
   import 'prismjs/components/prism-json';
   import 'prismjs/themes/prism-solarizedlight.css';
-  import { faPlus, faTrashAlt, faClone, faEdit } from '@fortawesome/free-solid-svg-icons';
+  import { faPlus, faTrashAlt, faClone, faEdit, faCopy } from '@fortawesome/free-solid-svg-icons';
   import { library } from '@fortawesome/fontawesome-svg-core';
   import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
 
-  library.add(faPlus, faTrashAlt, faClone, faEdit);
+  library.add(faPlus, faTrashAlt, faClone, faEdit, faCopy);
 
   type HistoryItem = {
     id: number;
@@ -392,6 +392,15 @@
   // Add a reactive statement to compute tableData
   $: tableData = $response ? jsonToTableData($response.body) : { headers: [], rows: [] };
 
+  // Function to copy text to clipboard
+  async function copyToClipboard(text: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      console.log('Copied to clipboard');
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  }
 
   onMount(() => {
     loadGroups();
@@ -411,8 +420,6 @@
   pre {
     background: var(--light-background);
     color: var(--primary-text);
-    /* padding: 1em;
-    border-radius: 5px; */
   }
 
   .fixed {
@@ -610,7 +617,7 @@
       <div class="group">
         <div class="flex justify-between items-center">
           <h3 class="text-lg font-semibold mb-2">{$selectedGroup}</h3>
-          <button type="button" on:click={() => variablesPanelOpen.set(true)} class="text-">
+          <button type="button" on:click={() => variablesPanelOpen.set(true)} class="">
             <FontAwesomeIcon icon="edit" size="lg" /> Variables
           </button>
         </div>
@@ -828,9 +835,18 @@
       </div>
       <div class="tab-content">
         {#if $selectedTab === 'response'}
-          <pre class="bg-secondary text-background p-2 rounded">
+        <div class="response-container relative">
+          <button 
+            type="button" 
+            on:click={() => copyToClipboard($response.body)} 
+            class="copy-button text-blue-500"
+          >
+            <FontAwesomeIcon icon="copy" size="xl" />
+          </button>
+          <pre class="response-content bg-secondary text-background p-2 rounded">
             {@html formatJson($response.body)}
           </pre>
+        </div>
         {:else if $selectedTab === 'table'}
         <div class="table-container">
           {#if tableData.headers.length > 0}
@@ -866,9 +882,18 @@
           {/each}
         </table>
       {:else if $selectedTab === 'curl'}
-        <span class="p-2 rounded">
-          {@html $response.curl_command}
-        </span>
+        <div class="flex justify-between">
+          <span class="p-2 rounded">
+            {@html $response.curl_command}
+          </span>
+          <button 
+            type="button" 
+            on:click={() => copyToClipboard($response.curl_command)} 
+            class="text-blue-500"
+          >
+            <FontAwesomeIcon icon="copy" size="xl" />
+          </button>
+        </div>
       {/if}
     </div>
   {:else}
