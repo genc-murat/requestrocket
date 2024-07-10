@@ -302,3 +302,19 @@ textarea {
   max-height: auto; /* or any height you prefer */
   overflow-y: auto;
 }
+
+.export-button {
+  background-color: var(--primary);
+  color: var(--background);
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.export-button:hover {
+  background-color: var(--primary-dark);
+}

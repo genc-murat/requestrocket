@@ -7,11 +7,14 @@
   import Prism from 'prismjs';
   import 'prismjs/components/prism-json';
   import 'prismjs/themes/prism-solarizedlight.css';
-  import { faPlus, faTrashAlt, faClone, faEdit, faCopy } from '@fortawesome/free-solid-svg-icons';
+  import { faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload } from '@fortawesome/free-solid-svg-icons';
   import { library } from '@fortawesome/fontawesome-svg-core';
   import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
+  import { writeTextFile } from '@tauri-apps/api/fs';
+  import { dialog } from '@tauri-apps/api';
+  import { sendNotification } from '@tauri-apps/api/notification';
 
-  library.add(faPlus, faTrashAlt, faClone, faEdit, faCopy);
+  library.add(faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload);
 
   type HistoryItem = {
     id: number;
@@ -428,8 +431,75 @@
   });
 
   $: $queryParams, updateUrl();
-</script>
 
+  // Function to convert request data to Postman format
+  function convertToPostmanFormat(historyItems: HistoryItem[]): any {
+    const postmanCollection = {
+      info: {
+        name: "Exported Collection",
+        schema: "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+      },
+      item: historyItems.map(item => ({
+        name: `${item.method} ${item.url}`,
+        request: {
+          method: item.method,
+          header: item.headers.map(header => ({ key: header.key, value: header.value })),
+          body: item.body ? {
+            mode: item.body.startsWith('{') ? 'raw' : 'urlencoded',
+            raw: item.body,
+            urlencoded: item.body.split('&').map(pair => {
+              const [key, value] = pair.split('=');
+              return { key, value };
+            })
+          } : undefined,
+          url: {
+            raw: item.url,
+            host: item.url.split('/')[2].split('.'),
+            path: item.url.split('/').slice(3)
+          }
+        }
+      }))
+    };
+
+    return postmanCollection;
+  }
+
+  // Function to save Postman collection as JSON file using Tauri
+  async function downloadPostmanCollection(historyItems: HistoryItem[]) {
+    const postmanCollection = convertToPostmanFormat(historyItems);
+    const postmanJson = JSON.stringify(postmanCollection, null, 2);
+
+    try {
+      const filePath = await dialog.save({
+        filters: [{
+          name: 'JSON',
+          extensions: ['json']
+        }]
+      });
+
+      if (filePath) {
+        await writeTextFile(filePath, postmanJson);
+        console.log('File saved successfully:', filePath);
+
+        sendNotification({
+          title: 'Success',
+          body: 'File saved successfully.'
+        });
+      }
+    } catch (error) {
+      console.error('Failed to save file:', error);
+      sendNotification({
+        title: 'Error',
+        body: 'Failed to save file.'
+      });
+    }
+  }
+
+  // Button click handler to export the selected group's requests
+  function handleExport() {
+    downloadPostmanCollection($history);
+  }
+</script>
 <style>
   pre {
     background: var(--light-background);
@@ -638,7 +708,11 @@
           <button type="button" on:click={() => variablesPanelOpen.set(true)} class="">
             <FontAwesomeIcon icon="edit" size="lg" /> Variables
           </button>
+          <button type="button" on:click={handleExport}>
+            <FontAwesomeIcon icon="download" size="lg" /> Export Group
+          </button>
         </div>
+       
         <ul>
           {#each $history as item}
             <li class="mb-2 history-item flex justify-between items-center">
