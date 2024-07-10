@@ -41,6 +41,8 @@
     body: string;
     headers: [string, string][];
     curl_command: string;
+    timestamp: string;
+    error: string | null;
   };
 
   let url = writable('');
@@ -202,7 +204,16 @@
       }
     } catch (error) {
       console.error('Request failed:', error);
-      response.set(null);
+      response.set({
+        status: 0,
+        duration: 0,
+        size: 0,
+        body: '',
+        headers: [],
+        curl_command: '',
+        timestamp: new Date().toISOString(),
+        error: error instanceof Error ? error.message : String(error)
+      });
     }
   }
 
@@ -381,12 +392,10 @@
     try {
       const data = JSON.parse(json);
       if (Array.isArray(data)) {
-        // If it's an array of objects
         const headers = Object.keys(data[0]);
         const rows = data.map(item => headers.map(header => JSON.stringify(item[header])));
         return { headers, rows };
       } else if (typeof data === 'object' && data !== null) {
-        // If it's a single object
         const headers = Object.keys(data);
         const rows = [headers.map(header => JSON.stringify(data[header]))];
         return { headers, rows };
@@ -397,10 +406,8 @@
     return { headers: [], rows: [] };
   }
 
-  // Add a reactive statement to compute tableData
   $: tableData = $response ? jsonToTableData($response.body) : { headers: [], rows: [] };
 
-  // Function to copy text to clipboard
   async function copyToClipboard(text: string) {
     try {
       await navigator.clipboard.writeText(text);
@@ -412,7 +419,7 @@
 
   onMount(() => {
     loadGroups();
-    loadVariables(); // Load variables on mount
+    loadVariables();
     response.subscribe(value => {
       if (value) {
         Prism.highlightAll();
@@ -420,11 +427,10 @@
     });
   });
 
-  $: $queryParams, updateUrl(); // Update URL whenever params change
+  $: $queryParams, updateUrl();
 </script>
 
 <style>
-  /* Styles for the application */
   pre {
     background: var(--light-background);
     color: var(--primary-text);
@@ -597,6 +603,10 @@
     border-radius: 0.5rem;
   }
 
+  .error-message {
+    color: red;
+    font-weight: bold;
+  }
 </style>
 
 <div class="flex h-screen">
@@ -731,7 +741,6 @@
     </div>
     <div class="tab-content">
       {#if $selectedRequestTab === 'body'}
-   
         <select id="bodyType" bind:value={$bodyType} class="w-full mb-4 p-2 border rounded text-primary bg-accent">
           <option value="json">JSON</option>
           <option value="xml">XML</option>
@@ -749,19 +758,17 @@
           {/each}
           <button type="button" on:click={addFormField} class="w-full p-2 bg-primary text-background rounded">Add Field</button>
         {/if}
- 
       {:else if $selectedRequestTab === 'headers'}
-      <div class="params-container">
-        <div class="top-buttons">
-          <button type="button" on:click={addHeader} class="">
-            <FontAwesomeIcon icon="plus" size="lg"/> Add
-          </button>
-          <span class="separator"></span>
-          <button type="button" on:click={clearHeaders} class="text-red-700">
-            <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
-          </button>
-        </div>
-    
+        <div class="params-container">
+          <div class="top-buttons">
+            <button type="button" on:click={addHeader} class="">
+              <FontAwesomeIcon icon="plus" size="lg"/> Add
+            </button>
+            <span class="separator"></span>
+            <button type="button" on:click={clearHeaders} class="text-red-700">
+              <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
+            </button>
+          </div>
           {#each $headers as header, index}
             <div class="header-row">
               <input type="text" placeholder="Key" bind:value={header.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
@@ -771,11 +778,9 @@
               </button>
             </div>
           {/each}
-    
-      </div>
+        </div>
       {:else if $selectedRequestTab === 'group'}
         <div class="mb-4">
-      
           <select id="group" bind:value={$selectedGroup} class="w-full mb-4 p-2 border rounded text-primary bg-accent">
             {#each $groups as group}
               <option value={group}>{group}</option>
@@ -787,68 +792,68 @@
           {/if}
         </div>
       {:else if $selectedRequestTab === 'path-params'}
-      <div class="params-container">
-        <div class="top-buttons">
-          <button type="button" on:click={() => pathParams.update(p => [...p, { key: '', value: '' }])} class="">
-            <FontAwesomeIcon icon="plus" size="lg"/> Add
-          </button>
-          <span class="separator"></span>
-          <button type="button" on:click={() => pathParams.set([])} class="text-red-700">
-            <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
-          </button>
-        </div>
-        {#each $pathParams as param, index}
-          <div class="header-row">
-            <input type="text" placeholder="Key" bind:value={param.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
-            <input type="text" placeholder="Value" bind:value={param.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
-            <button type="button" on:click={() => pathParams.update(p => p.filter((_, i) => i !== index))} class="text-red-500">
-              <FontAwesomeIcon icon="trash-alt" size="lg" />
+        <div class="params-container">
+          <div class="top-buttons">
+            <button type="button" on:click={() => pathParams.update(p => [...p, { key: '', value: '' }])} class="">
+              <FontAwesomeIcon icon="plus" size="lg"/> Add
+            </button>
+            <span class="separator"></span>
+            <button type="button" on:click={() => pathParams.set([])} class="text-red-700">
+              <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
             </button>
           </div>
-        {/each}
-      </div>
+          {#each $pathParams as param, index}
+            <div class="header-row">
+              <input type="text" placeholder="Key" bind:value={param.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
+              <input type="text" placeholder="Value" bind:value={param.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
+              <button type="button" on:click={() => pathParams.update(p => p.filter((_, i) => i !== index))} class="text-red-500">
+                <FontAwesomeIcon icon="trash-alt" size="lg" />
+              </button>
+            </div>
+          {/each}
+        </div>
       {:else if $selectedRequestTab === 'query-params'}
-      <div class="params-container">
-        <div class="top-buttons">
-          <button type="button" on:click={addParam} class="">
-            <FontAwesomeIcon icon="plus" size="lg"/> Add
-          </button>
-          <span class="separator"></span>
-          <button type="button" on:click={clearParams} class="text-red-700">
-            <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
-          </button>
-        </div>
-        {#each $queryParams as param, index}
-          <div class="header-row">
-            <input type="text" placeholder="Key" bind:value={param.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
-            <input type="text" placeholder="Value" bind:value={param.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
-            <button type="button" on:click={() => queryParams.update(p => p.filter((_, i) => i !== index))} class="text-red-500">
-              <FontAwesomeIcon icon="trash-alt" size="lg" />
+        <div class="params-container">
+          <div class="top-buttons">
+            <button type="button" on:click={addParam} class="">
+              <FontAwesomeIcon icon="plus" size="lg"/> Add
+            </button>
+            <span class="separator"></span>
+            <button type="button" on:click={clearParams} class="text-red-700">
+              <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
             </button>
           </div>
-        {/each}
-      </div>
+          {#each $queryParams as param, index}
+            <div class="header-row">
+              <input type="text" placeholder="Key" bind:value={param.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
+              <input type="text" placeholder="Value" bind:value={param.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
+              <button type="button" on:click={() => queryParams.update(p => p.filter((_, i) => i !== index))} class="text-red-500">
+                <FontAwesomeIcon icon="trash-alt" size="lg" />
+              </button>
+            </div>
+          {/each}
+        </div>
       {:else if $selectedRequestTab === 'form-data'}
-      <div class="params-container">
-        <div class="top-buttons">
-          <button type="button" on:click={addFormField} class="">
-            <FontAwesomeIcon icon="plus" size="lg"/> Add
-          </button>
-          <span class="separator"></span>
-          <button type="button" on:click={() => formParams.set([])} class="text-red-700">
-            <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
-          </button>
-        </div>
-        {#each $formParams as field, index}
-          <div class="header-row">
-            <input type="text" placeholder="Key" bind:value={field.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
-            <input type="text" placeholder="Value" bind:value={field.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
-            <button type="button" on:click={() => formParams.update(f => f.filter((_, i) => i !== index))} class="text-red-500">
-              <FontAwesomeIcon icon="trash-alt" size="lg" />
+        <div class="params-container">
+          <div class="top-buttons">
+            <button type="button" on:click={addFormField} class="">
+              <FontAwesomeIcon icon="plus" size="lg"/> Add
+            </button>
+            <span class="separator"></span>
+            <button type="button" on:click={() => formParams.set([])} class="text-red-700">
+              <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
             </button>
           </div>
-        {/each}
-      </div>
+          {#each $formParams as field, index}
+            <div class="header-row">
+              <input type="text" placeholder="Key" bind:value={field.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
+              <input type="text" placeholder="Value" bind:value={field.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
+              <button type="button" on:click={() => formParams.update(f => f.filter((_, i) => i !== index))} class="text-red-500">
+                <FontAwesomeIcon icon="trash-alt" size="lg" />
+              </button>
+            </div>
+          {/each}
+        </div>
       {/if}
     </div>
   </div>
@@ -867,8 +872,16 @@
           <div class="flex items-center ml-2">
             <span>{($response.size / 1024).toFixed(2)} KB</span>
           </div>
+          <div class="flex items-center ml-2">
+            <span>{$response.timestamp}</span>
+          </div>
         </div>
       </div>
+      {#if $response.error}
+        <div class="error-message mb-4">
+          {$response.error}
+        </div>
+      {/if}
       <div class="flex mb-4">
         <button 
           type="button" 
@@ -905,70 +918,70 @@
       </div>
       <div class="tab-content">
         {#if $selectedTab === 'response'}
-        <div class="response-container relative">
-          <button 
-            type="button" 
-            on:click={() => copyToClipboard($response.body)} 
-            class="copy-button text-blue-500"
-          >
-            <FontAwesomeIcon icon="copy" size="xl" />
-          </button>
-          <pre class="response-content bg-secondary text-background p-2 rounded">
-            {@html formatJson($response.body)}
-          </pre>
-        </div>
+          <div class="response-container relative">
+            <button 
+              type="button" 
+              on:click={() => copyToClipboard($response.body)} 
+              class="copy-button text-blue-500"
+            >
+              <FontAwesomeIcon icon="copy" size="xl" />
+            </button>
+            <pre class="response-content bg-secondary text-background p-2 rounded">
+              {@html formatJson($response.body)}
+            </pre>
+          </div>
         {:else if $selectedTab === 'table'}
-        <div class="table-container">
-          {#if tableData.headers.length > 0}
-            <table>
-              <thead>
-                <tr>
-                  {#each tableData.headers as header}
-                    <th>{header}</th>
-                  {/each}
-                </tr>
-              </thead>
-              <tbody>
-                {#each tableData.rows as row}
+          <div class="table-container">
+            {#if tableData.headers.length > 0}
+              <table>
+                <thead>
                   <tr>
-                    {#each row as cell}
-                      <td>{cell}</td>
+                    {#each tableData.headers as header}
+                      <th>{header}</th>
                     {/each}
                   </tr>
-                {/each}
-              </tbody>
-            </table>
-          {:else}
-            <p>Unable to display data in table format.</p>
-          {/if}
-        </div>
-      {:else if $selectedTab === 'headers'}
-        <table>
-          {#each $response.headers as [key, value]}
-            <tr>
-              <th>{key}</th>
-              <td>{value}</td>
-            </tr>
-          {/each}
-        </table>
-      {:else if $selectedTab === 'curl'}
-        <div class="flex justify-between">
-          <span class="p-2 rounded">
-            {@html $response.curl_command}
-          </span>
-          <button 
-            type="button" 
-            on:click={() => copyToClipboard($response.curl_command)} 
-            class="text-blue-500"
-          >
-            <FontAwesomeIcon icon="copy" size="xl" />
-          </button>
-        </div>
-      {/if}
-    </div>
-  {:else}
-    <div>No response</div>
-  {/if}
+                </thead>
+                <tbody>
+                  {#each tableData.rows as row}
+                    <tr>
+                      {#each row as cell}
+                        <td>{cell}</td>
+                      {/each}
+                    </tr>
+                  {/each}
+                </tbody>
+              </table>
+            {:else}
+              <p>Unable to display data in table format.</p>
+            {/if}
+          </div>
+        {:else if $selectedTab === 'headers'}
+          <table>
+            {#each $response.headers as [key, value]}
+              <tr>
+                <th>{key}</th>
+                <td>{value}</td>
+              </tr>
+            {/each}
+          </table>
+        {:else if $selectedTab === 'curl'}
+          <div class="flex justify-between">
+            <span class="p-2 rounded">
+              {@html $response.curl_command}
+            </span>
+            <button 
+              type="button" 
+              on:click={() => copyToClipboard($response.curl_command)} 
+              class="text-blue-500"
+            >
+              <FontAwesomeIcon icon="copy" size="xl" />
+            </button>
+          </div>
+        {/if}
+      </div>
+    {:else}
+      <div>No response</div>
+    {/if}
   </div>
 
   {#if $variablesPanelOpen}
