@@ -80,6 +80,9 @@ async fn send_request(client: State<'_, Client>, request_data: RequestData) -> R
         "POST" => client.post(&url),
         "PUT" => client.put(&url),
         "DELETE" => client.delete(&url),
+        "PATCH" => client.patch(&url),
+        "OPTIONS" => client.request(reqwest::Method::OPTIONS, &url),
+        "HEAD" => client.head(&url),
         _ => return Err("Unsupported method".to_string()),
     };
 
