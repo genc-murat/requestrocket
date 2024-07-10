@@ -369,6 +369,30 @@
     deleteVariableFromDb(key);
   }
 
+  function jsonToTableData(json: string): { headers: string[], rows: string[][] } {
+    try {
+      const data = JSON.parse(json);
+      if (Array.isArray(data)) {
+        // If it's an array of objects
+        const headers = Object.keys(data[0]);
+        const rows = data.map(item => headers.map(header => JSON.stringify(item[header])));
+        return { headers, rows };
+      } else if (typeof data === 'object' && data !== null) {
+        // If it's a single object
+        const headers = Object.keys(data);
+        const rows = [headers.map(header => JSON.stringify(data[header]))];
+        return { headers, rows };
+      }
+    } catch (e) {
+      console.error('Error parsing JSON:', e);
+    }
+    return { headers: [], rows: [] };
+  }
+
+  // Add a reactive statement to compute tableData
+  $: tableData = $response ? jsonToTableData($response.body) : { headers: [], rows: [] };
+
+
   onMount(() => {
     loadGroups();
     loadVariables(); // Load variables on mount
@@ -557,6 +581,7 @@
     margin-top: 1rem;
     border-radius: 0.5rem;
   }
+
 </style>
 
 <div class="flex h-screen">
@@ -778,6 +803,14 @@
         </button>
         <button 
           type="button" 
+          class="tab { $selectedTab === 'table' ? 'active' : '' }" 
+          on:click={() => selectedTab.set('table')} 
+          aria-label="Table Tab"
+        >
+          Table
+        </button>
+        <button 
+          type="button" 
           class="tab { $selectedTab === 'headers' ? 'active' : '' }" 
           on:click={() => selectedTab.set('headers')} 
           aria-label="Headers Tab"
@@ -798,24 +831,49 @@
           <pre class="bg-secondary text-background p-2 rounded">
             {@html formatJson($response.body)}
           </pre>
-        {:else if $selectedTab === 'headers'}
-          <table>
-            {#each $response.headers as [key, value]}
-              <tr>
-                <td>{key}</td>
-                <td>{value}</td>
-              </tr>
-            {/each}
-          </table>
-        {:else if $selectedTab === 'curl'}
-          <span class="p-2 rounded">
-            {@html $response.curl_command}
-          </span>
-        {/if}
-      </div>
-    {:else}
-      <div>No response</div>
-    {/if}
+        {:else if $selectedTab === 'table'}
+        <div class="table-container">
+          {#if tableData.headers.length > 0}
+            <table>
+              <thead>
+                <tr>
+                  {#each tableData.headers as header}
+                    <th>{header}</th>
+                  {/each}
+                </tr>
+              </thead>
+              <tbody>
+                {#each tableData.rows as row}
+                  <tr>
+                    {#each row as cell}
+                      <td>{cell}</td>
+                    {/each}
+                  </tr>
+                {/each}
+              </tbody>
+            </table>
+          {:else}
+            <p>Unable to display data in table format.</p>
+          {/if}
+        </div>
+      {:else if $selectedTab === 'headers'}
+        <table>
+          {#each $response.headers as [key, value]}
+            <tr>
+              <th>{key}</th>
+              <td>{value}</td>
+            </tr>
+          {/each}
+        </table>
+      {:else if $selectedTab === 'curl'}
+        <span class="p-2 rounded">
+          {@html $response.curl_command}
+        </span>
+      {/if}
+    </div>
+  {:else}
+    <div>No response</div>
+  {/if}
   </div>
 
   {#if $variablesPanelOpen}
