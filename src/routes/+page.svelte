@@ -745,18 +745,23 @@
   <div class="history-panel panel">
     <h2 class="text-xl font-bold mb-4">History</h2>
     {#if $selectedGroup}
-      <div class="group">
+      <div class="group"><div class="top-buttons">
+            <button type="button" on:click={() => variablesPanelOpen.set(true)} class="">
+              <FontAwesomeIcon icon="edit" size="lg" /> Variables
+            </button>
+            <button type="button" on:click={handleExport}>
+              <FontAwesomeIcon icon="download" size="lg" /> Export Group
+            </button>
+            <button type="button" on:click={importPostmanCollection}>
+              <FontAwesomeIcon icon="upload" size="lg" /> Import Postman Collection
+            </button>
+          </div>
         <div class="flex justify-between items-center">
+          
+
+
           <h3 class="text-lg font-semibold mb-2">{$selectedGroup}</h3>
-          <button type="button" on:click={() => variablesPanelOpen.set(true)} class="">
-            <FontAwesomeIcon icon="edit" size="lg" /> Variables
-          </button>
-          <button type="button" on:click={handleExport}>
-            <FontAwesomeIcon icon="download" size="lg" /> Export Group
-          </button>
-          <button type="button" on:click={importPostmanCollection}>
-            <FontAwesomeIcon icon="upload" size="lg" /> Import Postman Collection
-          </button>
+       
         </div>
        
         <ul>
