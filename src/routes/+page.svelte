@@ -742,7 +742,7 @@
 
 <div class="flex h-screen">
   {#if $modalOpen}
-    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div class="bg-white p-4 rounded shadow-lg w-1/2">
         <h2 class="text-lg font-bold mb-4">Select Group</h2>
         <div class="grid grid-cols-4 gap-2">
@@ -1001,7 +1001,7 @@
     </div>
   </div>
 
-  <div class="response-panel panel">
+  <div class="response-panel panel relative">
     <h2 class="text-xl font-bold mb-4">Results</h2>
     {#if $response}
       <div class="status-box border border-gray-500 p-4 mb-4 rounded">
@@ -1125,7 +1125,17 @@
     {:else}
       <div>No response</div>
     {/if}
+  
+    {#if $isSending}
+      <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div class="bg-white p-4 rounded shadow-lg">
+          <h2 class="text-lg font-bold mb-4">Sending request...</h2>
+          <button type="button" on:click={cancelRequest} class="w-full p-2 bg-red-500 text-white rounded">Cancel Request</button>
+        </div>
+      </div>
+    {/if}
   </div>
+  
 
   {#if $variablesPanelOpen}
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -1158,11 +1168,3 @@
   {/if}
 </div>
 
-{#if $isSending}
-  <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div class="bg-white p-4 rounded shadow-lg">
-      <h2 class="text-lg font-bold mb-4">Sending request...</h2>
-      <button type="button" on:click={cancelRequest} class="w-full p-2 bg-red-500 text-white rounded">Cancel Request</button>
-    </div>
-  </div>
-{/if}
