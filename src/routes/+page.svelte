@@ -135,6 +135,15 @@
   }
 
 
+  type StatusHistoryItem = {
+    status: number;
+    duration: number;
+    size: number;
+    timestamp: string;
+  };
+
+  let statusHistory = writable<StatusHistoryItem[]>([]);
+
   async function sendRequest() {
   isSending.set(true);
   const actualUrl = $url;
@@ -205,6 +214,16 @@
     console.log('Response received:', res);
     response.set(res);
     isSending.set(false);
+
+    statusHistory.update(history => [
+        ...history,
+        {
+          status: res.status,
+          duration: res.duration,
+          size: res.size,
+          timestamp: res.timestamp
+        }
+      ]);
 
     const existingHistoryItem = $history.find(item => item.url === actualUrl && item.method === $method && item.group === $selectedGroup);
     if (existingHistoryItem) {
@@ -752,6 +771,17 @@ function timeAgo(timestamp: string): string {
     return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
   }
 }
+
+let statusHistoryOpen = writable(false);
+
+
+function toggleStatusHistory() {
+  statusHistoryOpen.update(open => !open);
+}
+
+  function formatSize(size: number): string {
+    return `${(size / 1024).toFixed(2)} KB`;
+  }
 </script>
 
 <style>
@@ -1207,10 +1237,13 @@ function timeAgo(timestamp: string): string {
             <span>{($response.size / 1024).toFixed(2)} KB</span>
           </div>
           <div class="flex items-center ml-2">
-            <span>{timeAgo($response.timestamp)}</span>
+            <span on:click={toggleStatusHistory}>{timeAgo($response.timestamp)}</span>
           </div>
+        
+          
         </div>
       </div>
+      
       {#if $response.error}
         <div class="error-message mb-4">
           {$response.error}
@@ -1316,7 +1349,7 @@ function timeAgo(timestamp: string): string {
     {:else}
       <div>No response</div>
     {/if}
-  
+
     {#if $isSending}
     <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div class="bg-white p-4 rounded shadow-lg">
@@ -1330,6 +1363,26 @@ function timeAgo(timestamp: string): string {
   
   </div>
   
+  {#if $statusHistoryOpen}
+  <div class="status-history-modal fixed inset-0 flex items-end justify-end bg-black bg-opacity-50 z-50">
+    <div class="status-history bg-white p-4 rounded shadow-lg w-1/3 h-full overflow-y-auto">
+      <button type="button" on:click={toggleStatusHistory} class="text-red-900 bg-slate-50 rounded-full p-2 shadow absolute top-4 right-4 flex items-center justify-center">
+        <FontAwesomeIcon icon="close" size="lg" />
+      </button>
+      <h2 class="text-xl font-bold mb-4">Status History</h2>
+      {#each $statusHistory as history}
+        <div class="status-history-item flex justify-between items-center p-2 mb-2">
+          <div class="px-2 text-white rounded {getStatusClass(history.status)}">
+            Status: {history.status} {history.status === 200 ? 'OK' : ''}
+          </div>
+          <div class="px-2">Duration: {history.duration} ms</div>
+          <div class="px-2">Size: {formatSize(history.size)}</div>
+          <div class="px-2">Timestamp: {timeAgo(history.timestamp)}</div>
+        </div>
+      {/each}
+    </div>
+  </div>
+{/if}
 
   {#if $variablesPanelOpen}
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
