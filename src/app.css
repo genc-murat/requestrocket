@@ -326,6 +326,16 @@ textarea {
   z-index: 50;
 }
 
+.status-section {
+  margin-bottom: 1rem;
+}
+
+.divider {
+  border-top: 1px solid #ccc;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .status-history-modal {
   display: flex;
   align-items: flex-end;
