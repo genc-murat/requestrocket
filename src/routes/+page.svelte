@@ -511,6 +511,8 @@
 
     try {
       const filePath = await dialog.save({
+        defaultPath: 'postman-collection.json',
+        title: 'Save Postman Collection',
         filters: [{
           name: 'JSON',
           extensions: ['json']
@@ -581,6 +583,116 @@
       });
     }
   }
+
+  function generateApiDocumentation(historyItems: HistoryItem[]): ApiDoc {
+  const apiDoc: ApiDoc = {
+    info: {
+      title: "Generated API Documentation",
+      version: "1.0.0"
+    },
+    paths: {}
+  };
+
+  historyItems.forEach(item => {
+    if (!apiDoc.paths[item.url]) {
+      apiDoc.paths[item.url] = {};
+    }
+
+    let requestBodyExample: any;
+    try {
+      requestBodyExample = JSON.parse(item.body);
+    } catch (e) {
+      requestBodyExample = item.body;
+    }
+
+    let responseBodyExample: any;
+    try {
+      responseBodyExample = item.response ? JSON.parse(item.response) : {};
+    } catch (e) {
+      responseBodyExample = item.response;
+    }
+
+    apiDoc.paths[item.url][item.method.toLowerCase()] = {
+      summary: `Request to ${item.url}`,
+      parameters: [
+        ...item.headers.map(header => ({
+          name: header.key,
+          in: "header",
+          required: true,
+          schema: {
+            type: "string"
+          },
+          example: header.value
+        })),
+        ...item.params.map(param => ({
+          name: param.key,
+          in: "query",
+          required: true,
+          schema: {
+            type: "string"
+          },
+          example: param.value
+        }))
+      ],
+      requestBody: {
+        content: {
+          "application/json": {
+            schema: {
+              type: "object"
+            },
+            example: requestBodyExample
+          }
+        }
+      },
+      responses: {
+        [item.response ? responseBodyExample.status : "default"]: {
+          description: "Response",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object"
+              },
+              example: responseBodyExample
+            }
+          }
+        }
+      }
+    };
+  });
+
+  return apiDoc;
+}
+
+async function downloadApiDocumentation(historyItems: HistoryItem[]) {
+  const apiDoc = generateApiDocumentation(historyItems);
+  const apiDocJson = JSON.stringify(apiDoc, null, 2);
+
+  try {
+    const filePath = await dialog.save({
+      title: 'Save API Documentation',
+      defaultPath: 'api-documentation.json',
+      filters: [{ name: 'JSON', extensions: ['json'] }]
+    });
+
+    if (filePath) {
+      await writeTextFile(filePath, apiDocJson);
+      console.log('API Documentation saved successfully:', filePath);
+
+      sendNotification({
+        title: 'Success',
+        body: 'API Documentation saved successfully.'
+      });
+    }
+  } catch (error) {
+    console.error('Failed to save API Documentation:', error);
+    sendNotification({
+      title: 'Error',
+      body: 'Failed to save API Documentation.'
+    });
+  }
+}
+
+
 </script>
 
 <style>
@@ -794,6 +906,9 @@
             </button>
             <button type="button" on:click={importPostmanCollection}>
               <FontAwesomeIcon icon="upload" size="lg" /> Import Postman Collection
+            </button>
+            <button type="button" on:click={() => downloadApiDocumentation($history)}>
+              <FontAwesomeIcon icon="download" size="lg" /> Export API Documentation
             </button>
           </div>
         <div class="flex justify-between items-center">
