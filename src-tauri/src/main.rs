@@ -101,7 +101,7 @@ async fn send_request(state: State<'_, AppState>, request_data: RequestData) -> 
         curl_command.push_str(&format!(" -H 'Content-Type: {}'", content_type));
 
         match content_type.as_str() {
-            "application/json" | "application/xml" => {
+            "application/json" | "application/xml" | "text/xml" | "text/xml; charset=utf-8" => {
                 if let Some(body) = request_data.body {
                     request = request.headers(headers.clone()).body(body.clone());
                     curl_command.push_str(&format!(" -d '{}'", body));
@@ -161,7 +161,11 @@ async fn send_request(state: State<'_, AppState>, request_data: RequestData) -> 
                         error: None,
                     })
                 },
-                Err(err) => Err(format!("Request failed: {}", err)),
+                Err(err) => {
+                    let error_message = format!("Request failed: {}", err);
+                    println!("Error details: {:?}", err);
+                    Err(error_message)
+                },
             }
         }
     }

@@ -158,8 +158,20 @@
         requestBody = $body;
         break;
       case 'xml':
-        contentType = 'application/xml';
-        requestBody = $body;
+        if ($body.includes('soapenv:Envelope')) {
+          contentType = 'text/xml; charset=utf-8';
+          requestBody = $body;
+          // Add SOAPAction header if not already present
+          if (!actualHeaders.some(h => h.key.toLowerCase() === 'soapaction')) {
+            actualHeaders.push({
+              key: 'SOAPAction',
+              value: '""'  // You might need to set a specific SOAPAction
+            });
+          }
+        } else {
+          contentType = 'application/xml';
+          requestBody = $body;
+        }
         break;
       case 'form-data':
         contentType = 'multipart/form-data';
@@ -223,6 +235,13 @@
     }
   } catch (error) {
     console.error('Request failed:', error);
+    let errorMessage: string;
+    if (error instanceof Error) {
+      errorMessage = error.message;
+      console.error('Error stack:', error.stack);
+    } else {
+      errorMessage = String(error);
+    }
     response.set({
       status: 0,
       duration: 0,
@@ -236,8 +255,6 @@
     isSending.set(false);
   }
 }
-
-
 
   async function cancelRequest() {
     await invoke('cancel_request');
