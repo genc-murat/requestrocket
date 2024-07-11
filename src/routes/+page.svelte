@@ -833,6 +833,10 @@ async function downloadApiDocumentation(historyItems: HistoryItem[]) {
     align-items: center;
     gap: 1rem;
     margin-bottom: 1rem;
+    border-bottom: 1px solid var(--divider); 
+    border-top: 1px solid var(--divider); 
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
   }
 
   .separator {
@@ -897,7 +901,8 @@ async function downloadApiDocumentation(historyItems: HistoryItem[]) {
   <div class="history-panel panel">
     <h2 class="text-xl font-bold mb-4">History</h2>
     {#if $selectedGroup}
-      <div class="group"><div class="top-buttons">
+      <div class="group">
+        <div class="top-buttons">
             <button type="button" on:click={() => variablesPanelOpen.set(true)} class="">
               <FontAwesomeIcon icon="edit" size="lg" /> Variables
             </button>
@@ -910,7 +915,7 @@ async function downloadApiDocumentation(historyItems: HistoryItem[]) {
             <button type="button" on:click={() => downloadApiDocumentation($history)}>
               <FontAwesomeIcon icon="download" size="lg" /> Export API Documentation
             </button>
-          </div>
+        </div>
         <div class="flex justify-between items-center">
           <h3 class="text-lg font-semibold mb-2">{$selectedGroup}</h3>
         </div>
