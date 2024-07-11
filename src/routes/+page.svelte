@@ -7,7 +7,7 @@
   import Prism from 'prismjs';
   import 'prismjs/components/prism-json';
   import 'prismjs/themes/prism-solarizedlight.css';
-  import { faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload } from '@fortawesome/free-solid-svg-icons';
+  import { faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose } from '@fortawesome/free-solid-svg-icons';
   import { library } from '@fortawesome/fontawesome-svg-core';
   import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
   import { writeTextFile,readTextFile  } from '@tauri-apps/api/fs';
@@ -15,7 +15,7 @@
   import { sendNotification } from '@tauri-apps/api/notification';
   import { fly,fade,scale } from 'svelte/transition';
 
-  library.add(faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload);
+  library.add(faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose);
 
   type HistoryItem = {
     id: number;
@@ -1119,29 +1119,32 @@
   </div>
 
   {#if $variablesPanelOpen}
-    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div class="variables-panel bg-white p-4 rounded shadow-lg">
-        <h2 class="text-xl font-bold mb-4">Variables</h2>
-        <div class="flex mb-4">
-          <input type="text" placeholder="Key" bind:value={$newVariableKey} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
-          <input type="text" placeholder="Value" bind:value={$newVariableValue} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
-          <button type="button" on:click={addVariable} class="flex items-center">
-            <FontAwesomeIcon icon="plus" size="lg" class="mr-2" />Add
-          </button>
-        </div>
-        
-        <ul>
-          {#each Object.entries($variables) as [key, value]}
-            <li class="mb-2 flex justify-between items-center">
-              <strong class="text-primary">{key}:</strong> <span class="text-secondary">{value}</span>
-              <button type="button" on:click={() => deleteVariable(key)} class="text-red-500">
-                <FontAwesomeIcon icon="trash-alt"/> 
-              </button>
-            </li>
-          {/each}
-        </ul>
-        <button type="button" on:click={() => variablesPanelOpen.set(false)} class="">Close Panel</button>
+  <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="variables-panel bg-white p-4 rounded shadow-lg relative">
+      <h2 class="text-xl font-bold mb-4">Variables</h2>
+      <div class="flex mb-4">
+        <input type="text" placeholder="Key" bind:value={$newVariableKey} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
+        <input type="text" placeholder="Value" bind:value={$newVariableValue} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
+        <button type="button" on:click={addVariable} class="flex items-center">
+          <FontAwesomeIcon icon="plus" size="lg" class="mr-2" />Add
+        </button>
       </div>
+      
+      <ul>
+        {#each Object.entries($variables) as [key, value]}
+          <li class="mb-2 flex justify-between items-center">
+            <strong class="text-primary">{key}:</strong> <span class="text-secondary">{value}</span>
+            <button type="button" on:click={() => deleteVariable(key)} class="text-red-500">
+              <FontAwesomeIcon icon="trash-alt"/> 
+            </button>
+          </li>
+        {/each}
+      </ul>
+      <button type="button" on:click={() => variablesPanelOpen.set(false)} class="text-red-800 bg-white rounded-full p-2 shadow absolute top-4 right-4 flex items-center justify-center">
+        <FontAwesomeIcon icon="close" size="2x" />
+      </button>
     </div>
+  </div>
+  
   {/if}
 </div>
