@@ -734,12 +734,12 @@
 
 <div class="flex h-screen">
   {#if $modalOpen}
-    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" transition:fade>
+    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div class="bg-white p-4 rounded shadow-lg w-1/2">
         <h2 class="text-lg font-bold mb-4">Select Group</h2>
         <div class="grid grid-cols-4 gap-2">
           {#each $groups as group}
-            <div class="group-card" on:click={() => handleGroupSelect(group)} transition:fly="{{ x: -200, duration: 500 }}">
+            <div class="group-card" on:click={() => handleGroupSelect(group)}>
               {group}
             </div>
           {/each}
@@ -873,7 +873,7 @@
         Form Data
       </button>
     </div>
-    <div class="tab-content" transition:fly="{{ x: 200, duration: 500 }}">
+    <div class="tab-content">
       {#if $selectedRequestTab === 'body'}
         <select id="bodyType" bind:value={$bodyType} class="w-full mb-4 p-2 border rounded text-primary bg-accent">
           <option value="json">JSON</option>
@@ -1050,7 +1050,7 @@
           Curl Command
         </button>
       </div>
-      <div class="tab-content" transition:fly="{{ x: 200, duration: 500 }}">
+      <div class="tab-content">
         {#if $selectedTab === 'response'}
           <div class="response-container relative">
             <button 
@@ -1119,8 +1119,8 @@
   </div>
 
   {#if $variablesPanelOpen}
-    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" transition:fade>
-      <div class="variables-panel bg-white p-4 rounded shadow-lg" transition:fly="{{ y: 200, duration: 500 }}">
+    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div class="variables-panel bg-white p-4 rounded shadow-lg">
         <h2 class="text-xl font-bold mb-4">Variables</h2>
         <div class="flex mb-4">
           <input type="text" placeholder="Key" bind:value={$newVariableKey} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
