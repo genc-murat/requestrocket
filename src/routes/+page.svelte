@@ -1406,19 +1406,52 @@ function toggleStatusHistory() {
         <FontAwesomeIcon icon="close" size="lg" />
       </button>
       <h2 class="text-xl font-bold mb-4">Status History</h2>
-      {#each $statusHistory as history}
-        <div class="status-history-item flex justify-between items-center p-2 mb-2">
-          <div class="px-2 text-white rounded {getStatusClass(history.status)}">
-            Status: {history.status} {history.status === 200 ? 'OK' : ''}
+      {#if $statusHistory.length === 0}
+        <p>No status history available.</p>
+      {/if}
+      <div class="status-section">
+        <h4 class="text-lg font-semibold mb-2">Within the Last Hour</h4>
+        {#each $statusHistory.filter(item => new Date().getTime() - new Date(item.timestamp).getTime() <= 3600000) as history}
+          <div class="status-history-item flex justify-between items-center p-2 mb-2">
+            <div class="px-2 text-white {getStatusClass(history.status)}">
+              Status: {history.status} {history.status === 200 ? 'OK' : ''}
+            </div>
+            <div class="px-2">Duration: {history.duration} ms</div>
+            <div class="px-2">Size: {formatSize(history.size)}</div>
+            <div class="px-2">Timestamp: {timeAgo(history.timestamp)}</div>
           </div>
-          <div class="px-2">Duration: {history.duration} ms</div>
-          <div class="px-2">Size: {formatSize(history.size)}</div>
-          <div class="px-2">Timestamp: {timeAgo(history.timestamp)}</div>
-        </div>
-      {/each}
+        {/each}
+      </div>
+      <div class="status-section">
+        <h3 class="text-lg font-semibold mb-2">Today</h3>
+        {#each $statusHistory.filter(item => new Date().getTime() - new Date(item.timestamp).getTime() > 3600000 && new Date().getDate() === new Date(item.timestamp).getDate()) as history}
+          <div class="status-history-item flex justify-between items-center p-2 mb-2">
+            <div class="px-2 text-white {getStatusClass(history.status)}">
+              Status: {history.status} {history.status === 200 ? 'OK' : ''}
+            </div>
+            <div class="px-2">Duration: {history.duration} ms</div>
+            <div class="px-2">Size: {formatSize(history.size)}</div>
+            <div class="px-2">Timestamp: {timeAgo(history.timestamp)}</div>
+          </div>
+        {/each}
+      </div>
+      <div class="status-section">
+        <h3 class="text-lg font-semibold mb-2">Older</h3>
+        {#each $statusHistory.filter(item => new Date().getTime() - new Date(item.timestamp).getTime() > 86400000) as history}
+          <div class="status-history-item flex justify-between items-center p-2 mb-2">
+            <div class="px-2 text-white {getStatusClass(history.status)}">
+              {history.status} {history.status === 200 ? 'OK' : ''}
+            </div>
+            <div class="px-2">Duration: {history.duration} ms</div>
+            <div class="px-2">Size: {formatSize(history.size)}</div>
+            <div class="px-2">Timestamp: {timeAgo(history.timestamp)}</div>
+          </div>
+        {/each}
+      </div>
     </div>
   </div>
 {/if}
+
 
 
   {#if $variablesPanelOpen}
