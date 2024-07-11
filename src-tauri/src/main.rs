@@ -1,8 +1,3 @@
-#![cfg_attr(
-    all(not(debug_assertions), target_os = "windows"),
-    windows_subsystem = "windows"
-)]
-
 use reqwest::Client;
 use reqwest::header::{HeaderMap, HeaderName, HeaderValue, CONTENT_TYPE};
 use reqwest::multipart;
@@ -10,6 +5,9 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use tauri::State;
 use chrono::prelude::*;
+use std::sync::Arc;
+use tokio::sync::{Mutex, mpsc};
+use tokio::sync::mpsc::Sender;
 
 #[derive(Serialize, Deserialize)]
 struct RequestData {
@@ -35,11 +33,18 @@ struct ResponseData {
     error: Option<String>,
 }
 
-#[tauri::command]
-async fn send_request(client: State<'_, Client>, request_data: RequestData) -> Result<ResponseData, String> {
-    let client = client.inner();
-    let start = std::time::Instant::now();
+struct AppState {
+    client: Client,
+    cancel_sender: Arc<Mutex<Option<Sender<()>>>>,
+}
 
+#[tauri::command]
+async fn send_request(state: State<'_, AppState>, request_data: RequestData) -> Result<ResponseData, String> {
+    let client = &state.client;
+    let (cancel_tx, mut cancel_rx) = mpsc::channel(1);
+    *state.cancel_sender.lock().await = Some(cancel_tx);
+
+    let start = std::time::Instant::now();
     let timestamp = Utc::now().to_rfc3339();
 
     let mut url = request_data.url.clone();
@@ -123,39 +128,57 @@ async fn send_request(client: State<'_, Client>, request_data: RequestData) -> R
         request = request.headers(headers.clone());
     }
 
-    let response = request.send().await;
-    let duration = start.elapsed().as_millis();
-
-    match response {
-        Ok(res) => {
-            let status = res.status().as_u16();
-            let headers = res.headers()
-                .iter()
-                .map(|(k, v)| (k.to_string(), v.to_str().unwrap_or("").to_string()))
-                .collect();
-            let body = res.text().await.unwrap_or_default();
-            let size = body.len() as u64;
-
-            Ok(ResponseData {
-                status,
-                duration,
-                size,
-                body,
-                headers,
-                curl_command,
-                timestamp,
-                error: None,
-            })
+    tokio::select! {
+        _ = cancel_rx.recv() => {
+            Err("Request canceled".to_string())
         },
-        Err(err) => Err(format!("Request failed: {}", err)),
+        response = request.send() => {
+            let duration = start.elapsed().as_millis();
+            match response {
+                Ok(res) => {
+                    let status = res.status().as_u16();
+                    let headers = res.headers()
+                        .iter()
+                        .map(|(k, v)| (k.to_string(), v.to_str().unwrap_or("").to_string()))
+                        .collect();
+                    let body = res.text().await.unwrap_or_default();
+                    let size = body.len() as u64;
+
+                    Ok(ResponseData {
+                        status,
+                        duration,
+                        size,
+                        body,
+                        headers,
+                        curl_command,
+                        timestamp,
+                        error: None,
+                    })
+                },
+                Err(err) => Err(format!("Request failed: {}", err)),
+            }
+        }
     }
+}
+
+#[tauri::command]
+async fn cancel_request(state: State<'_, AppState>) -> Result<(), String> {
+    if let Some(cancel_sender) = &*state.cancel_sender.lock().await {
+        if cancel_sender.send(()).await.is_err() {
+            return Err("Failed to send cancel signal".to_string());
+        }
+    }
+    Ok(())
 }
 
 #[tokio::main]
 async fn main() {
     tauri::Builder::default()
-        .manage(Client::new())
-        .invoke_handler(tauri::generate_handler![send_request])
+        .manage(AppState {
+            client: Client::new(),
+            cancel_sender: Arc::new(Mutex::new(None)),
+        })
+        .invoke_handler(tauri::generate_handler![send_request, cancel_request])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

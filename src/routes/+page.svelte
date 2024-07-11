@@ -10,10 +10,9 @@
   import { faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose } from '@fortawesome/free-solid-svg-icons';
   import { library } from '@fortawesome/fontawesome-svg-core';
   import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
-  import { writeTextFile,readTextFile  } from '@tauri-apps/api/fs';
+  import { writeTextFile, readTextFile } from '@tauri-apps/api/fs';
   import { dialog } from '@tauri-apps/api';
   import { sendNotification } from '@tauri-apps/api/notification';
-  import { fly,fade,scale } from 'svelte/transition';
 
   library.add(faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose);
 
@@ -66,11 +65,11 @@
   let groups = writable<string[]>([]);
   let newGroupName = writable('');
   let modalOpen = writable(true);
+  let isSending = writable(false);
 
   let variables = writable<{ [key: string]: string }>({});
   let newVariableKey = writable('');
   let newVariableValue = writable('');
-
   let variablesPanelOpen = writable(false);
 
   const dbPromise = openDB('request-rocket-db', 2, {
@@ -133,6 +132,7 @@
   }
 
   async function sendRequest() {
+    isSending.set(true);
     const actualUrl = replaceVariables($url, $variables);
     const actualHeaders = $headers.map(header => ({
       key: replaceVariables(header.key, $variables),
@@ -178,6 +178,7 @@
       const res: ResponseData = await invoke<ResponseData>('send_request', { requestData });
       console.log('Response received:', res);
       response.set(res);
+      isSending.set(false);
 
       const existingHistoryItem = $history.find(item => item.url === actualUrl && item.method === $method && item.group === $selectedGroup);
       if (existingHistoryItem) {
@@ -218,7 +219,13 @@
         timestamp: new Date().toISOString(),
         error: error instanceof Error ? error.message : String(error)
       });
+      isSending.set(false);
     }
+  }
+
+  async function cancelRequest() {
+    await invoke('cancel_request');
+    isSending.set(false);
   }
 
   async function saveHistory(historyItem: HistoryItem) {
@@ -553,6 +560,7 @@
     }
   }
 </script>
+
 <style>
   pre {
     background: var(--light-background);
@@ -822,6 +830,7 @@
       </div>
     </div>
     <button type="button" on:click={sendRequest} class="button mb-4">Send Request</button>
+    <button type="button" on:click={cancelRequest} class="button mb-4">Cancel Request</button>
     <div class="tabs">
       <button 
         type="button" 
@@ -1148,3 +1157,12 @@
   
   {/if}
 </div>
+
+{#if $isSending}
+  <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white p-4 rounded shadow-lg">
+      <h2 class="text-lg font-bold mb-4">Sending request...</h2>
+      <button type="button" on:click={cancelRequest} class="w-full p-2 bg-red-500 text-white rounded">Cancel Request</button>
+    </div>
+  </div>
+{/if}
