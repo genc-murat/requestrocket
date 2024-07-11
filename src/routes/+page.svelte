@@ -134,97 +134,110 @@
     return str.replace(/{{(.*?)}}/g, (_, key) => vars[key.trim()] || '');
   }
 
+
   async function sendRequest() {
-    isSending.set(true);
-    const actualUrl = replaceVariables($url, $variables);
-    const actualHeaders = $headers.map(header => ({
-      key: replaceVariables(header.key, $variables),
-      value: replaceVariables(header.value, $variables)
-    }));
+  isSending.set(true);
+  const actualUrl = $url;
+  const actualHeaders = $headers.map(header => ({
+    key: replaceVariables(header.key, $variables),
+    value: replaceVariables(header.value, $variables)
+  }));
 
-    const pathParamsObject = Object.fromEntries($pathParams.map(param => [param.key, param.value]));
-    const queryParamsObject = Object.fromEntries($queryParams.map(param => [param.key, param.value]));
-    const formParamsObject = Object.fromEntries($formParams.map(field => [field.key, field.value]));
+  const pathParamsObject = Object.fromEntries($pathParams.map(param => [param.key, param.value]));
+  const queryParamsObject = Object.fromEntries($queryParams.map(param => [param.key, param.value]));
+  const formParamsObject = Object.fromEntries($formParams.map(field => [field.key, field.value]));
 
-    let requestBody;
-    if ($method === 'GET') {
-      requestBody = null;
-    } else {
-      switch ($bodyType) {
-        case 'json':
-        case 'xml':
-          requestBody = replaceVariables($body, $variables);
-          break;
-        case 'form-data':
-          requestBody = null;
-          break;
-        case 'form-urlencoded':
-          requestBody = new URLSearchParams($formParams.map(field => [field.key, replaceVariables(field.value, $variables)])).toString();
-          break;
-      }
-    }
-
-    const requestData: any = {
-      url: actualUrl,
-      method: $method,
-      body: requestBody,
-      headers: Object.fromEntries(actualHeaders.map(header => [header.key, header.value])),
-      path_params: pathParamsObject,
-      query_params: queryParamsObject,
-      form_data: $bodyType === 'form-data' ? formParamsObject : undefined,
-      content_type: $bodyType === 'form-data' ? 'multipart/form-data' : $bodyType === 'form-urlencoded' ? 'application/x-www-form-urlencoded' : undefined
-    };
-
-    console.log('Sending request with data:', requestData);
-
-    try {
-      const res: ResponseData = await invoke<ResponseData>('send_request', { requestData });
-      console.log('Response received:', res);
-      response.set(res);
-      isSending.set(false);
-
-      const existingHistoryItem = $history.find(item => item.url === actualUrl && item.method === $method && item.group === $selectedGroup);
-      if (existingHistoryItem) {
-        const updatedHistoryItem: HistoryItem = { 
-          ...existingHistoryItem,
-          body: $body, 
-          headers: actualHeaders,
-          params: $params,
-          response: JSON.stringify(res),
-        };
-        updateHistoryItem(updatedHistoryItem);
-      } else {
-        const newHistoryItem: HistoryItem = { 
-          id: Date.now(), 
-          url: actualUrl, 
-          method: $method, 
-          body: $body, 
-          headers: actualHeaders,
-          params: $params,
-          response: JSON.stringify(res),
-          group: $selectedGroup
-        };
-        history.update(h => {
-          const newHistory = [...h, newHistoryItem];
-          saveHistory(newHistoryItem);
-          return newHistory;
-        });
-      }
-    } catch (error) {
-      console.error('Request failed:', error);
-      response.set({
-        status: 0,
-        duration: 0,
-        size: 0,
-        body: '',
-        headers: [],
-        curl_command: '',
-        timestamp: new Date().toISOString(),
-        error: error instanceof Error ? error.message : String(error)
-      });
-      isSending.set(false);
+  let requestBody;
+  let contentType;
+  if ($method === 'GET') {
+    requestBody = null;
+  } else {
+    switch ($bodyType) {
+      case 'json':
+        contentType = 'application/json';
+        requestBody = $body;
+        break;
+      case 'xml':
+        contentType = 'application/xml';
+        requestBody = $body;
+        break;
+      case 'form-data':
+        contentType = 'multipart/form-data';
+        requestBody = formParamsObject;
+        break;
+      case 'form-urlencoded':
+        contentType = 'application/x-www-form-urlencoded';
+        requestBody = new URLSearchParams($formParams.map(field => [field.key, field.value])).toString();
+        break;
+      default:
+        contentType = 'text/plain';
+        requestBody = $body;
     }
   }
+
+  const requestData: any = {
+    url: actualUrl,
+    method: $method,
+    body: requestBody,
+    headers: Object.fromEntries(actualHeaders.map(header => [header.key, header.value])),
+    path_params: pathParamsObject,
+    query_params: queryParamsObject,
+    form_data: $bodyType === 'form-data' ? formParamsObject : undefined,
+    content_type: contentType
+  };
+
+  console.log('Sending request with data:', requestData);
+
+  try {
+    const res: ResponseData = await invoke<ResponseData>('send_request', { requestData });
+    console.log('Response received:', res);
+    response.set(res);
+    isSending.set(false);
+
+    const existingHistoryItem = $history.find(item => item.url === actualUrl && item.method === $method && item.group === $selectedGroup);
+    if (existingHistoryItem) {
+      const updatedHistoryItem: HistoryItem = { 
+        ...existingHistoryItem,
+        body: $body, 
+        headers: actualHeaders,
+        params: $params,
+        response: JSON.stringify(res),
+      };
+      updateHistoryItem(updatedHistoryItem);
+    } else {
+      const newHistoryItem: HistoryItem = { 
+        id: Date.now(), 
+        url: actualUrl, 
+        method: $method, 
+        body: $body, 
+        headers: actualHeaders,
+        params: $params,
+        response: JSON.stringify(res),
+        group: $selectedGroup
+      };
+      history.update(h => {
+        const newHistory = [...h, newHistoryItem];
+        saveHistory(newHistoryItem);
+        return newHistory;
+      });
+    }
+  } catch (error) {
+    console.error('Request failed:', error);
+    response.set({
+      status: 0,
+      duration: 0,
+      size: 0,
+      body: '',
+      headers: [],
+      curl_command: '',
+      timestamp: new Date().toISOString(),
+      error: error instanceof Error ? error.message : String(error)
+    });
+    isSending.set(false);
+  }
+}
+
+
 
   async function cancelRequest() {
     await invoke('cancel_request');
@@ -1038,19 +1051,9 @@ async function downloadApiDocumentation(historyItems: HistoryItem[]) {
         <select id="bodyType" bind:value={$bodyType} class="w-full mb-4 p-2 border rounded text-primary bg-accent">
           <option value="json">JSON</option>
           <option value="xml">XML</option>
-          <option value="form-data">Form Data</option>
-          <option value="form-urlencoded">Form URL Encoded</option>
         </select>
         {#if $bodyType === 'json' || $bodyType === 'xml'}
           <textarea id="body" bind:value={$body} placeholder={$bodyType === 'json' ? '{"key": "value"}' : '<xml></xml>'} class="w-full mb-4 p-2 border rounded text-primary bg-accent h-40"></textarea>
-        {:else}
-          {#each $formParams as field, index}
-            <div class="flex mb-2">
-              <input type="text" placeholder="Key" bind:value={field.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
-              <input type="text" placeholder="Value" bind:value={field.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
-            </div>
-          {/each}
-          <button type="button" on:click={addFormField} class="w-full p-2 bg-primary text-background rounded">Add Field</button>
         {/if}
       {:else if $selectedRequestTab === 'headers'}
         <div class="params-container">

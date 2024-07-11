@@ -47,6 +47,7 @@ async fn send_request(state: State<'_, AppState>, request_data: RequestData) -> 
     let start = std::time::Instant::now();
     let timestamp = Utc::now().to_rfc3339();
 
+    // Handle path parameters
     let mut url = request_data.url.clone();
     if let Some(path_params) = request_data.path_params {
         for (key, value) in path_params.iter() {
@@ -54,6 +55,7 @@ async fn send_request(state: State<'_, AppState>, request_data: RequestData) -> 
         }
     }
 
+    // Handle query parameters
     if let Some(query_params) = request_data.query_params {
         let query_string: String = query_params.iter()
             .map(|(key, value)| format!("{}={}", key, value))
@@ -65,6 +67,7 @@ async fn send_request(state: State<'_, AppState>, request_data: RequestData) -> 
     let mut headers = HeaderMap::new();
     let mut curl_command = format!("curl -X {} '{}'", request_data.method, url);
 
+    // Set request headers
     if let Some(header_map) = request_data.headers {
         for (key, value) in header_map.iter() {
             match HeaderName::from_bytes(key.as_bytes()) {
@@ -80,6 +83,7 @@ async fn send_request(state: State<'_, AppState>, request_data: RequestData) -> 
         }
     }
 
+    // Initialize request with the appropriate HTTP method
     let mut request = match request_data.method.as_str() {
         "GET" => client.get(&url),
         "POST" => client.post(&url),
@@ -91,6 +95,7 @@ async fn send_request(state: State<'_, AppState>, request_data: RequestData) -> 
         _ => return Err("Unsupported method".to_string()),
     };
 
+    // Set the Content-Type header and body according to the content type
     if let Some(content_type) = request_data.content_type {
         headers.insert(CONTENT_TYPE, HeaderValue::from_str(&content_type).unwrap());
         curl_command.push_str(&format!(" -H 'Content-Type: {}'", content_type));
@@ -128,6 +133,7 @@ async fn send_request(state: State<'_, AppState>, request_data: RequestData) -> 
         request = request.headers(headers.clone());
     }
 
+    // Send the request and handle cancellation
     tokio::select! {
         _ = cancel_rx.recv() => {
             Err("Request canceled".to_string())
