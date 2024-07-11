@@ -469,7 +469,7 @@ function isValidJson(json: string): boolean {
       console.error('Failed to copy text: ', err);
     }
   }
-
+  let timestampUpdateInterval: number;
   onMount(() => {
     isSending.subscribe(value => {
       if (value) {
@@ -482,10 +482,12 @@ function isValidJson(json: string): boolean {
         elapsedTime.set(0);
       }
     });
+
   });
 
   onDestroy(() => {
     clearInterval(timer);
+    clearInterval(timestampUpdateInterval);
   });
 
 
@@ -731,7 +733,25 @@ async function downloadApiDocumentation(historyItems: HistoryItem[]) {
   }
 }
 
+function timeAgo(timestamp: string): string {
+  const now = new Date();
+  const past = new Date(timestamp);
+  const diffMs = now.getTime() - past.getTime();
+  const diffSecs = Math.round(diffMs / 1000);
+  const diffMins = Math.round(diffSecs / 60);
+  const diffHours = Math.round(diffMins / 60);
+  const diffDays = Math.round(diffHours / 24);
 
+  if (diffSecs < 60) {
+    return `${diffSecs} seconds ago`;
+  } else if (diffMins < 60) {
+    return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+  } else if (diffHours < 24) {
+    return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+  } else {
+    return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+  }
+}
 </script>
 
 <style>
@@ -1187,7 +1207,7 @@ async function downloadApiDocumentation(historyItems: HistoryItem[]) {
             <span>{($response.size / 1024).toFixed(2)} KB</span>
           </div>
           <div class="flex items-center ml-2">
-            <span>{$response.timestamp}</span>
+            <span>{timeAgo($response.timestamp)}</span>
           </div>
         </div>
       </div>
