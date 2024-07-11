@@ -403,24 +403,33 @@
   }
 
   function jsonToTableData(json: string): { headers: string[], rows: string[][] } {
-    try {
-      const data = JSON.parse(json);
-      if (Array.isArray(data)) {
-        const headers = Object.keys(data[0]);
-        const rows = data.map(item => headers.map(header => JSON.stringify(item[header])));
-        return { headers, rows };
-      } else if (typeof data === 'object' && data !== null) {
-        const headers = Object.keys(data);
-        const rows = [headers.map(header => JSON.stringify(data[header]))];
-        return { headers, rows };
-      }
-    } catch (e) {
-      console.error('Error parsing JSON:', e);
+  try {
+    const data = JSON.parse(json);
+    if (Array.isArray(data)) {
+      const headers = Object.keys(data[0]);
+      const rows = data.map(item => headers.map(header => JSON.stringify(item[header])));
+      return { headers, rows };
+    } else if (typeof data === 'object' && data !== null) {
+      const headers = Object.keys(data);
+      const rows = [headers.map(header => JSON.stringify(data[header]))];
+      return { headers, rows };
     }
-    return { headers: [], rows: [] };
+  } catch (e) {
+    console.error('Error parsing JSON:', e);
   }
+  return { headers: [], rows: [] };
+}
 
-  $: tableData = $response ? jsonToTableData($response.body) : { headers: [], rows: [] };
+$: tableData = ($response && $response.body && isValidJson($response.body)) ? jsonToTableData($response.body) : { headers: [], rows: [] };
+
+function isValidJson(json: string): boolean {
+  try {
+    JSON.parse(json);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
   async function copyToClipboard(text: string) {
     try {
