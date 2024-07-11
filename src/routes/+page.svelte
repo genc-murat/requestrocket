@@ -1140,8 +1140,8 @@
           </li>
         {/each}
       </ul>
-      <button type="button" on:click={() => variablesPanelOpen.set(false)} class="text-red-800 bg-white rounded-full p-2 shadow absolute top-4 right-4 flex items-center justify-center">
-        <FontAwesomeIcon icon="close" size="2x" />
+      <button type="button" on:click={() => variablesPanelOpen.set(false)} class="text-red-900 bg-slate-50 rounded-full p-2 shadow absolute top-4 right-4 flex items-center justify-center">
+        <FontAwesomeIcon icon="close" size="lg" />
       </button>
     </div>
   </div>
