@@ -96,8 +96,7 @@ pre {
   word-break: break-word;
   overflow-y: auto;
   max-height: 100%;
-  /* color: var(--primary-text);
-  background: var(--light-background); */
+
 }
 
 ul {
@@ -136,10 +135,6 @@ td {
   padding: 0.5rem;
 }
 
-/* th {
-  background-color: var(--background);
-  color: var(--secondary-text);
-} */
 th {
   background-color: var(--secondary);
   color: var(--background);
@@ -149,12 +144,6 @@ tr:nth-child(even) {
   background-color: var(--light-background);
 }
 
-/* td:first-child {
-  background-color: var(--light-background);
-  color: var(--dark-text);
-  font-weight: bolder;
-  width: 20%;
-} */
 
 .url {
   word-break: break-all;
@@ -282,8 +271,8 @@ textarea {
 input[type='text'],
 textarea {
   width: 100%;
-  padding-right: 30px; /* Adjust padding to make room for clear icon */
-  box-sizing: border-box; /* Ensure padding-right is included in the width */
+  padding-right: 30px;
+  box-sizing: border-box; 
 }
 
 .response-container {
@@ -299,7 +288,7 @@ textarea {
   z-index: 1;
 }
 .response-content {
-  max-height: auto; /* or any height you prefer */
+  max-height: auto;
   overflow-y: auto;
 }
 

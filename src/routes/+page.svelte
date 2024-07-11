@@ -153,7 +153,7 @@
           requestBody = replaceVariables($body, $variables);
           break;
         case 'form-data':
-          requestBody = null; // formParams zaten ayrı bir alan olarak gönderilecek
+          requestBody = null;
           break;
         case 'form-urlencoded':
           requestBody = new URLSearchParams($formParams.map(field => [field.key, replaceVariables(field.value, $variables)])).toString();
@@ -445,7 +445,6 @@
     flashResponse();
   }
 
-  // Function to convert request data to Postman format
   function convertToPostmanFormat(historyItems: HistoryItem[]): any {
     const postmanCollection = {
       info: {
@@ -477,7 +476,6 @@
     return postmanCollection;
   }
 
-  // Function to save Postman collection as JSON file using Tauri
   async function downloadPostmanCollection(historyItems: HistoryItem[]) {
     const postmanCollection = convertToPostmanFormat(historyItems);
     const postmanJson = JSON.stringify(postmanCollection, null, 2);
@@ -508,7 +506,6 @@
     }
   }
 
-  // Button click handler to export the selected group's requests
   function handleExport() {
     downloadPostmanCollection($history);
   }
@@ -531,7 +528,7 @@
           method: item.request.method,
           body: item.request.body ? item.request.body.raw : '',
           headers: item.request.header.map((header: any) => ({ key: header.key, value: header.value })),
-          params: [], // Assuming no initial params
+          params: [], 
           response: '',
           group: 'Imported'
         }));
@@ -770,11 +767,7 @@
             </button>
           </div>
         <div class="flex justify-between items-center">
-          
-
-
           <h3 class="text-lg font-semibold mb-2">{$selectedGroup}</h3>
-       
         </div>
        
         <ul>
@@ -782,7 +775,7 @@
             <li class="mb-2 history-item flex justify-between items-center">
               <button type="button" class="w-full text-left" on:click={() => selectHistoryItem(item)}>
                 <strong class="px-2 py-1 rounded {item.method === 'GET' ? 'bg-green-500' : ''} {item.method === 'POST' ? 'bg-blue-500' : ''} {item.method === 'PUT' ? 'bg-yellow-500' : ''} {item.method === 'DELETE' ? 'bg-red-500' : ''} text-white">
-                  {item.method}
+                  {item.method.substring(0, 3)}
                 </strong> <span class="url">{item.url}</span>
               </button>
               <button 
