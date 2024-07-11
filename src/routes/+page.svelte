@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount , onDestroy } from 'svelte';
   import { writable } from 'svelte/store';
   import type { Writable } from 'svelte/store';
   import { openDB } from 'idb';
@@ -66,6 +66,9 @@
   let newGroupName = writable('');
   let modalOpen = writable(true);
   let isSending = writable(false);
+  let elapsedTime = writable(0);
+  let startTime: number;
+  let timer: ReturnType<typeof setInterval>;
 
   let variables = writable<{ [key: string]: string }>({});
   let newVariableKey = writable('');
@@ -427,6 +430,25 @@
       console.error('Failed to copy text: ', err);
     }
   }
+
+  onMount(() => {
+    isSending.subscribe(value => {
+      if (value) {
+        startTime = Date.now();
+        timer = setInterval(() => {
+          elapsedTime.set(Date.now() - startTime);
+        }, 10); // Update every 10 milliseconds
+      } else {
+        clearInterval(timer);
+        elapsedTime.set(0);
+      }
+    });
+  });
+
+  onDestroy(() => {
+    clearInterval(timer);
+  });
+
 
   onMount(() => {
     loadGroups();
@@ -1127,13 +1149,16 @@
     {/if}
   
     {#if $isSending}
-      <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div class="bg-white p-4 rounded shadow-lg">
-          <h2 class="text-lg font-bold mb-4">Sending request...</h2>
-          <button type="button" on:click={cancelRequest} class="w-full p-2 bg-red-500 text-white rounded">Cancel Request</button>
-        </div>
+    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div class="bg-white p-4 rounded shadow-lg">
+        <h2 class="text-lg font-bold mb-4">Sending request...</h2>
+        <p class="mb-4">Elapsed time: {$elapsedTime} ms</p>
+        <button type="button" on:click={cancelRequest} class="w-full p-2 bg-red-500 text-white rounded">Cancel Request</button>
       </div>
-    {/if}
+    </div>
+  {/if}
+  
+  
   </div>
   
 
