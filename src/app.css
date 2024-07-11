@@ -321,6 +321,7 @@ textarea {
 .flash {
   animation: flash 0.5s ease-in-out;
 }
+
 .z-50 {
   z-index: 50;
 }
@@ -334,7 +335,6 @@ textarea {
 .status-history {
   background: #f9f9f9;
   border: 1px solid #ccc;
-  border-radius: 4px;
   padding: 10px;
   max-height: 90%;
   overflow-y: auto;
@@ -347,11 +347,9 @@ textarea {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  border-radius: 4px;
   margin-bottom: 5px;
 }
 
 .status-history-item > div {
   padding: 0 10px;
 }
-

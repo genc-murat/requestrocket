@@ -75,20 +75,48 @@
   let newVariableValue = writable('');
   let variablesPanelOpen = writable(false);
 
-  const dbPromise = openDB('request-rocket-db', 2, {
-    upgrade(db, oldVersion) {
-      if (oldVersion < 1) {
-        if (!db.objectStoreNames.contains('history')) {
-          db.createObjectStore('history', { keyPath: 'id', autoIncrement: true });
-        }
+  const dbPromise = openDB('request-rocket-db', 3, {
+  upgrade(db, oldVersion) {
+    if (oldVersion < 1) {
+      if (!db.objectStoreNames.contains('history')) {
+        db.createObjectStore('history', { keyPath: 'id', autoIncrement: true });
       }
-      if (oldVersion < 2) {
-        if (!db.objectStoreNames.contains('variables')) {
-          db.createObjectStore('variables', { keyPath: 'key' });
-        }
+    }
+    if (oldVersion < 2) {
+      if (!db.objectStoreNames.contains('variables')) {
+        db.createObjectStore('variables', { keyPath: 'key' });
       }
-    },
-  });
+    }
+    if (oldVersion < 3) {
+      if (!db.objectStoreNames.contains('statusHistory')) {
+        db.createObjectStore('statusHistory', { keyPath: 'id', autoIncrement: true });
+      }
+    }
+  },
+});
+
+async function saveStatusHistory(statusHistoryItem: StatusHistoryItem) {
+  console.log('Saving status history:', statusHistoryItem);
+  try {
+    const db = await dbPromise;
+    await db.add('statusHistory', statusHistoryItem);
+    console.log('Status history saved successfully.');
+  } catch (error) {
+    console.error('Error saving status history:', error instanceof Error ? error.message : error);
+  }
+}
+
+
+async function loadStatusHistory() {
+  console.log('Loading status history...');
+  try {
+    const db = await dbPromise;
+    const allStatusHistoryItems = await db.getAll('statusHistory');
+    statusHistory.set(allStatusHistoryItems);
+  } catch (error) {
+    console.error('Failed to load status history:', error instanceof Error ? error.message : error);
+  }
+}
 
   async function addHeader() {
     headers.update(h => [...h, { key: '', value: '' }]);
@@ -216,14 +244,21 @@
     isSending.set(false);
 
     statusHistory.update(history => [
-        ...history,
-        {
-          status: res.status,
-          duration: res.duration,
-          size: res.size,
-          timestamp: res.timestamp
-        }
-      ]);
+      ...history,
+      {
+        status: res.status,
+        duration: res.duration,
+        size: res.size,
+        timestamp: res.timestamp
+      }
+    ]);
+
+    saveStatusHistory({
+      status: res.status,
+      duration: res.duration,
+      size: res.size,
+      timestamp: res.timestamp
+    });
 
     const existingHistoryItem = $history.find(item => item.url === actualUrl && item.method === $method && item.group === $selectedGroup);
     if (existingHistoryItem) {
@@ -513,6 +548,7 @@ function isValidJson(json: string): boolean {
   onMount(() => {
     loadGroups();
     loadVariables();
+    loadStatusHistory();
     response.subscribe(value => {
       if (value) {
         Prism.highlightAll();
@@ -1365,7 +1401,7 @@ function toggleStatusHistory() {
   
   {#if $statusHistoryOpen}
   <div class="status-history-modal fixed inset-0 flex items-end justify-end bg-black bg-opacity-50 z-50">
-    <div class="status-history bg-white p-4 rounded shadow-lg w-1/3 h-full overflow-y-auto">
+    <div class="status-history bg-white p-4 shadow-lg w-1/3 h-full overflow-y-auto">
       <button type="button" on:click={toggleStatusHistory} class="text-red-900 bg-slate-50 rounded-full p-2 shadow absolute top-4 right-4 flex items-center justify-center">
         <FontAwesomeIcon icon="close" size="lg" />
       </button>
@@ -1383,6 +1419,7 @@ function toggleStatusHistory() {
     </div>
   </div>
 {/if}
+
 
   {#if $variablesPanelOpen}
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
