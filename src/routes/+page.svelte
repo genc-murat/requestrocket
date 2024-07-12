@@ -4,15 +4,13 @@
   import type { Writable } from 'svelte/store';
   import { openDB } from 'idb';
   import { invoke } from '@tauri-apps/api/tauri';
-  import Prism from 'prismjs';
-  import 'prismjs/components/prism-json';
-  import 'prismjs/themes/prism-solarizedlight.css';
   import { faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose } from '@fortawesome/free-solid-svg-icons';
   import { library } from '@fortawesome/fontawesome-svg-core';
   import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
   import { writeTextFile, readTextFile } from '@tauri-apps/api/fs';
   import { dialog } from '@tauri-apps/api';
   import { sendNotification } from '@tauri-apps/api/notification';
+  import JSONEditor from '../components/JSONEditor.svelte';
 
   library.add(faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose);
 
@@ -306,6 +304,7 @@ async function loadStatusHistory() {
       timestamp: new Date().toISOString(),
       error: error instanceof Error ? error.message : String(error)
     });
+
     isSending.set(false);
   }
 }
@@ -438,14 +437,8 @@ async function loadStatusHistory() {
     }
   }
 
-  function formatJson(json: string): string {
-    try {
-      json = JSON.stringify(JSON.parse(json.trim()), null, 2);
-      return Prism.highlight(json, Prism.languages.json, 'json');
-    } catch (e) {
-      return json;
-    }
-  }
+
+  let jsonData = writable('{}');
 
   function selectHistoryItem(item: HistoryItem) {
     url.set(item.url);
@@ -454,6 +447,7 @@ async function loadStatusHistory() {
     headers.set(item.headers || []);
     params.set(item.params || []);
     response.set(item.response ? JSON.parse(item.response) : null);
+    jsonData.set(item.response ? item.response : '{}'); 
   }
 
   function handleGroupSelect(group: string) {
@@ -549,26 +543,10 @@ function isValidJson(json: string): boolean {
     loadGroups();
     loadVariables();
     loadStatusHistory();
-    response.subscribe(value => {
-      if (value) {
-        Prism.highlightAll();
-      }
-    });
+    
   });
 
   $: $queryParams, updateUrl();
-
-  let responseFlash = writable(false);
-  function flashResponse() {
-    responseFlash.set(true);
-    setTimeout(() => {
-      responseFlash.set(false);
-    }, 500);
-  }
-
-  $: if ($response) {
-    flashResponse();
-  }
 
   function convertToPostmanFormat(historyItems: HistoryItem[]): any {
     const postmanCollection = {
@@ -1319,19 +1297,19 @@ function toggleStatusHistory() {
           Curl Command
         </button>
       </div>
+
       <div class="tab-content">
         {#if $selectedTab === 'response'}
           <div class="response-container relative">
-            <button 
+            <!-- <button 
               type="button" 
               on:click={() => copyToClipboard($response.body)} 
               class="copy-button text-blue-500"
             >
               <FontAwesomeIcon icon="copy" size="xl" />
-            </button>
-            <pre class="response-content bg-secondary text-background p-2 rounded { $responseFlash ? 'flash' : '' }">
-              {@html formatJson($response.body)}
-            </pre>
+            </button> -->
+            <JSONEditor jsonData={$response && $response.body ? $response.body : '{}'} />
+
           </div>
         {:else if $selectedTab === 'table'}
           <div class="table-container">
