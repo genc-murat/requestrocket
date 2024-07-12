@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount , onDestroy } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
   import { writable } from 'svelte/store';
   import type { Writable } from 'svelte/store';
   import { openDB } from 'idb';
@@ -74,47 +74,57 @@
   let variablesPanelOpen = writable(false);
 
   const dbPromise = openDB('request-rocket-db', 3, {
-  upgrade(db, oldVersion) {
-    if (oldVersion < 1) {
-      if (!db.objectStoreNames.contains('history')) {
-        db.createObjectStore('history', { keyPath: 'id', autoIncrement: true });
+    upgrade(db, oldVersion) {
+      if (oldVersion < 1) {
+        if (!db.objectStoreNames.contains('history')) {
+          db.createObjectStore('history', { keyPath: 'id', autoIncrement: true });
+        }
       }
-    }
-    if (oldVersion < 2) {
-      if (!db.objectStoreNames.contains('variables')) {
-        db.createObjectStore('variables', { keyPath: 'key' });
+      if (oldVersion < 2) {
+        if (!db.objectStoreNames.contains('variables')) {
+          db.createObjectStore('variables', { keyPath: 'key' });
+        }
       }
-    }
-    if (oldVersion < 3) {
-      if (!db.objectStoreNames.contains('statusHistory')) {
-        db.createObjectStore('statusHistory', { keyPath: 'id', autoIncrement: true });
+      if (oldVersion < 3) {
+        if (!db.objectStoreNames.contains('statusHistory')) {
+          db.createObjectStore('statusHistory', { keyPath: 'id', autoIncrement: true });
+        }
       }
-    }
-  },
-});
+    },
+  });
 
-async function saveStatusHistory(statusHistoryItem: StatusHistoryItem) {
-  console.log('Saving status history:', statusHistoryItem);
-  try {
-    const db = await dbPromise;
-    await db.add('statusHistory', statusHistoryItem);
-    console.log('Status history saved successfully.');
-  } catch (error) {
-    console.error('Error saving status history:', error instanceof Error ? error.message : error);
+  type StatusHistoryItem = {
+    id: number;
+    url: string;
+    status: number;
+    duration: number;
+    size: number;
+    timestamp: string;
+  };
+
+  let statusHistory = writable<StatusHistoryItem[]>([]);
+
+  async function saveStatusHistory(statusHistoryItem: StatusHistoryItem) {
+    console.log('Saving status history:', statusHistoryItem);
+    try {
+      const db = await dbPromise;
+      await db.add('statusHistory', statusHistoryItem);
+      console.log('Status history saved successfully.');
+    } catch (error) {
+      console.error('Error saving status history:', error instanceof Error ? error.message : error);
+    }
   }
-}
 
-
-async function loadStatusHistory() {
-  console.log('Loading status history...');
-  try {
-    const db = await dbPromise;
-    const allStatusHistoryItems = await db.getAll('statusHistory');
-    statusHistory.set(allStatusHistoryItems);
-  } catch (error) {
-    console.error('Failed to load status history:', error instanceof Error ? error.message : error);
+  async function loadStatusHistory(url: string) {
+    console.log('Loading status history for URL:', url);
+    try {
+      const db = await dbPromise;
+      const allStatusHistoryItems = await db.getAllFromIndex('statusHistory', 'url', IDBKeyRange.only(url));
+      statusHistory.set(allStatusHistoryItems);
+    } catch (error) {
+      console.error('Failed to load status history:', error instanceof Error ? error.message : error);
+    }
   }
-}
 
   async function addHeader() {
     headers.update(h => [...h, { key: '', value: '' }]);
@@ -160,154 +170,147 @@ async function loadStatusHistory() {
     return str.replace(/{{(.*?)}}/g, (_, key) => vars[key.trim()] || '');
   }
 
-
-  type StatusHistoryItem = {
-    status: number;
-    duration: number;
-    size: number;
-    timestamp: string;
-  };
-
-  let statusHistory = writable<StatusHistoryItem[]>([]);
-
   async function sendRequest() {
-  isSending.set(true);
-  const actualUrl = $url;
-  const actualHeaders = $headers.map(header => ({
-    key: replaceVariables(header.key, $variables),
-    value: replaceVariables(header.value, $variables)
-  }));
+    isSending.set(true);
+    const actualUrl = $url;
+    const actualHeaders = $headers.map(header => ({
+      key: replaceVariables(header.key, $variables),
+      value: replaceVariables(header.value, $variables)
+    }));
 
-  const pathParamsObject = Object.fromEntries($pathParams.map(param => [param.key, param.value]));
-  const queryParamsObject = Object.fromEntries($queryParams.map(param => [param.key, param.value]));
-  const formParamsObject = Object.fromEntries($formParams.map(field => [field.key, field.value]));
+    const pathParamsObject = Object.fromEntries($pathParams.map(param => [param.key, param.value]));
+    const queryParamsObject = Object.fromEntries($queryParams.map(param => [param.key, param.value]));
+    const formParamsObject = Object.fromEntries($formParams.map(field => [field.key, field.value]));
 
-  let requestBody;
-  let contentType;
-  if ($method === 'GET') {
-    requestBody = null;
-  } else {
-    switch ($bodyType) {
-      case 'json':
-        contentType = 'application/json';
-        requestBody = $body;
-        break;
-      case 'xml':
-        if ($body.includes('soapenv:Envelope')) {
-          contentType = 'text/xml; charset=utf-8';
+    let requestBody;
+    let contentType;
+    if ($method === 'GET') {
+      requestBody = null;
+    } else {
+      switch ($bodyType) {
+        case 'json':
+          contentType = 'application/json';
           requestBody = $body;
-          // Add SOAPAction header if not already present
-          if (!actualHeaders.some(h => h.key.toLowerCase() === 'soapaction')) {
-            actualHeaders.push({
-              key: 'SOAPAction',
-              value: '""'  // You might need to set a specific SOAPAction
-            });
+          break;
+        case 'xml':
+          if ($body.includes('soapenv:Envelope')) {
+            contentType = 'text/xml; charset=utf-8';
+            requestBody = $body;
+            // Add SOAPAction header if not already present
+            if (!actualHeaders.some(h => h.key.toLowerCase() === 'soapaction')) {
+              actualHeaders.push({
+                key: 'SOAPAction',
+                value: '""'  // You might need to set a specific SOAPAction
+              });
+            }
+          } else {
+            contentType = 'application/xml';
+            requestBody = $body;
           }
-        } else {
-          contentType = 'application/xml';
+          break;
+        case 'form-data':
+          contentType = 'multipart/form-data';
+          requestBody = formParamsObject;
+          break;
+        case 'form-urlencoded':
+          contentType = 'application/x-www-form-urlencoded';
+          requestBody = new URLSearchParams($formParams.map(field => [field.key, field.value])).toString();
+          break;
+        default:
+          contentType = 'text/plain';
           requestBody = $body;
-        }
-        break;
-      case 'form-data':
-        contentType = 'multipart/form-data';
-        requestBody = formParamsObject;
-        break;
-      case 'form-urlencoded':
-        contentType = 'application/x-www-form-urlencoded';
-        requestBody = new URLSearchParams($formParams.map(field => [field.key, field.value])).toString();
-        break;
-      default:
-        contentType = 'text/plain';
-        requestBody = $body;
+      }
     }
-  }
 
-  const requestData: any = {
-    url: actualUrl,
-    method: $method,
-    body: requestBody,
-    headers: Object.fromEntries(actualHeaders.map(header => [header.key, header.value])),
-    path_params: pathParamsObject,
-    query_params: queryParamsObject,
-    form_data: $bodyType === 'form-data' ? formParamsObject : undefined,
-    content_type: contentType
-  };
+    const requestData: any = {
+      url: actualUrl,
+      method: $method,
+      body: requestBody,
+      headers: Object.fromEntries(actualHeaders.map(header => [header.key, header.value])),
+      path_params: pathParamsObject,
+      query_params: queryParamsObject,
+      form_data: $bodyType === 'form-data' ? formParamsObject : undefined,
+      content_type: contentType
+    };
 
-  console.log('Sending request with data:', requestData);
+    console.log('Sending request with data:', requestData);
 
-  try {
-    const res: ResponseData = await invoke<ResponseData>('send_request', { requestData });
-    console.log('Response received:', res);
-    response.set(res);
-    isSending.set(false);
+    try {
+      const res: ResponseData = await invoke<ResponseData>('send_request', { requestData });
+      console.log('Response received:', res);
+      response.set(res);
+      isSending.set(false);
 
-    statusHistory.update(history => [
-      ...history,
-      {
+      statusHistory.set([
+        {
+          id: Date.now(),
+          url: actualUrl,
+          status: res.status,
+          duration: res.duration,
+          size: res.size,
+          timestamp: res.timestamp
+        }
+      ]);
+
+      saveStatusHistory({
+        id: Date.now(),
+        url: actualUrl,
         status: res.status,
         duration: res.duration,
         size: res.size,
         timestamp: res.timestamp
-      }
-    ]);
-
-    saveStatusHistory({
-      status: res.status,
-      duration: res.duration,
-      size: res.size,
-      timestamp: res.timestamp
-    });
-
-    const existingHistoryItem = $history.find(item => item.url === actualUrl && item.method === $method && item.group === $selectedGroup);
-    if (existingHistoryItem) {
-      const updatedHistoryItem: HistoryItem = { 
-        ...existingHistoryItem,
-        body: $body, 
-        headers: actualHeaders,
-        params: $params,
-        response: JSON.stringify(res),
-      };
-      updateHistoryItem(updatedHistoryItem);
-    } else {
-      const newHistoryItem: HistoryItem = { 
-        id: Date.now(), 
-        url: actualUrl, 
-        method: $method, 
-        body: $body, 
-        headers: actualHeaders,
-        params: $params,
-        response: JSON.stringify(res),
-        group: $selectedGroup
-      };
-      history.update(h => {
-        const newHistory = [...h, newHistoryItem];
-        saveHistory(newHistoryItem);
-        return newHistory;
       });
-    }
-  } catch (error) {
-    console.error('Request failed:', error);
-    let errorMessage: string;
-    if (error instanceof Error) {
-      errorMessage = error.message;
-      console.error('Error stack:', error.stack);
-    } else {
-      errorMessage = String(error);
-    }
-    response.set({
-      status: 0,
-      duration: 0,
-      size: 0,
-      body: '',
-      headers: [],
-      curl_command: '',
-      timestamp: new Date().toISOString(),
-      error: error instanceof Error ? error.message : String(error)
-    });
 
-    isSending.set(false);
+      const existingHistoryItem = $history.find(item => item.url === actualUrl && item.method === $method && item.group === $selectedGroup);
+      if (existingHistoryItem) {
+        const updatedHistoryItem: HistoryItem = { 
+          ...existingHistoryItem,
+          body: $body, 
+          headers: actualHeaders,
+          params: $params,
+          response: JSON.stringify(res),
+        };
+        updateHistoryItem(updatedHistoryItem);
+      } else {
+        const newHistoryItem: HistoryItem = { 
+          id: Date.now(), 
+          url: actualUrl, 
+          method: $method, 
+          body: $body, 
+          headers: actualHeaders,
+          params: $params,
+          response: JSON.stringify(res),
+          group: $selectedGroup
+        };
+        history.update(h => {
+          const newHistory = [...h, newHistoryItem];
+          saveHistory(newHistoryItem);
+          return newHistory;
+        });
+      }
+    } catch (error) {
+      console.error('Request failed:', error);
+      let errorMessage: string;
+      if (error instanceof Error) {
+        errorMessage = error.message;
+        console.error('Error stack:', error.stack);
+      } else {
+        errorMessage = String(error);
+      }
+      response.set({
+        status: 0,
+        duration: 0,
+        size: 0,
+        body: '',
+        headers: [],
+        curl_command: '',
+        timestamp: new Date().toISOString(),
+        error: error instanceof Error ? error.message : String(error)
+      });
+
+      isSending.set(false);
+    }
   }
-}
 
   async function cancelRequest() {
     await invoke('cancel_request');
@@ -437,7 +440,6 @@ async function loadStatusHistory() {
     }
   }
 
-
   let jsonData = writable('{}');
 
   function selectHistoryItem(item: HistoryItem) {
@@ -448,6 +450,7 @@ async function loadStatusHistory() {
     params.set(item.params || []);
     response.set(item.response ? JSON.parse(item.response) : null);
     jsonData.set(item.response ? item.response : '{}'); 
+    loadStatusHistory(item.url);
   }
 
   function handleGroupSelect(group: string) {
@@ -481,33 +484,33 @@ async function loadStatusHistory() {
   }
 
   function jsonToTableData(json: string): { headers: string[], rows: string[][] } {
-  try {
-    const data = JSON.parse(json);
-    if (Array.isArray(data)) {
-      const headers = Object.keys(data[0]);
-      const rows = data.map(item => headers.map(header => JSON.stringify(item[header])));
-      return { headers, rows };
-    } else if (typeof data === 'object' && data !== null) {
-      const headers = Object.keys(data);
-      const rows = [headers.map(header => JSON.stringify(data[header]))];
-      return { headers, rows };
+    try {
+      const data = JSON.parse(json);
+      if (Array.isArray(data)) {
+        const headers = Object.keys(data[0]);
+        const rows = data.map(item => headers.map(header => JSON.stringify(item[header])));
+        return { headers, rows };
+      } else if (typeof data === 'object' && data !== null) {
+        const headers = Object.keys(data);
+        const rows = [headers.map(header => JSON.stringify(data[header]))];
+        return { headers, rows };
+      }
+    } catch (e) {
+      console.error('Error parsing JSON:', e);
     }
-  } catch (e) {
-    console.error('Error parsing JSON:', e);
+    return { headers: [], rows: [] };
   }
-  return { headers: [], rows: [] };
-}
 
-$: tableData = ($response && $response.body && isValidJson($response.body)) ? jsonToTableData($response.body) : { headers: [], rows: [] };
+  $: tableData = ($response && $response.body && isValidJson($response.body)) ? jsonToTableData($response.body) : { headers: [], rows: [] };
 
-function isValidJson(json: string): boolean {
-  try {
-    JSON.parse(json);
-    return true;
-  } catch {
-    return false;
+  function isValidJson(json: string): boolean {
+    try {
+      JSON.parse(json);
+      return true;
+    } catch {
+      return false;
+    }
   }
-}
 
   async function copyToClipboard(text: string) {
     try {
@@ -517,6 +520,7 @@ function isValidJson(json: string): boolean {
       console.error('Failed to copy text: ', err);
     }
   }
+
   let timestampUpdateInterval: number;
   onMount(() => {
     isSending.subscribe(value => {
@@ -530,7 +534,6 @@ function isValidJson(json: string): boolean {
         elapsedTime.set(0);
       }
     });
-
   });
 
   onDestroy(() => {
@@ -538,12 +541,9 @@ function isValidJson(json: string): boolean {
     clearInterval(timestampUpdateInterval);
   });
 
-
   onMount(() => {
     loadGroups();
     loadVariables();
-    loadStatusHistory();
-    
   });
 
   $: $queryParams, updateUrl();
@@ -659,139 +659,138 @@ function isValidJson(json: string): boolean {
   }
 
   function generateApiDocumentation(historyItems: HistoryItem[]): ApiDoc {
-  const apiDoc: ApiDoc = {
-    info: {
-      title: "Generated API Documentation",
-      version: "1.0.0"
-    },
-    paths: {}
-  };
-
-  historyItems.forEach(item => {
-    if (!apiDoc.paths[item.url]) {
-      apiDoc.paths[item.url] = {};
-    }
-
-    let requestBodyExample: any;
-    try {
-      requestBodyExample = JSON.parse(item.body);
-    } catch (e) {
-      requestBodyExample = item.body;
-    }
-
-    let responseBodyExample: any;
-    try {
-      responseBodyExample = item.response ? JSON.parse(item.response) : {};
-    } catch (e) {
-      responseBodyExample = item.response;
-    }
-
-    apiDoc.paths[item.url][item.method.toLowerCase()] = {
-      summary: `Request to ${item.url}`,
-      parameters: [
-        ...item.headers.map(header => ({
-          name: header.key,
-          in: "header",
-          required: true,
-          schema: {
-            type: "string"
-          },
-          example: header.value
-        })),
-        ...item.params.map(param => ({
-          name: param.key,
-          in: "query",
-          required: true,
-          schema: {
-            type: "string"
-          },
-          example: param.value
-        }))
-      ],
-      requestBody: {
-        content: {
-          "application/json": {
-            schema: {
-              type: "object"
-            },
-            example: requestBodyExample
-          }
-        }
+    const apiDoc: ApiDoc = {
+      info: {
+        title: "Generated API Documentation",
+        version: "1.0.0"
       },
-      responses: {
-        [item.response ? responseBodyExample.status : "default"]: {
-          description: "Response",
+      paths: {}
+    };
+
+    historyItems.forEach(item => {
+      if (!apiDoc.paths[item.url]) {
+        apiDoc.paths[item.url] = {};
+      }
+
+      let requestBodyExample: any;
+      try {
+        requestBodyExample = JSON.parse(item.body);
+      } catch (e) {
+        requestBodyExample = item.body;
+      }
+
+      let responseBodyExample: any;
+      try {
+        responseBodyExample = item.response ? JSON.parse(item.response) : {};
+      } catch (e) {
+        responseBodyExample = item.response;
+      }
+
+      apiDoc.paths[item.url][item.method.toLowerCase()] = {
+        summary: `Request to ${item.url}`,
+        parameters: [
+          ...item.headers.map(header => ({
+            name: header.key,
+            in: "header",
+            required: true,
+            schema: {
+              type: "string"
+            },
+            example: header.value
+          })),
+          ...item.params.map(param => ({
+            name: param.key,
+            in: "query",
+            required: true,
+            schema: {
+              type: "string"
+            },
+            example: param.value
+          }))
+        ],
+        requestBody: {
           content: {
             "application/json": {
               schema: {
                 type: "object"
               },
-              example: responseBodyExample
+              example: requestBodyExample
+            }
+          }
+        },
+        responses: {
+          [item.response ? responseBodyExample.status : "default"]: {
+            description: "Response",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object"
+                },
+                example: responseBodyExample
+              }
             }
           }
         }
-      }
-    };
-  });
-
-  return apiDoc;
-}
-
-async function downloadApiDocumentation(historyItems: HistoryItem[]) {
-  const apiDoc = generateApiDocumentation(historyItems);
-  const apiDocJson = JSON.stringify(apiDoc, null, 2);
-
-  try {
-    const filePath = await dialog.save({
-      title: 'Save API Documentation',
-      defaultPath: 'api-documentation.json',
-      filters: [{ name: 'JSON', extensions: ['json'] }]
+      };
     });
 
-    if (filePath) {
-      await writeTextFile(filePath, apiDocJson);
-      console.log('API Documentation saved successfully:', filePath);
+    return apiDoc;
+  }
 
+  async function downloadApiDocumentation(historyItems: HistoryItem[]) {
+    const apiDoc = generateApiDocumentation(historyItems);
+    const apiDocJson = JSON.stringify(apiDoc, null, 2);
+
+    try {
+      const filePath = await dialog.save({
+        title: 'Save API Documentation',
+        defaultPath: 'api-documentation.json',
+        filters: [{ name: 'JSON', extensions: ['json'] }]
+      });
+
+      if (filePath) {
+        await writeTextFile(filePath, apiDocJson);
+        console.log('API Documentation saved successfully:', filePath);
+
+        sendNotification({
+          title: 'Success',
+          body: 'API Documentation saved successfully.'
+        });
+      }
+    } catch (error) {
+      console.error('Failed to save API Documentation:', error);
       sendNotification({
-        title: 'Success',
-        body: 'API Documentation saved successfully.'
+        title: 'Error',
+        body: 'Failed to save API Documentation.'
       });
     }
-  } catch (error) {
-    console.error('Failed to save API Documentation:', error);
-    sendNotification({
-      title: 'Error',
-      body: 'Failed to save API Documentation.'
-    });
   }
-}
 
-function timeAgo(timestamp: string): string {
-  const now = new Date();
-  const past = new Date(timestamp);
-  const diffMs = now.getTime() - past.getTime();
-  const diffSecs = Math.round(diffMs / 1000);
-  const diffMins = Math.round(diffSecs / 60);
-  const diffHours = Math.round(diffMins / 60);
-  const diffDays = Math.round(diffHours / 24);
+  function timeAgo(timestamp: string): string {
+    const now = new Date();
+    const past = new Date(timestamp);
+    const diffMs = now.getTime() - past.getTime();
+    const diffSecs = Math.round(diffMs / 1000);
+    const diffMins = Math.round(diffSecs / 60);
+    const diffHours = Math.round(diffMins / 60);
+    const diffDays = Math.round(diffHours / 24);
 
-  if (diffSecs < 60) {
-    return `${diffSecs} seconds ago`;
-  } else if (diffMins < 60) {
-    return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
-  } else if (diffHours < 24) {
-    return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-  } else {
-    return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    if (diffSecs < 60) {
+      return `${diffSecs} seconds ago`;
+    } else if (diffMins < 60) {
+      return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+    } else if (diffHours < 24) {
+      return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    } else {
+      return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    }
   }
-}
 
-let statusHistoryOpen = writable(false);
+  let statusHistoryOpen = writable(false);
 
-
-function toggleStatusHistory() {
-  statusHistoryOpen.update(open => !open);
-}
+  function toggleStatusHistory() {
+    statusHistoryOpen.update(open => !open);
+  }
 
   function formatSize(size: number): string {
     return `${(size / 1024).toFixed(2)} KB`;
@@ -1482,4 +1481,3 @@ function toggleStatusHistory() {
   
   {/if}
 </div>
-
