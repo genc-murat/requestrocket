@@ -4,7 +4,7 @@
   import type { Writable } from 'svelte/store';
   import { openDB } from 'idb';
   import { invoke } from '@tauri-apps/api/tauri';
-  import { faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+  import { faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose, faRepeat } from '@fortawesome/free-solid-svg-icons';
   import { library } from '@fortawesome/fontawesome-svg-core';
   import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
   import { writeTextFile, readTextFile } from '@tauri-apps/api/fs';
@@ -12,7 +12,7 @@
   import { sendNotification } from '@tauri-apps/api/notification';
   import JSONEditor from '../components/JSONEditor.svelte';
 
-  library.add(faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose, faAngleDown);
+  library.add(faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose, faRepeat);
 
   type HistoryItem = {
     id: number;
@@ -1010,19 +1010,19 @@ function toggleStatusHistory() {
             <FontAwesomeIcon icon="edit" size="lg" /> Variables
           </button>
           <button type="button" on:click={handleExport}>
-            <FontAwesomeIcon icon="download" size="lg" /> Export Group
+            <FontAwesomeIcon icon="download" size="lg" /> Export
           </button>
           <button type="button" on:click={importPostmanCollection}>
-            <FontAwesomeIcon icon="upload" size="lg" /> Import Postman Collection
+            <FontAwesomeIcon icon="upload" size="lg" /> Import
           </button>
           <button type="button" on:click={() => downloadApiDocumentation($history)}>
-            <FontAwesomeIcon icon="download" size="lg" /> Export API Documentation
+            <FontAwesomeIcon icon="download" size="lg" />Documentation
           </button>
         </div>
         <div class="flex justify-between items-center">
           <h3 class="text-lg font-semibold mb-2 flex items-center">
             <button type="button" class="text-blue-600" on:click={() =>{ modalOpen.set(true);}} >
-                <FontAwesomeIcon icon="angle-down" class="mr-2"/>
+                <FontAwesomeIcon icon="repeat" class="mr-2"/>
               </button>
             {$selectedGroup}
           </h3>
@@ -1032,9 +1032,21 @@ function toggleStatusHistory() {
           {#each $history as item}
             <li class="mb-2 history-item flex justify-between items-center">
               <button type="button" class="w-full text-left" on:click={() => selectHistoryItem(item)}>
-                <strong class="px-2 py-1 rounded {item.method === 'GET' ? 'bg-green-500' : ''} {item.method === 'POST' ? 'bg-blue-500' : ''} {item.method === 'PUT' ? 'bg-yellow-500' : ''} {item.method === 'DELETE' ? 'bg-red-500' : ''} text-white">
-                  {item.method.substring(0, 3)}
-                </strong> <span class="url">{item.url}</span>
+                <strong class="px-2 py-1 rounded 
+                {item.method === 'GET' ? 'bg-green-500' : ''} 
+                {item.method === 'POST' ? 'bg-blue-500' : ''} 
+                {item.method === 'PUT' ? 'bg-yellow-500' : ''} 
+                {item.method === 'DELETE' ? 'bg-red-500' : ''} 
+                {item.method === 'PATCH' ? 'bg-purple-500' : ''} 
+                {item.method === 'OPTIONS' ? 'bg-indigo-500' : ''} 
+                {item.method === 'HEAD' ? 'bg-teal-500' : ''} 
+                {item.method === 'CONNECT' ? 'bg-pink-500' : ''} 
+                {item.method === 'TRACE' ? 'bg-orange-500' : ''}
+                text-white">
+                {item.method.substring(0, 3)}
+              </strong>
+              
+                <span class="url">{item.url}</span>
               </button>
               <button 
                 class="duplicate-icon text-blue-500" 
