@@ -1308,7 +1308,7 @@ function toggleStatusHistory() {
             >
               <FontAwesomeIcon icon="copy" size="xl" />
             </button> -->
-            <JSONEditor jsonData={$response && $response.body ? $response.body : '{}'} />
+            <JSONEditor jsonData={$response && $response.body ? $response.body : '{}'} theme="light" />
 
           </div>
         {:else if $selectedTab === 'table'}
