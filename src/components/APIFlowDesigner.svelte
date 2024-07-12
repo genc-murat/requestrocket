@@ -421,16 +421,11 @@ type BlockType = keyof typeof blockTypes;
 <div class="api-flow-designer">
   <div class="toolbar">
     <input type="text" bind:value={searchTerm} placeholder="Search blocks..." />
-
       <select class="w-full focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"  bind:value={categoryFilter}>
         {#each Object.entries(blockCategories) as [value, name]}
           <option value={value}>{name}</option>
         {/each}
       </select>
- 
-    
-    
-    
     {#each Object.entries(blockTypes) as [type, { category, name }]}
     {#if categoryFilter === 'all' || categoryFilter === category}
       <button on:click={() => handleAddBlock(type)}>{name}</button>
