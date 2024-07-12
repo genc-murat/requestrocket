@@ -5,7 +5,7 @@
   import 'jsoneditor/dist/jsoneditor.css';
 
   export let jsonData: string = '{}';
-  export let mode: JSONEditorMode = 'tree';
+  export let mode: JSONEditorMode = 'code';
   export let theme: 'light' | 'dark' = 'light';
 
   let editorContainer: HTMLElement;
@@ -23,7 +23,7 @@
   onMount(() => {
     const options: JSONEditorOptions = {
       mode,
-      modes: ['tree', 'code'],
+      modes: ['code','tree' ,'text'],
     };
     editor = new JSONEditor(editorContainer, options);
     if (isValidJson(jsonData)) {
@@ -161,5 +161,10 @@
 
   :global(.dark-theme .jsoneditor-menu button:hover) {
     background-color: var(--secondary);
+  }
+
+  /* Hide "powered by ace" link */
+  :global(.jsoneditor-poweredBy) {
+    display: none !important;
   }
 </style>
