@@ -365,3 +365,22 @@ textarea {
 .status-history-item > div {
   padding: 0 10px;
 }
+
+.api-flow-panel {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  border-left: 1px solid var(--divider);
+}
+
+.button {
+  background-color: var(--primary);
+  color: var(--background);
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.button:hover {
+  opacity: 0.9;
+}

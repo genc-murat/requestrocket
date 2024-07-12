@@ -11,6 +11,7 @@
   import { dialog } from '@tauri-apps/api';
   import { sendNotification } from '@tauri-apps/api/notification';
   import JSONEditor from '../components/JSONEditor.svelte';
+  import APIFlowDesigner  from '../components/APIFlowDesigner.svelte';
 
   library.add(faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose, faRepeat);
 
@@ -45,6 +46,101 @@
     timestamp: string;
     error: string | null;
   };
+
+  type Connection = {
+  source: string;
+  target: string;
+  type: 'next' | 'alternative' | 'error';
+};
+
+type FlowBlock = {
+  id: string;
+  type: 'api_call' | 'condition' | 'loop' | 'timer' | 'json_transformer' | 'regex' | 'variable' | 'try_catch' | 'switch_case' | 'custom_script' | 'webhook' | 'auth' | 'comment' | 'group';
+  data: any;
+  position: { x: number; y: number };
+  next: string | null;
+  alternative?: string | null;
+  error?: string | null;
+  group?: string;
+};
+
+type Flow = {
+  id: string;
+  name: string;
+  description: string;
+  version: string;
+  blocks: FlowBlock[];
+  connections: Connection[];  // Bu satırı ekleyin
+  variables: { [key: string]: any };
+  createdAt: Date;
+  updatedAt: Date;
+  createdBy: string;
+  tags: string[];
+};
+
+
+let currentFlow: Writable<Flow | null> = writable(null);
+  let flowResults: Writable<{ [key: string]: any } | null> = writable(null);
+
+  async function runFlow(flow: Flow) {
+  console.log('Running flow:', flow);
+  flowResults.set(null);
+  
+  for (const block of flow.blocks) {
+    if (block.type === 'api_call') {
+      try {
+        const requestData = {
+          url: block.data.url,
+          method: block.data.method,
+          headers: block.data.headers,
+          body: block.data.body,
+          // Diğer gerekli alanları ekleyin
+        };
+        const result = await invoke<ResponseData>('send_request', { requestData });
+        flowResults.update(results => ({...results, [block.id]: result}));
+      } catch (error) {
+        console.error('Error in flow execution:', error);
+        flowResults.update(results => ({...results, [block.id]: {error: error instanceof Error ? error.message : String(error)}}));
+        break;
+      }
+    }
+    // Diğer blok tipleri için gerekli işlemler burada yapılabilir
+  }
+}
+currentFlow.set({
+  id: crypto.randomUUID(),
+  name: 'New Flow',
+  description: '',
+  version: '1.0.0',
+  blocks: [],
+  connections: [],  // Bu satırı ekleyin
+  variables: {},
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  createdBy: 'Anonymous',
+  tags: []
+});
+
+function handleFlowSave(event: CustomEvent<Flow>) {
+  currentFlow.set(event.detail);
+  // Akışı kaydetmek için gerekli işlemler burada yapılabilir
+  console.log('Flow saved:', event.detail);
+}
+
+function handleFlowRun(event: CustomEvent<Flow>) {
+  runFlow(event.detail);
+}
+let apiFlowModalOpen = writable(false);
+
+// ... (mevcut fonksiyonlar)
+
+function openApiFlowModal() {
+  apiFlowModalOpen.set(true);
+}
+
+function closeApiFlowModal() {
+  apiFlowModalOpen.set(false);
+}
 
   let url = writable('');
   let method = writable('GET');
@@ -1000,11 +1096,35 @@
     </div>
   {/if}
 
+  {#if $apiFlowModalOpen}
+  <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white p-4 rounded shadow-lg w-3/4 h-3/4 overflow-hidden">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">API Flow Designer</h2>
+        <button type="button" on:click={closeApiFlowModal} class="text-red-900 bg-slate-50 rounded-full p-2 shadow flex items-center justify-center">
+          <FontAwesomeIcon icon="close" size="lg" />
+        </button>
+      </div>
+      
+      <div class="h-full">
+        <APIFlowDesigner 
+  initialFlow={$currentFlow} 
+  on:save={handleFlowSave} 
+  on:run={handleFlowRun}
+/>
+      </div>
+    </div>
+  </div>
+{/if}
+
   <div class="history-panel panel">
     <h2 class="text-xl font-bold mb-4">History</h2>
     {#if $selectedGroup}
       <div class="group">
         <div class="top-buttons">
+          <button type="button" on:click={openApiFlowModal} class="">
+            <FontAwesomeIcon icon="edit" size="lg" /> API Flow Designer
+          </button>
           <button type="button" on:click={() => variablesPanelOpen.set(true)} class="">
             <FontAwesomeIcon icon="edit" size="lg" /> Variables
           </button>

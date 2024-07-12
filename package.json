@@ -21,6 +21,7 @@
 		"@tauri-apps/cli": "^1.6.0",
 		"@types/jsoneditor": "^9.9.5",
 		"@types/prismjs": "^1.26.4",
+		"@types/uuid": "^10.0.0",
 		"autoprefixer": "^10.4.19",
 		"postcss": "^8.4.39",
 		"svelte": "^4.2.7",
@@ -36,6 +37,7 @@
 		"@fortawesome/free-solid-svg-icons": "^6.5.2",
 		"@fortawesome/svelte-fontawesome": "^0.2.2",
 		"idb": "^8.0.0",
-		"jsoneditor": "^10.1.0"
+		"jsoneditor": "^10.1.0",
+		"uuid": "^10.0.0"
 	}
 }
