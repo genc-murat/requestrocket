@@ -73,23 +73,23 @@
   let newVariableValue = writable('');
   let variablesPanelOpen = writable(false);
 
-  const dbPromise = openDB('request-rocket-db', 3, {
+  const dbPromise = openDB('request-rocket-db', 1, {
     upgrade(db, oldVersion) {
-      if (oldVersion < 1) {
+ 
         if (!db.objectStoreNames.contains('history')) {
           db.createObjectStore('history', { keyPath: 'id', autoIncrement: true });
         }
-      }
-      if (oldVersion < 2) {
+
+   
         if (!db.objectStoreNames.contains('variables')) {
           db.createObjectStore('variables', { keyPath: 'key' });
         }
-      }
-      if (oldVersion < 3) {
+     
+ 
         if (!db.objectStoreNames.contains('statusHistory')) {
           db.createObjectStore('statusHistory', { keyPath: 'id', autoIncrement: true });
         }
-      }
+   
     },
   });
 
