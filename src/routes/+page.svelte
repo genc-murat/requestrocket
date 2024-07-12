@@ -47,15 +47,35 @@
     error: string | null;
   };
 
-  type Connection = {
-  source: string;
-  target: string;
-  type: 'next' | 'alternative' | 'error';
-};
+  const blockTypes = {
+  'api_call': { category: 'input-output', name: 'API Call' },
+  'condition': { category: 'logic', name: 'Condition' },
+  'loop': { category: 'logic', name: 'Loop' },
+  'timer': { category: 'util', name: 'Timer' },
+  'variable': { category: 'data', name: 'Variable' },
+  'json_transformer': { category: 'data', name: 'JSON Transformer' },
+  'regex': { category: 'data', name: 'Regex' },
+  'webhook': { category: 'input-output', name: 'Webhook' },
+  'custom_script': { category: 'util', name: 'Custom Script' },
+  'try_catch': { category: 'logic', name: 'Try-Catch' },
+  'switch_case': { category: 'logic', name: 'Switch-Case' },
+  'auth': { category: 'input-output', name: 'Authentication' },
+  'comment': { category: 'util', name: 'Comment' },
+  'group': { category: 'util', name: 'Group' }
+} as const;
 
-type FlowBlock = {
+type BlockType = keyof typeof blockTypes;
+
+  type Connection = {
+    id: string;
+    source: string;
+    target: string;
+    type: 'next' | 'alternative' | 'error';
+  };
+
+  type FlowBlock = {
   id: string;
-  type: 'api_call' | 'condition' | 'loop' | 'timer' | 'json_transformer' | 'regex' | 'variable' | 'try_catch' | 'switch_case' | 'custom_script' | 'webhook' | 'auth' | 'comment' | 'group';
+  type: BlockType;
   data: any;
   position: { x: number; y: number };
   next: string | null;
@@ -64,19 +84,19 @@ type FlowBlock = {
   group?: string;
 };
 
-type Flow = {
-  id: string;
-  name: string;
-  description: string;
-  version: string;
-  blocks: FlowBlock[];
-  connections: Connection[];  // Bu satırı ekleyin
-  variables: { [key: string]: any };
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: string;
-  tags: string[];
-};
+  type Flow = {
+    id: string;
+    name: string;
+    description: string;
+    version: string;
+    blocks: FlowBlock[];
+    connections: Connection[];
+    variables: { [key: string]: any };
+    createdAt: Date;
+    updatedAt: Date;
+    createdBy: string;
+    tags: string[];
+  };
 
 
 let currentFlow: Writable<Flow | null> = writable(null);
@@ -1107,11 +1127,7 @@ function closeApiFlowModal() {
       </div>
       
       <div class="h-full">
-        <APIFlowDesigner 
-  initialFlow={$currentFlow} 
-  on:save={handleFlowSave} 
-  on:run={handleFlowRun}
-/>
+        <APIFlowDesigner initialFlow={$currentFlow} on:save={handleFlowSave} on:run={handleFlowRun} />
       </div>
     </div>
   </div>
