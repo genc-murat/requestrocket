@@ -4,7 +4,7 @@
   import type { Writable } from 'svelte/store';
   import { openDB } from 'idb';
   import { invoke } from '@tauri-apps/api/tauri';
-  import { faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose } from '@fortawesome/free-solid-svg-icons';
+  import { faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose, faAngleDown } from '@fortawesome/free-solid-svg-icons';
   import { library } from '@fortawesome/fontawesome-svg-core';
   import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
   import { writeTextFile, readTextFile } from '@tauri-apps/api/fs';
@@ -12,7 +12,7 @@
   import { sendNotification } from '@tauri-apps/api/notification';
   import JSONEditor from '../components/JSONEditor.svelte';
 
-  library.add(faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose);
+  library.add(faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose, faAngleDown);
 
   type HistoryItem = {
     id: number;
@@ -1006,23 +1006,28 @@ function toggleStatusHistory() {
     {#if $selectedGroup}
       <div class="group">
         <div class="top-buttons">
-            <button type="button" on:click={() => variablesPanelOpen.set(true)} class="">
-              <FontAwesomeIcon icon="edit" size="lg" /> Variables
-            </button>
-            <button type="button" on:click={handleExport}>
-              <FontAwesomeIcon icon="download" size="lg" /> Export Group
-            </button>
-            <button type="button" on:click={importPostmanCollection}>
-              <FontAwesomeIcon icon="upload" size="lg" /> Import Postman Collection
-            </button>
-            <button type="button" on:click={() => downloadApiDocumentation($history)}>
-              <FontAwesomeIcon icon="download" size="lg" /> Export API Documentation
-            </button>
+          <button type="button" on:click={() => variablesPanelOpen.set(true)} class="">
+            <FontAwesomeIcon icon="edit" size="lg" /> Variables
+          </button>
+          <button type="button" on:click={handleExport}>
+            <FontAwesomeIcon icon="download" size="lg" /> Export Group
+          </button>
+          <button type="button" on:click={importPostmanCollection}>
+            <FontAwesomeIcon icon="upload" size="lg" /> Import Postman Collection
+          </button>
+          <button type="button" on:click={() => downloadApiDocumentation($history)}>
+            <FontAwesomeIcon icon="download" size="lg" /> Export API Documentation
+          </button>
         </div>
         <div class="flex justify-between items-center">
-          <h3 class="text-lg font-semibold mb-2">{$selectedGroup}</h3>
+          <h3 class="text-lg font-semibold mb-2 flex items-center">
+            <button type="button" class="text-blue-600" on:click={() =>{ modalOpen.set(true);}} >
+                <FontAwesomeIcon icon="angle-down" class="mr-2"/>
+              </button>
+            {$selectedGroup}
+          </h3>
         </div>
-       
+        
         <ul>
           {#each $history as item}
             <li class="mb-2 history-item flex justify-between items-center">
@@ -1053,6 +1058,7 @@ function toggleStatusHistory() {
       </div>
     {/if}
   </div>
+  
 
   <div class="request-panel panel">
     <h2 class="text-xl font-bold mb-4">Request</h2>
