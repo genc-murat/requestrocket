@@ -896,18 +896,88 @@
     }
   }
 
+  const statusClasses: { [key: string]: string } = {
+    // Informational responses
+    "100": "bg-purple-500",
+    "101": "bg-purple-500",
+    "1xx": "bg-purple-500",
+
+    // Successful responses
+    "200": "bg-green-500",
+    "201": "bg-green-500",
+    "202": "bg-green-500",
+    "203": "bg-green-500",
+    "204": "bg-green-500",
+    "205": "bg-green-500",
+    "206": "bg-green-500",
+    "2xx": "bg-green-500",
+
+    // Redirection messages
+    "300": "bg-blue-500",
+    "301": "bg-blue-500",
+    "302": "bg-blue-500",
+    "303": "bg-blue-500",
+    "304": "bg-blue-500",
+    "305": "bg-blue-500",
+    "307": "bg-blue-500",
+    "308": "bg-blue-500",
+    "3xx": "bg-blue-500",
+
+    // Client errors
+    "400": "bg-yellow-500",
+    "401": "bg-orange-500", // Unauthorized
+    "402": "bg-yellow-500",
+    "403": "bg-pink-500", // Forbidden
+    "404": "bg-yellow-700", // Not Found
+    "405": "bg-yellow-500",
+    "406": "bg-yellow-500",
+    "407": "bg-yellow-500",
+    "408": "bg-yellow-500",
+    "409": "bg-yellow-500",
+    "410": "bg-yellow-500",
+    "411": "bg-yellow-500",
+    "412": "bg-yellow-500",
+    "413": "bg-yellow-500",
+    "414": "bg-yellow-500",
+    "415": "bg-yellow-500",
+    "416": "bg-yellow-500",
+    "417": "bg-yellow-500",
+    "418": "bg-yellow-500", // I'm a teapot (RFC 2324)
+    "422": "bg-yellow-500",
+    "425": "bg-yellow-500",
+    "426": "bg-yellow-500",
+    "428": "bg-yellow-500",
+    "429": "bg-yellow-500",
+    "431": "bg-yellow-500",
+    "451": "bg-yellow-500",
+    "4xx": "bg-yellow-500",
+
+    // Server errors
+    "500": "bg-red-500", // Internal Server Error
+    "501": "bg-red-600",
+    "502": "bg-red-700", // Bad Gateway
+    "503": "bg-red-800", // Service Unavailable
+    "504": "bg-red-600",
+    "505": "bg-red-600",
+    "506": "bg-red-600",
+    "507": "bg-red-600",
+    "508": "bg-red-600",
+    "510": "bg-red-600",
+    "511": "bg-red-600",
+    "5xx": "bg-red-600",
+
+    // Default
+    default: "bg-gray-500",
+  };
+
   function getStatusClass(status: number): string {
-    if (status >= 200 && status < 300) {
-      return "bg-green-500";
-    } else if (status >= 300 && status < 400) {
-      return "bg-blue-500";
-    } else if (status >= 400 && status < 500) {
-      return "bg-yellow-500";
-    } else if (status >= 500) {
-      return "bg-red-500";
-    } else {
-      return "bg-gray-500";
-    }
+    const statusKey = `${status}`;
+    const statusRangeKey = `${Math.floor(status / 100)}xx`;
+    return (
+      statusClasses[statusKey] ||
+      statusClasses[statusRangeKey] ||
+      statusClasses["default"]
+    );
   }
 
   let jsonData = writable("{}");
