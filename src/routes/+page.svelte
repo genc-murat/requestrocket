@@ -2,7 +2,7 @@
   import { onMount, onDestroy } from "svelte";
   import { writable } from "svelte/store";
   import type { Writable } from "svelte/store";
-  import { openDB, deleteDB } from "idb";
+  import { openDB } from "idb";
   import { invoke } from "@tauri-apps/api/tauri";
   import {
     faPlus,
@@ -420,10 +420,12 @@
       }
 
       if (!db.objectStoreNames.contains("statusHistory")) {
-        db.createObjectStore("statusHistory", {
+        const statusHistoryStore = db.createObjectStore("statusHistory", {
           keyPath: "id",
           autoIncrement: true,
         });
+        // Create index on "url"
+        statusHistoryStore.createIndex("url", "url");
       }
 
       if (!db.objectStoreNames.contains("customHeaders")) {
@@ -455,11 +457,15 @@
     console.log("Loading status history for URL:", url);
     try {
       const db = await dbPromise;
-      const allStatusHistoryItems = await db.getAllFromIndex(
-        "statusHistory",
-        "url",
-        IDBKeyRange.only(url),
-      );
+      const tx = db.transaction("statusHistory", "readonly");
+      const store = tx.objectStore("statusHistory");
+
+      if (!store.indexNames.contains("url")) {
+        throw new Error("Index 'url' not found");
+      }
+
+      const index = store.index("url");
+      const allStatusHistoryItems = await index.getAll(IDBKeyRange.only(url));
       statusHistory.set(allStatusHistoryItems);
     } catch (error) {
       console.error(
