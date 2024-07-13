@@ -1043,7 +1043,13 @@ let headers = writable<Header[]>([{ key: '', value: '' }]);
     return `${(size / 1024).toFixed(2)} KB`;
   }
 
-  
+  function clearAutocomplete(index: number) {
+  autocompleteHeaders.update(h => {
+    h[index] = [];
+    return h;
+  });
+}
+
 
 </script>
 
@@ -1244,7 +1250,7 @@ let headers = writable<Header[]>([{ key: '', value: '' }]);
     cursor: pointer;
   }
   .autocomplete-suggestion:hover {
-    background: #f0f0f0;
+    background: var(--surface);
   }
 </style>
 
@@ -1460,6 +1466,7 @@ let headers = writable<Header[]>([{ key: '', value: '' }]);
               bind:value={header.key} 
               class="flex-1 p-2 border rounded text-primary bg-accent mr-2" 
               on:input={(e) => filterHeaders(index, e)}
+              on:blur={() => clearAutocomplete(index)} 
             />
             {#if $autocompleteHeaders[index]?.length}
               <div class="autocomplete-suggestions">
