@@ -142,7 +142,8 @@
 
   :global(.ace-jsoneditor .ace_gutter) {
     background-color: var(--light-background) !important;
-    color: var(--secondary-text) !important;
+    color: var(--primary-text) !important;
+    z-index: 0 !important;
   }
 
   :global(.ace-jsoneditor .ace_string) {
