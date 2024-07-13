@@ -909,6 +909,9 @@ let headers = writable<Header[]>([]);
         return newHistory;
       });
 
+
+      selectedGroup.set(fileName);
+
       sendNotification({
         title: 'Success',
         body: 'Postman collection imported successfully.'
