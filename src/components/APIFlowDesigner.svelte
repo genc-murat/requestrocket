@@ -562,7 +562,7 @@
 <div class="api-flow-designer">
   <div class="toolbar">
     <input type="text" bind:value={$searchTerm} placeholder="Search blocks..." />
-    <select bind:value={$categoryFilter}>
+    <select bind:value={$categoryFilter} class="w-full">
       {#each Object.entries(blockCategories) as [value, name]}
         <option {value}>{name}</option>
       {/each}
@@ -867,6 +867,7 @@
     height: 100px;
     border: 1px solid #000;
     color: white;
+    font-weight: bolder;
     cursor: move;
     user-select: none;
     display: flex;

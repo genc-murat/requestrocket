@@ -1314,11 +1314,11 @@ function closeApiFlowModal() {
 
   {#if $apiFlowModalOpen}
   <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div class="bg-white p-4 rounded shadow-lg w-3/4 h-3/4 overflow-hidden">
+    <div class="bg-white p-4 rounded shadow-lg w-full h-full overflow-hidden">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold">API Flow Designer</h2>
-        <button type="button" on:click={closeApiFlowModal} class="text-red-900 bg-slate-50 rounded-full p-2 shadow flex items-center justify-center">
-          <FontAwesomeIcon icon="close" size="lg" />
+        <h4 class="text-xl font-bold">API Flow Designer</h4>
+        <button type="button" on:click={closeApiFlowModal} class="text-red-900 bg-slate-50 rounded-full p-4 shadow flex items-center justify-center ">
+          <FontAwesomeIcon icon="close" />
         </button>
       </div>
       
@@ -1328,6 +1328,8 @@ function closeApiFlowModal() {
     </div>
   </div>
 {/if}
+
+
 
   <div class="history-panel panel">
     <h2 class="text-xl font-bold mb-4">History</h2>
