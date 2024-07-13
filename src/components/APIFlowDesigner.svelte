@@ -453,7 +453,7 @@ function handleMouseMove(event: MouseEvent) {
   let panStart = { x: 0, y: 0 };
 
   function startPan(event: MouseEvent) {
-    if (event.button === 1) { // Middle mouse button
+    if (event.button === 1) {
       isPanning = true;
       panStart = { x: event.clientX, y: event.clientY };
     }
@@ -534,14 +534,52 @@ function handleMouseMove(event: MouseEvent) {
   }
 
   function validateFlow() {
-    const unconnectedBlocks = get(flow).blocks.filter(block => 
-      !get(flow).connections.some(conn => conn.source === block.id || conn.target === block.id)
-    );
-    if (unconnectedBlocks.length > 0) {
-      console.warn('Unconnected blocks found:', unconnectedBlocks);
-    }
-    // Diğer doğrulama kuralları...
+  const currentFlow = get(flow);
+  const unconnectedBlocks = currentFlow.blocks.filter(block => 
+    !currentFlow.connections.some(conn => conn.source === block.id || conn.target === block.id)
+  );
+  
+  if (unconnectedBlocks.length > 0) {
+    console.warn('Unconnected blocks found:', unconnectedBlocks);
   }
+
+  // Her akışın bir "start" bloğu olmalı
+  const startBlocks = currentFlow.blocks.filter(block => block.type === 'start');
+  if (startBlocks.length === 0) {
+    console.warn('Flow must have at least one start block.');
+  }
+
+  // Her akışın en az bir "end" bloğu olmalı
+  const endBlocks = currentFlow.blocks.filter(block => block.type === 'end');
+  if (endBlocks.length === 0) {
+    console.warn('Flow must have at least one end block.');
+  }
+
+  // Koşul bloklarının "alternative" ve "error" bağlantıları olmalı
+  const conditionBlocks = currentFlow.blocks.filter(block => block.type === 'condition');
+  conditionBlocks.forEach(block => {
+    const hasAlternativeConnection = currentFlow.connections.some(conn => conn.source === block.id && conn.type === 'alternative');
+    const hasErrorConnection = currentFlow.connections.some(conn => conn.source === block.id && conn.type === 'error');
+    
+    if (!hasAlternativeConnection) {
+      console.warn(`Condition block ${block.id} is missing an alternative connection.`);
+    }
+    if (!hasErrorConnection) {
+      console.warn(`Condition block ${block.id} is missing an error connection.`);
+    }
+  });
+
+  // Döngü bloklarının maksimum iterasyon sayısı belirtilmeli
+  const loopBlocks = currentFlow.blocks.filter(block => block.type === 'loop');
+  loopBlocks.forEach(block => {
+    if (!block.data.maxIterations || block.data.maxIterations <= 0) {
+      console.warn(`Loop block ${block.id} must have a valid maxIterations value.`);
+    }
+  });
+
+  // Daha fazla doğrulama kuralı buraya eklenebilir...
+}
+
 
   function generatePath(start: { x: number; y: number }, end: { x: number; y: number }): string {
     const midX = (start.x + end.x) / 2;
