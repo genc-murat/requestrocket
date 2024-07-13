@@ -12,64 +12,12 @@
   import { sendNotification } from '@tauri-apps/api/notification';
   import JSONEditor from '../components/JSONEditor.svelte';
   import APIFlowDesigner  from '../components/APIFlowDesigner.svelte';
-  import type { Flow, FlowBlock, Connection } from '../components/flow-types';
+
+  import type { Flow, FlowBlock, Connection, BlockType, SwitchCase } from '../components/flow-types';
+
+import type { HistoryItem, Header, Param, ResponseData, StatusHistoryItem, ApiDoc } from '../components/api-types';
 
   library.add(faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose, faRepeat);
-
-  type HistoryItem = {
-    id: number;
-    url: string;
-    method: string;
-    body: string;
-    response: string;
-    headers: Header[];
-    params: Param[];
-    group: string;
-  };
-
-  type Header = {
-    key: string;
-    value: string;
-  };
-
-  type Param = {
-    key: string;
-    value: string;
-  };
-
-  type ResponseData = {
-    status: number;
-    duration: number;
-    size: number;
-    body: string;
-    headers: [string, string][];
-    curl_command: string;
-    timestamp: string;
-    error: string | null;
-  };
-
-  const blockTypes = {
-  'api_call': { category: 'input-output', name: 'API Call' },
-  'condition': { category: 'logic', name: 'Condition' },
-  'loop': { category: 'logic', name: 'Loop' },
-  'timer': { category: 'util', name: 'Timer' },
-  'variable': { category: 'data', name: 'Variable' },
-  'json_transformer': { category: 'data', name: 'JSON Transformer' },
-  'regex': { category: 'data', name: 'Regex' },
-  'webhook': { category: 'input-output', name: 'Webhook' },
-  'custom_script': { category: 'util', name: 'Custom Script' },
-  'try_catch': { category: 'logic', name: 'Try-Catch' },
-  'switch_case': { category: 'logic', name: 'Switch-Case' },
-  'auth': { category: 'input-output', name: 'Authentication' },
-  'comment': { category: 'util', name: 'Comment' },
-  'group': { category: 'util', name: 'Group' },
-  'start': { category: 'control', name: 'Start' },
-  'end': { category: 'control', name: 'End' }
-} as const;
-
-type BlockType = keyof typeof blockTypes;
-
-
 
 let currentFlow: Writable<Flow | null> = writable(null);
   let flowResults: Writable<{ [key: string]: any } | null> = writable(null);
@@ -378,14 +326,7 @@ function closeApiFlowModal() {
     },
   });
 
-  type StatusHistoryItem = {
-    id: number;
-    url: string;
-    status: number;
-    duration: number;
-    size: number;
-    timestamp: string;
-  };
+
 
   let statusHistory = writable<StatusHistoryItem[]>([]);
 

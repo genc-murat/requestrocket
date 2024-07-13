@@ -4,7 +4,8 @@
   import type { Writable, Readable } from 'svelte/store';
   import { v4 as uuidv4 } from 'uuid';
   import { fade, fly } from 'svelte/transition';
-  import type { Flow, FlowBlock, Connection } from './flow-types';
+  import type { Flow, FlowBlock, Connection, BlockType, SwitchCase } from './flow-types';
+  import { blockTypes } from './flow-types';
 
 
   export let initialFlow: Flow | null = null;
@@ -52,27 +53,6 @@
     'data': 'Data Manipulation',
     'util': 'Utilities'
   };
-
-  const blockTypes = {
-    'start': { category: 'control', name: 'Start' },
-  'end': { category: 'control', name: 'End' },
-  'comment': { category: 'util', name: 'Comment' },
-  'group': { category: 'util', name: 'Group' },
-  'api_call': { category: 'input-output', name: 'API Call' },
-  'condition': { category: 'logic', name: 'Condition' },
-  'loop': { category: 'logic', name: 'Loop' },
-  'timer': { category: 'util', name: 'Timer' },
-  'variable': { category: 'data', name: 'Variable' },
-  'json_transformer': { category: 'data', name: 'JSON Transformer' },
-  'regex': { category: 'data', name: 'Regex' },
-  'webhook': { category: 'input-output', name: 'Webhook' },
-  'custom_script': { category: 'util', name: 'Custom Script' },
-  'try_catch': { category: 'logic', name: 'Try-Catch' },
-  'switch_case': { category: 'logic', name: 'Switch-Case' },
-  'auth': { category: 'input-output', name: 'Authentication' },
-
-  
-} as const;
 
   type BlockType = keyof typeof blockTypes;
 
