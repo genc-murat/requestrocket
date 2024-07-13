@@ -83,6 +83,7 @@
 
   :global(.jsoneditor-search input) {
     color: var(--primary-text);
+    background-color: var(--surface);
   }
 
   :global(.jsoneditor-frame) {
@@ -129,42 +130,62 @@
     color: var(--surface);
   }
 
-  :global(.dark-theme) {
-    --jse-theme-color: var(--primary);
-    --jse-theme-color-highlight: var(--secondary);
-    --jse-background-color: var(--background);
-    --jse-text-color: var(--primary-text);
-    --jse-selection-background-color: var(--secondary);
-    --jse-selection-color: var(--surface);
-    --jse-separator-color: var(--divider);
-    --jse-key-color: var(--primary);
-    --jse-value-color: var(--secondary);
-    --jse-value-color-number: var(--info);
-    --jse-value-color-boolean: var(--warning);
-    --jse-value-color-null: var(--error);
-    --jse-value-color-string: var(--success);
-    --jse-value-color-url: var(--info);
-    --jse-menu-color: var(--secondary-text);
-    --jse-menu-button-color: var(--secondary-text);
-    --jse-menu-button-background-color: var(--primary);
-    --jse-menu-button-background-color-hover: var(--secondary);
+  /* Code mode styles */
+  :global(.ace-jsoneditor) {
+    background-color: var(--surface) !important;
+    color: var(--primary-text) !important;
   }
 
-  :global(.dark-theme .jsoneditor-menu) {
-    background-color: var(--primary);
-    border-bottom: 1px solid var(--divider);
+  :global(.ace-jsoneditor .ace_scroller) {
+    background-color: var(--surface) !important;
   }
 
-  :global(.dark-theme .jsoneditor-menu button) {
-    color: var(--secondary-text);
+  :global(.ace-jsoneditor .ace_gutter) {
+    background-color: var(--light-background) !important;
+    color: var(--secondary-text) !important;
   }
 
-  :global(.dark-theme .jsoneditor-menu button:hover) {
-    background-color: var(--secondary);
+  :global(.ace-jsoneditor .ace_string) {
+    color: var(--info) !important;
+  }
+
+  :global(.ace-jsoneditor .ace_constant.ace_numeric) {
+    color: var(--warning) !important;
+  }
+
+  :global(.ace-jsoneditor .ace_constant.ace_boolean) {
+    color: var(--success) !important;
+  }
+
+  :global(.ace-jsoneditor .ace_variable) {
+    color: var(--primary) !important;
+  }
+
+  :global(.jsoneditor-mode-code) {
+    background-color: var(--surface) !important;
   }
 
   /* Hide "powered by ace" link */
   :global(.jsoneditor-poweredBy) {
     display: none !important;
+  }
+
+  /* Adjust scrollbar styles for better visibility */
+  :global(.ace_scrollbar::-webkit-scrollbar) {
+    width: 8px;
+    height: 8px;
+  }
+
+  :global(.ace_scrollbar::-webkit-scrollbar-track) {
+    background: var(--light-background);
+  }
+
+  :global(.ace_scrollbar::-webkit-scrollbar-thumb) {
+    background-color: var(--secondary);
+    border-radius: 4px;
+  }
+
+  :global(.ace_scrollbar::-webkit-scrollbar-thumb:hover) {
+    background-color: var(--primary);
   }
 </style>
