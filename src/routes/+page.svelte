@@ -282,7 +282,7 @@ function closeApiFlowModal() {
   let url = writable('');
   let method = writable('GET');
   let body = writable('{"key": "value"}');
-  let headers = writable<Header[]>([]);
+  // let headers = writable<Header[]>([]);
   let params = writable<Param[]>([]);
   let bodyType = writable('json');
   let pathParams = writable<Param[]>([]);
@@ -367,6 +367,30 @@ function closeApiFlowModal() {
 
   function clearHeaders() {
     headers.set([]);
+  }
+
+  type Header = { key: string; value: string };
+type AutocompleteHeaders = string[][];
+
+let headers = writable<Header[]>([{ key: '', value: '' }]);
+  let autocompleteHeaders = writable<AutocompleteHeaders>([]);
+  let knownHeaders: string[] = [
+    "Accept", "Accept-Charset", "Accept-Encoding", "Accept-Language", "Accept-Datetime", "Authorization",
+    "Cache-Control", "Connection", "Content-Length", "Content-MD5", "Content-Type", "Cookie", "Date",
+    "Expect", "Forwarded", "From", "Host", "If-Match", "If-Modified-Since", "If-None-Match",
+    "If-Range", "If-Unmodified-Since", "Max-Forwards", "Pragma", "Proxy-Authorization", "Range",
+    "Referer", "TE", "User-Agent", "Upgrade", "Via", "Warning"
+  ];
+
+
+  function filterHeaders(index: number, event: Event) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    const filtered = knownHeaders.filter(header => header.toLowerCase().includes(value.toLowerCase()));
+    autocompleteHeaders.update(h => {
+      h[index] = filtered;
+      return h;
+    });
   }
 
   function clearParams() {
@@ -1018,6 +1042,9 @@ function closeApiFlowModal() {
   function formatSize(size: number): string {
     return `${(size / 1024).toFixed(2)} KB`;
   }
+
+  
+
 </script>
 
 <style>
@@ -1200,6 +1227,24 @@ function closeApiFlowModal() {
   .error-message {
     color: red;
     font-weight: bold;
+  }
+
+  .autocomplete-suggestions {
+    border: 1px solid var(--divider);
+    color: var(--primary-text);
+    background: var(--light-background);
+    position: absolute;
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 1000;
+    top: 100%;
+  }
+  .autocomplete-suggestion {
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+  .autocomplete-suggestion:hover {
+    background: #f0f0f0;
   }
 </style>
 
@@ -1397,26 +1442,49 @@ function closeApiFlowModal() {
           <textarea id="body" bind:value={$body} placeholder={$bodyType === 'json' ? '{"key": "value"}' : '<xml></xml>'} class="w-full mb-4 p-2 border rounded text-primary bg-accent h-40"></textarea>
         {/if}
       {:else if $selectedRequestTab === 'headers'}
-        <div class="params-container">
-          <div class="top-buttons">
-            <button type="button" on:click={addHeader} class="">
-              <FontAwesomeIcon icon="plus" size="lg"/> Add
-            </button>
-            <span class="separator"></span>
-            <button type="button" on:click={clearHeaders} class="text-red-700">
-              <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
+      <div class="params-container">
+        <div class="top-buttons">
+          <button type="button" on:click={addHeader} class="">
+            <FontAwesomeIcon icon="plus" size="lg" /> Add
+          </button>
+          <span class="separator"></span>
+          <button type="button" on:click={clearHeaders} class="text-red-700">
+            <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
+          </button>
+        </div>
+        {#each $headers as header, index}
+          <div class="header-row relative">
+            <input 
+              type="text" 
+              placeholder="Key" 
+              bind:value={header.key} 
+              class="flex-1 p-2 border rounded text-primary bg-accent mr-2" 
+              on:input={(e) => filterHeaders(index, e)}
+            />
+            {#if $autocompleteHeaders[index]?.length}
+              <div class="autocomplete-suggestions">
+                {#each $autocompleteHeaders[index] as suggestion}
+                  <div class="autocomplete-suggestion" on:click={() => {
+                    header.key = suggestion;
+                    autocompleteHeaders.update(h => { h[index] = []; return h; });
+                  }}>
+                    {suggestion}
+                  </div>
+                {/each}
+              </div>
+            {/if}
+            <input 
+              type="text" 
+              placeholder="Value" 
+              bind:value={header.value} 
+              class="flex-1 p-2 border rounded text-primary bg-accent" 
+            />
+            <button type="button" on:click={() => headers.update(h => h.filter((_, i) => i !== index))} class="text-red-500">
+              <FontAwesomeIcon icon="trash-alt" size="lg" />
             </button>
           </div>
-          {#each $headers as header, index}
-            <div class="header-row">
-              <input type="text" placeholder="Key" bind:value={header.key} class="flex-1 p-2 border rounded text-primary bg-accent mr-2" />
-              <input type="text" placeholder="Value" bind:value={header.value} class="flex-1 p-2 border rounded text-primary bg-accent" />
-              <button type="button" on:click={() => headers.update(h => h.filter((_, i) => i !== index))} class="text-red-500">
-                <FontAwesomeIcon icon="trash-alt" size="lg" />
-              </button>
-            </div>
-          {/each}
-        </div>
+        {/each}
+      </div>
       {:else if $selectedRequestTab === 'group'}
         <div class="mb-4">
           <select id="group" bind:value={$selectedGroup} class="w-full mb-4 p-2 border rounded text-primary bg-accent">
