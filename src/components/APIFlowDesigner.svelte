@@ -988,6 +988,8 @@ Her koşul bloğunun "true" ve "false" dalları olmalıdır.
     height: 100%;
     background-color: #f0f0f0;
     transition: transform 0.1s ease-out;
+    background-image: linear-gradient(0deg, transparent 24%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.05) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.05) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05) 76%, transparent 77%, transparent);
+    background-size: 10px 10px;
   }
 
   .connections {
