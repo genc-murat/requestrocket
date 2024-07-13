@@ -1444,7 +1444,7 @@ function processPostmanCollection(collection: any, groupName: string): HistoryIt
       </div>
     </div>
     <button type="button" on:click={sendRequest} class="button mb-4">Send Request</button>
-    <button type="button" on:click={cancelRequest} class="button mb-4">Cancel Request</button>
+    <!-- <button type="button" on:click={cancelRequest} class="button mb-4">Cancel Request</button> -->
     <div class="tabs">
       <button 
         type="button" 
@@ -1503,7 +1503,7 @@ function processPostmanCollection(collection: any, groupName: string): HistoryIt
           <option value="xml">XML</option>
         </select>
         {#if $bodyType === 'json' || $bodyType === 'xml'}
-          <textarea id="body" bind:value={$body} placeholder={$bodyType === 'json' ? '{"key": "value"}' : '<xml></xml>'} class="w-full mb-4 p-2 border rounded text-primary bg-accent h-40"></textarea>
+          <textarea id="body" bind:value={$body} placeholder={$bodyType === 'json' ? '{"key": "value"}' : '<xml></xml>'} class="w-full mb-4 p-2 border rounded text-primary bg-accent h-4/6"></textarea>
         {/if}
       {:else if $selectedRequestTab === 'headers'}
       <div class="params-container">
