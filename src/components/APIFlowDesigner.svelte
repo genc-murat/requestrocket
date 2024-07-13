@@ -268,18 +268,33 @@
     dragOffset = null;
   }
 
-  function startConnection(blockId: string, event: MouseEvent) {
-    isConnecting = true;
-    connectionStart = blockId;
-    connectionEnd = { x: event.clientX, y: event.clientY };
-    event.stopPropagation();
-  }
+  let highlightedBlockId: string | null = null;
 
-  function handleMouseMove(event: MouseEvent) {
-    if (isConnecting) {
-      connectionEnd = { x: event.clientX, y: event.clientY };
+function startConnection(blockId: string, event: MouseEvent) {
+  isConnecting = true;
+  connectionStart = blockId;
+  connectionEnd = { x: event.clientX, y: event.clientY };
+  event.stopPropagation();
+}
+
+function handleMouseMove(event: MouseEvent) {
+  if (isConnecting) {
+    connectionEnd = { x: event.clientX, y: event.clientY };
+    const targetElement = event.target as HTMLElement;
+    const targetBlock = targetElement.closest('.block') as HTMLElement;
+
+    if (targetBlock && targetBlock.dataset.id !== highlightedBlockId) {
+      if (highlightedBlockId) {
+        document.querySelector(`[data-id="${highlightedBlockId}"]`)?.classList.remove('highlight');
+      }
+      highlightedBlockId = targetBlock.dataset.id || null;
+      targetBlock.classList.add('highlight');
+    } else if (!targetBlock && highlightedBlockId) {
+      document.querySelector(`[data-id="${highlightedBlockId}"]`)?.classList.remove('highlight');
+      highlightedBlockId = null;
     }
   }
+}
 
   function handleMouseUp(event: MouseEvent) {
     if (isConnecting && connectionStart) {
@@ -297,6 +312,10 @@
     isConnecting = false;
     connectionStart = null;
     connectionEnd = null;
+    if (highlightedBlockId) {
+      document.querySelector(`[data-id="${highlightedBlockId}"]`)?.classList.remove('highlight');
+      highlightedBlockId = null;
+    }
   }
 
   function isConnectionValid(sourceId: string, targetId: string): boolean {
@@ -631,7 +650,7 @@
     </svg>
     {#each $filteredBlocks as block (block.id)}
       <div 
-        class="block {block.type}"
+        class="block {block.type} {highlightedBlockId === block.id ? 'highlight' : ''}"
         style="left: {block.position.x}px; top: {block.position.y}px; background-color: {blockColors[block.type]};"
         draggable="true"
         on:dragstart={(e) => handleDragStart(e, block.id)}
@@ -999,4 +1018,9 @@
     50% { opacity: 1; }
     100% { opacity: 0.5; }
   }
+
+  .block.highlight {
+  outline: 3px solid yellow; /* or any other highlight style */
+}
+
 </style>
