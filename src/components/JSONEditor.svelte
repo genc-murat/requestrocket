@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { onMount, onDestroy, afterUpdate } from 'svelte';
-  import JSONEditor from 'jsoneditor';
-  import type { JSONEditorOptions, JSONEditorMode } from 'jsoneditor';
-  import 'jsoneditor/dist/jsoneditor.css';
+  import { onMount, onDestroy, afterUpdate } from "svelte";
+  import JSONEditor from "jsoneditor";
+  import type { JSONEditorOptions, JSONEditorMode } from "jsoneditor";
+  import "jsoneditor/dist/jsoneditor.css";
 
-  export let jsonData: string = '{}';
-  export let mode: JSONEditorMode = 'code';
-  export let theme: 'light' | 'dark' = 'light';
+  export let jsonData: string = "{}";
+  export let mode: JSONEditorMode = "code";
+  export let theme: "light" | "dark" = "light";
 
   let editorContainer: HTMLElement;
   let editor: JSONEditor;
@@ -23,7 +23,7 @@
   onMount(() => {
     const options: JSONEditorOptions = {
       mode,
-      modes: ['code','tree' ,'text'],
+      modes: ["code", "tree", "text"],
     };
     editor = new JSONEditor(editorContainer, options);
     if (isValidJson(jsonData)) {
@@ -51,7 +51,7 @@
 
   $: {
     if (editorContainer) {
-      editorContainer.classList.toggle('dark-theme', theme === 'dark');
+      editorContainer.classList.toggle("dark-theme", theme === "dark");
     }
   }
 </script>
