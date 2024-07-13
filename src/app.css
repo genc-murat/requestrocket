@@ -81,12 +81,6 @@ body {
   border-radius: 4px 4px 0 0;
 }
 
-.tab.active {
-  background: var(--light-background);
-  border-bottom: 1px solid var(--surface);
-  color: var(--dark-text);
-}
-
 .tab-content {
   border: 1px solid var(--divider);
   padding: 0.5rem;

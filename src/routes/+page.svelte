@@ -2327,9 +2327,10 @@
   }
 
   .tab.active {
-    background: var(--light-background);
+    background: var(--secondary);
     border-bottom: 1px solid var(--surface);
-    color: var(--dark-text);
+    color: var(--primary-text);
+    font-weight: bold;
   }
 
   .tab-content {
