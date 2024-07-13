@@ -364,24 +364,24 @@ function handleMouseMove(event: MouseEvent) {
   }
 
   function isCircularConnection(sourceId: string, targetId: string): boolean {
-    const currentFlow = get(flow);
+  const currentFlow = get(flow);
+  
+  function checkCircular(currentId: string, visited: Set<string> = new Set()): boolean {
+    if (visited.has(currentId)) return false;
+    if (currentId === targetId) return true;
     
-    function checkCircular(currentId: string, visited: Set<string> = new Set()): boolean {
-      if (visited.has(currentId)) return false;
-      if (currentId === targetId) return true;
-      
-      visited.add(currentId);
-      const nextConnections = currentFlow.connections.filter(conn => conn.source === currentId);
-      
-      for (const conn of nextConnections) {
-        if (checkCircular(conn.target, new Set(visited))) return true;
-      }
-      
-      return false;
+    visited.add(currentId);
+    const nextConnections = currentFlow.connections.filter(conn => conn.source === currentId);
+    
+    for (const conn of nextConnections) {
+      if (checkCircular(conn.target, new Set(visited))) return true;
     }
-
-    return checkCircular(sourceId);
+    
+    return false;
   }
+
+  return checkCircular(sourceId);
+}
 
   function showInvalidConnectionFeedback() {
     const message = get(invalidConnectionMessage);
@@ -533,6 +533,20 @@ function handleMouseMove(event: MouseEvent) {
     closeContextMenu();
   }
 
+/**
+ * 
+ * Her akışın bir "start" bloğu olmalıdır.
+Her akışın en az bir "end" bloğu olmalıdır.
+Koşul bloklarının "alternative" ve "error" bağlantıları olmalıdır.
+Döngü bloklarının maksimum iterasyon sayısı belirtilmelidir.
+Her API çağrısı bloğunda URL belirtilmelidir.
+JSON dönüştürücü bloklarında dönüştürme fonksiyonu belirtilmelidir.
+Her bloğun yalnızca bir türde bağlantısı olmalıdır ("next", "alternative" veya "error").
+Bloklar döngüsel bağlantılara sahip olmamalıdır.
+Blokların bir grup içerisinde olup olmadığı kontrol edilmelidir (opsiyonel).
+Her koşul bloğunun "true" ve "false" dalları olmalıdır.
+ */
+
   function validateFlow() {
   const currentFlow = get(flow);
   const unconnectedBlocks = currentFlow.blocks.filter(block => 
@@ -560,12 +574,16 @@ function handleMouseMove(event: MouseEvent) {
   conditionBlocks.forEach(block => {
     const hasAlternativeConnection = currentFlow.connections.some(conn => conn.source === block.id && conn.type === 'alternative');
     const hasErrorConnection = currentFlow.connections.some(conn => conn.source === block.id && conn.type === 'error');
+    const hasNextConnection = currentFlow.connections.some(conn => conn.source === block.id && conn.type === 'next');
     
     if (!hasAlternativeConnection) {
       console.warn(`Condition block ${block.id} is missing an alternative connection.`);
     }
     if (!hasErrorConnection) {
       console.warn(`Condition block ${block.id} is missing an error connection.`);
+    }
+    if (!hasNextConnection) {
+      console.warn(`Condition block ${block.id} is missing a next connection.`);
     }
   });
 
@@ -577,9 +595,59 @@ function handleMouseMove(event: MouseEvent) {
     }
   });
 
+  // Her API çağrısı bloğunda URL belirtilmeli
+  const apiCallBlocks = currentFlow.blocks.filter(block => block.type === 'api_call');
+  apiCallBlocks.forEach(block => {
+    if (!block.data.url) {
+      console.warn(`API Call block ${block.id} must have a URL.`);
+    }
+  });
+
+  // JSON dönüştürücü bloklarında dönüştürme fonksiyonu belirtilmeli
+  const jsonTransformerBlocks = currentFlow.blocks.filter(block => block.type === 'json_transformer');
+  jsonTransformerBlocks.forEach(block => {
+    if (!block.data.transformFunction) {
+      console.warn(`JSON Transformer block ${block.id} must have a transform function.`);
+    }
+  });
+
+  // Her bloğun yalnızca bir türde bağlantısı olmalı ("next", "alternative" veya "error")
+  currentFlow.blocks.forEach(block => {
+    const connections = currentFlow.connections.filter(conn => conn.source === block.id);
+    const connectionTypes = connections.map(conn => conn.type);
+    const uniqueConnectionTypes = new Set(connectionTypes);
+
+    if (uniqueConnectionTypes.size !== connectionTypes.length) {
+      console.warn(`Block ${block.id} has multiple connections of the same type.`);
+    }
+  });
+
+  // Bloklar döngüsel bağlantılara sahip olmamalı
+  currentFlow.connections.forEach(connection => {
+    if (isCircularConnection(connection.source, connection.target)) {
+      console.warn(`Connection from ${connection.source} to ${connection.target} creates a circular dependency.`);
+    }
+  });
+
+  // Blokların bir grup içerisinde olup olmadığı kontrol edilmelidir (opsiyonel)
+  currentFlow.blocks.forEach(block => {
+    if (block.type === 'group' && !block.group) {
+      console.warn(`Group block ${block.id} must be part of a group.`);
+    }
+  });
+
+  // Her koşul bloğunun "true" ve "false" dalları olmalıdır
+  conditionBlocks.forEach(block => {
+    const trueBranch = currentFlow.connections.find(conn => conn.source === block.id && conn.type === 'next');
+    const falseBranch = currentFlow.connections.find(conn => conn.source === block.id && conn.type === 'alternative');
+    
+    if (!trueBranch || !falseBranch) {
+      console.warn(`Condition block ${block.id} must have both true and false branches.`);
+    }
+  });
+
   // Daha fazla doğrulama kuralı buraya eklenebilir...
 }
-
 
   function generatePath(start: { x: number; y: number }, end: { x: number; y: number }): string {
     const midX = (start.x + end.x) / 2;
