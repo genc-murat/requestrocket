@@ -684,7 +684,7 @@ Her koşul bloğunun "true" ve "false" dalları olmalıdır.
             d={generatePath(sourceBlock.position, targetBlock.position)}
             fill="none"
             stroke={connection.type === 'next' ? 'green' : connection.type === 'alternative' ? 'blue' : 'red'}
-            stroke-width="2"
+            stroke-width="3"
           />
           <text 
             x={(sourceBlock.position.x + targetBlock.position.x) / 2} 
@@ -710,7 +710,7 @@ Her koşul bloğunun "true" ve "false" dalları olmalıdır.
             d={generatePath(startBlock.position, connectionEnd)}
             fill="none"
             stroke={connectionType === 'next' ? 'green' : connectionType === 'alternative' ? 'blue' : 'red'}
-            stroke-width="2" 
+            stroke-width="3" 
             stroke-dasharray="5,5"
           />
         {/if}
