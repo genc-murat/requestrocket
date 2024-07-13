@@ -84,6 +84,10 @@
   };
 
   const blockTypes = {
+    'start': { category: 'control', name: 'Start' },
+  'end': { category: 'control', name: 'End' },
+  'comment': { category: 'util', name: 'Comment' },
+  'group': { category: 'util', name: 'Group' },
   'api_call': { category: 'input-output', name: 'API Call' },
   'condition': { category: 'logic', name: 'Condition' },
   'loop': { category: 'logic', name: 'Loop' },
@@ -96,10 +100,8 @@
   'try_catch': { category: 'logic', name: 'Try-Catch' },
   'switch_case': { category: 'logic', name: 'Switch-Case' },
   'auth': { category: 'input-output', name: 'Authentication' },
-  'comment': { category: 'util', name: 'Comment' },
-  'group': { category: 'util', name: 'Group' },
-  'start': { category: 'control', name: 'Start' },
-  'end': { category: 'control', name: 'End' }
+
+  
 } as const;
 
   type BlockType = keyof typeof blockTypes;
