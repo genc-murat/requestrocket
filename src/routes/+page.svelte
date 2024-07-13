@@ -14,6 +14,7 @@
     faUpload,
     faClose,
     faRepeat,
+    faDatabase,
   } from "@fortawesome/free-solid-svg-icons";
   import { library } from "@fortawesome/fontawesome-svg-core";
   import { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";
@@ -58,6 +59,7 @@
     faUpload,
     faClose,
     faRepeat,
+    faDatabase
   );
 
   let currentFlow: Writable<Flow | null> = writable(null);
@@ -1544,11 +1546,11 @@
   </div>
 
   <div class="history-panel panel">
-    <h2 class="text-xl font-bold mb-4">History</h2>
+    <!-- <h2 class="text-xl font-bold mb-4">History</h2> -->
     {#if $selectedGroup}
       <div class="group">
         <div class="flex justify-between items-center">
-          <h3 class="text-lg font-semibold mb-2 flex items-center">
+          <h4 class="text-base font-semibold mb-2 flex items-center">
             <button
               type="button"
               class="text-blue-600"
@@ -1556,10 +1558,10 @@
                 modalOpen.set(true);
               }}
             >
-              <FontAwesomeIcon icon="repeat" class="mr-2" />
+              <FontAwesomeIcon icon="database" class="mr-2" />
             </button>
             {$selectedGroup}
-          </h3>
+          </h4>
         </div>
 
         <ul>
@@ -1618,7 +1620,7 @@
   </div>
 
   <div class="request-panel panel">
-    <h2 class="text-xl font-bold mb-4">Request</h2>
+    <!-- <h2 class="text-xl font-bold mb-4">Request</h2> -->
 
     <div class="flex mb-4">
       <select
@@ -1921,7 +1923,7 @@
   </div>
 
   <div class="response-panel panel relative">
-    <h2 class="text-xl font-bold mb-4">Results</h2>
+    <!-- <h2 class="text-xl font-bold mb-4">Results</h2> -->
     {#if $response}
       <div class="status-box border border-gray-500 p-4 mb-4 rounded">
         <div class="flex justify-end">
