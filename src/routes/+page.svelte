@@ -1218,6 +1218,8 @@
 
         selectedGroup.set(fileName);
 
+        modalOpen.set(false);
+
         sendNotification({
           title: "Success",
           body: "Postman collection imported successfully.",
@@ -1449,8 +1451,14 @@
           <button
             type="button"
             on:click={createNewGroup}
-            class="w-full p-2 bg-primary text-background rounded"
+            class="w-full p-2 bg-primary text-background rounded mb-2"
             >Add Group</button
+          >
+          <button
+            type="button"
+            on:click={importPostmanCollection}
+            class="w-full p-2 bg-orange-600 text-background rounded"
+            >Import</button
           >
         </div>
       </div>
