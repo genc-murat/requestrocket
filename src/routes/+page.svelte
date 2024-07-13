@@ -1296,19 +1296,19 @@ let headers = writable<Header[]>([{ key: '', value: '' }]);
     {#if $selectedGroup}
       <div class="group">
         <div class="top-buttons">
-          <button type="button" on:click={openApiFlowModal} class="">
+          <button type="button" on:click={openApiFlowModal} class="bg-gray-300  rounded-md cursor-not-allowed opacity-50" disabled>
             <FontAwesomeIcon icon="edit" size="lg" /> Designer
           </button>
-          <button type="button" on:click={() => variablesPanelOpen.set(true)} class="">
+          <button type="button" on:click={() => variablesPanelOpen.set(true)} class="hover:text-green-700">
             <FontAwesomeIcon icon="edit" size="lg" /> Variables
           </button>
-          <button type="button" on:click={handleExport}>
+          <button type="button" on:click={handleExport} class="bg-gray-300  rounded-md cursor-not-allowed opacity-50" disabled>
             <FontAwesomeIcon icon="download" size="lg" /> Export
           </button>
-          <button type="button" on:click={importPostmanCollection}>
+          <button type="button" on:click={importPostmanCollection} class="bg-gray-300  rounded-md cursor-not-allowed opacity-50" disabled>
             <FontAwesomeIcon icon="upload" size="lg" /> Import
           </button>
-          <button type="button" on:click={() => downloadApiDocumentation($history)}>
+          <button type="button" on:click={() => downloadApiDocumentation($history)} class="hover:text-green-700">
             <FontAwesomeIcon icon="download" size="lg" />Documentation
           </button>
         </div>
