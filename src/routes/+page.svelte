@@ -12,6 +12,7 @@
   import { sendNotification } from '@tauri-apps/api/notification';
   import JSONEditor from '../components/JSONEditor.svelte';
   import APIFlowDesigner  from '../components/APIFlowDesigner.svelte';
+  import type { Flow, FlowBlock, Connection } from '../components/flow-types';
 
   library.add(faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose, faRepeat);
 
@@ -68,37 +69,6 @@
 
 type BlockType = keyof typeof blockTypes;
 
-  type Connection = {
-    id: string;
-    source: string;
-    target: string;
-    type: 'next' | 'alternative' | 'error';
-  };
-
-  type FlowBlock = {
-  id: string;
-  type: BlockType;
-  data: any;
-  position: { x: number; y: number };
-  next: string | null;
-  alternative?: string | null;
-  error?: string | null;
-  group?: string;
-};
-
-  type Flow = {
-    id: string;
-    name: string;
-    description: string;
-    version: string;
-    blocks: FlowBlock[];
-    connections: Connection[];
-    variables: { [key: string]: any };
-    createdAt: Date;
-    updatedAt: Date;
-    createdBy: string;
-    tags: string[];
-  };
 
 
 let currentFlow: Writable<Flow | null> = writable(null);

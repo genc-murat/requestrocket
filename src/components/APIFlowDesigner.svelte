@@ -4,38 +4,8 @@
   import type { Writable, Readable } from 'svelte/store';
   import { v4 as uuidv4 } from 'uuid';
   import { fade, fly } from 'svelte/transition';
+  import type { Flow, FlowBlock, Connection } from './flow-types';
 
-  type Connection = {
-    id: string;
-    source: string;
-    target: string;
-    type: 'next' | 'alternative' | 'error';
-  };
-
-  type FlowBlock = {
-    id: string;
-    type: BlockType;
-    data: any;
-    position: { x: number; y: number };
-    next: string | null;
-    alternative?: string | null;
-    error?: string | null;
-    group?: string;
-  };
-
-  type Flow = {
-    id: string;
-    name: string;
-    description: string;
-    version: string;
-    blocks: FlowBlock[];
-    connections: Connection[];
-    variables: { [key: string]: any };
-    createdAt: Date;
-    updatedAt: Date;
-    createdBy: string;
-    tags: string[];
-  };
 
   export let initialFlow: Flow | null = null;
   export let readOnly: boolean = false;
