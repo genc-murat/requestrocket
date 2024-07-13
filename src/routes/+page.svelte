@@ -440,40 +440,40 @@
   let statusHistory = writable<StatusHistoryItem[]>([]);
 
   async function saveStatusHistory(statusHistoryItem: StatusHistoryItem) {
-    console.log("Saving status history:", statusHistoryItem);
-    try {
-      const db = await dbPromise;
-      await db.add("statusHistory", statusHistoryItem);
-      console.log("Status history saved successfully.");
-    } catch (error) {
-      console.error(
-        "Error saving status history:",
-        error instanceof Error ? error.message : error,
-      );
-    }
+  console.log("Saving status history:", statusHistoryItem);
+  try {
+    const db = await dbPromise;
+    await db.add("statusHistory", statusHistoryItem);
+    console.log("Status history saved successfully.");
+  } catch (error) {
+    console.error(
+      "Error saving status history:",
+      error instanceof Error ? error.message : error,
+    );
   }
+}
 
-  async function loadStatusHistory(url: string) {
-    console.log("Loading status history for URL:", url);
-    try {
-      const db = await dbPromise;
-      const tx = db.transaction("statusHistory", "readonly");
-      const store = tx.objectStore("statusHistory");
+async function loadStatusHistory(url: string) {
+  console.log("Loading status history for URL:", url);
+  try {
+    const db = await dbPromise;
+    const tx = db.transaction("statusHistory", "readonly");
+    const store = tx.objectStore("statusHistory");
 
-      if (!store.indexNames.contains("url")) {
-        throw new Error("Index 'url' not found");
-      }
-
-      const index = store.index("url");
-      const allStatusHistoryItems = await index.getAll(IDBKeyRange.only(url));
-      statusHistory.set(allStatusHistoryItems);
-    } catch (error) {
-      console.error(
-        "Failed to load status history:",
-        error instanceof Error ? error.message : error,
-      );
+    if (!store.indexNames.contains("url")) {
+      throw new Error("Index 'url' not found");
     }
+
+    const index = store.index("url");
+    const allStatusHistoryItems = await index.getAll(IDBKeyRange.only(url));
+    statusHistory.set(allStatusHistoryItems);
+  } catch (error) {
+    console.error(
+      "Failed to load status history:",
+      error instanceof Error ? error.message : error,
+    );
   }
+}
 
   async function addHeader() {
     headers.update((h) => [...h, { key: "", value: "" }]);
@@ -596,165 +596,160 @@
   }
 
   async function sendRequest() {
-    isSending.set(true);
-    const actualUrl = $url;
-    const actualHeaders = $headers.map((header) => ({
-      key: replaceVariables(header.key, $variables),
-      value: replaceVariables(header.value, $variables),
-    }));
+  isSending.set(true);
+  const actualUrl = $url;
+  const actualHeaders = $headers.map((header) => ({
+    key: replaceVariables(header.key, $variables),
+    value: replaceVariables(header.value, $variables),
+  }));
 
-    const pathParamsObject = Object.fromEntries(
-      $pathParams.map((param) => [param.key, param.value]),
-    );
-    const queryParamsObject = Object.fromEntries(
-      $queryParams.map((param) => [param.key, param.value]),
-    );
-    const formParamsObject = Object.fromEntries(
-      $formParams.map((field) => [field.key, field.value]),
-    );
+  const pathParamsObject = Object.fromEntries(
+    $pathParams.map((param) => [param.key, param.value]),
+  );
+  const queryParamsObject = Object.fromEntries(
+    $queryParams.map((param) => [param.key, param.value]),
+  );
+  const formParamsObject = Object.fromEntries(
+    $formParams.map((field) => [field.key, field.value]),
+  );
 
-    let requestBody;
-    let contentType;
-    if ($method === "GET") {
-      requestBody = null;
-    } else {
-      switch ($bodyType) {
-        case "json":
-          contentType = "application/json";
+  let requestBody;
+  let contentType;
+  if ($method === "GET") {
+    requestBody = null;
+  } else {
+    switch ($bodyType) {
+      case "json":
+        contentType = "application/json";
+        requestBody = $body;
+        break;
+      case "xml":
+        if ($body.includes("soapenv:Envelope")) {
+          contentType = "text/xml; charset=utf-8";
           requestBody = $body;
-          break;
-        case "xml":
-          if ($body.includes("soapenv:Envelope")) {
-            contentType = "text/xml; charset=utf-8";
-            requestBody = $body;
-            // Add SOAPAction header if not already present
-            if (
-              !actualHeaders.some((h) => h.key.toLowerCase() === "soapaction")
-            ) {
-              actualHeaders.push({
-                key: "SOAPAction",
-                value: '""', // You might need to set a specific SOAPAction
-              });
-            }
-          } else {
-            contentType = "application/xml";
-            requestBody = $body;
+          // Add SOAPAction header if not already present
+          if (
+            !actualHeaders.some((h) => h.key.toLowerCase() === "soapaction")
+          ) {
+            actualHeaders.push({
+              key: "SOAPAction",
+              value: '""', // You might need to set a specific SOAPAction
+            });
           }
-          break;
-        case "form-data":
-          contentType = "multipart/form-data";
-          requestBody = formParamsObject;
-          break;
-        case "form-urlencoded":
-          contentType = "application/x-www-form-urlencoded";
-          requestBody = new URLSearchParams(
-            $formParams.map((field) => [field.key, field.value]),
-          ).toString();
-          break;
-        default:
-          contentType = "text/plain";
+        } else {
+          contentType = "application/xml";
           requestBody = $body;
-      }
-    }
-
-    const requestData: any = {
-      url: actualUrl,
-      method: $method,
-      body: requestBody,
-      headers: Object.fromEntries(
-        actualHeaders.map((header) => [header.key, header.value]),
-      ),
-      path_params: pathParamsObject,
-      query_params: queryParamsObject,
-      form_data: $bodyType === "form-data" ? formParamsObject : undefined,
-      content_type: contentType,
-    };
-
-    console.log("Sending request with data:", requestData);
-
-    try {
-      const res: ResponseData = await invoke<ResponseData>("send_request", {
-        requestData,
-      });
-      console.log("Response received:", res);
-      response.set(res);
-      isSending.set(false);
-
-      statusHistory.set([
-        {
-          id: Date.now(),
-          url: actualUrl,
-          status: res.status,
-          duration: res.duration,
-          size: res.size,
-          timestamp: res.timestamp,
-        },
-      ]);
-
-      saveStatusHistory({
-        id: Date.now(),
-        url: actualUrl,
-        status: res.status,
-        duration: res.duration,
-        size: res.size,
-        timestamp: res.timestamp,
-      });
-
-      const existingHistoryItem = $history.find(
-        (item) =>
-          item.url === actualUrl &&
-          item.method === $method &&
-          item.group === $selectedGroup,
-      );
-      if (existingHistoryItem) {
-        const updatedHistoryItem: HistoryItem = {
-          ...existingHistoryItem,
-          body: $body,
-          headers: actualHeaders,
-          params: $params,
-          response: JSON.stringify(res),
-        };
-        updateHistoryItem(updatedHistoryItem);
-      } else {
-        const newHistoryItem: HistoryItem = {
-          id: Date.now(),
-          url: actualUrl,
-          method: $method,
-          body: $body,
-          headers: actualHeaders,
-          params: $params,
-          response: JSON.stringify(res),
-          group: $selectedGroup,
-        };
-        history.update((h) => {
-          const newHistory = [...h, newHistoryItem];
-          saveHistory(newHistoryItem);
-          return newHistory;
-        });
-      }
-    } catch (error) {
-      console.error("Request failed:", error);
-      let errorMessage: string;
-      if (error instanceof Error) {
-        errorMessage = error.message;
-        console.error("Error stack:", error.stack);
-      } else {
-        errorMessage = String(error);
-      }
-      response.set({
-        status: 0,
-        duration: 0,
-        size: 0,
-        body: "",
-        headers: [],
-        curl_command: "",
-        timestamp: new Date().toISOString(),
-        error: error instanceof Error ? error.message : String(error),
-      });
-
-      isSending.set(false);
+        }
+        break;
+      case "form-data":
+        contentType = "multipart/form-data";
+        requestBody = formParamsObject;
+        break;
+      case "form-urlencoded":
+        contentType = "application/x-www-form-urlencoded";
+        requestBody = new URLSearchParams(
+          $formParams.map((field) => [field.key, field.value]),
+        ).toString();
+        break;
+      default:
+        contentType = "text/plain";
+        requestBody = $body;
     }
   }
+
+  const requestData: any = {
+    url: actualUrl,
+    method: $method,
+    body: requestBody,
+    headers: Object.fromEntries(
+      actualHeaders.map((header) => [header.key, header.value]),
+    ),
+    path_params: pathParamsObject,
+    query_params: queryParamsObject,
+    form_data: $bodyType === "form-data" ? formParamsObject : undefined,
+    content_type: contentType,
+  };
+
+  console.log("Sending request with data:", requestData);
+
+  try {
+    const res: ResponseData = await invoke<ResponseData>("send_request", {
+      requestData,
+    });
+    console.log("Response received:", res);
+    response.set(res);
+    isSending.set(false);
+
+    const newStatusHistoryItem: StatusHistoryItem = {
+      id: Date.now(),
+      url: actualUrl,
+      status: res.status,
+      duration: res.duration,
+      size: res.size,
+      timestamp: new Date().toISOString(),
+    };
+
+    // Save new status history
+    saveStatusHistory(newStatusHistoryItem);
+
+    // Update status history state
+    statusHistory.update((history) => [...history, newStatusHistoryItem]);
+
+    const existingHistoryItem = $history.find(
+      (item) =>
+        item.url === actualUrl &&
+        item.method === $method &&
+        item.group === $selectedGroup,
+    );
+    if (existingHistoryItem) {
+      const updatedHistoryItem: HistoryItem = {
+        ...existingHistoryItem,
+        body: $body,
+        headers: actualHeaders,
+        params: $params,
+        response: JSON.stringify(res),
+      };
+      updateHistoryItem(updatedHistoryItem);
+    } else {
+      const newHistoryItem: HistoryItem = {
+        id: Date.now(),
+        url: actualUrl,
+        method: $method,
+        body: $body,
+        headers: actualHeaders,
+        params: $params,
+        response: JSON.stringify(res),
+        group: $selectedGroup,
+      };
+      history.update((h) => {
+        const newHistory = [...h, newHistoryItem];
+        saveHistory(newHistoryItem);
+        return newHistory;
+      });
+    }
+  } catch (error) {
+    console.error("Request failed:", error);
+    let errorMessage: string;
+    if (error instanceof Error) {
+      errorMessage = error.message;
+      console.error("Error stack:", error.stack);
+    } else {
+      errorMessage = String(error);
+    }
+    response.set({
+      status: 0,
+      duration: 0,
+      size: 0,
+      body: "",
+      headers: [],
+      curl_command: "",
+      timestamp: new Date().toISOString(),
+      error: error instanceof Error ? error.message : String(error),
+    });
+
+    isSending.set(false);
+  }
+}
 
   async function cancelRequest() {
     await invoke("cancel_request");
