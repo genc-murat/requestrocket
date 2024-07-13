@@ -96,7 +96,7 @@
   }
 
   :global(.jsoneditor-tree) {
-    background-color: var(--surface);
+    background-color: var(--surface) !important;
     color: var(--primary-text);
   }
 
