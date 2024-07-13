@@ -2152,57 +2152,56 @@
   {/if}
 
   {#if $variablesPanelOpen}
-    <div
-      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-    >
-      <div class="variables-panel bg-white p-4 rounded shadow-lg relative">
-        <h2 class="text-xl font-bold mb-4">Variables</h2>
-        <div class="flex mb-4">
-          <input
-            type="text"
-            placeholder="Key"
-            bind:value={$newVariableKey}
-            class="flex-1 p-2 border rounded text-primary bg-accent mr-2"
-          />
-          <input
-            type="text"
-            placeholder="Value"
-            bind:value={$newVariableValue}
-            class="flex-1 p-2 border rounded text-primary bg-accent mr-2"
-          />
-          <button
-            type="button"
-            on:click={addVariable}
-            class="flex items-center"
-          >
-            <FontAwesomeIcon icon="plus" size="lg" class="mr-2" />Add
-          </button>
-        </div>
-
-        <ul>
-          {#each Object.entries($variables) as [key, value]}
-            <li class="mb-2 flex justify-between items-center">
-              <strong class="text-primary">{key}:</strong>
-              <span class="text-secondary">{value}</span>
-              <button
-                type="button"
-                on:click={() => deleteVariable(key)}
-                class="text-red-500"
-              >
-                <FontAwesomeIcon icon="trash-alt" />
-              </button>
-            </li>
-          {/each}
-        </ul>
+  <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="variables-panel bg-white p-8 rounded-lg shadow-2xl relative max-w-2xl w-full">
+      <h2 class="text-2xl font-bold mb-6">Variables</h2>
+      <div class="flex mb-6">
+        <input
+          type="text"
+          placeholder="Key"
+          bind:value={$newVariableKey}
+          class="flex-1 p-3 border rounded-lg text-primary bg-accent mr-4"
+        />
+        <input
+          type="text"
+          placeholder="Value"
+          bind:value={$newVariableValue}
+          class="flex-1 p-3 border rounded-lg text-primary bg-accent mr-4"
+        />
         <button
           type="button"
-          on:click={() => variablesPanelOpen.set(false)}
-          class="text-red-900 bg-slate-50 rounded-full p-2 shadow absolute top-4 right-4 flex items-center justify-center"
+          on:click={addVariable}
+          class="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
         >
-          <FontAwesomeIcon icon="close" size="lg" />
+          <FontAwesomeIcon icon={faPlus} size="lg" class="mr-2" />Add
         </button>
       </div>
+  
+      <ul>
+        {#each Object.entries($variables) as [key, value]}
+          <li class="mb-4 flex justify-between items-center">
+            <strong class="text-primary">{key}:</strong>
+            <span class="text-secondary">{value}</span>
+            <button
+              type="button"
+              on:click={() => deleteVariable(key)}
+              class="text-red-500 hover:text-red-700"
+            >
+              <FontAwesomeIcon icon="trash-alt" />
+            </button>
+          </li>
+        {/each}
+      </ul>
+      <button
+        type="button"
+        on:click={() => variablesPanelOpen.set(false)}
+        class="text-red-900 bg-slate-50 rounded-full p-3 shadow-lg absolute top-4 right-4 flex items-center justify-center hover:bg-slate-200"
+      >
+        <FontAwesomeIcon icon="close" size="lg" />
+      </button>
     </div>
+  </div>
+  
   {/if}
 </div>
 
