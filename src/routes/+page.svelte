@@ -57,7 +57,7 @@
     faDownload,
     faUpload,
     faClose,
-    faRepeat
+    faRepeat,
   );
 
   let currentFlow: Writable<Flow | null> = writable(null);
@@ -129,7 +129,7 @@
 
         // Sonraki bloğu bul
         const nextBlockIndex = flow.blocks.findIndex(
-          (b) => b.id === nextBlockId
+          (b) => b.id === nextBlockId,
         );
         if (nextBlockIndex === -1) {
           console.error(`Next block with id ${nextBlockId} not found`);
@@ -153,7 +153,7 @@
 
   async function executeApiCall(
     block: FlowBlock,
-    variables: { [key: string]: any }
+    variables: { [key: string]: any },
   ): Promise<any> {
     const requestData = {
       url: replaceVariables(block.data.url, variables),
@@ -162,7 +162,7 @@
         Object.entries(block.data.headers).map(([key, value]) => [
           key,
           replaceVariables(value as string, variables),
-        ])
+        ]),
       ),
       body: replaceVariables(block.data.body, variables),
     };
@@ -171,7 +171,7 @@
 
   function executeCondition(
     block: FlowBlock,
-    variables: { [key: string]: any }
+    variables: { [key: string]: any },
   ): boolean {
     const condition = replaceVariables(block.data.condition, variables);
     return eval(condition);
@@ -180,11 +180,11 @@
   async function executeLoop(
     block: FlowBlock,
     variables: { [key: string]: any },
-    flow: Flow
+    flow: Flow,
   ): Promise<any[]> {
     const results: any[] = [];
     const maxIterations = parseInt(
-      replaceVariables(block.data.maxIterations, variables)
+      replaceVariables(block.data.maxIterations, variables),
     );
     const loopBlocks = flow.blocks.filter((b) => b.group === block.id);
 
@@ -218,7 +218,7 @@
         } catch (error) {
           console.error(
             `Error in loop iteration ${i}, block ${currentBlockId}:`,
-            error
+            error,
           );
           results.push({
             error: error instanceof Error ? error.message : String(error),
@@ -236,7 +236,7 @@
 
   function executeVariable(
     block: FlowBlock,
-    variables: { [key: string]: any }
+    variables: { [key: string]: any },
   ): any {
     const value = replaceVariables(block.data.value, variables);
     variables[block.data.name] = value;
@@ -245,19 +245,19 @@
 
   function executeJsonTransformer(
     block: FlowBlock,
-    variables: { [key: string]: any }
+    variables: { [key: string]: any },
   ): any {
     const input = JSON.parse(replaceVariables(block.data.input, variables));
     const transformFunction = new Function(
       "input",
-      block.data.transformFunction
+      block.data.transformFunction,
     );
     return transformFunction(input);
   }
 
   function executeRegex(
     block: FlowBlock,
-    variables: { [key: string]: any }
+    variables: { [key: string]: any },
   ): any {
     const input = replaceVariables(block.data.input, variables);
     const regex = new RegExp(block.data.pattern, block.data.flags);
@@ -266,7 +266,7 @@
 
   function executeCustomScript(
     block: FlowBlock,
-    variables: { [key: string]: any }
+    variables: { [key: string]: any },
   ): any {
     const script = replaceVariables(block.data.script, variables);
     return eval(script); // Not: eval kullanımı güvenlik riskleri taşıyabilir, dikkatli kullanılmalıdır.
@@ -274,7 +274,7 @@
 
   async function executeWebhook(
     block: FlowBlock,
-    variables: { [key: string]: any }
+    variables: { [key: string]: any },
   ): Promise<any> {
     return { message: "Webhook executed" };
   }
@@ -282,7 +282,7 @@
   async function executeTryCatch(
     block: FlowBlock,
     variables: { [key: string]: any },
-    flow: Flow
+    flow: Flow,
   ): Promise<any> {
     try {
       // Try bloğundaki işlemleri çalıştır
@@ -294,7 +294,7 @@
 
   function executeSwitchCase(
     block: FlowBlock,
-    variables: { [key: string]: any }
+    variables: { [key: string]: any },
   ): any {
     const value = replaceVariables(block.data.switchValue, variables);
     const cases = block.data.cases;
@@ -308,14 +308,14 @@
 
   async function executeAuth(
     block: FlowBlock,
-    variables: { [key: string]: any }
+    variables: { [key: string]: any },
   ): Promise<any> {
     return { message: "Auth executed" };
   }
 
   function replaceVariables(
     str: string,
-    variables: { [key: string]: any }
+    variables: { [key: string]: any },
   ): string {
     return str.replace(/\{\{(.*?)\}\}/g, (match, key) => {
       return variables[key.trim()] ?? match;
@@ -330,7 +330,7 @@
   function determineNextBlock(
     currentBlock: FlowBlock,
     result: any,
-    flow: Flow
+    flow: Flow,
   ): string | null {
     if (currentBlock.type === "condition") {
       return result
@@ -338,7 +338,7 @@
         : currentBlock.alternative ?? null;
     } else if (currentBlock.type === "switch_case") {
       const matchingCase = currentBlock.data.cases.find(
-        (c: SwitchCase) => c.value === result.result
+        (c: SwitchCase) => c.value === result.result,
       );
       return matchingCase?.next ?? currentBlock.data.defaultNext ?? null;
     } else {
@@ -446,7 +446,7 @@
     } catch (error) {
       console.error(
         "Error saving status history:",
-        error instanceof Error ? error.message : error
+        error instanceof Error ? error.message : error,
       );
     }
   }
@@ -458,13 +458,13 @@
       const allStatusHistoryItems = await db.getAllFromIndex(
         "statusHistory",
         "url",
-        IDBKeyRange.only(url)
+        IDBKeyRange.only(url),
       );
       statusHistory.set(allStatusHistoryItems);
     } catch (error) {
       console.error(
         "Failed to load status history:",
-        error instanceof Error ? error.message : error
+        error instanceof Error ? error.message : error,
       );
     }
   }
@@ -545,7 +545,7 @@
     const value = input.value;
     const allHeaders = [...knownHeaders, ...$customHeaders.map((h) => h.name)];
     const filtered = allHeaders.filter((header) =>
-      header.toLowerCase().includes(value.toLowerCase())
+      header.toLowerCase().includes(value.toLowerCase()),
     );
     autocompleteHeaders.update((h) => {
       h[index] = filtered;
@@ -582,7 +582,7 @@
     let urlWithParams = $url;
     if ($queryParams.length > 0) {
       const queryString = new URLSearchParams(
-        $queryParams.map((param) => [param.key, param.value])
+        $queryParams.map((param) => [param.key, param.value]),
       ).toString();
       urlWithParams = $url.split("?")[0] + `?${queryString}`;
     }
@@ -598,13 +598,13 @@
     }));
 
     const pathParamsObject = Object.fromEntries(
-      $pathParams.map((param) => [param.key, param.value])
+      $pathParams.map((param) => [param.key, param.value]),
     );
     const queryParamsObject = Object.fromEntries(
-      $queryParams.map((param) => [param.key, param.value])
+      $queryParams.map((param) => [param.key, param.value]),
     );
     const formParamsObject = Object.fromEntries(
-      $formParams.map((field) => [field.key, field.value])
+      $formParams.map((field) => [field.key, field.value]),
     );
 
     let requestBody;
@@ -642,7 +642,7 @@
         case "form-urlencoded":
           contentType = "application/x-www-form-urlencoded";
           requestBody = new URLSearchParams(
-            $formParams.map((field) => [field.key, field.value])
+            $formParams.map((field) => [field.key, field.value]),
           ).toString();
           break;
         default:
@@ -656,7 +656,7 @@
       method: $method,
       body: requestBody,
       headers: Object.fromEntries(
-        actualHeaders.map((header) => [header.key, header.value])
+        actualHeaders.map((header) => [header.key, header.value]),
       ),
       path_params: pathParamsObject,
       query_params: queryParamsObject,
@@ -698,7 +698,7 @@
         (item) =>
           item.url === actualUrl &&
           item.method === $method &&
-          item.group === $selectedGroup
+          item.group === $selectedGroup,
       );
       if (existingHistoryItem) {
         const updatedHistoryItem: HistoryItem = {
@@ -764,7 +764,7 @@
     } catch (error) {
       console.error(
         "Error saving history:",
-        error instanceof Error ? error.message : error
+        error instanceof Error ? error.message : error,
       );
     }
   }
@@ -776,12 +776,12 @@
       await db.put("history", historyItem);
       console.log("History updated successfully.");
       history.update((h) =>
-        h.map((item) => (item.id === historyItem.id ? historyItem : item))
+        h.map((item) => (item.id === historyItem.id ? historyItem : item)),
       );
     } catch (error) {
       console.error(
         "Error updating history:",
-        error instanceof Error ? error.message : error
+        error instanceof Error ? error.message : error,
       );
     }
   }
@@ -798,7 +798,7 @@
     } catch (error) {
       console.error(
         "Failed to load groups:",
-        error instanceof Error ? error.message : error
+        error instanceof Error ? error.message : error,
       );
     }
   }
@@ -809,13 +809,13 @@
       const db = await dbPromise;
       const allHistoryItems = await db.getAll("history");
       const filteredHistory = allHistoryItems.filter(
-        (item) => item.group === selectedGroup
+        (item) => item.group === selectedGroup,
       );
       history.set(filteredHistory);
     } catch (error) {
       console.error(
         "Failed to load history:",
-        error instanceof Error ? error.message : error
+        error instanceof Error ? error.message : error,
       );
     }
   }
@@ -831,7 +831,7 @@
     } catch (error) {
       console.error(
         "Error deleting history item:",
-        error instanceof Error ? error.message : error
+        error instanceof Error ? error.message : error,
       );
     }
   }
@@ -860,7 +860,7 @@
     } catch (error) {
       console.error(
         "Error saving variable:",
-        error instanceof Error ? error.message : error
+        error instanceof Error ? error.message : error,
       );
     }
   }
@@ -874,7 +874,7 @@
     } catch (error) {
       console.error(
         "Error deleting variable:",
-        error instanceof Error ? error.message : error
+        error instanceof Error ? error.message : error,
       );
     }
   }
@@ -885,13 +885,13 @@
       const db = await dbPromise;
       const allVariables = await db.getAll("variables");
       const variablesObject = Object.fromEntries(
-        allVariables.map((v) => [v.key, v.value])
+        allVariables.map((v) => [v.key, v.value]),
       );
       variables.set(variablesObject);
     } catch (error) {
       console.error(
         "Failed to load variables:",
-        error instanceof Error ? error.message : error
+        error instanceof Error ? error.message : error,
       );
     }
   }
@@ -965,7 +965,7 @@
       if (Array.isArray(data)) {
         const headers = Object.keys(data[0]);
         const rows = data.map((item) =>
-          headers.map((header) => JSON.stringify(item[header]))
+          headers.map((header) => JSON.stringify(item[header])),
         );
         return { headers, rows };
       } else if (typeof data === "object" && data !== null) {
@@ -1130,7 +1130,7 @@
         // Postman koleksiyonunu işle
         const importedHistoryItems: HistoryItem[] = processPostmanCollection(
           postmanCollection,
-          fileName
+          fileName,
         );
 
         // Yeni öğeleri history store'a ekle
@@ -1158,7 +1158,7 @@
 
   function processPostmanCollection(
     collection: any,
-    groupName: string
+    groupName: string,
   ): HistoryItem[] {
     const processItem = (item: any): HistoryItem | null => {
       if (item.request) {
@@ -1849,7 +1849,7 @@
           <div class="flex items-center">
             <span
               class="text-white px-2 py-1 rounded {getStatusClass(
-                $response.status
+                $response.status,
               )}"
               >{$response.status} {$response.status === 200 ? "OK" : ""}</span
             >
@@ -2020,7 +2020,7 @@
             >
               <div
                 class="text-white px-2 py-1 rounded {getStatusClass(
-                  history.status
+                  history.status,
                 )}"
               >
                 {history.status}
