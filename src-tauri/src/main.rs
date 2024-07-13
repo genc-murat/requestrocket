@@ -1,19 +1,18 @@
 #![cfg_attr(
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
-  )]
-  
+)]
 
-use reqwest::Client;
+use chrono::prelude::*;
 use reqwest::header::{HeaderMap, HeaderName, HeaderValue, CONTENT_TYPE};
 use reqwest::multipart;
+use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use tauri::State;
-use chrono::prelude::*;
 use std::sync::Arc;
-use tokio::sync::{Mutex, mpsc};
+use tauri::State;
 use tokio::sync::mpsc::Sender;
+use tokio::sync::{mpsc, Mutex};
 
 #[derive(Serialize, Deserialize)]
 struct RequestData {
@@ -45,7 +44,10 @@ struct AppState {
 }
 
 #[tauri::command]
-async fn send_request(state: State<'_, AppState>, request_data: RequestData) -> Result<ResponseData, String> {
+async fn send_request(
+    state: State<'_, AppState>,
+    request_data: RequestData,
+) -> Result<ResponseData, String> {
     let client = &state.client;
     let (cancel_tx, mut cancel_rx) = mpsc::channel(1);
     *state.cancel_sender.lock().await = Some(cancel_tx);
@@ -63,7 +65,8 @@ async fn send_request(state: State<'_, AppState>, request_data: RequestData) -> 
 
     // Handle query parameters
     if let Some(query_params) = request_data.query_params {
-        let query_string: String = query_params.iter()
+        let query_string: String = query_params
+            .iter()
             .map(|(key, value)| format!("{}={}", key, value))
             .collect::<Vec<String>>()
             .join("&");
@@ -78,10 +81,14 @@ async fn send_request(state: State<'_, AppState>, request_data: RequestData) -> 
         for (key, value) in header_map.iter() {
             match HeaderName::from_bytes(key.as_bytes()) {
                 Ok(header_name) => match HeaderValue::from_str(value) {
-                    Ok(header_value) => { 
-                        headers.insert(header_name.clone(), header_value.clone()); 
-                        curl_command.push_str(&format!(" -H '{}: {}'", header_name, header_value.to_str().unwrap()));
-                    },
+                    Ok(header_value) => {
+                        headers.insert(header_name.clone(), header_value.clone());
+                        curl_command.push_str(&format!(
+                            " -H '{}: {}'",
+                            header_name,
+                            header_value.to_str().unwrap()
+                        ));
+                    }
                     Err(_) => return Err(format!("Invalid header value for key: {}", key)),
                 },
                 Err(_) => return Err(format!("Invalid header name: {}", key)),
