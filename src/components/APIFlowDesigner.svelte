@@ -203,6 +203,14 @@
       y: event.clientY - rect.top
     };
     event.dataTransfer?.setData('text/plain', blockId);
+    target.classList.add('dragging'); // Sürükleme sırasında sınıf ekle
+  }
+
+  function handleDragEnd(event: DragEvent) {
+    isDragging = false;
+    dragOffset = null;
+    const target = event.target as HTMLElement;
+    target.classList.remove('dragging'); // Sürükleme sona erdiğinde sınıfı kaldır
   }
 
   function handleDrop(event: DragEvent) {
@@ -672,6 +680,7 @@ Her koşul bloğunun "true" ve "false" dalları olmalıdır.
   <div class="canvas" 
     on:dragover|preventDefault 
     on:drop={handleDrop}
+    on:dragend={handleDragEnd}
     on:mousemove={handleMouseMove}
     on:mouseup={handleMouseUp}
     style="transform: scale({zoom}) translate({pan.x}px, {pan.y}px);">

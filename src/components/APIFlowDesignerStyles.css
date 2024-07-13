@@ -78,6 +78,7 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  opacity: 1;
 }
 
 .block:hover {
@@ -85,11 +86,16 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
+.block.dragging {
+  opacity: 0.8; 
+  z-index: 500; 
+}
+
 .connect-button-group {
   display: flex;
   position: absolute;
   bottom: 0;
-  left: 50%;
+  left: 70%;
   transform: translateX(-50%) translateY(50%);
   gap: 4px;
   flex-direction: row;
