@@ -1240,15 +1240,13 @@ function closeApiFlowModal() {
   </div>
 {/if}
 
-
-
   <div class="history-panel panel">
     <h2 class="text-xl font-bold mb-4">History</h2>
     {#if $selectedGroup}
       <div class="group">
         <div class="top-buttons">
           <button type="button" on:click={openApiFlowModal} class="">
-            <FontAwesomeIcon icon="edit" size="lg" /> API Flow Designer
+            <FontAwesomeIcon icon="edit" size="lg" /> Designer
           </button>
           <button type="button" on:click={() => variablesPanelOpen.set(true)} class="">
             <FontAwesomeIcon icon="edit" size="lg" /> Variables
