@@ -2358,7 +2358,7 @@
   }
 
   .tab.active {
-    background: var(--secondary);
+    background: var(--surface);
     border-bottom: 1px solid var(--surface);
     color: var(--primary-text);
     font-weight: bold;
