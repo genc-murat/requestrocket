@@ -32,6 +32,8 @@
   } from "../components/CustomHeaderModule";
   import CustomHeaderPanel from "../components/CustomHeaderPanel.svelte";
 
+  import ConfirmModal from "../components/ConfirmModal.svelte"; 
+
   import type {
     Flow,
     FlowBlock,
@@ -64,6 +66,28 @@
 
   let currentFlow: Writable<Flow | null> = writable(null);
   let flowResults: Writable<{ [key: string]: any } | null> = writable(null);
+
+  const showModal = writable(false);
+  const itemToDelete = writable<number | null>(null);
+    function openModal(id: number) {
+    itemToDelete.set(id);
+    showModal.set(true);
+  }
+
+  function closeModal() {
+    showModal.set(false);
+    itemToDelete.set(null);
+  }
+
+  function confirmDelete() {
+    itemToDelete.update((id) => {
+      if (id !== null) {
+        deleteHistoryItem(id);
+      }
+      return null;
+    });
+    closeModal();
+  }
 
   async function runFlow(flow: Flow) {
     console.log("Running flow:", flow);
@@ -1604,10 +1628,9 @@
               <button
                 class="delete-icon text-red-500"
                 aria-label="Delete history item"
-                on:click={() => deleteHistoryItem(item.id)}
+                on:click={() => openModal(item.id)}  
                 on:keydown={(e) => {
-                  if (e.key === "Enter" || e.key === " ")
-                    deleteHistoryItem(item.id);
+                  if (e.key === "Enter" || e.key === " ") openModal(item.id); 
                 }}
               >
                 <FontAwesomeIcon icon="trash-alt" size="lg" />
@@ -2208,6 +2231,13 @@
 {#if $customHeaderPanelOpen}
   <CustomHeaderPanel />
 {/if}
+
+<ConfirmModal
+  bind:show={$showModal}
+  message="Are you sure you want to delete this history item?"
+  on:confirm={confirmDelete}
+  on:close={closeModal}
+/>
 
 <style>
   pre {
