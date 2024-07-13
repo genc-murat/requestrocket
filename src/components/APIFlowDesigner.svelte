@@ -729,14 +729,14 @@ Her koşul bloğunun "true" ve "false" dalları olmalıdır.
       >
         <h3>{blockTypes[block.type].name}</h3>
         <div class="connect-button-group">
-          <button class="connect-button next" on:mousedown|stopPropagation={(e) => { selectConnectionType('next'); startConnection(block.id, e); }}>
-            Next
+          <button class="connect-button next" title="Next Connection" on:mousedown|stopPropagation={(e) => { selectConnectionType('next'); startConnection(block.id, e); }}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"><path fill="none" d="M0 0h24v24H0z"/><path d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z" fill="currentColor"/></svg>
           </button>
-          <button class="connect-button alternative" on:mousedown|stopPropagation={(e) => { selectConnectionType('alternative'); startConnection(block.id, e); }}>
-            Alt
+          <button class="connect-button alternative" title="Alternative Connection" on:mousedown|stopPropagation={(e) => { selectConnectionType('alternative'); startConnection(block.id, e); }}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 3c.825 0 1.5.675 1.5 1.5S12.825 6 12 6s-1.5-.675-1.5-1.5S11.175 3 12 3zm0 15c.825 0 1.5.675 1.5 1.5S12.825 21 12 21s-1.5-.675-1.5-1.5.675-1.5 1.5-1.5zm0-7.5c.825 0 1.5.675 1.5 1.5s-.675 1.5-1.5 1.5-1.5-.675-1.5-1.5.675-1.5 1.5-1.5z" fill="currentColor"/></svg>
           </button>
-          <button class="connect-button error" on:mousedown|stopPropagation={(e) => { selectConnectionType('error'); startConnection(block.id, e); }}>
-            Error
+          <button class="connect-button error" title="Error Connection" on:mousedown|stopPropagation={(e) => { selectConnectionType('error'); startConnection(block.id, e); }}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z" fill="currentColor"/></svg>
           </button>
         </div>
       </div>
