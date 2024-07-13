@@ -61,7 +61,9 @@
   'switch_case': { category: 'logic', name: 'Switch-Case' },
   'auth': { category: 'input-output', name: 'Authentication' },
   'comment': { category: 'util', name: 'Comment' },
-  'group': { category: 'util', name: 'Group' }
+  'group': { category: 'util', name: 'Group' },
+  'start': { category: 'control', name: 'Start' },
+  'end': { category: 'control', name: 'End' }
 } as const;
 
 type BlockType = keyof typeof blockTypes;
@@ -102,38 +104,235 @@ type BlockType = keyof typeof blockTypes;
 let currentFlow: Writable<Flow | null> = writable(null);
   let flowResults: Writable<{ [key: string]: any } | null> = writable(null);
 
+
   async function runFlow(flow: Flow) {
   console.log('Running flow:', flow);
   flowResults.set(null);
-  
-  for (const block of flow.blocks) {
-    if (block.type === 'api_call') {
+
+  const variables: { [key: string]: any } = {};
+
+  let currentBlockIndex = 0;
+
+  while (currentBlockIndex < flow.blocks.length) {
+    let block = flow.blocks[currentBlockIndex];
+    try {
+      let result;
+      switch (block.type) {
+        case 'api_call':
+          result = await executeApiCall(block, variables);
+          break;
+        case 'condition':
+          result = executeCondition(block, variables);
+          break;
+        case 'loop':
+          result = await executeLoop(block, variables, flow);
+          break;
+        case 'variable':
+          result = executeVariable(block, variables);
+          break;
+        case 'json_transformer':
+          result = executeJsonTransformer(block, variables);
+          break;
+        case 'regex':
+          result = executeRegex(block, variables);
+          break;
+        case 'custom_script':
+          result = executeCustomScript(block, variables);
+          break;
+        case 'webhook':
+          result = await executeWebhook(block, variables);
+          break;
+        case 'try_catch':
+          result = await executeTryCatch(block, variables, flow);
+          break;
+        case 'switch_case':
+          result = executeSwitchCase(block, variables);
+          break;
+        case 'auth':
+          result = await executeAuth(block, variables);
+          break;
+        case 'start':
+        case 'end':
+        case 'comment':
+        case 'group':
+          // Bu bloklar için özel bir işlem yapılmıyor
+          result = { message: `${block.type} block executed` };
+          break;
+        default:
+          console.warn(`Unsupported block type: ${block.type}`);
+          result = { error: `Unsupported block type: ${block.type}` };
+      }
+
+      flowResults.update(results => ({ ...results, [block.id]: result }));
+
+      // Sonraki bloğu belirle
+      const nextBlockId = determineNextBlock(block, result, flow);
+      if (!nextBlockId) break; // Eğer sonraki blok yoksa akışı sonlandır
+
+      // Sonraki bloğu bul
+      const nextBlockIndex = flow.blocks.findIndex(b => b.id === nextBlockId);
+      if (nextBlockIndex === -1) {
+        console.error(`Next block with id ${nextBlockId} not found`);
+        break;
+      }
+
+      // Döngüyü sonraki blokla devam ettir
+      currentBlockIndex = nextBlockIndex;
+
+    } catch (error) {
+      console.error('Error in flow execution:', error);
+      flowResults.update(results => ({ ...results, [block.id]: { error: error instanceof Error ? error.message : String(error) } }));
+      break;
+    }
+  }
+}
+
+
+async function executeApiCall(block: FlowBlock, variables: { [key: string]: any }): Promise<any> {
+  const requestData = {
+    url: replaceVariables(block.data.url, variables),
+    method: block.data.method,
+    headers: Object.fromEntries(
+      Object.entries(block.data.headers).map(([key, value]) => [key, replaceVariables(value as string, variables)])
+    ),
+    body: replaceVariables(block.data.body, variables),
+  };
+  return await invoke<ResponseData>('send_request', { requestData });
+}
+
+function executeCondition(block: FlowBlock, variables: { [key: string]: any }): boolean {
+  const condition = replaceVariables(block.data.condition, variables);
+  return eval(condition); // Not: eval kullanımı güvenlik riskleri taşıyabilir, dikkatli kullanılmalıdır.
+}
+
+async function executeLoop(block: FlowBlock, variables: { [key: string]: any }, flow: Flow): Promise<any[]> {
+  const results: any[] = [];
+  const maxIterations = parseInt(replaceVariables(block.data.maxIterations, variables));
+  const loopBlocks = flow.blocks.filter(b => b.group === block.id);
+
+  for (let i = 0; i < maxIterations; i++) {
+    variables[block.data.iterator] = i;
+    let currentBlockId = block.next;
+
+    while (currentBlockId) {
+      const currentBlock = loopBlocks.find(b => b.id === currentBlockId);
+      if (!currentBlock) break;
+
       try {
-        const requestData = {
-          url: block.data.url,
-          method: block.data.method,
-          headers: block.data.headers,
-          body: block.data.body,
-          // Diğer gerekli alanları ekleyin
-        };
-        const result = await invoke<ResponseData>('send_request', { requestData });
-        flowResults.update(results => ({...results, [block.id]: result}));
+        let result;
+        switch (currentBlock.type) {
+          case 'api_call':
+            result = await executeApiCall(currentBlock, variables);
+            break;
+          case 'condition':
+            result = executeCondition(currentBlock, variables);
+            break;
+          // Diğer blok tipleri için case'ler ekleyin
+          default:
+            result = { message: `Unsupported block type in loop: ${currentBlock.type}` };
+        }
+
+        results.push(result);
+
+        // Sonraki bloğu belirle
+        currentBlockId = determineNextBlock(currentBlock, result, flow);
       } catch (error) {
-        console.error('Error in flow execution:', error);
-        flowResults.update(results => ({...results, [block.id]: {error: error instanceof Error ? error.message : String(error)}}));
+        console.error(`Error in loop iteration ${i}, block ${currentBlockId}:`, error);
+        results.push({ error: error instanceof Error ? error.message : String(error) });
         break;
       }
     }
-    // Diğer blok tipleri için gerekli işlemler burada yapılabilir
+
+    // Döngüden çıkma kontrolü (örneğin, bir koşul bloğu false döndürdüyse)
+    if (currentBlockId === null) break;
+  }
+
+  return results;
+}
+
+function executeVariable(block: FlowBlock, variables: { [key: string]: any }): any {
+  const value = replaceVariables(block.data.value, variables);
+  variables[block.data.name] = value;
+  return { [block.data.name]: value };
+}
+
+function executeJsonTransformer(block: FlowBlock, variables: { [key: string]: any }): any {
+  const input = JSON.parse(replaceVariables(block.data.input, variables));
+  const transformFunction = new Function('input', block.data.transformFunction);
+  return transformFunction(input);
+}
+
+function executeRegex(block: FlowBlock, variables: { [key: string]: any }): any {
+  const input = replaceVariables(block.data.input, variables);
+  const regex = new RegExp(block.data.pattern, block.data.flags);
+  return input.match(regex);
+}
+
+function executeCustomScript(block: FlowBlock, variables: { [key: string]: any }): any {
+  const script = replaceVariables(block.data.script, variables);
+  return eval(script); // Not: eval kullanımı güvenlik riskleri taşıyabilir, dikkatli kullanılmalıdır.
+}
+
+async function executeWebhook(block: FlowBlock, variables: { [key: string]: any }): Promise<any> {
+  // Webhook mantığı burada uygulanmalı
+  return { message: "Webhook executed" };
+}
+
+async function executeTryCatch(block: FlowBlock, variables: { [key: string]: any }, flow: Flow): Promise<any> {
+  try {
+    // Try bloğundaki işlemleri çalıştır
+  } catch (error) {
+    // Catch bloğundaki işlemleri çalıştır
+  }
+  return { message: "Try-Catch executed" };
+}
+
+function executeSwitchCase(block: FlowBlock, variables: { [key: string]: any }): any {
+  const value = replaceVariables(block.data.switchValue, variables);
+  const cases = block.data.cases;
+  for (const caseItem of cases) {
+    if (caseItem.value === value) {
+      return { result: caseItem.result };
+    }
+  }
+  return { result: block.data.defaultCase };
+}
+
+async function executeAuth(block: FlowBlock, variables: { [key: string]: any }): Promise<any> {
+  // Yetkilendirme mantığı burada uygulanmalı
+  return { message: "Auth executed" };
+}
+
+function replaceVariables(str: string, variables: { [key: string]: any }): string {
+  return str.replace(/\{\{(.*?)\}\}/g, (match, key) => {
+    return variables[key.trim()] ?? match;
+  });
+}
+
+type SwitchCase = {
+  value: string;
+  next: string | null;
+};
+
+
+function determineNextBlock(currentBlock: FlowBlock, result: any, flow: Flow): string | null {
+  if (currentBlock.type === 'condition') {
+    return result ? (currentBlock.next ?? null) : (currentBlock.alternative ?? null);
+  } else if (currentBlock.type === 'switch_case') {
+    const matchingCase = currentBlock.data.cases.find((c: SwitchCase) => c.value === result.result);
+    return (matchingCase?.next ?? currentBlock.data.defaultNext ?? null);
+  } else {
+    return currentBlock.next ?? null;
   }
 }
+
 currentFlow.set({
   id: crypto.randomUUID(),
   name: 'New Flow',
   description: '',
   version: '1.0.0',
   blocks: [],
-  connections: [],  // Bu satırı ekleyin
+  connections: [],
   variables: {},
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -282,9 +481,6 @@ function closeApiFlowModal() {
     url.set(urlWithParams);
   }
 
-  function replaceVariables(str: string, vars: { [key: string]: string }): string {
-    return str.replace(/{{(.*?)}}/g, (_, key) => vars[key.trim()] || '');
-  }
 
   async function sendRequest() {
     isSending.set(true);

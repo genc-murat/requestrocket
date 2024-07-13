@@ -1,10 +1,9 @@
 <script lang="ts">
   import { onMount, createEventDispatcher } from 'svelte';
-  import { writable, get } from 'svelte/store';
-  import type { Writable } from 'svelte/store';
+  import { writable, derived, get } from 'svelte/store';
+  import type { Writable, Readable } from 'svelte/store';
   import { v4 as uuidv4 } from 'uuid';
   import { fade, fly } from 'svelte/transition';
- 
 
   type Connection = {
     id: string;
@@ -14,15 +13,15 @@
   };
 
   type FlowBlock = {
-  id: string;
-  type: BlockType;
-  data: any;
-  position: { x: number; y: number };
-  next: string | null;
-  alternative?: string | null;
-  error?: string | null;
-  group?: string;
-};
+    id: string;
+    type: BlockType;
+    data: any;
+    position: { x: number; y: number };
+    next: string | null;
+    alternative?: string | null;
+    error?: string | null;
+    group?: string;
+  };
 
   type Flow = {
     id: string;
@@ -41,6 +40,8 @@
   export let initialFlow: Flow | null = null;
   export let readOnly: boolean = false;
 
+  const dispatch = createEventDispatcher();
+
   let flow: Writable<Flow> = writable(initialFlow || {
     id: uuidv4(),
     name: 'New Flow',
@@ -56,23 +57,23 @@
   });
 
   let selectedBlock: Writable<FlowBlock | null> = writable(null);
+  let isConnecting = false;
+  let connectionStart: string | null = null;
+  let connectionType: 'next' | 'alternative' | 'error' = 'next';
+  let connectionEnd: { x: number; y: number } | null = null;
   let isDragging: boolean = false;
   let dragOffset: { x: number; y: number } | null = null;
   let showPropertiesModal: boolean = false;
-  let isConnecting: boolean = false;
-  let connectionStart: string | null = null;
-  let connectionEnd: { x: number; y: number } | null = null;
   let zoom: number = 1;
   let pan: { x: number; y: number } = { x: 0, y: 0 };
-  let searchTerm = '';
-  let categoryFilter = 'all';
+  let searchTerm: Writable<string> = writable('');
+  let categoryFilter: Writable<string> = writable('all');
   let showVariablesPanel = false;
   let showHelpPanel = false;
   let showContextMenu = false;
   let contextMenuPosition = { x: 0, y: 0 };
   let contextMenuTargetId: string | null = null;
-
-  const dispatch = createEventDispatcher();
+  let invalidConnectionMessage: Writable<string> = writable('');
 
   const blockCategories = {
     'all': 'All',
@@ -96,10 +97,45 @@
   'switch_case': { category: 'logic', name: 'Switch-Case' },
   'auth': { category: 'input-output', name: 'Authentication' },
   'comment': { category: 'util', name: 'Comment' },
-  'group': { category: 'util', name: 'Group' }
+  'group': { category: 'util', name: 'Group' },
+  'start': { category: 'control', name: 'Start' },
+  'end': { category: 'control', name: 'End' }
 } as const;
 
-type BlockType = keyof typeof blockTypes;
+  type BlockType = keyof typeof blockTypes;
+
+  function isValidBlockType(type: string): type is BlockType {
+    return type in blockTypes;
+  }
+
+  const blockColors: Record<BlockType, string> = {
+  'api_call': '#4CAF50',
+  'condition': '#2196F3',
+  'loop': '#FF9800',
+  'timer': '#9C27B0',
+  'variable': '#E91E63',
+  'json_transformer': '#00BCD4',
+  'regex': '#795548',
+  'webhook': '#3F51B5',
+  'custom_script': '#607D8B',
+  'try_catch': '#F44336',
+  'switch_case': '#FFEB3B',
+  'auth': '#8BC34A',
+  'comment': '#9E9E9E',
+  'group': '#FFC107',
+  'start': '#4CAF50',  // Başlangıç için yeşil
+  'end': '#F44336'     // Bitiş için kırmızı
+};
+
+  const filteredBlocks: Readable<FlowBlock[]> = derived(
+    [flow, searchTerm, categoryFilter],
+    ([$flow, $searchTerm, $categoryFilter]) => {
+      return $flow.blocks.filter(block => 
+        block.type.toLowerCase().includes($searchTerm.toLowerCase()) &&
+        ($categoryFilter === 'all' || blockTypes[block.type].category === $categoryFilter)
+      );
+    }
+  );
 
   // Undo/Redo işlemleri için geçmiş
   let history: Flow[] = [];
@@ -142,20 +178,24 @@ type BlockType = keyof typeof blockTypes;
     };
   });
 
-  function addBlock(type: BlockType) {
-  const newBlock: FlowBlock = {
-    id: uuidv4(),
-    type,
-    data: {},
-    position: { x: 100, y: 100 },
-    next: null
-  };
-  flow.update(f => ({
-    ...f,
-    blocks: [...f.blocks, newBlock]
-  }));
-  saveToHistory();
-}
+  function addBlock(type: string) {
+    if (isValidBlockType(type)) {
+      const newBlock: FlowBlock = {
+        id: uuidv4(),
+        type,
+        data: {},
+        position: { x: 100, y: 100 },
+        next: null
+      };
+      flow.update(f => ({
+        ...f,
+        blocks: [...f.blocks, newBlock]
+      }));
+      saveToHistory();
+    } else {
+      console.error(`Invalid block type: ${type}`);
+    }
+  }
 
   function updateBlockPosition(id: string, position: { x: number; y: number }) {
     flow.update(f => ({
@@ -228,19 +268,16 @@ type BlockType = keyof typeof blockTypes;
     dragOffset = null;
   }
 
-  function startConnection(blockId: string) {
+  function startConnection(blockId: string, event: MouseEvent) {
     isConnecting = true;
     connectionStart = blockId;
+    connectionEnd = { x: event.clientX, y: event.clientY };
+    event.stopPropagation();
   }
 
   function handleMouseMove(event: MouseEvent) {
     if (isConnecting) {
-      const canvas = event.currentTarget as HTMLElement;
-      const canvasRect = canvas.getBoundingClientRect();
-      connectionEnd = {
-        x: (event.clientX - canvasRect.left - pan.x) / zoom,
-        y: (event.clientY - canvasRect.top - pan.y) / zoom
-      };
+      connectionEnd = { x: event.clientX, y: event.clientY };
     }
   }
 
@@ -250,14 +287,108 @@ type BlockType = keyof typeof blockTypes;
       const targetBlock = targetElement.closest('.block') as HTMLElement;
       if (targetBlock) {
         const targetId = targetBlock.dataset.id;
-        if (targetId && targetId !== connectionStart) {
-          connectBlocks(connectionStart, targetId);
+        if (targetId && targetId !== connectionStart && isConnectionValid(connectionStart, targetId)) {
+          connectBlocks(connectionStart, targetId, connectionType);
+        } else {
+          showInvalidConnectionFeedback();
         }
       }
     }
     isConnecting = false;
     connectionStart = null;
     connectionEnd = null;
+  }
+
+  function isConnectionValid(sourceId: string, targetId: string): boolean {
+    const currentFlow = get(flow);
+    const sourceBlock = currentFlow.blocks.find(b => b.id === sourceId);
+    const targetBlock = currentFlow.blocks.find(b => b.id === targetId);
+
+    if (!sourceBlock || !targetBlock) {
+      invalidConnectionMessage.set('Geçersiz blok seçimi.');
+      return false;
+    }
+
+    if (isCircularConnection(sourceId, targetId)) {
+      invalidConnectionMessage.set('Döngüsel bağlantılar oluşturulamaz.');
+      return false;
+    }
+
+    const existingConnection = currentFlow.connections.find(
+      conn => conn.source === sourceId && conn.type === connectionType
+    );
+    if (existingConnection) {
+      invalidConnectionMessage.set(`Bu bloktan zaten bir ${connectionType} bağlantısı mevcut.`);
+      return false;
+    }
+
+    if (sourceBlock.type === 'condition' && connectionType === 'next') {
+      invalidConnectionMessage.set('Koşul bloğundan "next" bağlantısı oluşturulamaz. "alternative" veya "error" kullanın.');
+      return false;
+    }
+
+    if (sourceBlock.data.isStartBlock || targetBlock.data.isEndBlock) {
+    invalidConnectionMessage.set('Başlangıç bloğuna giriş veya bitiş bloğundan çıkış bağlantısı oluşturulamaz.');
+    return false;
+  }
+
+    return true;
+  }
+
+  function isCircularConnection(sourceId: string, targetId: string): boolean {
+    const currentFlow = get(flow);
+    
+    function checkCircular(currentId: string, visited: Set<string> = new Set()): boolean {
+      if (visited.has(currentId)) return false;
+      if (currentId === targetId) return true;
+      
+      visited.add(currentId);
+      const nextConnections = currentFlow.connections.filter(conn => conn.source === currentId);
+      
+      for (const conn of nextConnections) {
+        if (checkCircular(conn.target, new Set(visited))) return true;
+      }
+      
+      return false;
+    }
+
+    return checkCircular(sourceId);
+  }
+
+  function showInvalidConnectionFeedback() {
+    const message = get(invalidConnectionMessage);
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast error';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }, 100);
+
+    const invalidLine = document.createElement('div');
+    invalidLine.className = 'invalid-connection-line';
+    document.querySelector('.canvas')?.appendChild(invalidLine);
+
+    const sourceBlock = document.querySelector(`[data-id="${connectionStart}"]`);
+    const targetBlock = document.querySelector(`[data-id="${connectionEnd}"]`);
+
+    if (sourceBlock && targetBlock) {
+      const sourceRect = sourceBlock.getBoundingClientRect();
+      const targetRect = targetBlock.getBoundingClientRect();
+
+      invalidLine.style.left = `${sourceRect.left + sourceRect.width / 2}px`;
+      invalidLine.style.top = `${sourceRect.top + sourceRect.height / 2}px`;
+      invalidLine.style.width = `${targetRect.left - sourceRect.left}px`;
+      invalidLine.style.height = `${targetRect.top - sourceRect.top}px`;
+    }
+
+    setTimeout(() => invalidLine.remove(), 1000);
   }
 
   function openPropertiesModal(block: FlowBlock) {
@@ -328,6 +459,14 @@ type BlockType = keyof typeof blockTypes;
           event.preventDefault();
           saveFlow();
           break;
+          case 'f':
+        event.preventDefault();
+        (document.querySelector('input[type="text"]') as HTMLInputElement)?.focus();
+        break;
+        case 'g':
+          event.preventDefault();
+          autoArrangeBlocks();
+          break;
       }
     }
   }
@@ -345,26 +484,26 @@ type BlockType = keyof typeof blockTypes;
   }
 
   function duplicateBlock() {
-  if (contextMenuTargetId) {
-    const originalBlock = $flow.blocks.find(b => b.id === contextMenuTargetId);
-    if (originalBlock) {
-      const newBlock: FlowBlock = {
-        ...JSON.parse(JSON.stringify(originalBlock)),
-        id: uuidv4(),
-        position: {
-          x: originalBlock.position.x + 20,
-          y: originalBlock.position.y + 20
-        }
-      };
-      flow.update(f => ({
-        ...f,
-        blocks: [...f.blocks, newBlock]
-      }));
-      saveToHistory();
+    if (contextMenuTargetId) {
+      const originalBlock = get(flow).blocks.find(b => b.id === contextMenuTargetId);
+      if (originalBlock) {
+        const newBlock: FlowBlock = {
+          ...JSON.parse(JSON.stringify(originalBlock)),
+          id: uuidv4(),
+          position: {
+            x: originalBlock.position.x + 20,
+            y: originalBlock.position.y + 20
+          }
+        };
+        flow.update(f => ({
+          ...f,
+          blocks: [...f.blocks, newBlock]
+        }));
+        saveToHistory();
+      }
     }
+    closeContextMenu();
   }
-  closeContextMenu();
-}
 
   function validateFlow() {
     const unconnectedBlocks = get(flow).blocks.filter(block => 
@@ -375,11 +514,6 @@ type BlockType = keyof typeof blockTypes;
     }
     // Diğer doğrulama kuralları...
   }
-
-  $: filteredBlocks = $flow.blocks.filter(block => 
-  block.type.toLowerCase().includes(searchTerm.toLowerCase()) &&
-  (categoryFilter === 'all' || blockTypes[block.type].category === categoryFilter)
-);
 
   function generatePath(start: { x: number; y: number }, end: { x: number; y: number }): string {
     const midX = (start.x + end.x) / 2;
@@ -399,36 +533,43 @@ type BlockType = keyof typeof blockTypes;
       return { ...f, variables: rest };
     });
   }
-  function isValidBlockType(type: string): type is BlockType {
-    return type in blockTypes;
+
+  function autoArrangeBlocks() {
+    let x = 100;
+    let y = 100;
+    flow.update(f => {
+      f.blocks = f.blocks.map((block, index) => {
+        block.position = { x, y };
+        x += 200;
+        if ((index + 1) % 5 === 0) {
+          x = 100;
+          y += 150;
+        }
+        return block;
+      });
+      return f;
+    });
+    saveToHistory();
   }
 
-  function safeAddBlock(type: string) {
-    if (isValidBlockType(type)) {
-      addBlock(type);
-    } else {
-      console.error(`Invalid block type: ${type}`);
-    }
+  function selectConnectionType(type: 'next' | 'alternative' | 'error') {
+    connectionType = type;
   }
-  function handleAddBlock(type: string) {
-    addBlock(type as BlockType);
-  }
-
 </script>
 
 <svelte:window on:keydown={handleKeyDown} on:click={closeContextMenu} />
 
 <div class="api-flow-designer">
   <div class="toolbar">
-    <input type="text" bind:value={searchTerm} placeholder="Search blocks..." />
-      <select class="w-full focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"  bind:value={categoryFilter}>
-        {#each Object.entries(blockCategories) as [value, name]}
-          <option value={value}>{name}</option>
-        {/each}
-      </select>
+    <input type="text" bind:value={$searchTerm} placeholder="Search blocks..." />
+    <select bind:value={$categoryFilter}>
+      {#each Object.entries(blockCategories) as [value, name]}
+        <option {value}>{name}</option>
+      {/each}
+    </select>
     {#each Object.entries(blockTypes) as [type, { category, name }]}
-    {#if categoryFilter === 'all' || categoryFilter === category}
-      <button on:click={() => handleAddBlock(type)}>{name}</button>
+    {#if $categoryFilter === 'all' || $categoryFilter === category}
+      <button on:click={() => addBlock(type)}>{name}</button>
     {/if}
   {/each}
     <button on:click={saveFlow}>Save Flow</button>
@@ -438,6 +579,7 @@ type BlockType = keyof typeof blockTypes;
     <button on:click={() => showHelpPanel = true}>Help</button>
     <button on:click={undo} disabled={historyIndex <= 0}>Undo</button>
     <button on:click={redo} disabled={historyIndex >= history.length - 1}>Redo</button>
+    <button on:click={autoArrangeBlocks}>Auto Arrange</button>
   </div>
 
   <div class="canvas" 
@@ -454,7 +596,7 @@ type BlockType = keyof typeof blockTypes;
           <path 
             d={generatePath(sourceBlock.position, targetBlock.position)}
             fill="none"
-            stroke="black" 
+            stroke={connection.type === 'next' ? 'green' : connection.type === 'alternative' ? 'blue' : 'red'}
             stroke-width="2"
           />
           <text 
@@ -480,29 +622,38 @@ type BlockType = keyof typeof blockTypes;
           <path 
             d={generatePath(startBlock.position, connectionEnd)}
             fill="none"
-            stroke="black" 
+            stroke={connectionType === 'next' ? 'green' : connectionType === 'alternative' ? 'blue' : 'red'}
             stroke-width="2" 
             stroke-dasharray="5,5"
           />
         {/if}
       {/if}
     </svg>
-    {#each filteredBlocks as block (block.id)}
-    <div 
-      class="block {block.type}"
-      style="left: {block.position.x}px; top: {block.position.y}px;"
-      draggable="true"
-      on:dragstart={(e) => handleDragStart(e, block.id)}
-      on:click={() => openPropertiesModal(block)}
-      on:contextmenu={(e) => openContextMenu(e, block.id)}
-      data-id={block.id}
-      transition:fade
-    >
-      <h3>{blockTypes[block.type].name}</h3>
-      <button class="delete-button" on:click|stopPropagation={() => deleteBlock(block.id)}>×</button>
-      <button on:mousedown|stopPropagation={() => startConnection(block.id)} class="connect-button">Connect</button>
-    </div>
-  {/each}
+    {#each $filteredBlocks as block (block.id)}
+      <div 
+        class="block {block.type}"
+        style="left: {block.position.x}px; top: {block.position.y}px; background-color: {blockColors[block.type]};"
+        draggable="true"
+        on:dragstart={(e) => handleDragStart(e, block.id)}
+        on:click={() => openPropertiesModal(block)}
+        on:contextmenu={(e) => openContextMenu(e, block.id)}
+        data-id={block.id}
+        transition:fade
+      >
+        <h3>{blockTypes[block.type].name}</h3>
+        <div class="connect-button-group">
+          <button class="connect-button next" on:mousedown|stopPropagation={(e) => { selectConnectionType('next'); startConnection(block.id, e); }}>
+            Next
+          </button>
+          <button class="connect-button alternative" on:mousedown|stopPropagation={(e) => { selectConnectionType('alternative'); startConnection(block.id, e); }}>
+            Alt
+          </button>
+          <button class="connect-button error" on:mousedown|stopPropagation={(e) => { selectConnectionType('error'); startConnection(block.id, e); }}>
+            Error
+          </button>
+        </div>
+      </div>
+    {/each}
   </div>
 
   <div class="minimap">
@@ -514,10 +665,19 @@ type BlockType = keyof typeof blockTypes;
             y={block.position.y / 5} 
             width="30" 
             height="20" 
-            fill="blue" 
+            fill={blockColors[block.type]}
           />
         {/each}
       </g>
+      <rect 
+        x={-pan.x / 5 / zoom} 
+        y={-pan.y / 5 / zoom} 
+        width={200 / zoom} 
+        height={150 / zoom} 
+        fill="none" 
+        stroke="red" 
+        stroke-width="2"
+      />
     </svg>
   </div>
 
@@ -561,15 +721,6 @@ type BlockType = keyof typeof blockTypes;
             Max Iterations: 
             <input type="number" bind:value={$selectedBlock.data.maxIterations} />
           </label>
-          {:else if $selectedBlock.type === 'regex'}
-  <label>
-    Regular Expression:
-    <input type="text" bind:value={$selectedBlock.data.pattern} />
-  </label>
-  <label>
-    Flags:
-    <input type="text" bind:value={$selectedBlock.data.flags} />
-  </label>
         {:else if $selectedBlock.type === 'variable'}
           <label>
             Name: 
@@ -584,53 +735,6 @@ type BlockType = keyof typeof blockTypes;
             Transform Function:
             <textarea bind:value={$selectedBlock.data.transformFunction}></textarea>
           </label>
-        {:else if $selectedBlock.type === 'custom_script'}
-          <label>
-            Script:
-            <textarea bind:value={$selectedBlock.data.script}></textarea>
-          </label>
-        {:else if $selectedBlock.type === 'webhook'}
-          <label>
-            Webhook URL:
-            <input type="text" bind:value={$selectedBlock.data.webhookUrl} />
-          </label>
-        {:else if $selectedBlock.type === 'auth'}
-          <label>
-            Auth Type:
-            <select bind:value={$selectedBlock.data.authType}>
-              <option value="basic">Basic</option>
-              <option value="bearer">Bearer Token</option>
-              <option value="oauth2">OAuth 2.0</option>
-            </select>
-          </label>
-          {#if $selectedBlock.data.authType === 'basic'}
-            <label>
-              Username:
-              <input type="text" bind:value={$selectedBlock.data.username} />
-            </label>
-            <label>
-              Password:
-              <input type="password" bind:value={$selectedBlock.data.password} />
-            </label>
-          {:else if $selectedBlock.data.authType === 'bearer'}
-            <label>
-              Token:
-              <input type="text" bind:value={$selectedBlock.data.token} />
-            </label>
-          {:else if $selectedBlock.data.authType === 'oauth2'}
-            <label>
-              Client ID:
-              <input type="text" bind:value={$selectedBlock.data.clientId} />
-            </label>
-            <label>
-              Client Secret:
-              <input type="password" bind:value={$selectedBlock.data.clientSecret} />
-            </label>
-            <label>
-              Token URL:
-              <input type="text" bind:value={$selectedBlock.data.tokenUrl} />
-            </label>
-          {/if}
         {/if}
         <button on:click={updateBlockProperties}>Save</button>
         <button on:click={closePropertiesModal}>Cancel</button>
@@ -689,6 +793,8 @@ type BlockType = keyof typeof blockTypes;
           <li><strong>Ctrl/Cmd + Z:</strong> Undo</li>
           <li><strong>Ctrl/Cmd + Y:</strong> Redo</li>
           <li><strong>Ctrl/Cmd + S:</strong> Save Flow</li>
+          <li><strong>Ctrl/Cmd + F:</strong> Focus Search</li>
+          <li><strong>Ctrl/Cmd + G:</strong> Auto Arrange Blocks</li>
         </ul>
         <button on:click={() => showHelpPanel = false}>Close</button>
       </div>
@@ -696,25 +802,25 @@ type BlockType = keyof typeof blockTypes;
   {/if}
 
   {#if showContextMenu}
-  <div class="context-menu" style="left: {contextMenuPosition.x}px; top: {contextMenuPosition.y}px;">
-    <button on:click={duplicateBlock}>Duplicate</button>
-    <button on:click={() => {
-      if (contextMenuTargetId) {
-        deleteBlock(contextMenuTargetId);
-        closeContextMenu();
-      }
-    }}>Delete</button>
-    <button on:click={() => {
-      if (contextMenuTargetId) {
-        const block = $flow.blocks.find(b => b.id === contextMenuTargetId);
-        if (block) {
-          openPropertiesModal(block);
+    <div class="context-menu" style="left: {contextMenuPosition.x}px; top: {contextMenuPosition.y}px;">
+      <button on:click={duplicateBlock}>Duplicate</button>
+      <button on:click={() => {
+        if (contextMenuTargetId) {
+          deleteBlock(contextMenuTargetId);
           closeContextMenu();
         }
-      }
-    }}>Edit Properties</button>
-  </div>
-{/if}
+      }}>Delete</button>
+      <button on:click={() => {
+        if (contextMenuTargetId) {
+          const block = $flow.blocks.find(b => b.id === contextMenuTargetId);
+          if (block) {
+            openPropertiesModal(block);
+            closeContextMenu();
+          }
+        }
+      }}>Edit Properties</button>
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -760,7 +866,7 @@ type BlockType = keyof typeof blockTypes;
     width: 150px;
     height: 100px;
     border: 1px solid #000;
-    background-color: #fff;
+    color: white;
     cursor: move;
     user-select: none;
     display: flex;
@@ -769,40 +875,48 @@ type BlockType = keyof typeof blockTypes;
     justify-content: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     border-radius: 5px;
-    transition: transform 0.2s ease-out;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
   }
 
   .block:hover {
     transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   }
 
-  .connect-button {
+  .connect-button-group {
+    display: flex;
     position: absolute;
     bottom: 5px;
     right: 5px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 3px;
-    cursor: pointer;
   }
 
-  .delete-button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .connect-button {
+    margin-left: 2px;
+    padding: 2px 5px;
+    font-size: 10px;
     cursor: pointer;
-    font-size: 12px;
+    border: none;
+    border-radius: 3px;
+  }
+
+  .connect-button.next { background-color: #4CAF50; color: white; }
+  .connect-button.alternative { background-color: #2196F3; color: white; }
+  .connect-button.error { background-color: #f44336; color: white; }
+
+  .minimap {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 200px;
+    height: 150px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .minimap-content {
+    transform-origin: 0 0;
   }
 
   .modal {
@@ -828,22 +942,6 @@ type BlockType = keyof typeof blockTypes;
     overflow-y: auto;
   }
 
-  .minimap {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    width: 200px;
-    height: 150px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    overflow: hidden;
-  }
-
-  .minimap-content {
-    transform-origin: 0 0;
-  }
-
   .context-menu {
     position: fixed;
     background-color: white;
@@ -865,5 +963,39 @@ type BlockType = keyof typeof blockTypes;
 
   .context-menu button:hover {
     background-color: #f0f0f0;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .toast.error {
+    background-color: #f44336;
+  }
+
+  .toast.show {
+    opacity: 1;
+  }
+
+  .invalid-connection-line {
+    position: absolute;
+    background-color: red;
+    opacity: 0.5;
+    animation: flash 0.5s infinite;
+  }
+
+  @keyframes flash {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
   }
 </style>
