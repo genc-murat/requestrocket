@@ -279,7 +279,15 @@ function startConnection(blockId: string, event: MouseEvent) {
 
 function handleMouseMove(event: MouseEvent) {
   if (isConnecting) {
-    connectionEnd = { x: event.clientX, y: event.clientY };
+    const canvas = document.querySelector('.canvas') as HTMLElement;
+    if (canvas) {
+      const canvasRect = canvas.getBoundingClientRect();
+      connectionEnd = {
+        x: (event.clientX - canvasRect.left - pan.x) / zoom,
+        y: (event.clientY - canvasRect.top - pan.y) / zoom
+      };
+    }
+
     const targetElement = event.target as HTMLElement;
     const targetBlock = targetElement.closest('.block') as HTMLElement;
 
@@ -295,6 +303,7 @@ function handleMouseMove(event: MouseEvent) {
     }
   }
 }
+
 
   function handleMouseUp(event: MouseEvent) {
     if (isConnecting && connectionStart) {
