@@ -896,8 +896,11 @@ let headers = writable<Header[]>([]);
       const postmanJson = await readTextFile(filePath);
       const postmanCollection = JSON.parse(postmanJson);
 
+      // Dosya adını al
+      const fileName = filePath.split('/').pop()?.split('.').slice(0, -1).join('.') || 'Imported from Postman';
+
       // Postman koleksiyonunu işle
-      const importedHistoryItems: HistoryItem[] = processPostmanCollection(postmanCollection);
+      const importedHistoryItems: HistoryItem[] = processPostmanCollection(postmanCollection, fileName);
 
       // Yeni öğeleri history store'a ekle
       history.update(h => {
@@ -920,7 +923,7 @@ let headers = writable<Header[]>([]);
   }
 }
 
-function processPostmanCollection(collection: any): HistoryItem[] {
+function processPostmanCollection(collection: any, groupName: string): HistoryItem[] {
   const processItem = (item: any): HistoryItem | null => {
     if (item.request) {
       return {
@@ -931,7 +934,7 @@ function processPostmanCollection(collection: any): HistoryItem[] {
         headers: item.request.header?.map((h: any) => ({ key: h.key, value: h.value })) || [],
         params: item.request.url.query?.map((q: any) => ({ key: q.key, value: q.value })) || [],
         response: '',
-        group: 'Imported from Postman'
+        group: groupName
       };
     }
     return null;
@@ -950,6 +953,7 @@ function processPostmanCollection(collection: any): HistoryItem[] {
 
   return processItems(collection.item);
 }
+
 
   function generateApiDocumentation(historyItems: HistoryItem[]): ApiDoc {
     const apiDoc: ApiDoc = {
