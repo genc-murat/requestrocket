@@ -2,7 +2,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { writable } from 'svelte/store';
   import type { Writable } from 'svelte/store';
-  import { openDB } from 'idb';
+  import { openDB, deleteDB } from 'idb';
   import { invoke } from '@tauri-apps/api/tauri';
   import { faPlus, faTrashAlt, faClone, faEdit, faCopy, faDownload, faUpload, faClose, faRepeat } from '@fortawesome/free-solid-svg-icons';
   import { library } from '@fortawesome/fontawesome-svg-core';
@@ -12,6 +12,8 @@
   import { sendNotification } from '@tauri-apps/api/notification';
   import JSONEditor from '../components/JSONEditor.svelte';
   import APIFlowDesigner  from '../components/APIFlowDesigner.svelte';
+  import { customHeaders, customHeaderPanelOpen, loadCustomHeaders, openCustomHeaderPanel, setDatabase } from '../components/CustomHeaderModule';
+  import CustomHeaderPanel from '../components/CustomHeaderPanel.svelte';
 
   import type { Flow, FlowBlock, Connection, BlockType, SwitchCase } from '../components/flow-types';
 
@@ -306,8 +308,11 @@ function closeApiFlowModal() {
   let newVariableValue = writable('');
   let variablesPanelOpen = writable(false);
 
-  const dbPromise = openDB('request-rocket-db', 1, {
-    upgrade(db, oldVersion) {
+  const DB_NAME = 'request-rocket-db';
+const DB_VERSION = 1;
+
+  const dbPromise = openDB(DB_NAME, DB_VERSION, {
+    upgrade(db) {
  
         if (!db.objectStoreNames.contains('history')) {
           db.createObjectStore('history', { keyPath: 'id', autoIncrement: true });
@@ -323,6 +328,9 @@ function closeApiFlowModal() {
           db.createObjectStore('statusHistory', { keyPath: 'id', autoIncrement: true });
         }
    
+        if (!db.objectStoreNames.contains('customHeaders')) {
+            db.createObjectStore('customHeaders', { keyPath: 'id', autoIncrement: true });
+          }
     },
   });
 
@@ -372,7 +380,7 @@ function closeApiFlowModal() {
   type Header = { key: string; value: string };
 type AutocompleteHeaders = string[][];
 
-let headers = writable<Header[]>([{ key: '', value: '' }]);
+let headers = writable<Header[]>([]);
   let autocompleteHeaders = writable<AutocompleteHeaders>([]);
   let knownHeaders: string[] = [
     "Accept", "Accept-Charset", "Accept-Encoding", "Accept-Language", "Accept-Datetime", "Authorization",
@@ -386,9 +394,21 @@ let headers = writable<Header[]>([{ key: '', value: '' }]);
   function filterHeaders(index: number, event: Event) {
     const input = event.target as HTMLInputElement;
     const value = input.value;
-    const filtered = knownHeaders.filter(header => header.toLowerCase().includes(value.toLowerCase()));
+    const allHeaders = [...knownHeaders, ...$customHeaders.map(h => h.name)];
+    const filtered = allHeaders.filter(header => header.toLowerCase().includes(value.toLowerCase()));
     autocompleteHeaders.update(h => {
       h[index] = filtered;
+      return h;
+    });
+  }
+
+  function selectAutocompleteItem(index: number, suggestion: string) {
+    headers.update(h => {
+      h[index].key = suggestion;
+      return h;
+    });
+    autocompleteHeaders.update(h => {
+      h[index] = [];
       return h;
     });
   }
@@ -788,9 +808,12 @@ let headers = writable<Header[]>([{ key: '', value: '' }]);
     clearInterval(timestampUpdateInterval);
   });
 
-  onMount(() => {
+  onMount(async () => {
     loadGroups();
     loadVariables();
+    const db = await dbPromise;
+    setDatabase(db);
+    await loadCustomHeaders();
   });
 
   $: $queryParams, updateUrl();
@@ -1044,10 +1067,12 @@ let headers = writable<Header[]>([{ key: '', value: '' }]);
   }
 
   function clearAutocomplete(index: number) {
-  autocompleteHeaders.update(h => {
-    h[index] = [];
-    return h;
-  });
+    setTimeout(() => {
+      autocompleteHeaders.update(h => {
+        h[index] = [];
+        return h;
+      });
+    }, 200); 
 }
 
 
@@ -1311,6 +1336,9 @@ let headers = writable<Header[]>([{ key: '', value: '' }]);
           <button type="button" on:click={() => downloadApiDocumentation($history)} class="hover:text-green-700">
             <FontAwesomeIcon icon="download" size="lg" />Documentation
           </button>
+          <button type="button" on:click={openCustomHeaderPanel} class="hover:text-green-700">
+            <FontAwesomeIcon icon={faEdit} size="lg" /> Custom Headers
+          </button>
         </div>
         <div class="flex justify-between items-center">
           <h3 class="text-lg font-semibold mb-2 flex items-center">
@@ -1459,38 +1487,38 @@ let headers = writable<Header[]>([{ key: '', value: '' }]);
           </button>
         </div>
         {#each $headers as header, index}
-          <div class="header-row relative">
-            <input 
-              type="text" 
-              placeholder="Key" 
-              bind:value={header.key} 
-              class="flex-1 p-2 border rounded text-primary bg-accent mr-2" 
-              on:input={(e) => filterHeaders(index, e)}
-              on:blur={() => clearAutocomplete(index)} 
-            />
-            {#if $autocompleteHeaders[index]?.length}
-              <div class="autocomplete-suggestions">
-                {#each $autocompleteHeaders[index] as suggestion}
-                  <div class="autocomplete-suggestion" on:click={() => {
-                    header.key = suggestion;
-                    autocompleteHeaders.update(h => { h[index] = []; return h; });
-                  }}>
-                    {suggestion}
-                  </div>
-                {/each}
-              </div>
-            {/if}
-            <input 
-              type="text" 
-              placeholder="Value" 
-              bind:value={header.value} 
-              class="flex-1 p-2 border rounded text-primary bg-accent" 
-            />
-            <button type="button" on:click={() => headers.update(h => h.filter((_, i) => i !== index))} class="text-red-500">
-              <FontAwesomeIcon icon="trash-alt" size="lg" />
-            </button>
-          </div>
-        {/each}
+        <div class="header-row relative">
+          <input 
+            type="text" 
+            placeholder="Key" 
+            bind:value={header.key} 
+            class="flex-1 p-2 border rounded text-primary bg-accent mr-2" 
+            on:input={(e) => filterHeaders(index, e)}
+            on:blur={() => clearAutocomplete(index)} 
+          />
+          {#if $autocompleteHeaders[index]?.length}
+            <div class="autocomplete-suggestions">
+              {#each $autocompleteHeaders[index] as suggestion}
+                <div 
+                  class="autocomplete-suggestion"
+                  on:mousedown={() => selectAutocompleteItem(index, suggestion)}
+                >
+                  {suggestion}
+                </div>
+              {/each}
+            </div>
+          {/if}
+          <input 
+            type="text" 
+            placeholder="Value" 
+            bind:value={header.value} 
+            class="flex-1 p-2 border rounded text-primary bg-accent" 
+          />
+          <button type="button" on:click={() => headers.update(h => h.filter((_, i) => i !== index))} class="text-red-500">
+            <FontAwesomeIcon icon="trash-alt" size="lg" />
+          </button>
+        </div>
+      {/each}
       </div>
       {:else if $selectedRequestTab === 'group'}
         <div class="mb-4">
@@ -1799,3 +1827,7 @@ let headers = writable<Header[]>([{ key: '', value: '' }]);
   
   {/if}
 </div>
+
+{#if $customHeaderPanelOpen}
+  <CustomHeaderPanel />
+{/if}
