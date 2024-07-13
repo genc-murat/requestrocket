@@ -122,7 +122,7 @@ async function executeApiCall(block: FlowBlock, variables: { [key: string]: any 
 
 function executeCondition(block: FlowBlock, variables: { [key: string]: any }): boolean {
   const condition = replaceVariables(block.data.condition, variables);
-  return eval(condition); // Not: eval kullanımı güvenlik riskleri taşıyabilir, dikkatli kullanılmalıdır.
+  return eval(condition);
 }
 
 async function executeLoop(block: FlowBlock, variables: { [key: string]: any }, flow: Flow): Promise<any[]> {
@@ -147,14 +147,13 @@ async function executeLoop(block: FlowBlock, variables: { [key: string]: any }, 
           case 'condition':
             result = executeCondition(currentBlock, variables);
             break;
-          // Diğer blok tipleri için case'ler ekleyin
+
           default:
             result = { message: `Unsupported block type in loop: ${currentBlock.type}` };
         }
 
         results.push(result);
 
-        // Sonraki bloğu belirle
         currentBlockId = determineNextBlock(currentBlock, result, flow);
       } catch (error) {
         console.error(`Error in loop iteration ${i}, block ${currentBlockId}:`, error);
@@ -163,7 +162,7 @@ async function executeLoop(block: FlowBlock, variables: { [key: string]: any }, 
       }
     }
 
-    // Döngüden çıkma kontrolü (örneğin, bir koşul bloğu false döndürdüyse)
+    // Döngüden çıkma kontrolü
     if (currentBlockId === null) break;
   }
 
@@ -194,7 +193,7 @@ function executeCustomScript(block: FlowBlock, variables: { [key: string]: any }
 }
 
 async function executeWebhook(block: FlowBlock, variables: { [key: string]: any }): Promise<any> {
-  // Webhook mantığı burada uygulanmalı
+
   return { message: "Webhook executed" };
 }
 
@@ -219,7 +218,7 @@ function executeSwitchCase(block: FlowBlock, variables: { [key: string]: any }):
 }
 
 async function executeAuth(block: FlowBlock, variables: { [key: string]: any }): Promise<any> {
-  // Yetkilendirme mantığı burada uygulanmalı
+
   return { message: "Auth executed" };
 }
 
@@ -262,7 +261,7 @@ currentFlow.set({
 
 function handleFlowSave(event: CustomEvent<Flow>) {
   currentFlow.set(event.detail);
-  // Akışı kaydetmek için gerekli işlemler burada yapılabilir
+
   console.log('Flow saved:', event.detail);
 }
 
@@ -271,7 +270,6 @@ function handleFlowRun(event: CustomEvent<Flow>) {
 }
 let apiFlowModalOpen = writable(false);
 
-// ... (mevcut fonksiyonlar)
 
 function openApiFlowModal() {
   apiFlowModalOpen.set(true);
@@ -886,47 +884,72 @@ let headers = writable<Header[]>([]);
   }
 
   async function importPostmanCollection() {
-    try {
-      const filePath = await dialog.open({
-        filters: [{
-          name: 'JSON',
-          extensions: ['json']
-        }]
+  try {
+    const filePath = await dialog.open({
+      filters: [{
+        name: 'JSON',
+        extensions: ['json']
+      }]
+    });
+
+    if (typeof filePath === 'string') {
+      const postmanJson = await readTextFile(filePath);
+      const postmanCollection = JSON.parse(postmanJson);
+
+      // Postman koleksiyonunu işle
+      const importedHistoryItems: HistoryItem[] = processPostmanCollection(postmanCollection);
+
+      // Yeni öğeleri history store'a ekle
+      history.update(h => {
+        const newHistory = [...h, ...importedHistoryItems];
+        importedHistoryItems.forEach(item => saveHistory(item));
+        return newHistory;
       });
 
-      if (typeof filePath === 'string') {
-        const postmanJson = await readTextFile(filePath);
-        const postmanCollection = JSON.parse(postmanJson);
-        const importedHistoryItems: HistoryItem[] = postmanCollection.item.map((item: any, index: number) => ({
-          id: Date.now() + index,
-          url: typeof item.request.url.raw === 'string' ? item.request.url.raw : '',
-          method: item.request.method,
-          body: item.request.body ? item.request.body.raw : '',
-          headers: item.request.header.map((header: any) => ({ key: header.key, value: header.value })),
-          params: [], 
-          response: '',
-          group: 'Imported'
-        }));
-
-        history.update(h => {
-          const newHistory = [...h, ...importedHistoryItems];
-          importedHistoryItems.forEach(item => saveHistory(item));
-          return newHistory;
-        });
-
-        sendNotification({
-          title: 'Success',
-          body: 'Postman collection imported successfully.'
-        });
-      }
-    } catch (error) {
-      console.error('Failed to import Postman collection:', error);
       sendNotification({
-        title: 'Error',
-        body: 'Failed to import Postman collection.'
+        title: 'Success',
+        body: 'Postman collection imported successfully.'
       });
     }
+  } catch (error) {
+    console.error('Failed to import Postman collection:', error);
+    sendNotification({
+      title: 'Error',
+      body: 'Failed to import Postman collection.'
+    });
   }
+}
+
+function processPostmanCollection(collection: any): HistoryItem[] {
+  const processItem = (item: any): HistoryItem | null => {
+    if (item.request) {
+      return {
+        id: Date.now() + Math.random(), // Benzersiz bir ID oluştur
+        url: typeof item.request.url === 'string' ? item.request.url : item.request.url.raw,
+        method: item.request.method,
+        body: item.request.body?.raw || '',
+        headers: item.request.header?.map((h: any) => ({ key: h.key, value: h.value })) || [],
+        params: item.request.url.query?.map((q: any) => ({ key: q.key, value: q.value })) || [],
+        response: '',
+        group: 'Imported from Postman'
+      };
+    }
+    return null;
+  };
+
+  const processItems = (items: any[]): HistoryItem[] => {
+    return items.flatMap(item => {
+      if (item.item) {
+        return processItems(item.item);
+      } else {
+        const processedItem = processItem(item);
+        return processedItem ? [processedItem] : [];
+      }
+    });
+  };
+
+  return processItems(collection.item);
+}
 
   function generateApiDocumentation(historyItems: HistoryItem[]): ApiDoc {
     const apiDoc: ApiDoc = {
@@ -1330,14 +1353,14 @@ let headers = writable<Header[]>([]);
           <button type="button" on:click={handleExport} class="bg-gray-300  rounded-md cursor-not-allowed opacity-50" disabled>
             <FontAwesomeIcon icon="download" size="lg" /> Export
           </button>
-          <button type="button" on:click={importPostmanCollection} class="bg-gray-300  rounded-md cursor-not-allowed opacity-50" disabled>
+          <button type="button" on:click={importPostmanCollection} class="hover:text-orange-700">
             <FontAwesomeIcon icon="upload" size="lg" /> Import
           </button>
           <button type="button" on:click={() => downloadApiDocumentation($history)} class="hover:text-green-700">
             <FontAwesomeIcon icon="download" size="lg" />Documentation
           </button>
           <button type="button" on:click={openCustomHeaderPanel} class="hover:text-green-700">
-            <FontAwesomeIcon icon={faEdit} size="lg" /> Custom Headers
+            <FontAwesomeIcon icon={faEdit} size="lg" /> Headers
           </button>
         </div>
         <div class="flex justify-between items-center">

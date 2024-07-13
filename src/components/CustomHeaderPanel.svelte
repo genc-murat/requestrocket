@@ -1,4 +1,3 @@
-<!-- CustomHeaderPanel.svelte -->
 <script lang="ts">
     import { customHeaders, newCustomHeaderName, addCustomHeader, deleteCustomHeader, closeCustomHeaderPanel } from './CustomHeaderModule';
     import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
