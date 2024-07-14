@@ -2154,7 +2154,7 @@
             <div
               class="status-history-item flex justify-between items-center p-2 mb-2"
             >
-              <div class="px-2 text-white {getStatusClass(history.status)}">
+              <div class="px-2 text-white rounded {getStatusClass(history.status)}">
                 {history.status}
                 {history.status === 200 ? "OK" : ""}
               </div>
@@ -2171,7 +2171,7 @@
             <div
               class="status-history-item flex justify-between items-center p-2 mb-2"
             >
-              <div class="px-2 text-white {getStatusClass(history.status)}">
+              <div class="px-2 text-white rounded {getStatusClass(history.status)}">
                 {history.status}
                 {history.status === 200 ? "OK" : ""}
               </div>
