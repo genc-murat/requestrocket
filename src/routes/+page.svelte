@@ -2198,9 +2198,7 @@
   {/if}
 
   {#if $variablesPanelOpen}
-    <div
-      class="fixed inset-0 flex items-center justify-center  bg-opacity-50"
-    >
+    <div class="fixed inset-0 flex items-center justify-center bg-opacity-50">
       <div
         class="variables-panel p-8 rounded-lg shadow-2xl relative max-w-2xl w-full"
       >
@@ -2464,8 +2462,6 @@
     background-color: var(--error);
     color: var(--background);
   }
-
- 
 
   .error-message {
     color: var(--error);
