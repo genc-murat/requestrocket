@@ -52,7 +52,7 @@ body {
 
 .panel {
   padding: 10px;
-  border-radius: 3px;
+ 
   margin: 1px;
   background: var(--surface);
   box-shadow: 0 2px 3px var(--shadow);
