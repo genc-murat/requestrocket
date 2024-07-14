@@ -1477,7 +1477,7 @@
       class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
     >
       <div class="bg-white p-4 rounded shadow-lg w-1/2">
-        <h2 class="text-lg font-bold mb-4">Select Group</h2>
+        <h2 class="text-lg font-bold mb-4 text-neutral-950">Select Group</h2>
         <div class="grid grid-cols-4 gap-2">
           {#each $groups as group}
             <div class="group-card" on:click={() => handleGroupSelect(group)}>
@@ -2120,12 +2120,12 @@
         >
           <FontAwesomeIcon icon="close" size="lg" />
         </button>
-        <h2 class="text-xl font-bold mb-4">Status History</h2>
+        <h2 class="text-xl font-bold mb-4 text-neutral-950">Status History</h2>
         {#if $statusHistory.length === 0}
           <p>No status history available.</p>
         {/if}
         <div class="status-section mb-4">
-          <h4 class="text-sm font-semibold mb-2">Within the Last Hour</h4>
+          <h4 class="text-sm font-semibold mb-2 text-neutral-950">Within the Last Hour</h4>
           {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() <= 3600000) as history}
             <div
               class="status-history-item flex justify-between items-center p-2 mb-2"
@@ -2146,7 +2146,7 @@
           <div class="divider border-t border-gray-300 mt-2"></div>
         </div>
         <div class="status-section mb-4">
-          <h4 class="text-sm font-semibold mb-2">Today</h4>
+          <h4 class="text-sm font-semibold mb-2 text-neutral-950">Today</h4>
           {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 3600000 && new Date().getDate() === new Date(item.timestamp).getDate()) as history}
             <div
               class="status-history-item flex justify-between items-center p-2 mb-2"
@@ -2163,7 +2163,7 @@
           <div class="divider border-t border-gray-300 mt-2"></div>
         </div>
         <div class="status-section">
-          <h4 class="text-sm font-semibold mb-2">Older</h4>
+          <h4 class="text-sm font-semibold mb-2 text-neutral-950">Older</h4>
           {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 86400000) as history}
             <div
               class="status-history-item flex justify-between items-center p-2 mb-2"
@@ -2189,7 +2189,7 @@
       <div
         class="variables-panel bg-white p-8 rounded-lg shadow-2xl relative max-w-2xl w-full"
       >
-        <h2 class="text-2xl font-bold mb-6">Variables</h2>
+        <h2 class="text-2xl font-bold mb-6 text-neutral-950">Variables</h2>
         <div class="flex mb-6">
           <input
             type="text"
@@ -2312,10 +2312,12 @@
 
   .group-card {
     border: 1px solid var(--seperator);
+    color: var(--dark-text);
     padding: 0.4rem;
     margin-bottom: 0.1rem;
     cursor: pointer;
     text-align: center;
+    background-color: var(--surface);
   }
 
   .group-card:hover {

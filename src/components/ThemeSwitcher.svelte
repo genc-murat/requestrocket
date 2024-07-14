@@ -1193,34 +1193,7 @@
             "--select-focus-box-shadow":
                 "rgba(149, 117, 205, 0.3)" /* Lavender purple focus shadow */,
         },
-        coralPinkTheme: {
-            "--background": "#ff6f61" /* Coral pink background */,
-            "--light-background": "#ffb5a7" /* Light coral pink surface */,
-            "--surface": "#ff6f61" /* Coral pink surface */,
-            "--primary-text": "#ffffff" /* White primary text */,
-            "--secondary-text": "#ffcccb" /* Light pink secondary text */,
-            "--dark-text": "#ffffff" /* White text */,
-            "--divider": "#ff9a8d" /* Light pink divider */,
-            "--shadow": "rgba(255, 111, 97, 0.5)" /* Coral pink shadow */,
-            "--primary": "#ff6f61" /* Coral pink primary color */,
-            "--secondary": "#ff9a8d" /* Light pink secondary color */,
-            "--warning": "#ffa726" /* Bright orange warning color */,
-            "--error": "#e53935" /* Bright red error color */,
-            "--info": "#29b6f6" /* Bright blue info color */,
-            "--success": "#66bb6a" /* Bright green success color */,
-            "--dropdown-box-shadow":
-                "rgba(255, 111, 97, 0.7)" /* Coral pink shadow */,
-            "--group-card-hover":
-                "#ffb5a7" /* Light coral pink card hover color */,
-            "--separator": "#ff9a8d" /* Light pink separator */,
-            "--select-background-color":
-                "#ff6f61" /* Coral pink select background color */,
-            "--select-text-color": "#ffffff" /* White select text color */,
-            "--select-focus-border-color":
-                "#ff6f61" /* Coral pink focus border color */,
-            "--select-focus-box-shadow":
-                "rgba(255, 111, 97, 0.3)" /* Coral pink focus shadow */,
-        },
+
         nebulaGlowTheme: {
             "--background": "#1c1c2e" /* Deep space blue background */,
             "--light-background": "#26264c" /* Dark blue surface */,
@@ -1844,6 +1817,67 @@
                 "#ff9800" /* Bright orange focus border color */,
             "--select-focus-box-shadow":
                 "rgba(255, 152, 0, 0.3)" /* Bright orange focus shadow */,
+        },
+
+        fastAndfuriousTheme: {
+            "--background": "#000000" /* Black background */,
+            "--light-background": "#333333" /* Dark gray surface */,
+            "--surface": "#ff0000" /* Bright red surface */,
+            "--primary-text": "#ffffff" /* White primary text */,
+            "--secondary-text": "#b0b0b0" /* Medium gray secondary text */,
+            "--dark-text": "#000000" /* Black text */,
+            "--divider": "#666666" /* Medium gray divider */,
+            "--shadow": "rgba(0, 0, 0, 0.7)" /* Black shadow */,
+            "--primary": "#ff0000" /* Bright red primary color */,
+            "--secondary": "#ff9900" /* Bright orange secondary color */,
+            "--tertiary": "#ff6600" /* Bright orange tertiary color */,
+            "--quaternary": "#ff3300" /* Bright red quaternary color */,
+            "--warning": "#ffcc00" /* Bright yellow warning color */,
+            "--error": "#ff0033" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(255, 0, 0, 0.7)" /* Bright red shadow */,
+            "--group-card-hover":
+                "#1a1a1a" /* Very dark gray card hover color */,
+            "--separator": "#666666" /* Medium gray separator */,
+            "--select-background-color":
+                "#000000" /* Black select background color */,
+            "--select-text-color": "#ffffff" /* White select text color */,
+            "--select-focus-border-color":
+                "#ff0000" /* Bright red focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(255, 0, 0, 0.3)" /* Bright red focus shadow */,
+        },
+        matrixTheme: {
+            "--background": "#000000" /* Black background */,
+            "--light-background": "#333333" /* Dark gray surface */,
+            "--surface": "#00ff00" /* Bright green surface */,
+            "--primary-text": "#ffffff" /* White primary text */,
+            "--secondary-text": "#b0b0b0" /* Medium gray secondary text */,
+            "--dark-text": "#000000" /* Black text */,
+            "--divider": "#666666" /* Medium gray divider */,
+            "--shadow": "rgba(0, 0, 0, 0.7)" /* Black shadow */,
+            "--primary": "#00ff00" /* Bright green primary color */,
+            "--secondary": "#00ff99" /* Bright turquoise secondary color */,
+            "--tertiary": "#00ffff" /* Bright cyan tertiary color */,
+            "--quaternary": "#00ccff" /* Medium cyan quaternary color */,
+            "--warning": "#ffcc00" /* Bright yellow warning color */,
+            "--error": "#ff0033" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(0, 255, 0, 0.7)" /* Bright green shadow */,
+            "--group-card-hover":
+                "#1a1a1a" /* Very dark gray card hover color */,
+            "--separator": "#666666" /* Medium gray separator */,
+            "--select-background-color":
+                "#000000" /* Black select background color */,
+            "--select-text-color": "#ffffff" /* White select text color */,
+            "--select-focus-border-color":
+                "#00ff00" /* Bright green focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(0, 255, 0, 0.3)" /* Bright green focus shadow */,
         },
     };
 

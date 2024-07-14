@@ -25,7 +25,7 @@
   class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
 >
   <div class="variables-panel bg-white p-8 rounded-lg shadow-2xl relative max-w-2xl w-full">
-    <h2 class="text-2xl font-bold mb-6">Custom Headers</h2>
+    <h2 class="text-2xl font-bold mb-6 text-neutral-950">Custom Headers</h2>
     <div class="flex mb-6">
       <input
         type="text"
