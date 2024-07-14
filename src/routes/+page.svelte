@@ -2104,10 +2104,10 @@
       <button
         type="button"
         on:click={toggleStatusHistory}
-        class="rounded-full p-2 absolute top-4 right-4 flex items-center justify-center"
+        class="rounded-full p-2 absolute top-2 right-2 flex items-center justify-center"
         style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
       >
-        <FontAwesomeIcon icon="close" size="lg" />
+        <FontAwesomeIcon icon="close"  />
       </button>
 
       {#if $statusHistory.length === 0}
@@ -2226,9 +2226,9 @@
         type="button"
         on:click={() => variablesPanelOpen.set(false)}
         style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
-        class=" rounded-full p-3 shadow-lg absolute top-4 right-4 flex items-center justify-center"
+        class=" rounded-full p-2 shadow-lg absolute top-2 right-2 flex items-center justify-center"
       >
-        <FontAwesomeIcon icon="close" size="lg" />
+        <FontAwesomeIcon icon="close"  />
       </button>
     </div>
   </div>

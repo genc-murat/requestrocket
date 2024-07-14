@@ -60,9 +60,9 @@
       type="button"
       on:click={closeCustomHeaderPanel}
       style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
-      class=" rounded-full p-3 shadow-lg absolute top-4 right-4 flex items-center justify-center hover:bg-slate-200"
+      class=" rounded-full p-2 shadow-lg absolute top-2 right-2 flex items-center justify-center hover:bg-slate-200"
     >
-      <FontAwesomeIcon icon={faClose} size="lg" />
+      <FontAwesomeIcon icon={faClose} />
     </button>
   </div>
 </div>
