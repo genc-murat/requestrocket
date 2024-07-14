@@ -1480,81 +1480,11 @@
     }
   }
 </script>
- <TitleBar/>
-<div class="flex h-screen">
- 
-  {#if $groupModalOpen}
-    <div
-      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-    >
-      <div class="bg-white p-4 rounded shadow-lg w-1/2">
-        <h2 class="text-lg font-bold mb-4 text-neutral-950">Select Group</h2>
-        <div class="grid grid-cols-4 gap-2">
-          {#each $groups as group}
-            <div
-              class="group-card"
-              role="button"
-              tabindex="0"
-              on:keydown={(e) =>
-                handleKeydown(e, () => handleGroupSelect(group))}
-              on:click={() => handleGroupSelect(group)}
-            >
-              {group}
-            </div>
-          {/each}
-        </div>
-        <div class="mt-4">
-          <input
-            type="text"
-            placeholder="New Group Name"
-            bind:value={$newGroupName}
-            class="w-full mb-2 p-2 border rounded text-primary bg-accent"
-          />
-          <button
-            type="button"
-            on:click={createNewGroup}
-            class="w-full p-2 bg-primary text-background rounded mb-2"
-            >Add Group</button
-          >
-          <button
-            type="button"
-            on:click={importPostmanCollection}
-            class="w-full p-2 bg-orange-600 text-background rounded"
-            >Import</button
-          >
-        </div>
-      </div>
-    </div>
-  {/if}
 
-  {#if $apiFlowModalOpen}
-    <div
-      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-    >
-      <div class="bg-white p-4 rounded shadow-lg w-full h-full overflow-hidden">
-        <div class="flex justify-between items-center mb-4">
-          <h4 class="text-xl font-bold">API Flow Designer</h4>
-          <button
-            type="button"
-            on:click={closeApiFlowModal}
-            style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
-            class="rounded-full p-4 shadow flex items-center justify-center"
-          >
-            <FontAwesomeIcon icon="close" />
-          </button>
-        </div>
+<TitleBar />
 
-        <div class="h-full">
-          <APIFlowDesigner
-            initialFlow={$currentFlow}
-            on:save={handleFlowSave}
-            on:run={handleFlowRun}
-          />
-        </div>
-      </div>
-    </div>
-  {/if}
-
+<div class="flex h-screen flex-col">
+<div class="main-content">
   <div class="menu-panel panel">
     <div class="vertical-buttons">
       <button
@@ -2137,34 +2067,56 @@
       </div>
     {/if}
   </div>
+</div>
+</div>
 
-  {#if $statusHistoryOpen}
-    <div
-      class="status-history-modal fixed inset-0 flex items-end justify-end bg-black bg-opacity-50 z-50"
-    >
-      <div class="status-history p-4 shadow-lg w-1/3 h-full overflow-y-auto">
-        <button
-          type="button"
-          on:click={toggleStatusHistory}
-          class="rounded-full p-2 absolute top-4 right-4 flex items-center justify-center"
-          style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
-        >
-          <FontAwesomeIcon icon="close" size="lg" />
-        </button>
+{#if $statusHistoryOpen}
+  <div
+    class="status-history-modal fixed inset-0 flex items-end justify-end bg-black bg-opacity-50 z-50"
+  >
+    <div class="status-history p-4 shadow-lg w-1/3 h-full overflow-y-auto">
+      <button
+        type="button"
+        on:click={toggleStatusHistory}
+        class="rounded-full p-2 absolute top-4 right-4 flex items-center justify-center"
+        style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
+      >
+        <FontAwesomeIcon icon="close" size="lg" />
+      </button>
 
-        {#if $statusHistory.length === 0}
-          <p>No status history available.</p>
-        {/if}
-        <div class="status-section mt-10 mb-4">
-          <h4 class="text-sm font-semibold mb-2">Within the Last Hour</h4>
-          {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() <= 3600000) as history}
+      {#if $statusHistory.length === 0}
+        <p>No status history available.</p>
+      {/if}
+      <div class="status-section mt-10 mb-4">
+        <h4 class="text-sm font-semibold mb-2">Within the Last Hour</h4>
+        {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() <= 3600000) as history}
+          <div
+            class="status-history-item flex justify-between items-center p-2 mb-2"
+          >
+            <div
+              class="text-white px-2 py-1 rounded {getStatusClass(
+                history.status,
+              )}"
+            >
+              {history.status}
+              {history.status === 200 ? "OK" : ""}
+            </div>
+            <div class="px-2">{history.duration} ms</div>
+            <div class="px-2">{formatSize(history.size)}</div>
+            <div class="px-2">{timeAgo(history.timestamp)}</div>
+          </div>
+        {/each}
+        <div class="divider border-t border-gray-300 mt-2"></div>
+      </div>
+      {#if $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 3600000 && new Date().getDate() === new Date(item.timestamp).getDate()).length > 0}
+        <div class="status-section mb-4">
+          <h4 class="text-sm font-semibold mb-2">Today</h4>
+          {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 3600000 && new Date().getDate() === new Date(item.timestamp).getDate()) as history}
             <div
               class="status-history-item flex justify-between items-center p-2 mb-2"
             >
               <div
-                class="text-white px-2 py-1 rounded {getStatusClass(
-                  history.status,
-                )}"
+                class="px-2 text-white rounded {getStatusClass(history.status)}"
               >
                 {history.status}
                 {history.status === 200 ? "OK" : ""}
@@ -2176,112 +2128,85 @@
           {/each}
           <div class="divider border-t border-gray-300 mt-2"></div>
         </div>
-        {#if $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 3600000 && new Date().getDate() === new Date(item.timestamp).getDate()).length > 0}
-          <div class="status-section mb-4">
-            <h4 class="text-sm font-semibold mb-2">Today</h4>
-            {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 3600000 && new Date().getDate() === new Date(item.timestamp).getDate()) as history}
+      {/if}
+
+      {#if $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 86400000).length > 0}
+        <div class="status-section mb-4">
+          <h4 class="text-sm font-semibold mb-2">Older</h4>
+          {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 86400000) as history}
+            <div
+              class="status-history-item flex justify-between items-center p-2 mb-2"
+            >
               <div
-                class="status-history-item flex justify-between items-center p-2 mb-2"
+                class="px-2 text-white rounded {getStatusClass(history.status)}"
               >
-                <div
-                  class="px-2 text-white rounded {getStatusClass(
-                    history.status,
-                  )}"
-                >
-                  {history.status}
-                  {history.status === 200 ? "OK" : ""}
-                </div>
-                <div class="px-2">{history.duration} ms</div>
-                <div class="px-2">{formatSize(history.size)}</div>
-                <div class="px-2">{timeAgo(history.timestamp)}</div>
+                {history.status}
+                {history.status === 200 ? "OK" : ""}
               </div>
-            {/each}
-            <div class="divider border-t border-gray-300 mt-2"></div>
-          </div>
-        {/if}
-
-        {#if $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 86400000).length > 0}
-          <div class="status-section mb-4">
-            <h4 class="text-sm font-semibold mb-2">Older</h4>
-            {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 86400000) as history}
-              <div
-                class="status-history-item flex justify-between items-center p-2 mb-2"
-              >
-                <div
-                  class="px-2 text-white rounded {getStatusClass(
-                    history.status,
-                  )}"
-                >
-                  {history.status}
-                  {history.status === 200 ? "OK" : ""}
-                </div>
-                <div class="px-2">{history.duration} ms</div>
-                <div class="px-2">{formatSize(history.size)}</div>
-                <div class="px-2">{timeAgo(history.timestamp)}</div>
-              </div>
-            {/each}
-          </div>
-        {/if}
-      </div>
-    </div>
-  {/if}
-
-  {#if $variablesPanelOpen}
-    <div class="fixed inset-0 flex items-center justify-center bg-opacity-50">
-      <div
-        class="variables-panel p-8 rounded-lg shadow-2xl relative max-w-2xl w-full"
-      >
-        <h2 class="text-2xl font-bold mb-6">Variables</h2>
-        <div class="flex mb-6">
-          <input
-            type="text"
-            placeholder="Key"
-            bind:value={$newVariableKey}
-            class="flex-1 p-3 border rounded-lg text-primary bg-accent mr-4"
-          />
-          <input
-            type="text"
-            placeholder="Value"
-            bind:value={$newVariableValue}
-            class="flex-1 p-3 border rounded-lg text-primary bg-accent mr-4"
-          />
-          <button
-            type="button"
-            on:click={addVariable}
-            class="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
-          >
-            <FontAwesomeIcon icon={faPlus} size="lg" class="mr-2" />Add
-          </button>
-        </div>
-
-        <ul>
-          {#each Object.entries($variables) as [key, value]}
-            <li class="mb-4 flex justify-between items-center">
-              <strong class="text-primary">{key}:</strong>
-              <span class="text-secondary">{value}</span>
-              <button
-                type="button"
-                on:click={() => deleteVariable(key)}
-                class="text-red-500 hover:text-red-700"
-              >
-                <FontAwesomeIcon icon="trash-alt" />
-              </button>
-            </li>
+              <div class="px-2">{history.duration} ms</div>
+              <div class="px-2">{formatSize(history.size)}</div>
+              <div class="px-2">{timeAgo(history.timestamp)}</div>
+            </div>
           {/each}
-        </ul>
+        </div>
+      {/if}
+    </div>
+  </div>
+{/if}
+{#if $variablesPanelOpen}
+  <div class="fixed inset-0 flex items-center justify-center bg-opacity-50">
+    <div
+      class="variables-panel p-8 rounded-lg shadow-2xl relative max-w-2xl w-full"
+    >
+      <h2 class="text-2xl font-bold mb-6">Variables</h2>
+      <div class="flex mb-6">
+        <input
+          type="text"
+          placeholder="Key"
+          bind:value={$newVariableKey}
+          class="flex-1 p-3 border rounded-lg text-primary bg-accent mr-4"
+        />
+        <input
+          type="text"
+          placeholder="Value"
+          bind:value={$newVariableValue}
+          class="flex-1 p-3 border rounded-lg text-primary bg-accent mr-4"
+        />
         <button
           type="button"
-          on:click={() => variablesPanelOpen.set(false)}
-          style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
-          class=" rounded-full p-3 shadow-lg absolute top-4 right-4 flex items-center justify-center"
+          on:click={addVariable}
+          class="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
         >
-          <FontAwesomeIcon icon="close" size="lg" />
+          <FontAwesomeIcon icon={faPlus} size="lg" class="mr-2" />Add
         </button>
       </div>
-    </div>
-  {/if}
-</div>
 
+      <ul>
+        {#each Object.entries($variables) as [key, value]}
+          <li class="mb-4 flex justify-between items-center">
+            <strong class="text-primary">{key}:</strong>
+            <span class="text-secondary">{value}</span>
+            <button
+              type="button"
+              on:click={() => deleteVariable(key)}
+              class="text-red-500 hover:text-red-700"
+            >
+              <FontAwesomeIcon icon="trash-alt" />
+            </button>
+          </li>
+        {/each}
+      </ul>
+      <button
+        type="button"
+        on:click={() => variablesPanelOpen.set(false)}
+        style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
+        class=" rounded-full p-3 shadow-lg absolute top-4 right-4 flex items-center justify-center"
+      >
+        <FontAwesomeIcon icon="close" size="lg" />
+      </button>
+    </div>
+  </div>
+{/if}
 {#if $customHeaderPanelOpen}
   <CustomHeaderPanel />
 {/if}
@@ -2309,6 +2234,77 @@
         </button>
       </div>
       <ThemeSwitcher />
+    </div>
+  </div>
+{/if}
+
+{#if $groupModalOpen}
+  <div
+    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+  >
+    <div class="bg-white p-4 rounded shadow-lg w-1/2">
+      <h2 class="text-lg font-bold mb-4 text-neutral-950">Select Group</h2>
+      <div class="grid grid-cols-4 gap-2">
+        {#each $groups as group}
+          <div
+            class="group-card"
+            role="button"
+            tabindex="0"
+            on:keydown={(e) => handleKeydown(e, () => handleGroupSelect(group))}
+            on:click={() => handleGroupSelect(group)}
+          >
+            {group}
+          </div>
+        {/each}
+      </div>
+      <div class="mt-4">
+        <input
+          type="text"
+          placeholder="New Group Name"
+          bind:value={$newGroupName}
+          class="w-full mb-2 p-2 border rounded text-primary bg-accent"
+        />
+        <button
+          type="button"
+          on:click={createNewGroup}
+          class="w-full p-2 bg-primary text-background rounded mb-2"
+          >Add Group</button
+        >
+        <button
+          type="button"
+          on:click={importPostmanCollection}
+          class="w-full p-2 bg-orange-600 text-background rounded"
+          >Import</button
+        >
+      </div>
+    </div>
+  </div>
+{/if}
+
+{#if $apiFlowModalOpen}
+  <div
+    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+  >
+    <div class="bg-white p-4 rounded shadow-lg w-full h-full overflow-hidden">
+      <div class="flex justify-between items-center mb-4">
+        <h4 class="text-xl font-bold">API Flow Designer</h4>
+        <button
+          type="button"
+          on:click={closeApiFlowModal}
+          style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
+          class="rounded-full p-4 shadow flex items-center justify-center"
+        >
+          <FontAwesomeIcon icon="close" />
+        </button>
+      </div>
+
+      <div class="h-full">
+        <APIFlowDesigner
+          initialFlow={$currentFlow}
+          on:save={handleFlowSave}
+          on:run={handleFlowRun}
+        />
+      </div>
     </div>
   </div>
 {/if}

@@ -1,59 +1,63 @@
 <script lang="ts">
-    import { appWindow } from '@tauri-apps/api/window';
-  
+    import { appWindow } from "@tauri-apps/api/window";
+
     async function minimize() {
-      await appWindow.minimize();
+        await appWindow.minimize();
     }
-  
+
     async function maximize() {
-      await appWindow.toggleMaximize();
+        await appWindow.toggleMaximize();
     }
-  
+
     async function close() {
-      await appWindow.close();
+        await appWindow.close();
     }
-  </script>
-  
-  <style>
-    .titlebar {
-      background-color: var(--background);
-      color: var(--primary-text);
-      padding: 0.5rem 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--divider);
-    }
-  
-    .titlebar .title {
-      -webkit-app-region: drag; /* Bu alanlarda pencere taşınabilir */
-    }
-  
-    .titlebar .buttons {
-      display: flex;
-      gap: 0.5rem;
-      -webkit-app-region: no-drag; /* Bu alanlarda pencere taşınamaz */
-    }
-  
-    .titlebar button {
-      background: none;
-      border: none;
-      color: var(--primary-text);
-      cursor: pointer;
-      font-size: 1rem;
-    }
-  
-    .titlebar button:hover {
-      color: var(--error);
-    }
-  </style>
-  
-  <div data-tauri-drag-region class="titlebar">
-    <div class="title">Your App Title</div>
+</script>
+
+<div data-tauri-drag-region class="titlebar">
+    <div class="title">Request Rocket</div>
     <div class="buttons">
-      <button on:click={minimize}>_</button>
-      <button on:click={maximize}>[]</button>
-      <button on:click={close}>×</button>
+        <button on:click={minimize}>_</button>
+        <button on:click={maximize}>[]</button>
+        <button on:click={close}>×</button>
     </div>
-  </div>
-  
+</div>
+
+<style>
+    .titlebar {
+        background-color: var(--background);
+        color: var(--primary-text);
+        padding: 0.5rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--divider);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2.5rem;
+        z-index: 1000;
+    }
+
+    .titlebar .title {
+        color: var(--dark-text);
+    }
+
+    .titlebar .buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .titlebar button {
+        background: none;
+        border: none;
+        color: var(--primary-text);
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .titlebar button:hover {
+        color: var(--error);
+    }
+</style>

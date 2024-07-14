@@ -37,6 +37,15 @@ body {
   width: 99.5%;
 }
 
+.main-content {
+  padding-top: 2.5rem;
+  /* TitleBar yüksekliği kadar boşluk ekleyin */
+  height: calc(104vh - 2.55rem);
+  /* TitleBar yüksekliği kadar azaltın */
+  display: flex;
+  flex-direction: row;
+}
+
 .flex {
   display: flex;
 }
@@ -53,7 +62,7 @@ body {
 }
 
 .menu-panel {
-  flex: 1 0 2%;
+  flex: 1 0 3%;
   overflow-y: auto;
 }
 
@@ -69,7 +78,7 @@ body {
 }
 
 .response-panel {
-  flex: 1 0 51%;
+  flex: 1 0 50%;
   overflow-y: auto;
 }
 
