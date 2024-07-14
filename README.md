@@ -1,5 +1,7 @@
 # Request Rocket
 
+**⚠️ Note: Request Rocket is currently under active development. Features and functionalities are being added and improved regularly.**
+
 <div align="center">
     <img src="/icon.png">
 </div>
