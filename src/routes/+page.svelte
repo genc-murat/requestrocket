@@ -62,6 +62,8 @@
 
   import TitleBar from "../components/TitleBar.svelte";
 
+  import SplashScreen from "../components/SplashScreen.svelte";
+
   const themeModalOpen = writable(false);
 
   function openThemeSwitcherModal() {
@@ -1479,7 +1481,29 @@
       callback();
     }
   }
+
+  let isLoading = writable(true);
+
+  async function initializeApp() {
+    try {
+      // Gerekli verileri yükleyin
+      await loadGroups();
+      await loadVariables();
+      await loadCustomHeaders();
+      
+      // Yükleme tamamlandığında loading state'i güncelleyin
+      isLoading.set(false);
+    } catch (error) {
+      console.error("Error loading initial data:", error);
+      // Hata durumunda da loading state'i güncelleyin
+      isLoading.set(false);
+    }
+  }
 </script>
+
+{#if $isLoading}
+  <SplashScreen onFinish={initializeApp} />
+{:else}
 
 <TitleBar />
 
@@ -2069,6 +2093,8 @@
   </div>
 </div>
 </div>
+{/if}
+
 
 {#if $statusHistoryOpen}
   <div
