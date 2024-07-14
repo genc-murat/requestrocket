@@ -1221,6 +1221,630 @@
             "--select-focus-box-shadow":
                 "rgba(255, 111, 97, 0.3)" /* Coral pink focus shadow */,
         },
+        nebulaGlowTheme: {
+            "--background": "#1c1c2e" /* Deep space blue background */,
+            "--light-background": "#26264c" /* Dark blue surface */,
+            "--surface": "#1c1c2e" /* Deep space blue surface */,
+            "--primary-text": "#e0e0e0" /* Light gray primary text */,
+            "--secondary-text": "#b0b0b0" /* Medium gray secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#3e3e5e" /* Dark blue divider */,
+            "--shadow": "rgba(28, 28, 46, 0.7)" /* Deep space blue shadow */,
+            "--primary": "#9c27b0" /* Nebula purple primary color */,
+            "--secondary": "#03a9f4" /* Nebula blue secondary color */,
+            "--tertiary": "#ffeb3b" /* Nebula yellow tertiary color */,
+            "--quaternary": "#8bc34a" /* Nebula green quaternary color */,
+            "--warning": "#ff9800" /* Bright orange warning color */,
+            "--error": "#f44336" /* Bright red error color */,
+            "--info": "#00bcd4" /* Bright cyan info color */,
+            "--success": "#4caf50" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(156, 39, 176, 0.7)" /* Nebula purple shadow */,
+            "--group-card-hover": "#26264c" /* Dark blue card hover color */,
+            "--separator": "#3e3e5e" /* Dark blue separator */,
+            "--select-background-color":
+                "#1c1c2e" /* Deep space blue select background color */,
+            "--select-text-color": "#e0e0e0" /* Light gray select text color */,
+            "--select-focus-border-color":
+                "#9c27b0" /* Nebula purple focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(156, 39, 176, 0.3)" /* Nebula purple focus shadow */,
+        },
+        auroraBorealisTheme: {
+            "--background": "#001f3f" /* Dark navy blue background */,
+            "--light-background": "#00264d" /* Deep blue surface */,
+            "--surface": "#001f3f" /* Dark navy blue surface */,
+            "--primary-text": "#e0f7fa" /* Light cyan primary text */,
+            "--secondary-text": "#80deea" /* Medium cyan secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#004d66" /* Deep cyan divider */,
+            "--shadow": "rgba(0, 31, 63, 0.7)" /* Dark navy blue shadow */,
+            "--primary": "#00e676" /* Bright green primary color */,
+            "--secondary": "#1de9b6" /* Bright teal secondary color */,
+            "--tertiary": "#ffeb3b" /* Bright yellow tertiary color */,
+            "--quaternary": "#ff1744" /* Bright red quaternary color */,
+            "--warning": "#ffc107" /* Bright orange warning color */,
+            "--error": "#f44336" /* Bright red error color */,
+            "--info": "#00bcd4" /* Bright cyan info color */,
+            "--success": "#4caf50" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(0, 230, 118, 0.7)" /* Bright green shadow */,
+            "--group-card-hover": "#00264d" /* Deep blue card hover color */,
+            "--separator": "#004d66" /* Deep cyan separator */,
+            "--select-background-color":
+                "#001f3f" /* Dark navy blue select background color */,
+            "--select-text-color": "#e0f7fa" /* Light cyan select text color */,
+            "--select-focus-border-color":
+                "#00e676" /* Bright green focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(0, 230, 118, 0.3)" /* Bright green focus shadow */,
+        },
+        cyberpunkNeonTheme: {
+            "--background": "#0d0d0d" /* Dark black background */,
+            "--light-background": "#1a1a1a" /* Very dark gray surface */,
+            "--surface": "#0d0d0d" /* Dark black surface */,
+            "--primary-text": "#f5f5f5" /* Light gray primary text */,
+            "--secondary-text": "#bdbdbd" /* Medium gray secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#333333" /* Dark gray divider */,
+            "--shadow": "rgba(13, 13, 13, 0.7)" /* Dark black shadow */,
+            "--primary": "#ff00ff" /* Bright magenta primary color */,
+            "--secondary": "#00ffff" /* Bright cyan secondary color */,
+            "--tertiary": "#ffea00" /* Bright yellow tertiary color */,
+            "--quaternary": "#ff1744" /* Bright red quaternary color */,
+            "--warning": "#ff9800" /* Bright orange warning color */,
+            "--error": "#f44336" /* Bright red error color */,
+            "--info": "#2196f3" /* Bright blue info color */,
+            "--success": "#4caf50" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(255, 0, 255, 0.7)" /* Bright magenta shadow */,
+            "--group-card-hover":
+                "#1a1a1a" /* Very dark gray card hover color */,
+            "--separator": "#333333" /* Dark gray separator */,
+            "--select-background-color":
+                "#0d0d0d" /* Dark black select background color */,
+            "--select-text-color": "#f5f5f5" /* Light gray select text color */,
+            "--select-focus-border-color":
+                "#ff00ff" /* Bright magenta focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(255, 0, 255, 0.3)" /* Bright magenta focus shadow */,
+        },
+        solarFlareTheme: {
+            "--background": "#4a0000" /* Deep red background */,
+            "--light-background": "#660000" /* Dark red surface */,
+            "--surface": "#4a0000" /* Deep red surface */,
+            "--primary-text": "#ffcccb" /* Light red primary text */,
+            "--secondary-text": "#ffc1c1" /* Medium red secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#990000" /* Dark red divider */,
+            "--shadow": "rgba(74, 0, 0, 0.7)" /* Deep red shadow */,
+            "--primary": "#ff4500" /* Bright orange-red primary color */,
+            "--secondary": "#ff6347" /* Bright tomato secondary color */,
+            "--tertiary": "#ffa07a" /* Light salmon tertiary color */,
+            "--quaternary": "#ff8c00" /* Dark orange quaternary color */,
+            "--warning": "#ffa726" /* Bright orange warning color */,
+            "--error": "#f44336" /* Bright red error color */,
+            "--info": "#29b6f6" /* Bright blue info color */,
+            "--success": "#66bb6a" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(255, 69, 0, 0.7)" /* Bright orange-red shadow */,
+            "--group-card-hover": "#660000" /* Dark red card hover color */,
+            "--separator": "#990000" /* Dark red separator */,
+            "--select-background-color":
+                "#4a0000" /* Deep red select background color */,
+            "--select-text-color": "#ffcccb" /* Light red select text color */,
+            "--select-focus-border-color":
+                "#ff4500" /* Bright orange-red focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(255, 69, 0, 0.3)" /* Bright orange-red focus shadow */,
+        },
+        tropicalRainforestTheme: {
+            "--background": "#004d40" /* Deep teal background */,
+            "--light-background": "#00796b" /* Dark teal surface */,
+            "--surface": "#004d40" /* Deep teal surface */,
+            "--primary-text": "#e0f2f1" /* Light cyan primary text */,
+            "--secondary-text": "#b2dfdb" /* Medium cyan secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#00796b" /* Dark teal divider */,
+            "--shadow": "rgba(0, 77, 64, 0.7)" /* Deep teal shadow */,
+            "--primary": "#00bfa5" /* Bright aqua primary color */,
+            "--secondary": "#1de9b6" /* Bright teal secondary color */,
+            "--tertiary": "#00e676" /* Bright green tertiary color */,
+            "--quaternary": "#76ff03" /* Lime green quaternary color */,
+            "--warning": "#ffa726" /* Bright orange warning color */,
+            "--error": "#f44336" /* Bright red error color */,
+            "--info": "#29b6f6" /* Bright blue info color */,
+            "--success": "#66bb6a" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(0, 191, 165, 0.7)" /* Bright aqua shadow */,
+            "--group-card-hover": "#00796b" /* Dark teal card hover color */,
+            "--separator": "#00796b" /* Dark teal separator */,
+            "--select-background-color":
+                "#004d40" /* Deep teal select background color */,
+            "--select-text-color": "#e0f2f1" /* Light cyan select text color */,
+            "--select-focus-border-color":
+                "#00bfa5" /* Bright aqua focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(0, 191, 165, 0.3)" /* Bright aqua focus shadow */,
+        },
+        galacticPurpleTheme: {
+            "--background": "#2e003e" /* Deep purple background */,
+            "--light-background": "#4a0072" /* Dark purple surface */,
+            "--surface": "#2e003e" /* Deep purple surface */,
+            "--primary-text": "#e1bee7" /* Light lavender primary text */,
+            "--secondary-text": "#ce93d8" /* Medium lavender secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#6a1b9a" /* Dark lavender divider */,
+            "--shadow": "rgba(46, 0, 62, 0.7)" /* Deep purple shadow */,
+            "--primary": "#d500f9" /* Bright magenta primary color */,
+            "--secondary": "#aa00ff" /* Bright violet secondary color */,
+            "--tertiary": "#e040fb" /* Bright pink tertiary color */,
+            "--quaternary": "#e91e63" /* Bright pink quaternary color */,
+            "--warning": "#ff4081" /* Bright pink warning color */,
+            "--error": "#f44336" /* Bright red error color */,
+            "--info": "#29b6f6" /* Bright blue info color */,
+            "--success": "#66bb6a" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(213, 0, 249, 0.7)" /* Bright magenta shadow */,
+            "--group-card-hover": "#4a0072" /* Dark purple card hover color */,
+            "--separator": "#6a1b9a" /* Dark lavender separator */,
+            "--select-background-color":
+                "#2e003e" /* Deep purple select background color */,
+            "--select-text-color":
+                "#e1bee7" /* Light lavender select text color */,
+            "--select-focus-border-color":
+                "#d500f9" /* Bright magenta focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(213, 0, 249, 0.3)" /* Bright magenta focus shadow */,
+        },
+        electricLimeTheme: {
+            "--background": "#1a1a1a" /* Dark gray background */,
+            "--light-background": "#333333" /* Medium dark gray surface */,
+            "--surface": "#1a1a1a" /* Dark gray surface */,
+            "--primary-text": "#d4ff00" /* Electric lime primary text */,
+            "--secondary-text": "#a0a000" /* Medium lime secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#3d3d00" /* Dark lime divider */,
+            "--shadow": "rgba(26, 26, 26, 0.7)" /* Dark gray shadow */,
+            "--primary": "#d4ff00" /* Electric lime primary color */,
+            "--secondary": "#a0a000" /* Medium lime secondary color */,
+            "--tertiary": "#ccff33" /* Bright lime tertiary color */,
+            "--quaternary": "#ffff00" /* Yellow quaternary color */,
+            "--warning": "#ffcc00" /* Bright orange warning color */,
+            "--error": "#ff0033" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(212, 255, 0, 0.7)" /* Electric lime shadow */,
+            "--group-card-hover":
+                "#333333" /* Medium dark gray card hover color */,
+            "--separator": "#3d3d00" /* Dark lime separator */,
+            "--select-background-color":
+                "#1a1a1a" /* Dark gray select background color */,
+            "--select-text-color":
+                "#d4ff00" /* Electric lime select text color */,
+            "--select-focus-border-color":
+                "#d4ff00" /* Electric lime focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(212, 255, 0, 0.3)" /* Electric lime focus shadow */,
+        },
+        sunsetPurpleTheme: {
+            "--background": "#3e1a4d" /* Dark purple background */,
+            "--light-background": "#562a6a" /* Medium dark purple surface */,
+            "--surface": "#3e1a4d" /* Dark purple surface */,
+            "--primary-text": "#ffb3ff" /* Light pink primary text */,
+            "--secondary-text": "#d48fd4" /* Medium pink secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#7a478a" /* Dark pink divider */,
+            "--shadow": "rgba(62, 26, 77, 0.7)" /* Dark purple shadow */,
+            "--primary": "#ff33cc" /* Bright pink primary color */,
+            "--secondary": "#ff66ff" /* Bright fuchsia secondary color */,
+            "--tertiary": "#ff99ff" /* Light pink tertiary color */,
+            "--quaternary": "#ff33ff" /* Bright magenta quaternary color */,
+            "--warning": "#ffcc00" /* Bright orange warning color */,
+            "--error": "#ff0033" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(255, 51, 204, 0.7)" /* Bright pink shadow */,
+            "--group-card-hover":
+                "#562a6a" /* Medium dark purple card hover color */,
+            "--separator": "#7a478a" /* Dark pink separator */,
+            "--select-background-color":
+                "#3e1a4d" /* Dark purple select background color */,
+            "--select-text-color": "#ffb3ff" /* Light pink select text color */,
+            "--select-focus-border-color":
+                "#ff33cc" /* Bright pink focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(255, 51, 204, 0.3)" /* Bright pink focus shadow */,
+        },
+        darkIceBlueTheme: {
+            "--background": "#003366" /* Dark blue background */,
+            "--light-background": "#004080" /* Medium dark blue surface */,
+            "--surface": "#003366" /* Dark blue surface */,
+            "--primary-text": "#b3d9ff" /* Light blue primary text */,
+            "--secondary-text": "#80bfff" /* Medium blue secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#0066cc" /* Medium blue divider */,
+            "--shadow": "rgba(0, 51, 102, 0.7)" /* Dark blue shadow */,
+            "--primary": "#3399ff" /* Bright blue primary color */,
+            "--secondary": "#66ccff" /* Light blue secondary color */,
+            "--tertiary": "#99ccff" /* Sky blue tertiary color */,
+            "--quaternary": "#00ccff" /* Bright cyan quaternary color */,
+            "--warning": "#ffcc00" /* Bright orange warning color */,
+            "--error": "#ff0033" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(51, 153, 255, 0.7)" /* Bright blue shadow */,
+            "--group-card-hover":
+                "#004080" /* Medium dark blue card hover color */,
+            "--separator": "#0066cc" /* Medium blue separator */,
+            "--select-background-color":
+                "#003366" /* Dark blue select background color */,
+            "--select-text-color": "#b3d9ff" /* Light blue select text color */,
+            "--select-focus-border-color":
+                "#3399ff" /* Bright blue focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(51, 153, 255, 0.3)" /* Bright blue focus shadow */,
+        },
+        mysticJadeTheme: {
+            "--background": "#004d40" /* Deep jade green background */,
+            "--light-background": "#00695c" /* Dark jade green surface */,
+            "--surface": "#004d40" /* Deep jade green surface */,
+            "--primary-text": "#e0f2f1" /* Light mint green primary text */,
+            "--secondary-text":
+                "#b2dfdb" /* Medium mint green secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#00796b" /* Dark teal divider */,
+            "--shadow": "rgba(0, 77, 64, 0.7)" /* Deep jade green shadow */,
+            "--primary": "#00e676" /* Bright mint green primary color */,
+            "--secondary": "#1de9b6" /* Bright aqua secondary color */,
+            "--tertiary": "#00e5ff" /* Bright cyan tertiary color */,
+            "--quaternary": "#76ff03" /* Bright lime quaternary color */,
+            "--warning": "#ffcc00" /* Bright orange warning color */,
+            "--error": "#ff0033" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(0, 230, 118, 0.7)" /* Bright mint green shadow */,
+            "--group-card-hover":
+                "#00695c" /* Dark jade green card hover color */,
+            "--separator": "#00796b" /* Dark teal separator */,
+            "--select-background-color":
+                "#004d40" /* Deep jade green select background color */,
+            "--select-text-color":
+                "#e0f2f1" /* Light mint green select text color */,
+            "--select-focus-border-color":
+                "#00e676" /* Bright mint green focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(0, 230, 118, 0.3)" /* Bright mint green focus shadow */,
+        },
+        solarEclipseTheme: {
+            "--background": "#2c3e50" /* Deep navy blue background */,
+            "--light-background": "#34495e" /* Dark navy blue surface */,
+            "--surface": "#2c3e50" /* Deep navy blue surface */,
+            "--primary-text": "#ecf0f1" /* Light gray primary text */,
+            "--secondary-text": "#95a5a6" /* Medium gray secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#7f8c8d" /* Medium gray divider */,
+            "--shadow": "rgba(44, 62, 80, 0.7)" /* Deep navy blue shadow */,
+            "--primary": "#e74c3c" /* Bright red primary color */,
+            "--secondary": "#f39c12" /* Bright orange secondary color */,
+            "--tertiary": "#f1c40f" /* Bright yellow tertiary color */,
+            "--quaternary": "#16a085" /* Bright teal quaternary color */,
+            "--warning": "#ffcc00" /* Bright orange warning color */,
+            "--error": "#ff0033" /* Bright red error color */,
+            "--info": "#3498db" /* Bright blue info color */,
+            "--success": "#2ecc71" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(231, 76, 60, 0.7)" /* Bright red shadow */,
+            "--group-card-hover":
+                "#34495e" /* Dark navy blue card hover color */,
+            "--separator": "#7f8c8d" /* Medium gray separator */,
+            "--select-background-color":
+                "#2c3e50" /* Deep navy blue select background color */,
+            "--select-text-color": "#ecf0f1" /* Light gray select text color */,
+            "--select-focus-border-color":
+                "#e74c3c" /* Bright red focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(231, 76, 60, 0.3)" /* Bright red focus shadow */,
+        },
+        candylandTheme: {
+            "--background": "#ff6f61" /* Bright coral background */,
+            "--light-background": "#ffb5a7" /* Light coral surface */,
+            "--surface": "#ff6f61" /* Bright coral surface */,
+            "--primary-text": "#ffffff" /* White primary text */,
+            "--secondary-text": "#ffc1c1" /* Light pink secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#ff9a8d" /* Light pink divider */,
+            "--shadow": "rgba(255, 111, 97, 0.5)" /* Bright coral shadow */,
+            "--primary": "#ff6f61" /* Bright coral primary color */,
+            "--secondary": "#ffcccb" /* Light pink secondary color */,
+            "--tertiary": "#ff99ff" /* Light magenta tertiary color */,
+            "--quaternary": "#ff33ff" /* Bright magenta quaternary color */,
+            "--warning": "#ffcc00" /* Bright orange warning color */,
+            "--error": "#ff0033" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(255, 111, 97, 0.7)" /* Bright coral shadow */,
+            "--group-card-hover": "#ffb5a7" /* Light coral card hover color */,
+            "--separator": "#ff9a8d" /* Light pink separator */,
+            "--select-background-color":
+                "#ff6f61" /* Bright coral select background color */,
+            "--select-text-color": "#ffffff" /* White select text color */,
+            "--select-focus-border-color":
+                "#ff6f61" /* Bright coral focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(255, 111, 97, 0.3)" /* Bright coral focus shadow */,
+        },
+        twilightMeadowTheme: {
+            "--background": "#003366" /* Dark blue background */,
+            "--light-background": "#004080" /* Medium dark blue surface */,
+            "--surface": "#003366" /* Dark blue surface */,
+            "--primary-text": "#b3d9ff" /* Light blue primary text */,
+            "--secondary-text": "#80bfff" /* Medium blue secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#0066cc" /* Medium blue divider */,
+            "--shadow": "rgba(0, 51, 102, 0.7)" /* Dark blue shadow */,
+            "--primary": "#3399ff" /* Bright blue primary color */,
+            "--secondary": "#66ccff" /* Light blue secondary color */,
+            "--tertiary": "#99ccff" /* Sky blue tertiary color */,
+            "--quaternary": "#00ccff" /* Bright cyan quaternary color */,
+            "--warning": "#ffcc00" /* Bright orange warning color */,
+            "--error": "#ff0033" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(51, 153, 255, 0.7)" /* Bright blue shadow */,
+            "--group-card-hover":
+                "#004080" /* Medium dark blue card hover color */,
+            "--separator": "#0066cc" /* Medium blue separator */,
+            "--select-background-color":
+                "#003366" /* Dark blue select background color */,
+            "--select-text-color": "#b3d9ff" /* Light blue select text color */,
+            "--select-focus-border-color":
+                "#3399ff" /* Bright blue focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(51, 153, 255, 0.3)" /* Bright blue focus shadow */,
+        },
+        royalGoldTheme: {
+            "--background": "#333333" /* Dark gray background */,
+            "--light-background": "#4f4f4f" /* Medium dark gray surface */,
+            "--surface": "#333333" /* Dark gray surface */,
+            "--primary-text": "#ffd700" /* Gold primary text */,
+            "--secondary-text": "#ffec8b" /* Light gold secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#b8860b" /* Dark gold divider */,
+            "--shadow": "rgba(51, 51, 51, 0.7)" /* Dark gray shadow */,
+            "--primary": "#ffd700" /* Gold primary color */,
+            "--secondary": "#ffec8b" /* Light gold secondary color */,
+            "--tertiary": "#ffc107" /* Amber tertiary color */,
+            "--quaternary": "#ff9800" /* Bright orange quaternary color */,
+            "--warning": "#ffcc00" /* Bright yellow warning color */,
+            "--error": "#ff0033" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
+            "--dropdown-box-shadow": "rgba(255, 215, 0, 0.7)" /* Gold shadow */,
+            "--group-card-hover":
+                "#4f4f4f" /* Medium dark gray card hover color */,
+            "--separator": "#b8860b" /* Dark gold separator */,
+            "--select-background-color":
+                "#333333" /* Dark gray select background color */,
+            "--select-text-color": "#ffd700" /* Gold select text color */,
+            "--select-focus-border-color":
+                "#ffd700" /* Gold focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(255, 215, 0, 0.3)" /* Gold focus shadow */,
+        },
+        raspberrySorbetTheme: {
+            "--background": "#880e4f" /* Deep raspberry background */,
+            "--light-background": "#ad1457" /* Dark raspberry surface */,
+            "--surface": "#880e4f" /* Deep raspberry surface */,
+            "--primary-text": "#ffc1e3" /* Light pink primary text */,
+            "--secondary-text": "#ff80ab" /* Medium pink secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#d81b60" /* Dark pink divider */,
+            "--shadow": "rgba(136, 14, 79, 0.7)" /* Deep raspberry shadow */,
+            "--primary": "#f50057" /* Bright raspberry primary color */,
+            "--secondary": "#ff4081" /* Bright pink secondary color */,
+            "--tertiary": "#ff80ab" /* Light pink tertiary color */,
+            "--quaternary": "#ff1744" /* Bright red quaternary color */,
+            "--warning": "#ffcc00" /* Bright yellow warning color */,
+            "--error": "#f44336" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(245, 0, 87, 0.7)" /* Bright raspberry shadow */,
+            "--group-card-hover":
+                "#ad1457" /* Dark raspberry card hover color */,
+            "--separator": "#d81b60" /* Dark pink separator */,
+            "--select-background-color":
+                "#880e4f" /* Deep raspberry select background color */,
+            "--select-text-color": "#ffc1e3" /* Light pink select text color */,
+            "--select-focus-border-color":
+                "#f50057" /* Bright raspberry focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(245, 0, 87, 0.3)" /* Bright raspberry focus shadow */,
+        },
+        arcticFrostTheme: {
+            "--background": "#001f3f" /* Deep navy blue background */,
+            "--light-background": "#003366" /* Dark blue surface */,
+            "--surface": "#001f3f" /* Deep navy blue surface */,
+            "--primary-text": "#e0f7fa" /* Light cyan primary text */,
+            "--secondary-text": "#80deea" /* Medium cyan secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#0077b6" /* Dark cyan divider */,
+            "--shadow": "rgba(0, 31, 63, 0.7)" /* Deep navy blue shadow */,
+            "--primary": "#00bcd4" /* Bright cyan primary color */,
+            "--secondary": "#1de9b6" /* Bright teal secondary color */,
+            "--tertiary": "#00e5ff" /* Bright light blue tertiary color */,
+            "--quaternary": "#76ff03" /* Bright green quaternary color */,
+            "--warning": "#ffcc00" /* Bright orange warning color */,
+            "--error": "#ff0033" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(0, 188, 212, 0.7)" /* Bright cyan shadow */,
+            "--group-card-hover": "#003366" /* Dark blue card hover color */,
+            "--separator": "#0077b6" /* Dark cyan separator */,
+            "--select-background-color":
+                "#001f3f" /* Deep navy blue select background color */,
+            "--select-text-color": "#e0f7fa" /* Light cyan select text color */,
+            "--select-focus-border-color":
+                "#00bcd4" /* Bright cyan focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(0, 188, 212, 0.3)" /* Bright cyan focus shadow */,
+        },
+        darkMatterTheme: {
+            "--background": "#000000" /* Black background */,
+            "--light-background": "#1a1a1a" /* Very dark gray surface */,
+            "--surface": "#000000" /* Black surface */,
+            "--primary-text": "#ffffff" /* White primary text */,
+            "--secondary-text": "#b0b0b0" /* Medium gray secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#333333" /* Dark gray divider */,
+            "--shadow": "rgba(0, 0, 0, 0.7)" /* Black shadow */,
+            "--primary": "#ffcc00" /* Bright yellow primary color */,
+            "--secondary": "#ff9900" /* Bright orange secondary color */,
+            "--tertiary": "#ff6600" /* Bright orange tertiary color */,
+            "--quaternary": "#ff3300" /* Bright red quaternary color */,
+            "--warning": "#ffcc00" /* Bright yellow warning color */,
+            "--error": "#ff0033" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(255, 204, 0, 0.7)" /* Bright yellow shadow */,
+            "--group-card-hover":
+                "#1a1a1a" /* Very dark gray card hover color */,
+            "--separator": "#333333" /* Dark gray separator */,
+            "--select-background-color":
+                "#000000" /* Black select background color */,
+            "--select-text-color": "#ffffff" /* White select text color */,
+            "--select-focus-border-color":
+                "#ffcc00" /* Bright yellow focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(255, 204, 0, 0.3)" /* Bright yellow focus shadow */,
+        },
+        cyberSunsetTheme: {
+            "--background": "#1f1f1f" /* Dark gray background */,
+            "--light-background": "#2e2e2e" /* Dark gray surface */,
+            "--surface": "#ff6f61" /* Bright coral surface */,
+            "--primary-text": "#ffffff" /* White primary text */,
+            "--secondary-text": "#ffcccb" /* Light pink secondary text */,
+            "--dark-text": "#000000" /* Black text */,
+            "--divider": "#ff9a8d" /* Light pink divider */,
+            "--shadow": "rgba(31, 31, 31, 0.7)" /* Dark gray shadow */,
+            "--primary": "#ff6f61" /* Bright coral primary color */,
+            "--secondary": "#ffcccb" /* Light pink secondary color */,
+            "--tertiary": "#ffc107" /* Amber tertiary color */,
+            "--quaternary": "#ff9800" /* Bright orange quaternary color */,
+            "--warning": "#ffcc00" /* Bright yellow warning color */,
+            "--error": "#f44336" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(255, 111, 97, 0.7)" /* Bright coral shadow */,
+            "--group-card-hover": "#2e2e2e" /* Dark gray card hover color */,
+            "--separator": "#ff9a8d" /* Light pink separator */,
+            "--select-background-color":
+                "#ff6f61" /* Bright coral select background color */,
+            "--select-text-color": "#ffffff" /* White select text color */,
+            "--select-focus-border-color":
+                "#ff6f61" /* Bright coral focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(255, 111, 97, 0.3)" /* Bright coral focus shadow */,
+        },
+        retroWaveTheme: {
+            "--background": "#282828" /* Dark gray background */,
+            "--light-background": "#404040" /* Medium dark gray surface */,
+            "--surface": "#ff00ff" /* Neon pink surface */,
+            "--primary-text": "#ffffff" /* White primary text */,
+            "--secondary-text": "#d1d1d1" /* Light gray secondary text */,
+            "--dark-text": "#000000" /* Black text */,
+            "--divider": "#ff69b4" /* Hot pink divider */,
+            "--shadow": "rgba(40, 40, 40, 0.7)" /* Dark gray shadow */,
+            "--primary": "#ff00ff" /* Neon pink primary color */,
+            "--secondary": "#ff69b4" /* Hot pink secondary color */,
+            "--tertiary": "#00ffff" /* Neon cyan tertiary color */,
+            "--quaternary": "#ffea00" /* Neon yellow quaternary color */,
+            "--warning": "#ffcc00" /* Bright yellow warning color */,
+            "--error": "#f44336" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(255, 0, 255, 0.7)" /* Neon pink shadow */,
+            "--group-card-hover":
+                "#404040" /* Medium dark gray card hover color */,
+            "--separator": "#ff69b4" /* Hot pink separator */,
+            "--select-background-color":
+                "#ff00ff" /* Neon pink select background color */,
+            "--select-text-color": "#ffffff" /* White select text color */,
+            "--select-focus-border-color":
+                "#ff00ff" /* Neon pink focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(255, 0, 255, 0.3)" /* Neon pink focus shadow */,
+        },
+        oceanAbyssTheme: {
+            "--background": "#0d1b2a" /* Dark blue background */,
+            "--light-background": "#1b263b" /* Medium dark blue surface */,
+            "--surface": "#4f6d7a" /* Slate blue surface */,
+            "--primary-text": "#e0e1dd" /* Light gray primary text */,
+            "--secondary-text": "#778da9" /* Medium gray secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#415a77" /* Medium blue divider */,
+            "--shadow": "rgba(13, 27, 42, 0.7)" /* Dark blue shadow */,
+            "--primary": "#4f6d7a" /* Slate blue primary color */,
+            "--secondary": "#1c2541" /* Dark navy secondary color */,
+            "--tertiary": "#0d3b66" /* Dark blue tertiary color */,
+            "--quaternary": "#3a506b" /* Steel blue quaternary color */,
+            "--warning": "#ffcc00" /* Bright yellow warning color */,
+            "--error": "#ff0033" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(79, 109, 122, 0.7)" /* Slate blue shadow */,
+            "--group-card-hover":
+                "#1b263b" /* Medium dark blue card hover color */,
+            "--separator": "#415a77" /* Medium blue separator */,
+            "--select-background-color":
+                "#4f6d7a" /* Slate blue select background color */,
+            "--select-text-color": "#e0e1dd" /* Light gray select text color */,
+            "--select-focus-border-color":
+                "#4f6d7a" /* Slate blue focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(79, 109, 122, 0.3)" /* Slate blue focus shadow */,
+        },
+        desertOasisTheme: {
+            "--background": "#3e2723" /* Deep brown background */,
+            "--light-background": "#5d4037" /* Medium brown surface */,
+            "--surface": "#ffcc80" /* Light orange surface */,
+            "--primary-text": "#ffffff" /* White primary text */,
+            "--secondary-text": "#ffe0b2" /* Light orange secondary text */,
+            "--dark-text": "#000000" /* Black text */,
+            "--divider": "#ffab91" /* Light orange divider */,
+            "--shadow": "rgba(62, 39, 35, 0.7)" /* Deep brown shadow */,
+            "--primary": "#ff9800" /* Bright orange primary color */,
+            "--secondary": "#ffb74d" /* Light orange secondary color */,
+            "--tertiary": "#ffcc80" /* Pale orange tertiary color */,
+            "--quaternary": "#ffa726" /* Bright orange quaternary color */,
+            "--warning": "#ffcc00" /* Bright yellow warning color */,
+            "--error": "#f44336" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(255, 152, 0, 0.7)" /* Bright orange shadow */,
+            "--group-card-hover": "#5d4037" /* Medium brown card hover color */,
+            "--separator": "#ffab91" /* Light orange separator */,
+            "--select-background-color":
+                "#ffcc80" /* Light orange select background color */,
+            "--select-text-color": "#ffffff" /* White select text color */,
+            "--select-focus-border-color":
+                "#ff9800" /* Bright orange focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(255, 152, 0, 0.3)" /* Bright orange focus shadow */,
+        },
     };
 
     export function applyTheme(theme: string) {
@@ -1249,7 +1873,7 @@
 </script>
 
 <div class="theme-switcher">
-    <div class="grid grid-cols-8 gap-2">
+    <div class="grid grid-cols-12 gap-2">
         {#each Object.keys(themes) as theme}
             <button
                 class="theme-button"
@@ -1260,9 +1884,9 @@
                 ]} 100%); color: {themes[theme]['--primary-text']};"
                 on:click={() => applyTheme(theme)}
             >
-                {theme
+                <!-- {theme
                     .replace(/([A-Z])/g, " $1")
-                    .replace(/^./, (str) => str.toUpperCase())}
+                    .replace(/^./, (str) => str.toUpperCase())} -->
             </button>
         {/each}
     </div>
@@ -1284,5 +1908,7 @@
             background-color 0.3s ease,
             color 0.3s ease;
         text-align: center;
+        width: 75px;
+        height: 45px;
     }
 </style>
