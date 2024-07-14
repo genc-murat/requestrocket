@@ -12,7 +12,7 @@
         visible.set(true);
         setTimeout(() => {
             visible.set(false);
-        }, 3000);
+        }, 2000);
     }
 </script>
 
@@ -28,8 +28,9 @@
         left: 0;
         width: 100%;
         color: var(--background);
+        font-weight: bold;
         text-align: center;
-        padding: 0.5rem;
+        padding: 0.2rem;
         z-index: 1000;
         transition: 
             opacity 0.5s ease,
@@ -56,8 +57,5 @@
         background-color: var(--error);
     }
 
-    /* Adjust other panel heights if necessary */
-    .panel {
-        height: calc(100% - 2.5rem); /* Subtract StatusBar height */
-    }
+   
 </style>

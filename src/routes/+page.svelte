@@ -660,6 +660,11 @@
   }
 
   async function sendRequest() {
+    if (!$url.trim()) {
+    showStatusMessage("URL cannot be empty", "error");
+    return;
+  }
+
     isSending.set(true);
     const actualUrl = $url;
     const actualHeaders = $headers.map((header) => ({
@@ -1071,17 +1076,47 @@
     response.set(null);
   }
 
-  function addVariable() {
-    if ($newVariableKey && $newVariableValue) {
-      variables.update((vars) => ({
-        ...vars,
-        [$newVariableKey]: $newVariableValue,
-      }));
-      saveVariable($newVariableKey, $newVariableValue);
-      newVariableKey.set("");
-      newVariableValue.set("");
+  async function addVariable() {
+  if (!$newVariableKey.trim()) {
+    showStatusMessage("Variable key cannot be empty", "error");
+    return;
+  }
+
+  if (!$newVariableValue.trim()) {
+    showStatusMessage("Variable value cannot be empty", "error");
+    return;
+  }
+
+  const trimmedKey = $newVariableKey.trim();
+  const trimmedValue = $newVariableValue.trim();
+
+  let shouldAdd = true;
+
+  variables.update((vars) => {
+    if (trimmedKey in vars) {
+      shouldAdd = confirm(`Variable "${trimmedKey}" already exists. Do you want to update it?`);
+      if (shouldAdd) {
+        showStatusMessage(`Variable "${trimmedKey}" updated`, "info");
+      } else {
+        showStatusMessage(`Variable "${trimmedKey}" not updated`, "warn");
+      }
+    }
+    
+    if (shouldAdd) {
+      return { ...vars, [trimmedKey]: trimmedValue };
+    }
+    return vars;
+  });
+
+  if (shouldAdd) {
+    await saveVariable(trimmedKey, trimmedValue);
+    newVariableKey.set("");
+    newVariableValue.set("");
+    if (!(trimmedKey in $variables)) {
+      showStatusMessage(`Variable "${trimmedKey}" added successfully`, "info");
     }
   }
+}
 
   function deleteVariable(key: string) {
     variables.update((vars) => {
