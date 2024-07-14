@@ -2225,11 +2225,6 @@
 />
 
 <style>
-  pre {
-    background: var(--light-background);
-    color: var(--primary-text);
-  }
-
   .fixed {
     position: fixed;
   }
@@ -2270,7 +2265,7 @@
   }
 
   .group-card {
-    border: 1px solid #ccc;
+    border: 1px solid var(--seperator);
     padding: 0.4rem;
     margin-bottom: 0.1rem;
     cursor: pointer;
@@ -2278,7 +2273,7 @@
   }
 
   .group-card:hover {
-    background-color: #f0f0f0;
+    background-color: var(--group-card-hover);
   }
 
   .input-container {
@@ -2382,11 +2377,6 @@
     transition: background-color 0.3s ease;
     text-align: center;
   }
-
-  .button-item span {
-    margin-top: 0.5rem;
-  }
-
   .button-item:hover {
     background-color: var(--light-background);
   }
@@ -2406,7 +2396,7 @@
   .separator {
     width: 1px;
     height: 20px;
-    background-color: #ccc;
+    background-color: var(--seperator);
   }
 
   .btn {
@@ -2431,13 +2421,13 @@
 
   .variables-panel {
     padding: 1rem;
-    border: 1px solid #ccc;
+    border: 1px solid var(--seperator);
     margin-top: 1rem;
     border-radius: 0.5rem;
   }
 
   .error-message {
-    color: red;
+    color: var(--error);
     font-weight: bold;
   }
 
@@ -2461,12 +2451,12 @@
 
   .custom-select {
     appearance: none;
-    background-color: #f3f4f6;
+    background-color: var(--select-background-color);
     padding: 0.5rem 1.5rem 0.5rem 0.75rem;
     border: 1px solid #d1d5db;
     border-radius: 0.375rem;
     font-size: 1rem;
-    color: #374151;
+    color: var(--select-text-color);
     background-image: url('data:image/svg+xml;utf8,<svg fill="none" stroke="%236B7280" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 9l-7 7-7-7"/></svg>');
     background-repeat: no-repeat;
     background-position: right 0.75rem center;
@@ -2477,8 +2467,8 @@
   }
 
   .custom-select:focus {
-    border-color: #2563eb;
+    border-color: var(--select-focus-border-color);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 0 0 3px var(--select-focus-box-shadow);
   }
 </style>

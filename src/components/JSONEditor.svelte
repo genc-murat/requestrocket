@@ -171,7 +171,6 @@
     display: none !important;
   }
 
-  /* Adjust scrollbar styles for better visibility */
   :global(.ace_scrollbar::-webkit-scrollbar) {
     width: 8px;
     height: 8px;

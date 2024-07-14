@@ -19,6 +19,12 @@
   --info: #7EA8D7;
   --success: #90C695;
   --dropdown-bow-shadow: rgba(162, 206, 209, 0.7);
+  --group-card-hover: #f0f0f0;
+  --seperator: #ccc;
+  --select-background-color:#f3f4f6;
+  --select-text-color:#374151;
+  --select-focus-border-color:#2563eb;
+  --select-focus-box-shadow:rgba(37, 99, 235, 0.3);
 }
 
 /* General Styles */
