@@ -1,19 +1,60 @@
 # Request Rocket
 
+<div align="center">
+    <img src="/icon.png">
+</div>
+
 Request Rocket is a powerful API testing tool designed to streamline the process of creating, testing, and managing API requests. Built with SvelteKit, Tailwind CSS, and Tauri, Request Rocket offers a robust set of features to enhance your API development workflow.
 
 ## Features
 
-- **Request Creation**: Easily create and customize API requests, supporting all major HTTP methods (GET, POST, PUT, DELETE). Choose from various body types, including JSON, XML, form data, and form-urlencoded.
-- **Request History**: Automatically save and organize your API requests into history. Group requests for better management and quick access.
-- **Variable Replacement**: Define and use variables within your requests to manage dynamic content effortlessly.
-- **Group Management**: Organize your requests into groups to keep related requests together, improving organization and efficiency.
-- **Response Viewer**: View and format responses with syntax highlighting, including status, duration, and size of the response.
-- **Persistent Storage**: Use IndexedDB to store requests and variables, ensuring your data is saved across sessions.
+- **Request Creation**: 
+  - Easily create and customize API requests.
+  - Supports all major HTTP methods: GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD, CONNECT, and TRACE.
+  - Choose from various body types, including JSON, XML, form data, and form-urlencoded.
+
+- **Request History**: 
+  - Automatically save and organize your API requests.
+  - Group requests for better management and quick access.
+  - Duplicate and delete history items with ease.
+
+- **Variable Replacement**: 
+  - Define and use variables within your requests.
+  - Replace dynamic content effortlessly using `{{variableName}}` syntax.
+
+- **Group Management**: 
+  - Organize your requests into groups to keep related requests together.
+  - Create new groups as needed to improve organization and efficiency.
+
+- **Response Viewer**: 
+  - View and format responses with syntax highlighting.
+  - Display status, duration, and size of the response.
+  - Switch between response formats: JSON, Table, Headers, and cURL command.
+
+- **Persistent Storage**: 
+  - Use IndexedDB to store requests and variables.
+  - Ensure your data is saved across sessions for consistent access.
+
+- **Import/Export**:
+  - Import Postman collections to easily migrate existing requests.
+  - Export requests to Postman format for sharing and collaboration.
+  - Generate and download API documentation based on request history.
+
+- **JSON Editor Integration**:
+  - Edit JSON data using a powerful JSON editor with support for code, tree, and text modes.
+  - Theme support for light and dark modes.
+
+- **Status History**:
+  - Track and display status history for each request URL.
+  - Categorize history items by time (last hour, today, older).
+
+- **Custom Headers**:
+  - Define and manage custom headers for your requests.
+  - Autocomplete header names for quick entry.
 
 ## Screenshots
 
-
+[Add screenshots here]
 
 ## Installation
 
@@ -66,6 +107,7 @@ Ensure you have the following installed:
 
 - **Automatic Saving:** Requests are automatically saved to history after execution.
 - **Organize by Groups:** Group requests to keep related requests together. Create new groups as needed.
+- **Duplicate and Delete:** Easily duplicate or delete history items.
 
 ### Using Variables
 
@@ -76,6 +118,28 @@ Ensure you have the following installed:
 
 - **Response Details:** View status, duration, and size of the response.
 - **Formatted Output:** Response body is displayed with syntax highlighting for easy reading.
+- **Tab Views:** Switch between JSON, Table, Headers, and cURL command views.
+
+### Importing and Exporting
+
+- **Import Postman Collections:** Easily import existing Postman collections to migrate requests.
+- **Export Requests:** Export requests to Postman format for sharing and collaboration.
+- **Generate API Documentation:** Create and download API documentation based on request history.
+
+### Editing JSON Data
+
+- **JSON Editor:** Edit JSON data using a powerful JSON editor with support for code, tree, and text modes.
+- **Theme Support:** Switch between light and dark themes for the JSON editor.
+
+### Tracking Status History
+
+- **Status History:** Track and display status history for each request URL.
+- **Categorize by Time:** View history items categorized by time (last hour, today, older).
+
+### Managing Custom Headers
+
+- **Custom Headers:** Define and manage custom headers for your requests.
+- **Autocomplete:** Use autocomplete for quick entry of header names.
 
 ## Contributing
 
@@ -83,7 +147,7 @@ We welcome contributions! Please follow these steps to contribute:
 
 1. **Fork the repository:**
    ```sh
-   git fork https://github.com/yourusername/request-rocket.git
+   git fork https://github.com/genc-murat/request-rocket.git
    ```
 
 2. **Create a new branch:**
@@ -115,5 +179,5 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - [SvelteKit](https://kit.svelte.dev/) - The framework used for building the application.
 - [Tailwind CSS](https://tailwindcss.com/) - The utility-first CSS framework.
 - [Tauri](https://tauri.studio/) - For packaging the application.
-- [Prism.js](https://prismjs.com/) - Syntax highlighting library.
+- [JSONEditor](https://github.com/josdejong/jsoneditor) - JSON editor library.
 - [FontAwesome](https://fontawesome.com/) - Icons library.
