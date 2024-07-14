@@ -2333,17 +2333,7 @@
     width: 100%;
   }
 
-  .clear-icon {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    font-size: 1rem;
-    color: var(--secondary-text);
-    transition: color 0.3s ease;
-    user-select: none;
-  }
+ 
 
   .clear-icon:hover {
     color: var(--error);
