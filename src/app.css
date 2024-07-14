@@ -405,7 +405,19 @@ textarea {
   border-left: 1px solid var(--divider);
 }
 
+.variables-panel {
+  padding: 1rem;
+  border: 1px solid var(--seperator);
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--surface);
+}
+
 .headers-panel {
+  padding: 1rem;
+  border: 1px solid var(--seperator);
+  margin-top: 1rem;
+  border-radius: 0.5rem;
   background-color: var(--surface);
 }
 

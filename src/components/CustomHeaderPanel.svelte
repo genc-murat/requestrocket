@@ -22,7 +22,7 @@
 </script>
 
 <div
-  class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+  class="fixed inset-0 flex items-center justify-center  bg-opacity-50"
 >
   <div class="headers-panel p-8 rounded-lg shadow-2xl relative max-w-2xl w-full">
     <h2 class="text-2xl font-bold mb-6">Custom Headers</h2>

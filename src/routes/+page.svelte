@@ -2199,12 +2199,12 @@
 
   {#if $variablesPanelOpen}
     <div
-      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+      class="fixed inset-0 flex items-center justify-center  bg-opacity-50"
     >
       <div
         class="variables-panel p-8 rounded-lg shadow-2xl relative max-w-2xl w-full"
       >
-        <h2 class="text-2xl font-bold mb-6 text-neutral-950">Variables</h2>
+        <h2 class="text-2xl font-bold mb-6">Variables</h2>
         <div class="flex mb-6">
           <input
             type="text"
@@ -2465,13 +2465,7 @@
     color: var(--background);
   }
 
-  .variables-panel {
-    padding: 1rem;
-    border: 1px solid var(--seperator);
-    margin-top: 1rem;
-    border-radius: 0.5rem;
-    background-color: var(--surface);
-  }
+ 
 
   .error-message {
     color: var(--error);
