@@ -59,17 +59,17 @@ body {
 
 
 .history-panel {
-  flex: 1 0 20%;
+  flex: 1 0 15%;
   overflow-y: auto;
 }
 
 .request-panel {
-  flex: 1 0 30%;
+  flex: 1 0 32%;
   overflow-y: auto;
 }
 
 .response-panel {
-  flex: 1 0 48%;
+  flex: 1 0 51%;
   overflow-y: auto;
 }
 
@@ -156,6 +156,7 @@ tr:nth-child(even) {
 .url {
   word-break: break-all;
   overflow-wrap: anywhere;
+  font-size: .65rem;
 }
 
 .button {

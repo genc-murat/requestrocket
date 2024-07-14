@@ -1629,7 +1629,7 @@
                 class="w-full text-left"
                 on:click={() => selectHistoryItem(item)}
               >
-                <strong
+                <span
                   class="px-2 py-1 rounded
                {item.method === 'GET' ? 'method-get' : ''} 
                                  {item.method === 'POST' ? 'method-post' : ''} 
@@ -1651,7 +1651,7 @@
                 text-white"
                 >
                   {item.method.substring(0, 3)}
-                </strong>
+            </span>
 
                 <span class="url">{item.url}</span>
               </button>
