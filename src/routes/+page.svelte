@@ -68,9 +68,12 @@
   const themeModalOpen = writable(false);
 
   const statusMessage: Writable<string | null> = writable(null);
-    const statusType: Writable<'info' | 'warn' | 'error'> = writable('info');
+  const statusType: Writable<"info" | "warn" | "error"> = writable("info");
 
-  function showStatusMessage(message: string, type: 'info' | 'warn' | 'error' = 'info'): void {
+  function showStatusMessage(
+    message: string,
+    type: "info" | "warn" | "error" = "info",
+  ): void {
     statusMessage.set(message);
     statusType.set(type);
     setTimeout(() => {
@@ -507,7 +510,6 @@
       const db = await dbPromise;
       await db.add("statusHistory", statusHistoryItem);
       console.log("Status history saved successfully.");
-
     } catch (error) {
       console.error(
         "Error saving status history:",
@@ -638,13 +640,58 @@
     updateUrl();
   }
 
-  function createNewGroup() {
-    if ($newGroupName) {
-      groups.update((g) => [...g, $newGroupName]);
-      selectedGroup.set($newGroupName);
-      newGroupName.set("");
-      groupModalOpen.set(false);
-      loadHistory($newGroupName);
+  async function createNewGroup() {
+    const trimmedGroupName = $newGroupName.trim();
+    const MAX_GROUP_NAME_LENGTH = 50; // Örnek bir sınır
+
+    if (!trimmedGroupName) {
+      showStatusMessage("Group name cannot be empty", "error");
+      return;
+    }
+
+    if (trimmedGroupName.length > MAX_GROUP_NAME_LENGTH) {
+      showStatusMessage(
+        `Group name cannot exceed ${MAX_GROUP_NAME_LENGTH} characters`,
+        "error",
+      );
+      return;
+    }
+
+    let groupExists = false;
+    groups.update((g) => {
+      if (
+        g.some(
+          (existingGroup) =>
+            existingGroup.toLowerCase() === trimmedGroupName.toLowerCase(),
+        )
+      ) {
+        groupExists = true;
+        return g;
+      }
+      return [...g, trimmedGroupName];
+    });
+
+    if (groupExists) {
+      showStatusMessage(`Group "${trimmedGroupName}" already exists`, "warn");
+      return;
+    }
+
+    selectedGroup.set(trimmedGroupName);
+    newGroupName.set("");
+    groupModalOpen.set(false);
+
+    try {
+      await loadHistory(trimmedGroupName);
+      showStatusMessage(
+        `Group "${trimmedGroupName}" created successfully`,
+        "info",
+      );
+    } catch (error) {
+      console.error("Error loading history for new group:", error);
+      showStatusMessage(
+        `Group created, but there was an error loading its history`,
+        "warn",
+      );
     }
   }
 
@@ -661,9 +708,9 @@
 
   async function sendRequest() {
     if (!$url.trim()) {
-    showStatusMessage("URL cannot be empty", "error");
-    return;
-  }
+      showStatusMessage("URL cannot be empty", "error");
+      return;
+    }
 
     isSending.set(true);
     const actualUrl = $url;
@@ -1077,46 +1124,51 @@
   }
 
   async function addVariable() {
-  if (!$newVariableKey.trim()) {
-    showStatusMessage("Variable key cannot be empty", "error");
-    return;
-  }
+    if (!$newVariableKey.trim()) {
+      showStatusMessage("Variable key cannot be empty", "error");
+      return;
+    }
 
-  if (!$newVariableValue.trim()) {
-    showStatusMessage("Variable value cannot be empty", "error");
-    return;
-  }
+    if (!$newVariableValue.trim()) {
+      showStatusMessage("Variable value cannot be empty", "error");
+      return;
+    }
 
-  const trimmedKey = $newVariableKey.trim();
-  const trimmedValue = $newVariableValue.trim();
+    const trimmedKey = $newVariableKey.trim();
+    const trimmedValue = $newVariableValue.trim();
 
-  let shouldAdd = true;
+    let shouldAdd = true;
 
-  variables.update((vars) => {
-    if (trimmedKey in vars) {
-      shouldAdd = confirm(`Variable "${trimmedKey}" already exists. Do you want to update it?`);
+    variables.update((vars) => {
+      if (trimmedKey in vars) {
+        shouldAdd = confirm(
+          `Variable "${trimmedKey}" already exists. Do you want to update it?`,
+        );
+        if (shouldAdd) {
+          showStatusMessage(`Variable "${trimmedKey}" updated`, "info");
+        } else {
+          showStatusMessage(`Variable "${trimmedKey}" not updated`, "warn");
+        }
+      }
+
       if (shouldAdd) {
-        showStatusMessage(`Variable "${trimmedKey}" updated`, "info");
-      } else {
-        showStatusMessage(`Variable "${trimmedKey}" not updated`, "warn");
+        return { ...vars, [trimmedKey]: trimmedValue };
+      }
+      return vars;
+    });
+
+    if (shouldAdd) {
+      await saveVariable(trimmedKey, trimmedValue);
+      newVariableKey.set("");
+      newVariableValue.set("");
+      if (!(trimmedKey in $variables)) {
+        showStatusMessage(
+          `Variable "${trimmedKey}" added successfully`,
+          "info",
+        );
       }
     }
-    
-    if (shouldAdd) {
-      return { ...vars, [trimmedKey]: trimmedValue };
-    }
-    return vars;
-  });
-
-  if (shouldAdd) {
-    await saveVariable(trimmedKey, trimmedValue);
-    newVariableKey.set("");
-    newVariableValue.set("");
-    if (!(trimmedKey in $variables)) {
-      showStatusMessage(`Variable "${trimmedKey}" added successfully`, "info");
-    }
   }
-}
 
   function deleteVariable(key: string) {
     variables.update((vars) => {
@@ -1266,8 +1318,8 @@
       }
     } catch (error) {
       console.error("Failed to save file:", error);
-      
-      showStatusMessage("Failed to save file.","error");
+
+      showStatusMessage("Failed to save file.", "error");
     }
   }
 
@@ -1312,13 +1364,12 @@
 
         groupModalOpen.set(false);
 
-       
         showStatusMessage("Postman collection imported successfully.");
       }
     } catch (error) {
       console.error("Failed to import Postman collection:", error);
-     
-      showStatusMessage("Failed to import Postman collection.","error");
+
+      showStatusMessage("Failed to import Postman collection.", "error");
     }
   }
 
@@ -1461,13 +1512,12 @@
         await writeTextFile(filePath, apiDocJson);
         console.log("API Documentation saved successfully:", filePath);
 
-       
         showStatusMessage("API Documentation saved successfully.");
       }
     } catch (error) {
       console.error("Failed to save API Documentation:", error);
-   
-      showStatusMessage("Failed to save API Documentation.","error");
+
+      showStatusMessage("Failed to save API Documentation.", "error");
     }
   }
 
@@ -1524,7 +1574,7 @@
       await loadGroups();
       await loadVariables();
       await loadCustomHeaders();
-      
+
       // Yükleme tamamlandığında loading state'i güncelleyin
       isLoading.set(false);
     } catch (error) {
@@ -1538,596 +1588,607 @@
 {#if $isLoading}
   <SplashScreen onFinish={initializeApp} />
 {:else}
+  <TitleBar />
 
-<TitleBar />
-
-<div class="flex h-screen flex-col">
-<div class="main-content">
-  <div class="menu-panel panel">
-    <div class="vertical-buttons">
-      <button
-        type="button"
-        on:click={openThemeSwitcherModal}
-        class="button-item hover:text-purple-700"
-        title="Change Theme"
-      >
-        <FontAwesomeIcon icon="paint-brush" size="lg" />
-      </button>
-      <button
-        type="button"
-        class="button-item hover:text-blue-700"
-        title="Change Group"
-        on:click={() => {
-          groupModalOpen.set(true);
-        }}
-      >
-        <FontAwesomeIcon icon="database" size="lg" />
-      </button>
-      <button
-        type="button"
-        on:click={openCustomHeaderPanel}
-        class="button-item hover:text-green-700"
-        title="Headers"
-      >
-        <FontAwesomeIcon icon={faEdit} size="lg" />
-      </button>
-      <button
-        type="button"
-        on:click={() => variablesPanelOpen.set(true)}
-        class="button-item hover:text-green-700"
-        title="Variables"
-      >
-        <FontAwesomeIcon icon="edit" size="lg" />
-      </button>
-      <button
-        type="button"
-        on:click={importPostmanCollection}
-        class="button-item hover:text-orange-700"
-        title="Import"
-      >
-        <FontAwesomeIcon icon="upload" size="lg" />
-      </button>
-      <button
-        type="button"
-        on:click={() => downloadApiDocumentation($history)}
-        class="button-item hover:text-green-700"
-        title="Doc"
-      >
-        <FontAwesomeIcon icon="download" size="lg" />
-      </button>
-      <button
-        type="button"
-        on:click={openApiFlowModal}
-        class="button-item bg-gray-300 rounded-md cursor-not-allowed opacity-50"
-        title="Designer"
-        disabled
-      >
-        <FontAwesomeIcon icon="edit" size="lg" />
-      </button>
-      <button
-        type="button"
-        on:click={handleExport}
-        class="button-item bg-gray-300 rounded-md cursor-not-allowed opacity-50"
-        title="Export"
-        disabled
-      >
-        <FontAwesomeIcon icon="download" size="lg" />
-      </button>
-    </div>
-  </div>
-
-  <div class="history-panel panel">
-    {#if $selectedGroup}
-      <div class="group">
-        <div class="flex justify-between items-center">
-          <h4 class="text-base font-semibold mb-2 flex items-center">
-            {$selectedGroup}
-          </h4>
+  <div class="flex h-screen flex-col">
+    <div class="main-content">
+      <div class="menu-panel panel">
+        <div class="vertical-buttons">
+          <button
+            type="button"
+            on:click={openThemeSwitcherModal}
+            class="button-item hover:text-purple-700"
+            title="Change Theme"
+          >
+            <FontAwesomeIcon icon="paint-brush" size="lg" />
+          </button>
+          <button
+            type="button"
+            class="button-item hover:text-blue-700"
+            title="Change Group"
+            on:click={() => {
+              groupModalOpen.set(true);
+            }}
+          >
+            <FontAwesomeIcon icon="database" size="lg" />
+          </button>
+          <button
+            type="button"
+            on:click={openCustomHeaderPanel}
+            class="button-item hover:text-green-700"
+            title="Headers"
+          >
+            <FontAwesomeIcon icon={faEdit} size="lg" />
+          </button>
+          <button
+            type="button"
+            on:click={() => variablesPanelOpen.set(true)}
+            class="button-item hover:text-green-700"
+            title="Variables"
+          >
+            <FontAwesomeIcon icon="edit" size="lg" />
+          </button>
+          <button
+            type="button"
+            on:click={importPostmanCollection}
+            class="button-item hover:text-orange-700"
+            title="Import"
+          >
+            <FontAwesomeIcon icon="upload" size="lg" />
+          </button>
+          <button
+            type="button"
+            on:click={() => downloadApiDocumentation($history)}
+            class="button-item hover:text-green-700"
+            title="Doc"
+          >
+            <FontAwesomeIcon icon="download" size="lg" />
+          </button>
+          <button
+            type="button"
+            on:click={openApiFlowModal}
+            class="button-item bg-gray-300 rounded-md cursor-not-allowed opacity-50"
+            title="Designer"
+            disabled
+          >
+            <FontAwesomeIcon icon="edit" size="lg" />
+          </button>
+          <button
+            type="button"
+            on:click={handleExport}
+            class="button-item bg-gray-300 rounded-md cursor-not-allowed opacity-50"
+            title="Export"
+            disabled
+          >
+            <FontAwesomeIcon icon="download" size="lg" />
+          </button>
         </div>
+      </div>
 
-        <ul>
-          {#each $history as item}
-            <li class="mb-2 history-item flex justify-between items-center">
-              <button
-                type="button"
-                class="w-full text-left"
-                on:click={() => selectHistoryItem(item)}
-              >
-                <span
-                  class="px-2 py-1 rounded
+      <div class="history-panel panel">
+        {#if $selectedGroup}
+          <div class="group">
+            <div class="flex justify-between items-center">
+              <h4 class="text-base font-semibold mb-2 flex items-center">
+                {$selectedGroup}
+              </h4>
+            </div>
+
+            <ul>
+              {#each $history as item}
+                <li class="mb-2 history-item flex justify-between items-center">
+                  <button
+                    type="button"
+                    class="w-full text-left"
+                    on:click={() => selectHistoryItem(item)}
+                  >
+                    <span
+                      class="px-2 py-1 rounded
                {item.method === 'GET' ? 'method-get' : ''} 
                                  {item.method === 'POST' ? 'method-post' : ''} 
                                  {item.method === 'PUT' ? 'method-put' : ''} 
                                  {item.method === 'DELETE'
-                    ? 'method-delete'
-                    : ''} 
+                        ? 'method-delete'
+                        : ''} 
                                  {item.method === 'PATCH'
-                    ? 'method-patch'
-                    : ''} 
+                        ? 'method-patch'
+                        : ''} 
                                  {item.method === 'OPTIONS'
-                    ? 'method-options'
-                    : ''} 
+                        ? 'method-options'
+                        : ''} 
                                  {item.method === 'HEAD' ? 'method-head' : ''} 
                                  {item.method === 'CONNECT'
-                    ? 'method-connect'
-                    : ''} 
+                        ? 'method-connect'
+                        : ''} 
                                  {item.method === 'TRACE' ? 'method-trace' : ''}
                 text-white"
-                >
-                  {item.method.substring(0, 3)}
-                </span>
-
-                <span class="url">{item.url}</span>
-              </button>
-              <button
-                class="duplicate-icon"
-                aria-label="Duplicate history item"
-                on:click={() => duplicateHistoryItem(item)}
-                on:keydown={(e) => {
-                  if (e.key === "Enter" || e.key === " ")
-                    duplicateHistoryItem(item);
-                }}
-              >
-                <FontAwesomeIcon icon="clone" size="lg" />
-              </button>
-              <button
-                class="delete-icon"
-                aria-label="Delete history item"
-                on:click={() => openModal(item.id)}
-                on:keydown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") openModal(item.id);
-                }}
-              >
-                <FontAwesomeIcon icon="trash-alt" size="lg" />
-              </button>
-            </li>
-          {/each}
-        </ul>
-      </div>
-    {/if}
-  </div>
-
-  <div class="request-panel panel">
-    <div class="flex mb-4">
-      <HttpMethodDropdown {method} />
-      <div class="input-container">
-        <input
-          type="text"
-          id="url"
-          bind:value={$url}
-          placeholder="https://api.example.com/data"
-          class="flex-1 p-2 border rounded text-primary bg-accent"
-        />
-        {#if $url}
-          <span
-            class="clear-icon"
-            role="button"
-            tabindex="0"
-            on:keydown={(e) => handleKeydown(e, () => clearInput(url))}
-            on:click={() => clearInput(url)}>×</span
-          >
-        {/if}
-      </div>
-    </div>
-    <button type="button" on:click={sendRequest} class="button mb-4"
-      >Send Request</button
-    >
-    <div class="tabs">
-      <button
-        type="button"
-        class="tab {$selectedRequestTab === 'body' ? 'active' : ''}"
-        on:click={() => selectedRequestTab.set("body")}
-        aria-label="Body Tab"
-      >
-        Body
-      </button>
-
-      <button
-        type="button"
-        class="tab {$selectedRequestTab === 'headers' ? 'active' : ''}"
-        on:click={() => selectedRequestTab.set("headers")}
-        aria-label="Headers Tab"
-      >
-        Headers
-      </button>
-      <button
-        type="button"
-        class="tab {$selectedRequestTab === 'group' ? 'active' : ''}"
-        on:click={() => selectedRequestTab.set("group")}
-        aria-label="Group Tab"
-      >
-        Group
-      </button>
-      <button
-        type="button"
-        class="tab {$selectedRequestTab === 'path-params' ? 'active' : ''}"
-        on:click={() => selectedRequestTab.set("path-params")}
-        aria-label="Path Params Tab"
-      >
-        Path Params
-      </button>
-      <button
-        type="button"
-        class="tab {$selectedRequestTab === 'query-params' ? 'active' : ''}"
-        on:click={() => selectedRequestTab.set("query-params")}
-        aria-label="Query Params Tab"
-      >
-        Query Params
-      </button>
-      <button
-        type="button"
-        class="tab {$selectedRequestTab === 'form-data' ? 'active' : ''}"
-        on:click={() => selectedRequestTab.set("form-data")}
-        aria-label="Form Data Tab"
-      >
-        Form Data
-      </button>
-    </div>
-    <div class="tab-content">
-      {#if $selectedRequestTab === "body"}
-        <HttpBodyDropdown selected={bodyType} />
-        {#if $bodyType === "json" || $bodyType === "xml"}
-          <textarea
-            id="body"
-            bind:value={$body}
-            placeholder={$bodyType === "json"
-              ? '{"key": "value"}'
-              : "<xml></xml>"}
-            class="w-full mb-4 p-2 border rounded text-primary bg-accent h-4/6"
-          ></textarea>
-        {/if}
-      {:else if $selectedRequestTab === "headers"}
-        <div class="params-container">
-          <div class="top-buttons">
-            <button type="button" on:click={addHeader} class="">
-              <FontAwesomeIcon icon="plus" size="lg" /> Add
-            </button>
-            <span class="separator"></span>
-            <button type="button" on:click={clearHeaders} class="text-red-700">
-              <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
-            </button>
-          </div>
-          {#each $headers as header, index}
-            <div class="header-row relative">
-              <input
-                type="text"
-                placeholder="Key"
-                bind:value={header.key}
-                class="flex-1 p-2 border rounded text-primary bg-accent mr-2"
-                on:input={(e) => filterHeaders(index, e)}
-                on:blur={() => clearAutocomplete(index)}
-              />
-              {#if $autocompleteHeaders[index]?.length}
-                <div class="autocomplete-suggestions">
-                  {#each $autocompleteHeaders[index] as suggestion}
-                    <div
-                      class="autocomplete-suggestion"
-                      role="option"
-                      tabindex="0"
-                      aria-selected={false}
-                      on:mousedown={() =>
-                        selectAutocompleteItem(index, suggestion)}
                     >
-                      {suggestion}
-                    </div>
-                  {/each}
-                </div>
-              {/if}
-              <input
-                type="text"
-                placeholder="Value"
-                bind:value={header.value}
-                class="flex-1 p-2 border rounded text-primary bg-accent"
-              />
-              <button
-                type="button"
-                on:click={() =>
-                  headers.update((h) => h.filter((_, i) => i !== index))}
-                class="text-red-500"
-              >
-                <FontAwesomeIcon icon="trash-alt" size="lg" />
-              </button>
-            </div>
-          {/each}
-        </div>
-      {:else if $selectedRequestTab === "group"}
-        <div class="mb-4">
-          <select
-            id="group"
-            bind:value={$selectedGroup}
-            class="w-full mb-4 p-2 border rounded text-primary bg-accent"
-          >
-            {#each $groups as group}
-              <option value={group}>{group}</option>
-            {/each}
-            <option value="new">+ Create New Group</option>
-          </select>
-          {#if $selectedGroup === "new"}
+                      {item.method.substring(0, 3)}
+                    </span>
+
+                    <span class="url">{item.url}</span>
+                  </button>
+                  <button
+                    class="duplicate-icon"
+                    aria-label="Duplicate history item"
+                    on:click={() => duplicateHistoryItem(item)}
+                    on:keydown={(e) => {
+                      if (e.key === "Enter" || e.key === " ")
+                        duplicateHistoryItem(item);
+                    }}
+                  >
+                    <FontAwesomeIcon icon="clone" size="lg" />
+                  </button>
+                  <button
+                    class="delete-icon"
+                    aria-label="Delete history item"
+                    on:click={() => openModal(item.id)}
+                    on:keydown={(e) => {
+                      if (e.key === "Enter" || e.key === " ")
+                        openModal(item.id);
+                    }}
+                  >
+                    <FontAwesomeIcon icon="trash-alt" size="lg" />
+                  </button>
+                </li>
+              {/each}
+            </ul>
+          </div>
+        {/if}
+      </div>
+
+      <div class="request-panel panel">
+        <div class="flex mb-4">
+          <HttpMethodDropdown {method} />
+          <div class="input-container">
             <input
               type="text"
-              placeholder="New Group Name"
-              bind:value={$newGroupName}
-              class="w-full mb-4 p-2 border rounded text-primary bg-accent"
-              on:blur={createNewGroup}
+              id="url"
+              bind:value={$url}
+              placeholder="https://api.example.com/data"
+              class="flex-1 p-2 border rounded text-primary bg-accent"
             />
-          {/if}
-        </div>
-      {:else if $selectedRequestTab === "path-params"}
-        <div class="params-container">
-          <div class="top-buttons">
-            <button
-              type="button"
-              on:click={() =>
-                pathParams.update((p) => [...p, { key: "", value: "" }])}
-              class=""
-            >
-              <FontAwesomeIcon icon="plus" size="lg" /> Add
-            </button>
-            <span class="separator"></span>
-            <button
-              type="button"
-              on:click={() => pathParams.set([])}
-              class="text-red-700"
-            >
-              <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
-            </button>
-          </div>
-          {#each $pathParams as param, index}
-            <div class="header-row">
-              <input
-                type="text"
-                placeholder="Key"
-                bind:value={param.key}
-                class="flex-1 p-2 border rounded text-primary bg-accent mr-2"
-              />
-              <input
-                type="text"
-                placeholder="Value"
-                bind:value={param.value}
-                class="flex-1 p-2 border rounded text-primary bg-accent"
-              />
-              <button
-                type="button"
-                on:click={() =>
-                  pathParams.update((p) => p.filter((_, i) => i !== index))}
-                class="text-red-500"
+            {#if $url}
+              <span
+                class="clear-icon"
+                role="button"
+                tabindex="0"
+                on:keydown={(e) => handleKeydown(e, () => clearInput(url))}
+                on:click={() => clearInput(url)}>×</span
               >
-                <FontAwesomeIcon icon="trash-alt" size="lg" />
-              </button>
-            </div>
-          {/each}
-        </div>
-      {:else if $selectedRequestTab === "query-params"}
-        <div class="params-container">
-          <div class="top-buttons">
-            <button type="button" on:click={addParam} class="">
-              <FontAwesomeIcon icon="plus" size="lg" /> Add
-            </button>
-            <span class="separator"></span>
-            <button type="button" on:click={clearParams} class="text-red-700">
-              <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
-            </button>
-          </div>
-          {#each $queryParams as param, index}
-            <div class="header-row">
-              <input
-                type="text"
-                placeholder="Key"
-                bind:value={param.key}
-                class="flex-1 p-2 border rounded text-primary bg-accent mr-2"
-              />
-              <input
-                type="text"
-                placeholder="Value"
-                bind:value={param.value}
-                class="flex-1 p-2 border rounded text-primary bg-accent"
-              />
-              <button
-                type="button"
-                on:click={() =>
-                  queryParams.update((p) => p.filter((_, i) => i !== index))}
-                class="text-red-500"
-              >
-                <FontAwesomeIcon icon="trash-alt" size="lg" />
-              </button>
-            </div>
-          {/each}
-        </div>
-      {:else if $selectedRequestTab === "form-data"}
-        <div class="params-container">
-          <div class="top-buttons">
-            <button type="button" on:click={addFormField} class="">
-              <FontAwesomeIcon icon="plus" size="lg" /> Add
-            </button>
-            <span class="separator"></span>
-            <button
-              type="button"
-              on:click={() => formParams.set([])}
-              class="text-red-700"
-            >
-              <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
-            </button>
-          </div>
-          {#each $formParams as field, index}
-            <div class="header-row">
-              <input
-                type="text"
-                placeholder="Key"
-                bind:value={field.key}
-                class="flex-1 p-2 border rounded text-primary bg-accent mr-2"
-              />
-              <input
-                type="text"
-                placeholder="Value"
-                bind:value={field.value}
-                class="flex-1 p-2 border rounded text-primary bg-accent"
-              />
-              <button
-                type="button"
-                on:click={() =>
-                  formParams.update((f) => f.filter((_, i) => i !== index))}
-                class="text-red-500"
-              >
-                <FontAwesomeIcon icon="trash-alt" size="lg" />
-              </button>
-            </div>
-          {/each}
-        </div>
-      {/if}
-    </div>
-  </div>
-
-  <div class="response-panel panel relative">
-    {#if $response}
-      <div class="status-box border border-gray-500 p-4 mb-4 rounded">
-        <div class="flex justify-end">
-          <div class="flex items-center">
-            <span
-              class="text-white px-2 py-1 rounded {getStatusClass(
-                $response.status,
-              )}"
-              >{$response.status} {$response.status === 200 ? "OK" : ""}</span
-            >
-          </div>
-          <div class="flex items-center ml-2">
-            <span>{$response.duration} ms</span>
-          </div>
-          <div class="flex items-center ml-2">
-            <span>{($response.size / 1024).toFixed(2)} KB</span>
-          </div>
-          <div class="flex items-center ml-2">
-            <span
-              role="button"
-              tabindex="0"
-              on:keydown={(e) => handleKeydown(e, () => toggleStatusHistory())}
-              on:click={toggleStatusHistory}
-              >{timeAgo($response.timestamp)}</span
-            >
-          </div>
-        </div>
-      </div>
-
-      {#if $response.error}
-        <div class="error-message mb-4">
-          {$response.error}
-        </div>
-      {/if}
-      <div class="flex mb-4">
-        <button
-          type="button"
-          class="tab {$selectedTab === 'response' ? 'active' : ''}"
-          on:click={() => selectedTab.set("response")}
-          aria-label="Response Tab"
-        >
-          Response
-        </button>
-        <button
-          type="button"
-          class="tab {$selectedTab === 'table' ? 'active' : ''}"
-          on:click={() => selectedTab.set("table")}
-          aria-label="Table Tab"
-        >
-          Table
-        </button>
-        <button
-          type="button"
-          class="tab {$selectedTab === 'headers' ? 'active' : ''}"
-          on:click={() => selectedTab.set("headers")}
-          aria-label="Headers Tab"
-        >
-          Headers
-        </button>
-        <button
-          type="button"
-          class="tab {$selectedTab === 'curl' ? 'active' : ''}"
-          on:click={() => selectedTab.set("curl")}
-          aria-label="Curl Command Tab"
-        >
-          Curl Command
-        </button>
-      </div>
-
-      <div class="tab-content">
-        {#if $selectedTab === "response"}
-          <div class="response-container relative">
-            <JSONEditor
-              jsonData={$response && $response.body ? $response.body : "{}"}
-              theme="light"
-            />
-          </div>
-        {:else if $selectedTab === "table"}
-          <div class="table-container">
-            {#if tableData.headers.length > 0}
-              <table>
-                <thead>
-                  <tr>
-                    {#each tableData.headers as header}
-                      <th>{header}</th>
-                    {/each}
-                  </tr>
-                </thead>
-                <tbody>
-                  {#each tableData.rows as row}
-                    <tr>
-                      {#each row as cell}
-                        <td>{cell}</td>
-                      {/each}
-                    </tr>
-                  {/each}
-                </tbody>
-              </table>
-            {:else}
-              <p>Unable to display data in table format.</p>
             {/if}
           </div>
-        {:else if $selectedTab === "headers"}
-          <table>
-            {#each $response.headers as [key, value]}
-              <tr>
-                <th>{key}</th>
-                <td>{value}</td>
-              </tr>
-            {/each}
-          </table>
-        {:else if $selectedTab === "curl"}
-          <div class="flex justify-between">
-            <span class="p-2 rounded">
-              {@html $response.curl_command}
-            </span>
+        </div>
+        <button type="button" on:click={sendRequest} class="button mb-4"
+          >Send Request</button
+        >
+        <div class="tabs">
+          <button
+            type="button"
+            class="tab {$selectedRequestTab === 'body' ? 'active' : ''}"
+            on:click={() => selectedRequestTab.set("body")}
+            aria-label="Body Tab"
+          >
+            Body
+          </button>
+
+          <button
+            type="button"
+            class="tab {$selectedRequestTab === 'headers' ? 'active' : ''}"
+            on:click={() => selectedRequestTab.set("headers")}
+            aria-label="Headers Tab"
+          >
+            Headers
+          </button>
+          <button
+            type="button"
+            class="tab {$selectedRequestTab === 'group' ? 'active' : ''}"
+            on:click={() => selectedRequestTab.set("group")}
+            aria-label="Group Tab"
+          >
+            Group
+          </button>
+          <button
+            type="button"
+            class="tab {$selectedRequestTab === 'path-params' ? 'active' : ''}"
+            on:click={() => selectedRequestTab.set("path-params")}
+            aria-label="Path Params Tab"
+          >
+            Path Params
+          </button>
+          <button
+            type="button"
+            class="tab {$selectedRequestTab === 'query-params' ? 'active' : ''}"
+            on:click={() => selectedRequestTab.set("query-params")}
+            aria-label="Query Params Tab"
+          >
+            Query Params
+          </button>
+          <button
+            type="button"
+            class="tab {$selectedRequestTab === 'form-data' ? 'active' : ''}"
+            on:click={() => selectedRequestTab.set("form-data")}
+            aria-label="Form Data Tab"
+          >
+            Form Data
+          </button>
+        </div>
+        <div class="tab-content">
+          {#if $selectedRequestTab === "body"}
+            <HttpBodyDropdown selected={bodyType} />
+            {#if $bodyType === "json" || $bodyType === "xml"}
+              <textarea
+                id="body"
+                bind:value={$body}
+                placeholder={$bodyType === "json"
+                  ? '{"key": "value"}'
+                  : "<xml></xml>"}
+                class="w-full mb-4 p-2 border rounded text-primary bg-accent h-4/6"
+              ></textarea>
+            {/if}
+          {:else if $selectedRequestTab === "headers"}
+            <div class="params-container">
+              <div class="top-buttons">
+                <button type="button" on:click={addHeader} class="">
+                  <FontAwesomeIcon icon="plus" size="lg" /> Add
+                </button>
+                <span class="separator"></span>
+                <button
+                  type="button"
+                  on:click={clearHeaders}
+                  class="text-red-700"
+                >
+                  <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
+                </button>
+              </div>
+              {#each $headers as header, index}
+                <div class="header-row relative">
+                  <input
+                    type="text"
+                    placeholder="Key"
+                    bind:value={header.key}
+                    class="flex-1 p-2 border rounded text-primary bg-accent mr-2"
+                    on:input={(e) => filterHeaders(index, e)}
+                    on:blur={() => clearAutocomplete(index)}
+                  />
+                  {#if $autocompleteHeaders[index]?.length}
+                    <div class="autocomplete-suggestions">
+                      {#each $autocompleteHeaders[index] as suggestion}
+                        <div
+                          class="autocomplete-suggestion"
+                          role="option"
+                          tabindex="0"
+                          aria-selected={false}
+                          on:mousedown={() =>
+                            selectAutocompleteItem(index, suggestion)}
+                        >
+                          {suggestion}
+                        </div>
+                      {/each}
+                    </div>
+                  {/if}
+                  <input
+                    type="text"
+                    placeholder="Value"
+                    bind:value={header.value}
+                    class="flex-1 p-2 border rounded text-primary bg-accent"
+                  />
+                  <button
+                    type="button"
+                    on:click={() =>
+                      headers.update((h) => h.filter((_, i) => i !== index))}
+                    class="text-red-500"
+                  >
+                    <FontAwesomeIcon icon="trash-alt" size="lg" />
+                  </button>
+                </div>
+              {/each}
+            </div>
+          {:else if $selectedRequestTab === "group"}
+            <div class="mb-4">
+              <select
+                id="group"
+                bind:value={$selectedGroup}
+                class="w-full mb-4 p-2 border rounded text-primary bg-accent"
+              >
+                {#each $groups as group}
+                  <option value={group}>{group}</option>
+                {/each}
+                <option value="new">+ Create New Group</option>
+              </select>
+              {#if $selectedGroup === "new"}
+                <input
+                  type="text"
+                  placeholder="New Group Name"
+                  bind:value={$newGroupName}
+                  class="w-full mb-4 p-2 border rounded text-primary bg-accent"
+                  on:blur={createNewGroup}
+                />
+              {/if}
+            </div>
+          {:else if $selectedRequestTab === "path-params"}
+            <div class="params-container">
+              <div class="top-buttons">
+                <button
+                  type="button"
+                  on:click={() =>
+                    pathParams.update((p) => [...p, { key: "", value: "" }])}
+                  class=""
+                >
+                  <FontAwesomeIcon icon="plus" size="lg" /> Add
+                </button>
+                <span class="separator"></span>
+                <button
+                  type="button"
+                  on:click={() => pathParams.set([])}
+                  class="text-red-700"
+                >
+                  <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
+                </button>
+              </div>
+              {#each $pathParams as param, index}
+                <div class="header-row">
+                  <input
+                    type="text"
+                    placeholder="Key"
+                    bind:value={param.key}
+                    class="flex-1 p-2 border rounded text-primary bg-accent mr-2"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Value"
+                    bind:value={param.value}
+                    class="flex-1 p-2 border rounded text-primary bg-accent"
+                  />
+                  <button
+                    type="button"
+                    on:click={() =>
+                      pathParams.update((p) => p.filter((_, i) => i !== index))}
+                    class="text-red-500"
+                  >
+                    <FontAwesomeIcon icon="trash-alt" size="lg" />
+                  </button>
+                </div>
+              {/each}
+            </div>
+          {:else if $selectedRequestTab === "query-params"}
+            <div class="params-container">
+              <div class="top-buttons">
+                <button type="button" on:click={addParam} class="">
+                  <FontAwesomeIcon icon="plus" size="lg" /> Add
+                </button>
+                <span class="separator"></span>
+                <button
+                  type="button"
+                  on:click={clearParams}
+                  class="text-red-700"
+                >
+                  <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
+                </button>
+              </div>
+              {#each $queryParams as param, index}
+                <div class="header-row">
+                  <input
+                    type="text"
+                    placeholder="Key"
+                    bind:value={param.key}
+                    class="flex-1 p-2 border rounded text-primary bg-accent mr-2"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Value"
+                    bind:value={param.value}
+                    class="flex-1 p-2 border rounded text-primary bg-accent"
+                  />
+                  <button
+                    type="button"
+                    on:click={() =>
+                      queryParams.update((p) =>
+                        p.filter((_, i) => i !== index),
+                      )}
+                    class="text-red-500"
+                  >
+                    <FontAwesomeIcon icon="trash-alt" size="lg" />
+                  </button>
+                </div>
+              {/each}
+            </div>
+          {:else if $selectedRequestTab === "form-data"}
+            <div class="params-container">
+              <div class="top-buttons">
+                <button type="button" on:click={addFormField} class="">
+                  <FontAwesomeIcon icon="plus" size="lg" /> Add
+                </button>
+                <span class="separator"></span>
+                <button
+                  type="button"
+                  on:click={() => formParams.set([])}
+                  class="text-red-700"
+                >
+                  <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
+                </button>
+              </div>
+              {#each $formParams as field, index}
+                <div class="header-row">
+                  <input
+                    type="text"
+                    placeholder="Key"
+                    bind:value={field.key}
+                    class="flex-1 p-2 border rounded text-primary bg-accent mr-2"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Value"
+                    bind:value={field.value}
+                    class="flex-1 p-2 border rounded text-primary bg-accent"
+                  />
+                  <button
+                    type="button"
+                    on:click={() =>
+                      formParams.update((f) => f.filter((_, i) => i !== index))}
+                    class="text-red-500"
+                  >
+                    <FontAwesomeIcon icon="trash-alt" size="lg" />
+                  </button>
+                </div>
+              {/each}
+            </div>
+          {/if}
+        </div>
+      </div>
+
+      <div class="response-panel panel relative">
+        {#if $response}
+          <div class="status-box border border-gray-500 p-4 mb-4 rounded">
+            <div class="flex justify-end">
+              <div class="flex items-center">
+                <span
+                  class="text-white px-2 py-1 rounded {getStatusClass(
+                    $response.status,
+                  )}"
+                  >{$response.status}
+                  {$response.status === 200 ? "OK" : ""}</span
+                >
+              </div>
+              <div class="flex items-center ml-2">
+                <span>{$response.duration} ms</span>
+              </div>
+              <div class="flex items-center ml-2">
+                <span>{($response.size / 1024).toFixed(2)} KB</span>
+              </div>
+              <div class="flex items-center ml-2">
+                <span
+                  role="button"
+                  tabindex="0"
+                  on:keydown={(e) =>
+                    handleKeydown(e, () => toggleStatusHistory())}
+                  on:click={toggleStatusHistory}
+                  >{timeAgo($response.timestamp)}</span
+                >
+              </div>
+            </div>
+          </div>
+
+          {#if $response.error}
+            <div class="error-message mb-4">
+              {$response.error}
+            </div>
+          {/if}
+          <div class="flex mb-4">
             <button
               type="button"
-              on:click={() => copyToClipboard($response.curl_command)}
-              class="text-blue-500"
+              class="tab {$selectedTab === 'response' ? 'active' : ''}"
+              on:click={() => selectedTab.set("response")}
+              aria-label="Response Tab"
             >
-              <FontAwesomeIcon icon="copy" size="xl" />
+              Response
             </button>
+            <button
+              type="button"
+              class="tab {$selectedTab === 'table' ? 'active' : ''}"
+              on:click={() => selectedTab.set("table")}
+              aria-label="Table Tab"
+            >
+              Table
+            </button>
+            <button
+              type="button"
+              class="tab {$selectedTab === 'headers' ? 'active' : ''}"
+              on:click={() => selectedTab.set("headers")}
+              aria-label="Headers Tab"
+            >
+              Headers
+            </button>
+            <button
+              type="button"
+              class="tab {$selectedTab === 'curl' ? 'active' : ''}"
+              on:click={() => selectedTab.set("curl")}
+              aria-label="Curl Command Tab"
+            >
+              Curl Command
+            </button>
+          </div>
+
+          <div class="tab-content">
+            {#if $selectedTab === "response"}
+              <div class="response-container relative">
+                <JSONEditor
+                  jsonData={$response && $response.body ? $response.body : "{}"}
+                  theme="light"
+                />
+              </div>
+            {:else if $selectedTab === "table"}
+              <div class="table-container">
+                {#if tableData.headers.length > 0}
+                  <table>
+                    <thead>
+                      <tr>
+                        {#each tableData.headers as header}
+                          <th>{header}</th>
+                        {/each}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {#each tableData.rows as row}
+                        <tr>
+                          {#each row as cell}
+                            <td>{cell}</td>
+                          {/each}
+                        </tr>
+                      {/each}
+                    </tbody>
+                  </table>
+                {:else}
+                  <p>Unable to display data in table format.</p>
+                {/if}
+              </div>
+            {:else if $selectedTab === "headers"}
+              <table>
+                {#each $response.headers as [key, value]}
+                  <tr>
+                    <th>{key}</th>
+                    <td>{value}</td>
+                  </tr>
+                {/each}
+              </table>
+            {:else if $selectedTab === "curl"}
+              <div class="flex justify-between">
+                <span class="p-2 rounded">
+                  {@html $response.curl_command}
+                </span>
+                <button
+                  type="button"
+                  on:click={() => copyToClipboard($response.curl_command)}
+                  class="text-blue-500"
+                >
+                  <FontAwesomeIcon icon="copy" size="xl" />
+                </button>
+              </div>
+            {/if}
+          </div>
+        {:else}
+          <div>No response</div>
+        {/if}
+
+        {#if $isSending}
+          <div
+            class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+          >
+            <div class="bg-white p-4 rounded shadow-lg">
+              <h2 class="text-lg font-bold mb-4">Sending request...</h2>
+              <p class="mb-4">Elapsed time: {$elapsedTime} ms</p>
+              <button
+                type="button"
+                on:click={cancelRequest}
+                class="w-full p-2 bg-red-500 text-white rounded"
+                >Cancel Request</button
+              >
+            </div>
           </div>
         {/if}
       </div>
-    {:else}
-      <div>No response</div>
-    {/if}
-
-    {#if $isSending}
-      <div
-        class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-      >
-        <div class="bg-white p-4 rounded shadow-lg">
-          <h2 class="text-lg font-bold mb-4">Sending request...</h2>
-          <p class="mb-4">Elapsed time: {$elapsedTime} ms</p>
-          <button
-            type="button"
-            on:click={cancelRequest}
-            class="w-full p-2 bg-red-500 text-white rounded"
-            >Cancel Request</button
-          >
-        </div>
-      </div>
-    {/if}
+    </div>
   </div>
-  
-</div>
-</div>
 {/if}
 
 <StatusBar message={$statusMessage} type={$statusType} />
@@ -2142,7 +2203,7 @@
         class="rounded-full p-2 absolute top-2 right-2 flex items-center justify-center"
         style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
       >
-        <FontAwesomeIcon icon="close"  />
+        <FontAwesomeIcon icon="close" />
       </button>
 
       {#if $statusHistory.length === 0}
@@ -2263,7 +2324,7 @@
         style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
         class=" rounded-full p-2 shadow-lg absolute top-2 right-2 flex items-center justify-center"
       >
-        <FontAwesomeIcon icon="close"  />
+        <FontAwesomeIcon icon="close" />
       </button>
     </div>
   </div>
@@ -2369,7 +2430,6 @@
     </div>
   </div>
 {/if}
-
 
 <style>
   .fixed {
