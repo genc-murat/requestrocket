@@ -8,7 +8,7 @@
     onMount(() => {
       setTimeout(() => {
         onFinish();
-      }, 3000);
+      }, 1500);
     });
   </script>
   
