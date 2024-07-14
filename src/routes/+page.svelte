@@ -1570,19 +1570,25 @@
 
   async function initializeApp() {
     try {
-      // Gerekli verileri yükleyin
       await loadGroups();
       await loadVariables();
       await loadCustomHeaders();
 
-      // Yükleme tamamlandığında loading state'i güncelleyin
       isLoading.set(false);
     } catch (error) {
       console.error("Error loading initial data:", error);
-      // Hata durumunda da loading state'i güncelleyin
       isLoading.set(false);
     }
   }
+
+  document.addEventListener(
+    "contextmenu",
+    (e: MouseEvent) => {
+      e.preventDefault();
+      return false;
+    },
+    { capture: true },
+  );
 </script>
 
 {#if $isLoading}
