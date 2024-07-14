@@ -230,7 +230,7 @@ textarea {
   display: none;
   cursor: pointer;
   margin-left: 10px;
-  color: var(--primary);
+  color: var(--info);
 }
 
 .clear-icon {
@@ -373,7 +373,7 @@ textarea {
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
- 
+
 }
 
 .status-history {
@@ -405,8 +405,8 @@ textarea {
   border-left: 1px solid var(--divider);
 }
 
-.headers-panel{
-  background-color: var(--surface) ;
+.headers-panel {
+  background-color: var(--surface);
 }
 
 .button {
