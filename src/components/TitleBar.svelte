@@ -1,5 +1,6 @@
 <script lang="ts">
     import { appWindow } from "@tauri-apps/api/window";
+    import logo from "../assets/128x128@2x.png";
 
     async function minimize() {
         await appWindow.minimize();
@@ -15,7 +16,10 @@
 </script>
 
 <div data-tauri-drag-region class="titlebar">
-    <div class="title">Request Rocket</div>
+    <div class="title-container">
+        <img src={logo} alt="Logo" class="title-logo" />
+        <div class="title">Request Rocket</div>
+    </div>
     <div class="buttons">
         <button on:click={minimize}>_</button>
         <button on:click={maximize}>[]</button>
@@ -38,6 +42,18 @@
         width: 100%;
         height: 2.5rem;
         z-index: 1000;
+    }
+
+    .title-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .title-logo {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
     }
 
     .titlebar .title {
