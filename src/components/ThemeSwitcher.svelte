@@ -3036,9 +3036,9 @@
                 ]} 100%); color: {themes[theme]['--primary-text']};"
                 on:click={() => applyTheme(theme)}
             >
-                {theme
+                <!-- {theme
                     .replace(/([A-Z])/g, " $1")
-                    .replace(/^./, (str) => str.toUpperCase())}
+                    .replace(/^./, (str) => str.toUpperCase())} -->
             </button>
         {/each}
     </div>
