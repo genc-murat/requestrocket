@@ -18,9 +18,6 @@
       "dialog": {
         "all": true
       },
-      "notification": {
-        "all": true
-      },
       "http": {
         "all": true,
         "request": true,

@@ -21,7 +21,6 @@
   import { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";
   import { writeTextFile, readTextFile } from "@tauri-apps/api/fs";
   import { dialog } from "@tauri-apps/api";
-  import { sendNotification } from "@tauri-apps/api/notification";
   import JSONEditor from "../components/JSONEditor.svelte";
   import APIFlowDesigner from "../components/APIFlowDesigner.svelte";
   import {
@@ -64,7 +63,20 @@
 
   import SplashScreen from "../components/SplashScreen.svelte";
 
+  import StatusBar from "../components/StatusBar.svelte";
+
   const themeModalOpen = writable(false);
+
+  const statusMessage: Writable<string | null> = writable(null);
+    const statusType: Writable<'info' | 'warn' | 'error'> = writable('info');
+
+  function showStatusMessage(message: string, type: 'info' | 'warn' | 'error' = 'info'): void {
+    statusMessage.set(message);
+    statusType.set(type);
+    setTimeout(() => {
+      statusMessage.set(null);
+    }, 3000);
+  }
 
   function openThemeSwitcherModal() {
     themeModalOpen.set(true);
@@ -495,6 +507,7 @@
       const db = await dbPromise;
       await db.add("statusHistory", statusHistoryItem);
       console.log("Status history saved successfully.");
+
     } catch (error) {
       console.error(
         "Error saving status history:",
@@ -1214,18 +1227,12 @@
       if (filePath) {
         await writeTextFile(filePath, postmanJson);
         console.log("File saved successfully:", filePath);
-
-        sendNotification({
-          title: "Success",
-          body: "File saved successfully.",
-        });
+        showStatusMessage("File saved successfully.");
       }
     } catch (error) {
       console.error("Failed to save file:", error);
-      sendNotification({
-        title: "Error",
-        body: "Failed to save file.",
-      });
+      
+      showStatusMessage("Failed to save file.","error");
     }
   }
 
@@ -1270,17 +1277,13 @@
 
         groupModalOpen.set(false);
 
-        sendNotification({
-          title: "Success",
-          body: "Postman collection imported successfully.",
-        });
+       
+        showStatusMessage("Postman collection imported successfully.");
       }
     } catch (error) {
       console.error("Failed to import Postman collection:", error);
-      sendNotification({
-        title: "Error",
-        body: "Failed to import Postman collection.",
-      });
+     
+      showStatusMessage("Failed to import Postman collection.","error");
     }
   }
 
@@ -1423,17 +1426,13 @@
         await writeTextFile(filePath, apiDocJson);
         console.log("API Documentation saved successfully:", filePath);
 
-        sendNotification({
-          title: "Success",
-          body: "API Documentation saved successfully.",
-        });
+       
+        showStatusMessage("API Documentation saved successfully.");
       }
     } catch (error) {
       console.error("Failed to save API Documentation:", error);
-      sendNotification({
-        title: "Error",
-        body: "Failed to save API Documentation.",
-      });
+   
+      showStatusMessage("Failed to save API Documentation.","error");
     }
   }
 
@@ -2091,11 +2090,12 @@
       </div>
     {/if}
   </div>
+  
 </div>
 </div>
 {/if}
 
-
+<StatusBar message={$statusMessage} type={$statusType} />
 {#if $statusHistoryOpen}
   <div
     class="status-history-modal fixed inset-0 flex items-end justify-end bg-black bg-opacity-50 z-50"
@@ -2334,6 +2334,7 @@
     </div>
   </div>
 {/if}
+
 
 <style>
   .fixed {
