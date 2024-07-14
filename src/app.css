@@ -14,10 +14,10 @@
   --shadow: rgba(0, 0, 0, 0.25);
   --primary: #526D82;
   --secondary: #9DB2BF;
-  --warning: #FFC107;
-  --error: #DC3545;
-  --info: #17A2B8;
-  --success: #28A745;
+  --warning: #FFD966;
+  --error: #F28B82;
+  --info: #7EA8D7;
+  --success: #90C695;
 }
 
 /* General Styles */
@@ -273,13 +273,14 @@ input[type='text'],
 textarea {
   width: 100%;
   padding-right: 30px;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 .response-container {
   position: relative;
   height: 100%;
 }
+
 .copy-button {
   position: sticky;
   top: 0rem;
@@ -289,6 +290,7 @@ textarea {
   cursor: pointer;
   z-index: 1;
 }
+
 .response-content {
   max-height: auto;
   overflow-y: auto;
@@ -315,6 +317,7 @@ textarea {
   0% {
     background-color: rgba(255, 255, 0, 0.2);
   }
+
   100% {
     background-color: transparent;
   }
@@ -362,7 +365,7 @@ textarea {
   margin-bottom: 5px;
 }
 
-.status-history-item > div {
+.status-history-item>div {
   padding: 0 10px;
 }
 
@@ -386,29 +389,46 @@ textarea {
 }
 
 .method-get {
-  background-color: #90c695; /* Koyu Pastel Green */
+  background-color: #90c695;
+  /* Koyu Pastel Green */
 }
+
 .method-post {
-  background-color: #7ea8d7; /* Koyu Pastel Blue */
+  background-color: #7ea8d7;
+  /* Koyu Pastel Blue */
 }
+
 .method-put {
-  background-color: #ffd966; /* Koyu Pastel Yellow */
+  background-color: #ffd966;
+  /* Koyu Pastel Yellow */
 }
+
 .method-delete {
-  background-color: #f28b82; /* Koyu Pastel Red */
+  background-color: #f28b82;
+  /* Koyu Pastel Red */
 }
+
 .method-patch {
-  background-color: #c29adb; /* Koyu Pastel Purple */
+  background-color: #c29adb;
+  /* Koyu Pastel Purple */
 }
+
 .method-options {
-  background-color: #8fc5d5; /* Koyu Pastel Cyan */
+  background-color: #8fc5d5;
+  /* Koyu Pastel Cyan */
 }
+
 .method-head {
-  background-color: #a2b5d9; /* Koyu Pastel Light Blue */
+  background-color: #a2b5d9;
+  /* Koyu Pastel Light Blue */
 }
+
 .method-connect {
-  background-color: #e2aaff; /* Koyu Pastel Pink */
+  background-color: #e2aaff;
+  /* Koyu Pastel Pink */
 }
+
 .method-trace {
-  background-color: #ffb870; /* Koyu Pastel Peach */
+  background-color: #ffb870;
+  /* Koyu Pastel Peach */
 }
