@@ -1473,7 +1473,7 @@
   }
 
   function handleKeydown(event: KeyboardEvent, callback: () => void) {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       callback();
     }
   }
@@ -1488,11 +1488,14 @@
         <h2 class="text-lg font-bold mb-4 text-neutral-950">Select Group</h2>
         <div class="grid grid-cols-4 gap-2">
           {#each $groups as group}
-            <div class="group-card"
-            role="button"
-            tabindex="0"
-            on:keydown={(e) => handleKeydown(e, () => handleGroupSelect(group))}
-            on:click={() => handleGroupSelect(group)}>
+            <div
+              class="group-card"
+              role="button"
+              tabindex="0"
+              on:keydown={(e) =>
+                handleKeydown(e, () => handleGroupSelect(group))}
+              on:click={() => handleGroupSelect(group)}
+            >
               {group}
             </div>
           {/each}
@@ -1705,11 +1708,13 @@
           class="flex-1 p-2 border rounded text-primary bg-accent"
         />
         {#if $url}
-          <span class="clear-icon" 
-          role="button"
-          tabindex="0"
-          on:keydown={(e) => handleKeydown(e, () => clearInput(url))}
-          on:click={() => clearInput(url)}>×</span>
+          <span
+            class="clear-icon"
+            role="button"
+            tabindex="0"
+            on:keydown={(e) => handleKeydown(e, () => clearInput(url))}
+            on:click={() => clearInput(url)}>×</span
+          >
         {/if}
       </div>
     </div>
@@ -1806,6 +1811,9 @@
                   {#each $autocompleteHeaders[index] as suggestion}
                     <div
                       class="autocomplete-suggestion"
+                      role="option"
+                      tabindex="0"
+                      aria-selected={false}
                       on:mousedown={() =>
                         selectAutocompleteItem(index, suggestion)}
                     >
