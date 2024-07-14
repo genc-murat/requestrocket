@@ -24,8 +24,8 @@
 <div
   class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
 >
-  <div class="variables-panel bg-white p-8 rounded-lg shadow-2xl relative max-w-2xl w-full">
-    <h2 class="text-2xl font-bold mb-6 text-neutral-950">Custom Headers</h2>
+  <div class="headers-panel p-8 rounded-lg shadow-2xl relative max-w-2xl w-full">
+    <h2 class="text-2xl font-bold mb-6">Custom Headers</h2>
     <div class="flex mb-6">
       <input
         type="text"
@@ -59,7 +59,8 @@
     <button
       type="button"
       on:click={closeCustomHeaderPanel}
-      class="text-red-900 bg-slate-50 rounded-full p-3 shadow-lg absolute top-4 right-4 flex items-center justify-center hover:bg-slate-200"
+      style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
+      class=" rounded-full p-3 shadow-lg absolute top-4 right-4 flex items-center justify-center hover:bg-slate-200"
     >
       <FontAwesomeIcon icon={faClose} size="lg" />
     </button>

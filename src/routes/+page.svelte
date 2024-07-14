@@ -55,8 +55,10 @@
   import HttpMethodDropdown from "../components/HttpMethodDropdown.svelte";
 
   import HttpBodyDropdown from "../components/HttpBodyDropdown.svelte";
-  import ThemeSwitcher, { applyTheme, currentTheme } from "../components/ThemeSwitcher.svelte";
-
+  import ThemeSwitcher, {
+    applyTheme,
+    currentTheme,
+  } from "../components/ThemeSwitcher.svelte";
 
   const themeModalOpen = writable(false);
 
@@ -1139,7 +1141,7 @@
   });
 
   onMount(async () => {
-    const savedTheme = localStorage.getItem('selectedTheme');
+    const savedTheme = localStorage.getItem("selectedTheme");
     if (savedTheme) {
       applyTheme(savedTheme);
     }
@@ -1519,7 +1521,8 @@
           <button
             type="button"
             on:click={closeApiFlowModal}
-            class="text-red-900 bg-slate-50 rounded-full p-4 shadow flex items-center justify-center"
+            style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
+            class="rounded-full p-4 shadow flex items-center justify-center"
           >
             <FontAwesomeIcon icon="close" />
           </button>
@@ -1539,13 +1542,13 @@
   <div class="menu-panel panel">
     <div class="vertical-buttons">
       <button
-      type="button"
-      on:click={openThemeSwitcherModal}
-      class="button-item hover:text-purple-700"
-      title="Change Theme"
-    >
-      <FontAwesomeIcon icon="paint-brush" size="lg" />
-    </button>
+        type="button"
+        on:click={openThemeSwitcherModal}
+        class="button-item hover:text-purple-700"
+        title="Change Theme"
+      >
+        <FontAwesomeIcon icon="paint-brush" size="lg" />
+      </button>
       <button
         type="button"
         class="button-item hover:text-blue-700"
@@ -2110,22 +2113,22 @@
     <div
       class="status-history-modal fixed inset-0 flex items-end justify-end bg-black bg-opacity-50 z-50"
     >
-      <div
-        class="status-history bg-white p-4 shadow-lg w-1/3 h-full overflow-y-auto"
-      >
+      <div class="status-history p-4 shadow-lg w-1/3 h-full overflow-y-auto">
         <button
           type="button"
           on:click={toggleStatusHistory}
-          class="text-red-900 bg-slate-50 rounded-full p-2 shadow absolute top-4 right-4 flex items-center justify-center"
+          class="rounded-full p-2 absolute top-4 right-4 flex items-center justify-center"
+          style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
         >
           <FontAwesomeIcon icon="close" size="lg" />
         </button>
-        <h2 class="text-xl font-bold mb-4 text-neutral-950">Status History</h2>
+
+        <h2 class="text-xl font-bold mb-4">Status History</h2>
         {#if $statusHistory.length === 0}
           <p>No status history available.</p>
         {/if}
         <div class="status-section mb-4">
-          <h4 class="text-sm font-semibold mb-2 text-neutral-950">Within the Last Hour</h4>
+          <h4 class="text-sm font-semibold mb-2">Within the Last Hour</h4>
           {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() <= 3600000) as history}
             <div
               class="status-history-item flex justify-between items-center p-2 mb-2"
@@ -2146,7 +2149,7 @@
           <div class="divider border-t border-gray-300 mt-2"></div>
         </div>
         <div class="status-section mb-4">
-          <h4 class="text-sm font-semibold mb-2 text-neutral-950">Today</h4>
+          <h4 class="text-sm font-semibold mb-2">Today</h4>
           {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 3600000 && new Date().getDate() === new Date(item.timestamp).getDate()) as history}
             <div
               class="status-history-item flex justify-between items-center p-2 mb-2"
@@ -2163,7 +2166,7 @@
           <div class="divider border-t border-gray-300 mt-2"></div>
         </div>
         <div class="status-section">
-          <h4 class="text-sm font-semibold mb-2 text-neutral-950">Older</h4>
+          <h4 class="text-sm font-semibold mb-2">Older</h4>
           {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 86400000) as history}
             <div
               class="status-history-item flex justify-between items-center p-2 mb-2"
@@ -2187,7 +2190,7 @@
       class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
     >
       <div
-        class="variables-panel bg-white p-8 rounded-lg shadow-2xl relative max-w-2xl w-full"
+        class="variables-panel p-8 rounded-lg shadow-2xl relative max-w-2xl w-full"
       >
         <h2 class="text-2xl font-bold mb-6 text-neutral-950">Variables</h2>
         <div class="flex mb-6">
@@ -2230,7 +2233,8 @@
         <button
           type="button"
           on:click={() => variablesPanelOpen.set(false)}
-          class="text-red-900 bg-slate-50 rounded-full p-3 shadow-lg absolute top-4 right-4 flex items-center justify-center hover:bg-slate-200"
+          style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
+          class=" rounded-full p-3 shadow-lg absolute top-4 right-4 flex items-center justify-center"
         >
           <FontAwesomeIcon icon="close" size="lg" />
         </button>
@@ -2251,24 +2255,24 @@
 />
 
 {#if $themeModalOpen}
-<div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-  <div class="bg-white p-4 rounded shadow-lg w-1/2">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-lg font-bold text-neutral-950">Change Theme</h2>
-      <button
-        type="button"
-        on:click={closeThemeSwitcherModal}
-        class="text-red-900 bg-slate-50 rounded-full p-4 shadow flex items-center justify-center"
-      >
-        <FontAwesomeIcon icon={faClose} />
-      </button>
+  <div
+    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+  >
+    <div class="bg-white p-4 rounded shadow-lg w-1/2">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-bold text-neutral-950">Change Theme</h2>
+        <button
+          type="button"
+          on:click={closeThemeSwitcherModal}
+          class="text-red-900 bg-slate-50 rounded-full p-4 shadow flex items-center justify-center"
+        >
+          <FontAwesomeIcon icon={faClose} />
+        </button>
+      </div>
+      <ThemeSwitcher />
     </div>
-    <ThemeSwitcher />
   </div>
-</div>
 {/if}
-
-
 
 <style>
   .fixed {
@@ -2472,6 +2476,7 @@
     border: 1px solid var(--seperator);
     margin-top: 1rem;
     border-radius: 0.5rem;
+    background-color: var(--surface);
   }
 
   .error-message {
