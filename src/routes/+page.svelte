@@ -1651,7 +1651,7 @@
                 text-white"
                 >
                   {item.method.substring(0, 3)}
-            </span>
+                </span>
 
                 <span class="url">{item.url}</span>
               </button>
@@ -2123,11 +2123,10 @@
           <FontAwesomeIcon icon="close" size="lg" />
         </button>
 
-        <h2 class="text-xl font-bold mb-4">Status History</h2>
         {#if $statusHistory.length === 0}
           <p>No status history available.</p>
         {/if}
-        <div class="status-section mb-4">
+        <div class="status-section mt-10 mb-4">
           <h4 class="text-sm font-semibold mb-2">Within the Last Hour</h4>
           {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() <= 3600000) as history}
             <div
@@ -2148,39 +2147,52 @@
           {/each}
           <div class="divider border-t border-gray-300 mt-2"></div>
         </div>
-        <div class="status-section mb-4">
-          <h4 class="text-sm font-semibold mb-2">Today</h4>
-          {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 3600000 && new Date().getDate() === new Date(item.timestamp).getDate()) as history}
-            <div
-              class="status-history-item flex justify-between items-center p-2 mb-2"
-            >
-              <div class="px-2 text-white rounded {getStatusClass(history.status)}">
-                {history.status}
-                {history.status === 200 ? "OK" : ""}
+        {#if $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 3600000 && new Date().getDate() === new Date(item.timestamp).getDate()).length > 0}
+          <div class="status-section mb-4">
+            <h4 class="text-sm font-semibold mb-2">Today</h4>
+            {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 3600000 && new Date().getDate() === new Date(item.timestamp).getDate()) as history}
+              <div
+                class="status-history-item flex justify-between items-center p-2 mb-2"
+              >
+                <div
+                  class="px-2 text-white rounded {getStatusClass(
+                    history.status,
+                  )}"
+                >
+                  {history.status}
+                  {history.status === 200 ? "OK" : ""}
+                </div>
+                <div class="px-2">{history.duration} ms</div>
+                <div class="px-2">{formatSize(history.size)}</div>
+                <div class="px-2">{timeAgo(history.timestamp)}</div>
               </div>
-              <div class="px-2">{history.duration} ms</div>
-              <div class="px-2">{formatSize(history.size)}</div>
-              <div class="px-2">{timeAgo(history.timestamp)}</div>
-            </div>
-          {/each}
-          <div class="divider border-t border-gray-300 mt-2"></div>
-        </div>
-        <div class="status-section">
-          <h4 class="text-sm font-semibold mb-2">Older</h4>
-          {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 86400000) as history}
-            <div
-              class="status-history-item flex justify-between items-center p-2 mb-2"
-            >
-              <div class="px-2 text-white rounded {getStatusClass(history.status)}">
-                {history.status}
-                {history.status === 200 ? "OK" : ""}
+            {/each}
+            <div class="divider border-t border-gray-300 mt-2"></div>
+          </div>
+        {/if}
+
+        {#if $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 86400000).length > 0}
+          <div class="status-section mb-4">
+            <h4 class="text-sm font-semibold mb-2">Older</h4>
+            {#each $statusHistory.filter((item) => new Date().getTime() - new Date(item.timestamp).getTime() > 86400000) as history}
+              <div
+                class="status-history-item flex justify-between items-center p-2 mb-2"
+              >
+                <div
+                  class="px-2 text-white rounded {getStatusClass(
+                    history.status,
+                  )}"
+                >
+                  {history.status}
+                  {history.status === 200 ? "OK" : ""}
+                </div>
+                <div class="px-2">{history.duration} ms</div>
+                <div class="px-2">{formatSize(history.size)}</div>
+                <div class="px-2">{timeAgo(history.timestamp)}</div>
               </div>
-              <div class="px-2">{history.duration} ms</div>
-              <div class="px-2">{formatSize(history.size)}</div>
-              <div class="px-2">{timeAgo(history.timestamp)}</div>
-            </div>
-          {/each}
-        </div>
+            {/each}
+          </div>
+        {/if}
       </div>
     </div>
   {/if}
@@ -2333,8 +2345,6 @@
     width: 100%;
   }
 
- 
-
   .clear-icon:hover {
     color: var(--error);
     font-weight: bolder;
@@ -2358,8 +2368,6 @@
   .header-row button {
     margin-left: 0.5rem;
   }
-
- 
 
   .history-item:hover .duplicate-icon {
     display: inline;
