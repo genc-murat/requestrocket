@@ -51,7 +51,7 @@
         <div class="dropdown-content">
             {#each options as option}
                 <div
-                    class="dropdown-item"
+                    class="dropdown-item {$method === option ? 'selected' : ''}"
                     on:click={() => selectOption(option)}
                 >
                     {option}
@@ -81,9 +81,7 @@
         justify-content: space-between;
         align-items: center;
         cursor: pointer;
-        transition:
-            border-color 0.3s ease-in-out,
-            box-shadow 0.3s ease-in-out;
+        transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         height: 2.3rem;
         line-height: 2.3rem;
     }
@@ -108,13 +106,19 @@
     }
 
     .dropdown-item {
-        padding: 0.25rem 0.5rem;
+        padding: 0.5rem;
         cursor: pointer;
         transition: background-color 0.2s;
     }
 
     .dropdown-item:hover {
-        background-color: var(--light-background);
+        background-color: var(--secondary);
+        color: var(--light-background);
+    }
+
+    .dropdown-item.selected {
+        background-color: var(--info);
+        color: var(--light-background);
     }
 
     .dropdown-button svg {
