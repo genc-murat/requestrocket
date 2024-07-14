@@ -611,6 +611,7 @@
       selectedGroup.set($newGroupName);
       newGroupName.set("");
       modalOpen.set(false);
+      loadHistory($newGroupName);
     }
   }
 
