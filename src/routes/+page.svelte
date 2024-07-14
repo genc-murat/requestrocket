@@ -1780,14 +1780,7 @@
           >
             Headers
           </button>
-          <button
-            type="button"
-            class="tab {$selectedRequestTab === 'group' ? 'active' : ''}"
-            on:click={() => selectedRequestTab.set("group")}
-            aria-label="Group Tab"
-          >
-            Group
-          </button>
+
           <button
             type="button"
             class="tab {$selectedRequestTab === 'path-params' ? 'active' : ''}"
@@ -1811,6 +1804,14 @@
             aria-label="Form Data Tab"
           >
             Form Data
+          </button>
+          <button
+            type="button"
+            class="tab {$selectedRequestTab === 'group' ? 'active' : ''}"
+            on:click={() => selectedRequestTab.set("group")}
+            aria-label="Group Tab"
+          >
+            Group
           </button>
         </div>
         <div class="tab-content">
@@ -2180,8 +2181,7 @@
               <button
                 type="button"
                 on:click={cancelRequest}
-                class="w-full p-2  rounded"
-                >Cancel Request</button
+                class="w-full p-2 rounded">Cancel Request</button
               >
             </div>
           </div>
