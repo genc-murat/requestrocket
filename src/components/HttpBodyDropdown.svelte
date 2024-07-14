@@ -29,6 +29,18 @@
     }
   }
 
+  function handleKeydown(event: KeyboardEvent) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      toggleDropdown();
+    }
+  }
+  function handleOptionKeydown(event: KeyboardEvent, option: Option) {
+    if (event.key === 'Enter') {
+      selectOption(option);
+    }
+  }
+
   window.addEventListener("click", handleClickOutside);
 
   onDestroy(() => {
@@ -37,7 +49,9 @@
 </script>
 
 <div class="dropdown">
-  <div class="dropdown-button" on:click={toggleDropdown} tabindex="0">
+  <div role="button" tabindex="0" class="dropdown-button" 
+  on:keydown={handleKeydown}
+  on:click={toggleDropdown}>
     {#if $selected}
       {#each options as option}
         {#if option.value === $selected}
@@ -64,6 +78,11 @@
       {#each options as option (option.value)}
         <div
           class="dropdown-item {option.value === $selected ? 'selected' : ''}"
+          role="option"
+          aria-selected={option.value === $selected}
+          tabindex="0"
+          on:keydown={(e) => handleOptionKeydown(e, option)}
+          
           on:click={() => selectOption(option)}
         >
           {option.label}
