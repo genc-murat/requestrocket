@@ -2005,7 +2005,11 @@
             <span>{($response.size / 1024).toFixed(2)} KB</span>
           </div>
           <div class="flex items-center ml-2">
-            <span on:click={toggleStatusHistory}
+            <span
+              role="button"
+              tabindex="0"
+              on:keydown={(e) => handleKeydown(e, () => toggleStatusHistory())}
+              on:click={toggleStatusHistory}
               >{timeAgo($response.timestamp)}</span
             >
           </div>
