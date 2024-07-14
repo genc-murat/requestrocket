@@ -50,6 +50,7 @@
     StatusHistoryItem,
     ApiDoc,
   } from "../components/api-types";
+  import HttpMethodDropdown from "../components/HttpMethodDropdown.svelte";
 
   library.add(
     faPlus,
@@ -1646,7 +1647,7 @@
     <!-- <h2 class="text-xl font-bold mb-4">Request</h2> -->
 
     <div class="flex mb-4">
-      <select
+      <!-- <select
         id="method"
         bind:value={$method}
         class="p-2 border rounded text-primary bg-accent mr-2"
@@ -1658,7 +1659,8 @@
         <option value="PATCH">PATCH</option>
         <option value="OPTIONS">OPTIONS</option>
         <option value="HEAD">HEAD</option>
-      </select>
+      </select> -->
+      <HttpMethodDropdown {method} />
       <div class="input-container">
         <input
           type="text"
@@ -2473,5 +2475,26 @@
   }
   .autocomplete-suggestion:hover {
     background: var(--surface);
+  }
+
+  .custom-select {
+    appearance: none;
+    background-color: #f3f4f6;
+    padding: 0.5rem 1.5rem 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    color: #374151;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="none" stroke="%236B7280" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 9l-7 7-7-7"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.5em;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+
+  .custom-select:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
   }
 </style>
