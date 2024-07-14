@@ -1656,7 +1656,7 @@
                 <span class="url">{item.url}</span>
               </button>
               <button
-                class="duplicate-icon text-blue-500"
+                class="duplicate-icon"
                 aria-label="Duplicate history item"
                 on:click={() => duplicateHistoryItem(item)}
                 on:keydown={(e) => {
@@ -1667,7 +1667,7 @@
                 <FontAwesomeIcon icon="clone" size="lg" />
               </button>
               <button
-                class="delete-icon text-red-500"
+                class="delete-icon"
                 aria-label="Delete history item"
                 on:click={() => openModal(item.id)}
                 on:keydown={(e) => {
@@ -2369,11 +2369,7 @@
     margin-left: 0.5rem;
   }
 
-  .duplicate-icon {
-    display: none;
-    cursor: pointer;
-    margin-left: 10px;
-  }
+ 
 
   .history-item:hover .duplicate-icon {
     display: inline;

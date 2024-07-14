@@ -223,6 +223,14 @@ textarea {
   display: none;
   cursor: pointer;
   margin-left: 10px;
+  color: var(--error);
+}
+
+.duplicate-icon {
+  display: none;
+  cursor: pointer;
+  margin-left: 10px;
+  color: var(--primary);
 }
 
 .icon {
