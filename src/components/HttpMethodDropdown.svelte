@@ -81,7 +81,9 @@
         justify-content: space-between;
         align-items: center;
         cursor: pointer;
-        transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        transition:
+            border-color 0.3s ease-in-out,
+            box-shadow 0.3s ease-in-out;
         height: 2.3rem;
         line-height: 2.3rem;
     }
