@@ -91,7 +91,7 @@
     .dropdown-button:focus {
         border-color: var(--info);
         outline: none;
-        box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.3);
+        box-shadow: 0 0 0 2px var(--dropdown-bow-shadow);
     }
 
     .dropdown-content {
