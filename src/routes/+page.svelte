@@ -1471,6 +1471,12 @@
       });
     }, 200);
   }
+
+  function handleKeydown(event: KeyboardEvent, callback: () => void) {
+    if (event.key === 'Enter') {
+      callback();
+    }
+  }
 </script>
 
 <div class="flex h-screen">
@@ -1482,7 +1488,11 @@
         <h2 class="text-lg font-bold mb-4 text-neutral-950">Select Group</h2>
         <div class="grid grid-cols-4 gap-2">
           {#each $groups as group}
-            <div class="group-card" on:click={() => handleGroupSelect(group)}>
+            <div class="group-card"
+            role="button"
+            tabindex="0"
+            on:keydown={(e) => handleKeydown(e, () => handleGroupSelect(group))}
+            on:click={() => handleGroupSelect(group)}>
               {group}
             </div>
           {/each}
