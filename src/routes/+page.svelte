@@ -2172,15 +2172,15 @@
 
         {#if $isSending}
           <div
-            class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+            class="absolute inset-0 flex items-center justify-center bg-opacity-50 z-50"
           >
-            <div class="bg-white p-4 rounded shadow-lg">
+            <div class=" p-4 rounded shadow-lg">
               <h2 class="text-lg font-bold mb-4">Sending request...</h2>
               <p class="mb-4">Elapsed time: {$elapsedTime} ms</p>
               <button
                 type="button"
                 on:click={cancelRequest}
-                class="w-full p-2 bg-red-500 text-white rounded"
+                class="w-full p-2  rounded"
                 >Cancel Request</button
               >
             </div>
