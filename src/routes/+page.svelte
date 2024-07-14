@@ -32,7 +32,7 @@
   } from "../components/CustomHeaderModule";
   import CustomHeaderPanel from "../components/CustomHeaderPanel.svelte";
 
-  import ConfirmModal from "../components/ConfirmModal.svelte"; 
+  import ConfirmModal from "../components/ConfirmModal.svelte";
 
   import type {
     Flow,
@@ -50,7 +50,10 @@
     StatusHistoryItem,
     ApiDoc,
   } from "../components/api-types";
+
   import HttpMethodDropdown from "../components/HttpMethodDropdown.svelte";
+
+  import HttpBodyDropdown from "../components/HttpBodyDropdown.svelte";
 
   library.add(
     faPlus,
@@ -62,7 +65,7 @@
     faUpload,
     faClose,
     faRepeat,
-    faDatabase
+    faDatabase,
   );
 
   let currentFlow: Writable<Flow | null> = writable(null);
@@ -70,7 +73,7 @@
 
   const showModal = writable(false);
   const itemToDelete = writable<number | null>(null);
-    function openModal(id: number) {
+  function openModal(id: number) {
     itemToDelete.set(id);
     showModal.set(true);
   }
@@ -1571,7 +1574,6 @@
   </div>
 
   <div class="history-panel panel">
-    <!-- <h2 class="text-xl font-bold mb-4">History</h2> -->
     {#if $selectedGroup}
       <div class="group">
         <div class="flex justify-between items-center">
@@ -1599,15 +1601,15 @@
               >
                 <strong
                   class="px-2 py-1 rounded
-                {item.method === 'GET' ? 'bg-green-500' : ''} 
-                {item.method === 'POST' ? 'bg-blue-500' : ''} 
-                {item.method === 'PUT' ? 'bg-yellow-500' : ''} 
-                {item.method === 'DELETE' ? 'bg-red-500' : ''} 
-                {item.method === 'PATCH' ? 'bg-purple-500' : ''} 
-                {item.method === 'OPTIONS' ? 'bg-indigo-500' : ''} 
-                {item.method === 'HEAD' ? 'bg-teal-500' : ''} 
-                {item.method === 'CONNECT' ? 'bg-pink-500' : ''} 
-                {item.method === 'TRACE' ? 'bg-orange-500' : ''}
+               {item.method === 'GET' ? 'method-get' : ''} 
+                                 {item.method === 'POST' ? 'method-post' : ''} 
+                                 {item.method === 'PUT' ? 'method-put' : ''} 
+                                 {item.method === 'DELETE' ? 'method-delete' : ''} 
+                                 {item.method === 'PATCH' ? 'method-patch' : ''} 
+                                 {item.method === 'OPTIONS' ? 'method-options' : ''} 
+                                 {item.method === 'HEAD' ? 'method-head' : ''} 
+                                 {item.method === 'CONNECT' ? 'method-connect' : ''} 
+                                 {item.method === 'TRACE' ? 'method-trace' : ''}
                 text-white"
                 >
                   {item.method.substring(0, 3)}
@@ -1629,9 +1631,9 @@
               <button
                 class="delete-icon text-red-500"
                 aria-label="Delete history item"
-                on:click={() => openModal(item.id)}  
+                on:click={() => openModal(item.id)}
                 on:keydown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") openModal(item.id); 
+                  if (e.key === "Enter" || e.key === " ") openModal(item.id);
                 }}
               >
                 <FontAwesomeIcon icon="trash-alt" size="lg" />
@@ -1644,22 +1646,7 @@
   </div>
 
   <div class="request-panel panel">
-    <!-- <h2 class="text-xl font-bold mb-4">Request</h2> -->
-
     <div class="flex mb-4">
-      <!-- <select
-        id="method"
-        bind:value={$method}
-        class="p-2 border rounded text-primary bg-accent mr-2"
-      >
-        <option value="GET">GET</option>
-        <option value="POST">POST</option>
-        <option value="PUT">PUT</option>
-        <option value="DELETE">DELETE</option>
-        <option value="PATCH">PATCH</option>
-        <option value="OPTIONS">OPTIONS</option>
-        <option value="HEAD">HEAD</option>
-      </select> -->
       <HttpMethodDropdown {method} />
       <div class="input-container">
         <input
@@ -1677,7 +1664,6 @@
     <button type="button" on:click={sendRequest} class="button mb-4"
       >Send Request</button
     >
-    <!-- <button type="button" on:click={cancelRequest} class="button mb-4">Cancel Request</button> -->
     <div class="tabs">
       <button
         type="button"
@@ -1731,14 +1717,7 @@
     </div>
     <div class="tab-content">
       {#if $selectedRequestTab === "body"}
-        <select
-          id="bodyType"
-          bind:value={$bodyType}
-          class="w-full mb-4 p-2 border rounded text-primary bg-accent"
-        >
-          <option value="json">JSON</option>
-          <option value="xml">XML</option>
-        </select>
+        <HttpBodyDropdown selected={bodyType} />
         {#if $bodyType === "json" || $bodyType === "xml"}
           <textarea
             id="body"
@@ -1948,7 +1927,6 @@
   </div>
 
   <div class="response-panel panel relative">
-    <!-- <h2 class="text-xl font-bold mb-4">Results</h2> -->
     {#if $response}
       <div class="status-box border border-gray-500 p-4 mb-4 rounded">
         <div class="flex justify-end">
@@ -2017,13 +1995,6 @@
       <div class="tab-content">
         {#if $selectedTab === "response"}
           <div class="response-container relative">
-            <!-- <button 
-              type="button" 
-              on:click={() => copyToClipboard($response.body)} 
-              class="copy-button text-blue-500"
-            >
-              <FontAwesomeIcon icon="copy" size="xl" />
-            </button> -->
             <JSONEditor
               jsonData={$response && $response.body ? $response.body : "{}"}
               theme="light"
@@ -2177,56 +2148,59 @@
   {/if}
 
   {#if $variablesPanelOpen}
-  <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="variables-panel bg-white p-8 rounded-lg shadow-2xl relative max-w-2xl w-full">
-      <h2 class="text-2xl font-bold mb-6">Variables</h2>
-      <div class="flex mb-6">
-        <input
-          type="text"
-          placeholder="Key"
-          bind:value={$newVariableKey}
-          class="flex-1 p-3 border rounded-lg text-primary bg-accent mr-4"
-        />
-        <input
-          type="text"
-          placeholder="Value"
-          bind:value={$newVariableValue}
-          class="flex-1 p-3 border rounded-lg text-primary bg-accent mr-4"
-        />
+    <div
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+    >
+      <div
+        class="variables-panel bg-white p-8 rounded-lg shadow-2xl relative max-w-2xl w-full"
+      >
+        <h2 class="text-2xl font-bold mb-6">Variables</h2>
+        <div class="flex mb-6">
+          <input
+            type="text"
+            placeholder="Key"
+            bind:value={$newVariableKey}
+            class="flex-1 p-3 border rounded-lg text-primary bg-accent mr-4"
+          />
+          <input
+            type="text"
+            placeholder="Value"
+            bind:value={$newVariableValue}
+            class="flex-1 p-3 border rounded-lg text-primary bg-accent mr-4"
+          />
+          <button
+            type="button"
+            on:click={addVariable}
+            class="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
+          >
+            <FontAwesomeIcon icon={faPlus} size="lg" class="mr-2" />Add
+          </button>
+        </div>
+
+        <ul>
+          {#each Object.entries($variables) as [key, value]}
+            <li class="mb-4 flex justify-between items-center">
+              <strong class="text-primary">{key}:</strong>
+              <span class="text-secondary">{value}</span>
+              <button
+                type="button"
+                on:click={() => deleteVariable(key)}
+                class="text-red-500 hover:text-red-700"
+              >
+                <FontAwesomeIcon icon="trash-alt" />
+              </button>
+            </li>
+          {/each}
+        </ul>
         <button
           type="button"
-          on:click={addVariable}
-          class="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
+          on:click={() => variablesPanelOpen.set(false)}
+          class="text-red-900 bg-slate-50 rounded-full p-3 shadow-lg absolute top-4 right-4 flex items-center justify-center hover:bg-slate-200"
         >
-          <FontAwesomeIcon icon={faPlus} size="lg" class="mr-2" />Add
+          <FontAwesomeIcon icon="close" size="lg" />
         </button>
       </div>
-  
-      <ul>
-        {#each Object.entries($variables) as [key, value]}
-          <li class="mb-4 flex justify-between items-center">
-            <strong class="text-primary">{key}:</strong>
-            <span class="text-secondary">{value}</span>
-            <button
-              type="button"
-              on:click={() => deleteVariable(key)}
-              class="text-red-500 hover:text-red-700"
-            >
-              <FontAwesomeIcon icon="trash-alt" />
-            </button>
-          </li>
-        {/each}
-      </ul>
-      <button
-        type="button"
-        on:click={() => variablesPanelOpen.set(false)}
-        class="text-red-900 bg-slate-50 rounded-full p-3 shadow-lg absolute top-4 right-4 flex items-center justify-center hover:bg-slate-200"
-      >
-        <FontAwesomeIcon icon="close" size="lg" />
-      </button>
     </div>
-  </div>
-  
   {/if}
 </div>
 
@@ -2489,7 +2463,9 @@
     background-repeat: no-repeat;
     background-position: right 0.75rem center;
     background-size: 1.5em;
-    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    transition:
+      border-color 0.3s ease-in-out,
+      box-shadow 0.3s ease-in-out;
   }
 
   .custom-select:focus {

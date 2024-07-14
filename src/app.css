@@ -384,3 +384,31 @@ textarea {
 .button:hover {
   opacity: 0.9;
 }
+
+.method-get {
+  background-color: #90c695; /* Koyu Pastel Green */
+}
+.method-post {
+  background-color: #7ea8d7; /* Koyu Pastel Blue */
+}
+.method-put {
+  background-color: #ffd966; /* Koyu Pastel Yellow */
+}
+.method-delete {
+  background-color: #f28b82; /* Koyu Pastel Red */
+}
+.method-patch {
+  background-color: #c29adb; /* Koyu Pastel Purple */
+}
+.method-options {
+  background-color: #8fc5d5; /* Koyu Pastel Cyan */
+}
+.method-head {
+  background-color: #a2b5d9; /* Koyu Pastel Light Blue */
+}
+.method-connect {
+  background-color: #e2aaff; /* Koyu Pastel Pink */
+}
+.method-trace {
+  background-color: #ffb870; /* Koyu Pastel Peach */
+}
