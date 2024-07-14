@@ -2380,7 +2380,6 @@
     background-color: var(--surface);
     transition: background-color 0.3s ease;
     text-align: center;
-    font-size: x-small;
   }
 
   .button-item span {
