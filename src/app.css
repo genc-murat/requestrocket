@@ -478,16 +478,17 @@ textarea {
   /* Koyu Pastel Peach */
 }
 
-.confirm-dialog{
-background-color: var(--surface)  ;
+.confirm-dialog {
+  background-color: var(--surface);
+  border: 1px solid var(--seperator);
 }
 
-.confirm-dialog .cancel{
+.confirm-dialog .cancel {
   background-color: var(--error);
   color: var(--dark-text);
 }
 
-.confirm-dialog .confirm{
+.confirm-dialog .confirm {
   background-color: var(--success);
   color: var(--dark-text);
 }
