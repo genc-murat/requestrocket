@@ -5,26 +5,26 @@
 /* Theme Variables */
 :root {
   --background: #f5f5f5;
-  --light-background: #f5f5f5;
-  --surface: #EEEEEE;
-  --primary-text: #31363F;
-  --secondary-text: #DDE6ED;
+  --light-background: #ffffff;
+  --surface: #eeeeee;
+  --primary-text: #31363f;
+  --secondary-text: #dde6ed;
   --dark-text: #111111;
-  --divider: #DDE6ED;
+  --divider: #dde6ed;
   --shadow: rgba(0, 0, 0, 0.25);
-  --primary: #526D82;
-  --secondary: #9DB2BF;
-  --warning: #FFD966;
-  --error: #F28B82;
-  --info: #7EA8D7;
-  --success: #90C695;
-  --dropdown-bow-shadow: rgba(162, 206, 209, 0.7);
+  --primary: #526d82;
+  --secondary: #9db2bf;
+  --warning: #ffd966;
+  --error: #f28b82;
+  --info: #7ea8d7;
+  --success: #90c695;
+  --dropdown-box-shadow: rgba(162, 206, 209, 0.7);
   --group-card-hover: #f0f0f0;
-  --seperator: #ccc;
-  --select-background-color:#f3f4f6;
-  --select-text-color:#374151;
-  --select-focus-border-color:#2563eb;
-  --select-focus-box-shadow:rgba(37, 99, 235, 0.3);
+  --seperator: #cccccc;
+  --select-background-color: #f3f4f6;
+  --select-text-color: #374151;
+  --select-focus-border-color: #2563eb;
+  --select-focus-box-shadow: rgba(37, 99, 235, 0.3);
 }
 
 /* General Styles */

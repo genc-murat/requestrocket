@@ -15,6 +15,7 @@
     faClose,
     faRepeat,
     faDatabase,
+    faPaintbrush,
   } from "@fortawesome/free-solid-svg-icons";
   import { library } from "@fortawesome/fontawesome-svg-core";
   import { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";
@@ -54,6 +55,18 @@
   import HttpMethodDropdown from "../components/HttpMethodDropdown.svelte";
 
   import HttpBodyDropdown from "../components/HttpBodyDropdown.svelte";
+  import ThemeSwitcher, { applyTheme, currentTheme } from "../components/ThemeSwitcher.svelte";
+
+
+  const themeModalOpen = writable(false);
+
+  function openThemeSwitcherModal() {
+    themeModalOpen.set(true);
+  }
+
+  function closeThemeSwitcherModal() {
+    themeModalOpen.set(false);
+  }
 
   library.add(
     faPlus,
@@ -66,6 +79,7 @@
     faClose,
     faRepeat,
     faDatabase,
+    faPaintbrush,
   );
 
   let currentFlow: Writable<Flow | null> = writable(null);
@@ -1125,6 +1139,10 @@
   });
 
   onMount(async () => {
+    const savedTheme = localStorage.getItem('selectedTheme');
+    if (savedTheme) {
+      applyTheme(savedTheme);
+    }
     loadGroups();
     loadVariables();
     const db = await dbPromise;
@@ -1520,6 +1538,14 @@
 
   <div class="menu-panel panel">
     <div class="vertical-buttons">
+      <button
+      type="button"
+      on:click={openThemeSwitcherModal}
+      class="button-item hover:text-purple-700"
+      title="Change Theme"
+    >
+      <FontAwesomeIcon icon="paint-brush" size="lg" />
+    </button>
       <button
         type="button"
         class="button-item hover:text-blue-700"
@@ -2223,6 +2249,26 @@
   on:confirm={confirmDelete}
   on:close={closeModal}
 />
+
+{#if $themeModalOpen}
+<div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  <div class="bg-white p-4 rounded shadow-lg w-1/2">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-bold text-neutral-950">Change Theme</h2>
+      <button
+        type="button"
+        on:click={closeThemeSwitcherModal}
+        class="text-red-900 bg-slate-50 rounded-full p-4 shadow flex items-center justify-center"
+      >
+        <FontAwesomeIcon icon={faClose} />
+      </button>
+    </div>
+    <ThemeSwitcher />
+  </div>
+</div>
+{/if}
+
+
 
 <style>
   .fixed {
