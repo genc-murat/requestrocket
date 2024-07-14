@@ -1705,7 +1705,11 @@
           class="flex-1 p-2 border rounded text-primary bg-accent"
         />
         {#if $url}
-          <span class="clear-icon" on:click={() => clearInput(url)}>×</span>
+          <span class="clear-icon" 
+          role="button"
+          tabindex="0"
+          on:keydown={(e) => handleKeydown(e, () => clearInput(url))}
+          on:click={() => clearInput(url)}>×</span>
         {/if}
       </div>
     </div>
