@@ -8,6 +8,8 @@
 
 Request Rocket is a powerful API testing tool designed to streamline the process of creating, testing, and managing API requests. Built with SvelteKit, Tailwind CSS, and Tauri, Request Rocket offers a robust set of features to enhance your API development workflow.
 
+**⚠️ The API Flow Designer feature is also under active development.** This feature allows users to visually design API workflows, making it easier to manage complex API interactions and logic. The Flow Designer provides a drag-and-drop interface to create, connect, and configure different types of blocks such as API calls, conditions, loops, and more.
+
 ## Features
 
 - **Request Creation**:
