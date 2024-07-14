@@ -60,6 +60,8 @@
     currentTheme,
   } from "../components/ThemeSwitcher.svelte";
 
+  import TitleBar from "../components/TitleBar.svelte";
+
   const themeModalOpen = writable(false);
 
   function openThemeSwitcherModal() {
@@ -1478,8 +1480,9 @@
     }
   }
 </script>
-
+ <TitleBar/>
 <div class="flex h-screen">
+ 
   {#if $groupModalOpen}
     <div
       class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
