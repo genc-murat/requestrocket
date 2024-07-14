@@ -425,7 +425,7 @@
   let selectedGroup = writable("");
   let groups = writable<string[]>([]);
   let newGroupName = writable("");
-  let modalOpen = writable(true);
+  let groupModalOpen = writable(true);
   let isSending = writable(false);
   let elapsedTime = writable(0);
   let startTime: number;
@@ -610,7 +610,7 @@
       groups.update((g) => [...g, $newGroupName]);
       selectedGroup.set($newGroupName);
       newGroupName.set("");
-      modalOpen.set(false);
+      groupModalOpen.set(false);
       loadHistory($newGroupName);
     }
   }
@@ -1027,7 +1027,7 @@
 
   function handleGroupSelect(group: string) {
     selectedGroup.set(group);
-    modalOpen.set(false);
+    groupModalOpen.set(false);
     loadHistory(group);
   }
 
@@ -1244,7 +1244,7 @@
 
         selectedGroup.set(fileName);
 
-        modalOpen.set(false);
+        groupModalOpen.set(false);
 
         sendNotification({
           title: "Success",
@@ -1454,7 +1454,7 @@
 </script>
 
 <div class="flex h-screen">
-  {#if $modalOpen}
+  {#if $groupModalOpen}
     <div
       class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
     >
@@ -1525,7 +1525,7 @@
         class="button-item hover:text-blue-700"
         title="Change Group"
         on:click={() => {
-          modalOpen.set(true);
+          groupModalOpen.set(true);
         }}
       >
         <FontAwesomeIcon icon="database" size="lg" />
