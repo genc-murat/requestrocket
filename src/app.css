@@ -46,7 +46,7 @@ body {
 }
 
 .menu-panel {
-  flex: 1 0 3%;
+  flex: 1 0 2%;
   overflow-y: auto;
 }
 
@@ -62,7 +62,7 @@ body {
 }
 
 .response-panel {
-  flex: 1 0 47%;
+  flex: 1 0 48%;
   overflow-y: auto;
 }
 

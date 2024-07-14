@@ -1521,54 +1521,63 @@
     <div class="vertical-buttons">
       <button
         type="button"
+        class="button-item hover:text-blue-700"
+        title="Change Group"
+        on:click={() => {
+          modalOpen.set(true);
+        }}
+      >
+        <FontAwesomeIcon icon="database" size="lg" />
+      </button>
+      <button
+        type="button"
         on:click={openCustomHeaderPanel}
         class="button-item hover:text-green-700"
+        title="Headers"
       >
         <FontAwesomeIcon icon={faEdit} size="lg" />
-        <span>Headers</span>
       </button>
       <button
         type="button"
         on:click={() => variablesPanelOpen.set(true)}
         class="button-item hover:text-green-700"
+        title="Variables"
       >
         <FontAwesomeIcon icon="edit" size="lg" />
-        <span>Variables</span>
       </button>
       <button
         type="button"
         on:click={importPostmanCollection}
         class="button-item hover:text-orange-700"
+        title="Import"
       >
         <FontAwesomeIcon icon="upload" size="lg" />
-        <span>Import</span>
       </button>
       <button
         type="button"
         on:click={() => downloadApiDocumentation($history)}
         class="button-item hover:text-green-700"
+        title="Doc"
       >
         <FontAwesomeIcon icon="download" size="lg" />
-        <span>Doc</span>
       </button>
       <button
         type="button"
         on:click={openApiFlowModal}
         class="button-item bg-gray-300 rounded-md cursor-not-allowed opacity-50"
+        title="Designer"
         disabled
       >
         <FontAwesomeIcon icon="edit" size="lg" />
-        <span>Designer</span>
       </button>
-
       <button
         type="button"
         on:click={handleExport}
         class="button-item bg-gray-300 rounded-md cursor-not-allowed opacity-50"
+        title="Export"
         disabled
       >
         <FontAwesomeIcon icon="download" size="lg" />
-        <span>Export</span>
       </button>
     </div>
   </div>
@@ -1578,15 +1587,6 @@
       <div class="group">
         <div class="flex justify-between items-center">
           <h4 class="text-base font-semibold mb-2 flex items-center">
-            <button
-              type="button"
-              class="text-blue-600"
-              on:click={() => {
-                modalOpen.set(true);
-              }}
-            >
-              <FontAwesomeIcon icon="database" class="mr-2" />
-            </button>
             {$selectedGroup}
           </h4>
         </div>
@@ -1604,11 +1604,19 @@
                {item.method === 'GET' ? 'method-get' : ''} 
                                  {item.method === 'POST' ? 'method-post' : ''} 
                                  {item.method === 'PUT' ? 'method-put' : ''} 
-                                 {item.method === 'DELETE' ? 'method-delete' : ''} 
-                                 {item.method === 'PATCH' ? 'method-patch' : ''} 
-                                 {item.method === 'OPTIONS' ? 'method-options' : ''} 
+                                 {item.method === 'DELETE'
+                    ? 'method-delete'
+                    : ''} 
+                                 {item.method === 'PATCH'
+                    ? 'method-patch'
+                    : ''} 
+                                 {item.method === 'OPTIONS'
+                    ? 'method-options'
+                    : ''} 
                                  {item.method === 'HEAD' ? 'method-head' : ''} 
-                                 {item.method === 'CONNECT' ? 'method-connect' : ''} 
+                                 {item.method === 'CONNECT'
+                    ? 'method-connect'
+                    : ''} 
                                  {item.method === 'TRACE' ? 'method-trace' : ''}
                 text-white"
                 >
@@ -2354,10 +2362,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    padding-top: 0.5rem;
+    gap: 0.2rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.2rem;
+    padding-top: 0.2rem;
     border-bottom: 1px solid var(--divider);
     border-top: 1px solid var(--divider);
   }
