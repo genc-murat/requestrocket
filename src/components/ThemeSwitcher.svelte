@@ -7,55 +7,150 @@
     };
 
     const themes: { [key: string]: ThemeProperties } = {
-        default: {
-            "--background": "#f5f5f5",
-            "--light-background": "#ffffff",
-            "--surface": "#eeeeee",
-            "--primary-text": "#31363f",
-            "--secondary-text": "#dde6ed",
-            "--dark-text": "#111111",
-            "--divider": "#dde6ed",
-            "--shadow": "rgba(0, 0, 0, 0.25)",
-            "--primary": "#526d82",
-            "--secondary": "#9db2bf",
-            "--warning": "#ffd966",
-            "--error": "#f28b82",
-            "--info": "#7ea8d7",
-            "--success": "#90c695",
-            "--dropdown-box-shadow": "rgba(162, 206, 209, 0.7)",
-            "--group-card-hover": "#f0f0f0",
-            "--seperator": "#cccccc",
-            "--select-background-color": "#f3f4f6",
-            "--select-text-color": "#374151",
-            "--select-focus-border-color": "#2563eb",
-            "--select-focus-box-shadow": "rgba(37, 99, 235, 0.3)",
+        pureWhiteTheme: {
+            "--background": "#ffffff",
+            "--light-background": "#f8f9fa",
+            "--surface": "#e9ecef",
+            "--primary-text": "#343a40",
+            "--secondary-text": "#6c757d",
+            "--dark-text": "#000000",
+            "--divider": "#dee2e6",
+            "--shadow": "rgba(0, 0, 0, 0.1)",
+            "--primary": "#007bff",
+            "--secondary": "#6c757d",
+            "--warning": "#ffc107",
+            "--error": "#dc3545",
+            "--info": "#17a2b8",
+            "--success": "#28a745",
+            "--dropdown-box-shadow": "rgba(0, 123, 255, 0.3)",
+            "--group-card-hover": "#f8f9fa",
+            "--seperator": "#dee2e6",
+            "--select-background-color": "#ffffff",
+            "--select-text-color": "#343a40",
+            "--select-focus-border-color": "#007bff",
+            "--select-focus-box-shadow": "rgba(0, 123, 255, 0.3)",
         },
-        blackAndWhiteTheme: {
-            "--background": "#000000" /* Black background */,
-            "--light-background": "#ffffff" /* White surface */,
-            "--surface": "#f0f0f0" /* Light gray surface */,
-            "--primary-text": "#000000" /* White primary text */,
-            "--secondary-text": "#bdbdbd" /* Light gray secondary text */,
+        whiteTheme: {
+            "--background": "#ffffff",
+            "--light-background": "#f7f7f7",
+            "--surface": "#e0e0e0",
+            "--primary-text": "#212121",
+            "--secondary-text": "#757575",
+            "--dark-text": "#000000",
+            "--divider": "#bdbdbd",
+            "--shadow": "rgba(0, 0, 0, 0.1)",
+            "--primary": "#3f51b5",
+            "--secondary": "#ff4081",
+            "--warning": "#ffc107",
+            "--error": "#f44336",
+            "--info": "#2196f3",
+            "--success": "#4caf50",
+            "--dropdown-box-shadow": "rgba(63, 81, 181, 0.3)",
+            "--group-card-hover": "#f7f7f7",
+            "--seperator": "#e0e0e0",
+            "--select-background-color": "#ffffff",
+            "--select-text-color": "#212121",
+            "--select-focus-border-color": "#3f51b5",
+            "--select-focus-box-shadow": "rgba(63, 81, 181, 0.3)",
+        },
+        arcticBreezeTheme: {
+            "--background": "#ffffff", // Beyaz arka plan
+            "--light-background": "#f0f8ff", // Açık buz mavisi yüzey
+            "--surface": "#e3f2fd", // Açık buz mavisi yüzey
+            "--primary-text": "#212121", // Koyu gri metin
+            "--secondary-text": "#616161", // Orta gri metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#b3e5fc", // Açık buz mavisi bölücü
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Açık gri gölge
+            "--primary": "#4fc3f7", // Açık mavi
+            "--secondary": "#29b6f6", // Orta mavi
+            "--warning": "#ffb74d", // Açık turuncu
+            "--error": "#ef5350", // Açık kırmızı
+            "--info": "#64b5f6", // Açık mavi
+            "--success": "#81c784", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(79, 195, 247, 0.5)", // Şeffaf açık mavi
+            "--group-card-hover": "#f0f8ff", // Açık buz mavisi
+            "--seperator": "#b3e5fc", // Açık buz mavisi
+            "--select-background-color": "#e3f2fd", // Açık buz mavisi
+            "--select-text-color": "#212121", // Koyu gri
+            "--select-focus-border-color": "#4fc3f7", // Açık mavi
+            "--select-focus-box-shadow": "rgba(79, 195, 247, 0.3)", // Şeffaf açık mavi
+        },
+        cloudNineTheme: {
+            "--background": "#ffffff", // Beyaz arka plan
+            "--light-background": "#f5f5f5", // Çok açık gri yüzey
+            "--surface": "#e0e0e0", // Açık gri yüzey
+            "--primary-text": "#212121", // Koyu gri metin
+            "--secondary-text": "#757575", // Orta gri metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#bdbdbd", // Açık gri bölücü
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Açık gri gölge
+            "--primary": "#90caf9", // Açık mavi
+            "--secondary": "#64b5f6", // Orta mavi
+            "--warning": "#ffb74d", // Açık turuncu
+            "--error": "#f44336", // Kırmızı
+            "--info": "#29b6f6", // Parlak mavi
+            "--success": "#81c784", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(144, 202, 249, 0.5)", // Şeffaf açık mavi
+            "--group-card-hover": "#f0f0f0", // Çok açık gri
+            "--seperator": "#bdbdbd", // Açık gri
+            "--select-background-color": "#e0e0e0", // Açık gri
+            "--select-text-color": "#212121", // Koyu gri
+            "--select-focus-border-color": "#90caf9", // Açık mavi
+            "--select-focus-box-shadow": "rgba(144, 202, 249, 0.3)", // Şeffaf açık mavi
+        },
+        ghostlyWhisperTheme: {
+            "--background": "#f8f8f8", // Çok açık gri arka plan
+            "--light-background": "#ffffff", // Beyaz yüzey
+            "--surface": "#f5f5f5", // Çok açık gri yüzey
+            "--primary-text": "#424242", // Koyu gri metin
+            "--secondary-text": "#757575", // Orta gri metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#e0e0e0", // Açık gri bölücü
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Açık gri gölge
+            "--primary": "#9e9e9e", // Orta gri
+            "--secondary": "#bdbdbd", // Açık gri
+            "--warning": "#ffc107", // Sarı
+            "--error": "#e53935", // Kırmızı
+            "--info": "#64b5f6", // Açık mavi
+            "--success": "#4caf50", // Yeşil
+            "--dropdown-box-shadow": "rgba(158, 158, 158, 0.5)", // Şeffaf orta gri
+            "--group-card-hover": "#ffffff", // Beyaz
+            "--seperator": "#e0e0e0", // Açık gri
+            "--select-background-color": "#f5f5f5", // Çok açık gri
+            "--select-text-color": "#424242", // Koyu gri
+            "--select-focus-border-color": "#9e9e9e", // Orta gri
+            "--select-focus-box-shadow": "rgba(158, 158, 158, 0.3)", // Şeffaf orta gri
+        },
+        mistyMorningTheme: {
+            "--background": "#e0e0e0" /* Light gray background */,
+            "--light-background": "#f5f5f5" /* Very light gray surface */,
+            "--surface": "#ffffff" /* White surface */,
+            "--primary-text": "#424242" /* Dark gray primary text */,
+            "--secondary-text": "#9e9e9e" /* Medium gray secondary text */,
             "--dark-text": "#000000" /* Black text */,
-            "--divider": "#4f4f4f" /* Dark gray divider */,
-            "--shadow": "rgba(0, 0, 0, 0.7)" /* Black shadow */,
-            "--primary": "#ffffff" /* White primary color */,
-            "--secondary": "#bdbdbd" /* Light gray secondary color */,
-            "--warning": "#ffc107" /* Yellow warning color */,
-            "--error": "#f44336" /* Red error color */,
-            "--info": "#2196f3" /* Blue info color */,
-            "--success": "#4caf50" /* Green success color */,
+            "--divider": "#bdbdbd" /* Medium light gray divider */,
+            "--shadow": "rgba(224, 224, 224, 0.7)" /* Light gray shadow */,
+            "--primary": "#b0bec5" /* Light gray-blue primary color */,
+            "--secondary": "#cfd8dc" /* Very light gray-blue secondary color */,
+            "--tertiary": "#eceff1" /* Light gray tertiary color */,
+            "--quaternary": "#fafafa" /* Very light gray quaternary color */,
+            "--warning": "#ffcc00" /* Bright yellow warning color */,
+            "--error": "#f44336" /* Bright red error color */,
+            "--info": "#33ccff" /* Bright cyan info color */,
+            "--success": "#66ff66" /* Bright green success color */,
             "--dropdown-box-shadow":
-                "rgba(255, 255, 255, 0.7)" /* White shadow */,
-            "--group-card-hover": "#1a1a1a" /* Dark gray card hover color */,
-            "--separator": "#4f4f4f" /* Dark gray separator */,
+                "rgba(176, 190, 197, 0.7)" /* Light gray-blue shadow */,
+            "--group-card-hover":
+                "#f5f5f5" /* Very light gray card hover color */,
+            "--separator": "#bdbdbd" /* Medium light gray separator */,
             "--select-background-color":
-                "#2e2e2e" /* Dark gray select background color */,
-            "--select-text-color": "#ffffff" /* White select text color */,
+                "#ffffff" /* White select background color */,
+            "--select-text-color": "#424242" /* Dark gray select text color */,
             "--select-focus-border-color":
-                "#ffffff" /* White focus border color */,
+                "#b0bec5" /* Light gray-blue focus border color */,
             "--select-focus-box-shadow":
-                "rgba(255, 255, 255, 0.3)" /* White focus shadow */,
+                "rgba(176, 190, 197, 0.3)" /* Light gray-blue focus shadow */,
         },
         foggyMountainTheme: {
             "--background": "#cfd8dc" /* Very light gray-blue background */,
@@ -90,59 +185,6 @@
             "--select-focus-box-shadow":
                 "rgba(120, 144, 156, 0.3)" /* Medium gray-blue focus shadow */,
         },
-        mistyMorningTheme: {
-            "--background": "#e0e0e0" /* Light gray background */,
-            "--light-background": "#f5f5f5" /* Very light gray surface */,
-            "--surface": "#ffffff" /* White surface */,
-            "--primary-text": "#424242" /* Dark gray primary text */,
-            "--secondary-text": "#9e9e9e" /* Medium gray secondary text */,
-            "--dark-text": "#000000" /* Black text */,
-            "--divider": "#bdbdbd" /* Medium light gray divider */,
-            "--shadow": "rgba(224, 224, 224, 0.7)" /* Light gray shadow */,
-            "--primary": "#b0bec5" /* Light gray-blue primary color */,
-            "--secondary": "#cfd8dc" /* Very light gray-blue secondary color */,
-            "--tertiary": "#eceff1" /* Light gray tertiary color */,
-            "--quaternary": "#fafafa" /* Very light gray quaternary color */,
-            "--warning": "#ffcc00" /* Bright yellow warning color */,
-            "--error": "#f44336" /* Bright red error color */,
-            "--info": "#33ccff" /* Bright cyan info color */,
-            "--success": "#66ff66" /* Bright green success color */,
-            "--dropdown-box-shadow":
-                "rgba(176, 190, 197, 0.7)" /* Light gray-blue shadow */,
-            "--group-card-hover":
-                "#f5f5f5" /* Very light gray card hover color */,
-            "--separator": "#bdbdbd" /* Medium light gray separator */,
-            "--select-background-color":
-                "#ffffff" /* White select background color */,
-            "--select-text-color": "#424242" /* Dark gray select text color */,
-            "--select-focus-border-color":
-                "#b0bec5" /* Light gray-blue focus border color */,
-            "--select-focus-box-shadow":
-                "rgba(176, 190, 197, 0.3)" /* Light gray-blue focus shadow */,
-        },
-        pureWhiteTheme: {
-            "--background": "#ffffff",
-            "--light-background": "#f8f9fa",
-            "--surface": "#e9ecef",
-            "--primary-text": "#343a40",
-            "--secondary-text": "#6c757d",
-            "--dark-text": "#000000",
-            "--divider": "#dee2e6",
-            "--shadow": "rgba(0, 0, 0, 0.1)",
-            "--primary": "#007bff",
-            "--secondary": "#6c757d",
-            "--warning": "#ffc107",
-            "--error": "#dc3545",
-            "--info": "#17a2b8",
-            "--success": "#28a745",
-            "--dropdown-box-shadow": "rgba(0, 123, 255, 0.3)",
-            "--group-card-hover": "#f8f9fa",
-            "--seperator": "#dee2e6",
-            "--select-background-color": "#ffffff",
-            "--select-text-color": "#343a40",
-            "--select-focus-border-color": "#007bff",
-            "--select-focus-box-shadow": "rgba(0, 123, 255, 0.3)",
-        },
         macosTheme: {
             "--background": "#f8f8f8" /* Light gray background */,
             "--light-background": "#ffffff" /* White surface */,
@@ -171,6 +213,340 @@
                 "#007aff" /* Bright blue focus border color */,
             "--select-focus-box-shadow":
                 "rgba(0, 122, 255, 0.3)" /* Bright blue focus shadow */,
+        },
+        silverLiningTheme: {
+            "--background": "#f0f0f0", // Açık gümüş gri arka plan
+            "--light-background": "#ffffff", // Beyaz yüzey
+            "--surface": "#d3d3d3", // Gümüş gri yüzey
+            "--primary-text": "#2e2e2e", // Koyu gri metin
+            "--secondary-text": "#a9a9a9", // Orta gri metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#b0b0b0", // Açık gri bölücü
+            "--shadow": "rgba(211, 211, 211, 0.5)", // Şeffaf gümüş gri gölge
+            "--primary": "#9e9e9e", // Orta gri
+            "--secondary": "#bdbdbd", // Açık gri
+            "--warning": "#ffc107", // Sarı
+            "--error": "#e53935", // Kırmızı
+            "--info": "#64b5f6", // Açık mavi
+            "--success": "#4caf50", // Yeşil
+            "--dropdown-box-shadow": "rgba(158, 158, 158, 0.5)", // Şeffaf orta gri
+            "--group-card-hover": "#ffffff", // Beyaz
+            "--seperator": "#b0b0b0", // Açık gri
+            "--select-background-color": "#d3d3d3", // Gümüş gri
+            "--select-text-color": "#2e2e2e", // Koyu gri
+            "--select-focus-border-color": "#9e9e9e", // Orta gri
+            "--select-focus-box-shadow": "rgba(158, 158, 158, 0.3)", // Şeffaf orta gri
+        },
+        lightGrayTheme: {
+            "--background": "#fafafa",
+            "--light-background": "#ffffff",
+            "--surface": "#f0f0f0",
+            "--primary-text": "#424242",
+            "--secondary-text": "#9e9e9e",
+            "--dark-text": "#000000",
+            "--divider": "#e0e0e0",
+            "--shadow": "rgba(0, 0, 0, 0.1)",
+            "--primary": "#1976d2",
+            "--secondary": "#c2185b",
+            "--warning": "#ff9800",
+            "--error": "#d32f2f",
+            "--info": "#0288d1",
+            "--success": "#388e3c",
+            "--dropdown-box-shadow": "rgba(25, 118, 210, 0.3)",
+            "--group-card-hover": "#f0f0f0",
+            "--seperator": "#e0e0e0",
+            "--select-background-color": "#ffffff",
+            "--select-text-color": "#424242",
+            "--select-focus-border-color": "#1976d2",
+            "--select-focus-box-shadow": "rgba(25, 118, 210, 0.3)",
+        },
+        windows11Theme: {
+            "--background": "#f3f3f3" /* Light gray background */,
+            "--light-background": "#ffffff" /* White surface */,
+            "--surface": "#e5e5e5" /* Very light gray surface */,
+            "--primary-text": "#1a1a1a" /* Dark gray primary text */,
+            "--secondary-text": "#757575" /* Medium gray secondary text */,
+            "--dark-text": "#000000" /* Black text */,
+            "--divider": "#cccccc" /* Light gray divider */,
+            "--shadow": "rgba(0, 0, 0, 0.1)" /* Very light shadow */,
+            "--primary": "#0078d4" /* Bright blue primary color */,
+            "--secondary": "#005a9e" /* Medium blue secondary color */,
+            "--tertiary": "#003a78" /* Dark blue tertiary color */,
+            "--quaternary": "#ffffff" /* White quaternary color */,
+            "--warning": "#ffcc00" /* Bright yellow warning color */,
+            "--error": "#d13438" /* Red error color */,
+            "--info": "#5ac8fa" /* Cyan info color */,
+            "--success": "#107c10" /* Green success color */,
+            "--dropdown-box-shadow":
+                "rgba(0, 120, 212, 0.7)" /* Bright blue shadow */,
+            "--group-card-hover":
+                "#e5e5e5" /* Very light gray card hover color */,
+            "--separator": "#cccccc" /* Light gray separator */,
+            "--select-background-color":
+                "#ffffff" /* White select background color */,
+            "--select-text-color": "#1a1a1a" /* Dark gray select text color */,
+            "--select-focus-border-color":
+                "#0078d4" /* Bright blue focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(0, 120, 212, 0.3)" /* Bright blue focus shadow */,
+        },
+        creamTheme: {
+            "--background": "#f0f0e9",
+            "--light-background": "#ffffff",
+            "--surface": "#d9d9d1",
+            "--primary-text": "#4e4e4e",
+            "--secondary-text": "#7d7d7d",
+            "--dark-text": "#1c1c1c",
+            "--divider": "#bfbfbf",
+            "--shadow": "rgba(76, 76, 76, 0.25)",
+            "--primary": "#8c7b75",
+            "--secondary": "#b29e96",
+            "--warning": "#f4a261",
+            "--error": "#e76f51",
+            "--info": "#6d9eeb",
+            "--success": "#9acd32",
+            "--dropdown-box-shadow": "rgba(140, 123, 117, 0.7)",
+            "--group-card-hover": "#ece5e0",
+            "--seperator": "#ccc5be",
+            "--select-background-color": "#ebe7e2",
+            "--select-text-color": "#4e4e4e",
+            "--select-focus-border-color": "#8c7b75",
+            "--select-focus-box-shadow": "rgba(140, 123, 117, 0.3)",
+        },
+        vanillaCreamTheme: {
+            "--background": "#fff9c4", // Açık krem arka plan
+            "--light-background": "#ffffff", // Beyaz yüzey
+            "--surface": "#fff59d", // Açık krem yüzey
+            "--primary-text": "#333333", // Koyu gri metin
+            "--secondary-text": "#666666", // Orta gri metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#ffe082", // Açık sarı bölücü
+            "--shadow": "rgba(255, 249, 196, 0.5)", // Şeffaf açık krem gölge
+            "--primary": "#fbc02d", // Açık sarı
+            "--secondary": "#ffa726", // Orta turuncu
+            "--warning": "#ffb74d", // Açık turuncu
+            "--error": "#ef5350", // Açık kırmızı
+            "--info": "#64b5f6", // Açık mavi
+            "--success": "#c8e6c9", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(251, 192, 45, 0.5)", // Şeffaf açık sarı
+            "--group-card-hover": "#ffffff", // Beyaz
+            "--seperator": "#ffe082", // Açık sarı
+            "--select-background-color": "#fff59d", // Açık krem
+            "--select-text-color": "#333333", // Koyu gri
+            "--select-focus-border-color": "#fbc02d", // Açık sarı
+            "--select-focus-box-shadow": "rgba(251, 192, 45, 0.3)", // Şeffaf açık sarı
+        },
+        neutralTheme: {
+            "--background": "#f5f5f5",
+            "--light-background": "#ffffff",
+            "--surface": "#e0e0e0",
+            "--primary-text": "#212121",
+            "--secondary-text": "#757575",
+            "--dark-text": "#000000",
+            "--divider": "#bdbdbd",
+            "--shadow": "rgba(33, 33, 33, 0.25)",
+            "--primary": "#3f51b5",
+            "--secondary": "#ff4081",
+            "--warning": "#ffa000",
+            "--error": "#d32f2f",
+            "--info": "#1976d2",
+            "--success": "#388e3c",
+            "--dropdown-box-shadow": "rgba(63, 81, 181, 0.7)",
+            "--group-card-hover": "#e8eaf6",
+            "--seperator": "#c5cae9",
+            "--select-background-color": "#f5f5f5",
+            "--select-text-color": "#212121",
+            "--select-focus-border-color": "#3f51b5",
+            "--select-focus-box-shadow": "rgba(63, 81, 181, 0.3)",
+        },
+        paleYellowTheme: {
+            "--background": "#fffde7",
+            "--light-background": "#fffff8",
+            "--surface": "#fff9c4",
+            "--primary-text": "#212121",
+            "--secondary-text": "#757575",
+            "--dark-text": "#000000",
+            "--divider": "#e0e0e0",
+            "--shadow": "rgba(0, 0, 0, 0.1)",
+            "--primary": "#fbc02d",
+            "--secondary": "#ffa000",
+            "--warning": "#ffeb3b",
+            "--error": "#f44336",
+            "--info": "#29b6f6",
+            "--success": "#66bb6a",
+            "--dropdown-box-shadow": "rgba(251, 192, 45, 0.3)",
+            "--group-card-hover": "#fffff8",
+            "--seperator": "#e0e0e0",
+            "--select-background-color": "#fffde7",
+            "--select-text-color": "#212121",
+            "--select-focus-border-color": "#fbc02d",
+            "--select-focus-box-shadow": "rgba(251, 192, 45, 0.3)",
+        },
+        sereneDawnTheme: {
+            "--background": "#f7f7f7", // Açık gri arka plan
+            "--light-background": "#ffffff", // Beyaz yüzey
+            "--surface": "#f0f0f0", // Açık gri yüzey
+            "--primary-text": "#333333", // Koyu gri metin
+            "--secondary-text": "#666666", // Orta gri metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#e0e0e0", // Açık gri bölücü
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Açık gri gölge
+            "--primary": "#a7d4cb", // Pastel yeşil
+            "--secondary": "#e1bee7", // Pastel mor
+            "--warning": "#ffcc80", // Pastel turuncu
+            "--error": "#f48fb1", // Pastel pembe
+            "--info": "#81d4fa", // Pastel mavi
+            "--success": "#c5e1a5", // Pastel yeşil
+            "--dropdown-box-shadow": "rgba(167, 212, 203, 0.5)", // Şeffaf pastel yeşil
+            "--group-card-hover": "#ffffff", // Beyaz
+            "--seperator": "#e0e0e0", // Açık gri
+            "--select-background-color": "#f0f0f0", // Açık gri
+            "--select-text-color": "#333333", // Koyu gri
+            "--select-focus-border-color": "#a7d4cb", // Pastel yeşil
+            "--select-focus-box-shadow": "rgba(167, 212, 203, 0.3)", // Şeffaf pastel yeşil
+        },
+        arcticBloomTheme: {
+            "--background": "#e0f7fa", // Açık buzul mavisi arka plan
+            "--light-background": "#ffffff", // Beyaz yüzey
+            "--surface": "#b2ebf2", // Açık buzul mavisi yüzey
+            "--primary-text": "#263238", // Koyu gri-mavi metin
+            "--secondary-text": "#546e7a", // Orta gri-mavi metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#90caf9", // Açık buzul mavisi bölücü
+            "--shadow": "rgba(176, 247, 250, 0.5)", // Şeffaf buzul mavisi gölge
+            "--primary": "#f48fb1", // Parlak pembe
+            "--secondary": "#64b5f6", // Açık mavi
+            "--warning": "#ffcc80", // Açık turuncu
+            "--error": "#ef5350", // Açık kırmızı
+            "--info": "#29b6f6", // Parlak mavi
+            "--success": "#81c784", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(244, 143, 177, 0.5)", // Şeffaf parlak pembe
+            "--group-card-hover": "#ffffff", // Beyaz
+            "--seperator": "#90caf9", // Açık buzul mavisi
+            "--select-background-color": "#b2ebf2", // Açık buzul mavisi
+            "--select-text-color": "#263238", // Koyu gri-mavi
+            "--select-focus-border-color": "#f48fb1", // Parlak pembe
+            "--select-focus-box-shadow": "rgba(244, 143, 177, 0.3)", // Şeffaf parlak pembe
+        },
+        zenGardenTheme: {
+            "--background": "#f2f2f2", // Açık gri arka plan
+            "--light-background": "#ffffff", // Beyaz yüzey
+            "--surface": "#e0e0e0", // Açık gri yüzey
+            "--primary-text": "#333333", // Koyu gri metin
+            "--secondary-text": "#666666", // Orta gri metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#d9d9d9", // Açık gri bölücü
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Açık gri gölge
+            "--primary": "#7cb342", // Orta yeşil
+            "--secondary": "#a1887f", // Açık kahverengi
+            "--warning": "#ffb74d", // Açık turuncu
+            "--error": "#ef5350", // Açık kırmızı
+            "--info": "#64b5f6", // Açık mavi
+            "--success": "#81c784", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(124, 179, 66, 0.5)", // Şeffaf orta yeşil
+            "--group-card-hover": "#ffffff", // Beyaz
+            "--seperator": "#d9d9d9", // Açık gri
+            "--select-background-color": "#e0e0e0", // Açık gri
+            "--select-text-color": "#333333", // Koyu gri
+            "--select-focus-border-color": "#7cb342", // Orta yeşil
+            "--select-focus-box-shadow": "rgba(124, 179, 66, 0.3)", // Şeffaf orta yeşil
+        },
+        solarPunkTheme: {
+            "--background": "#f0f4c3", // Açık yeşil-sarı arka plan
+            "--light-background": "#ffffff", // Beyaz yüzey
+            "--surface": "#dcedc8", // Açık yeşil yüzey
+            "--primary-text": "#333333", // Koyu gri metin
+            "--secondary-text": "#666666", // Orta gri metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#c5e1a5", // Açık yeşil bölücü
+            "--shadow": "rgba(220, 237, 200, 0.5)", // Şeffaf açık yeşil gölge
+            "--primary": "#aed581", // Orta yeşil
+            "--secondary": "#ffb74d", // Açık turuncu
+            "--warning": "#ffcc80", // Açık turuncu
+            "--error": "#ef5350", // Açık kırmızı
+            "--info": "#64b5f6", // Açık mavi
+            "--success": "#81c784", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(174, 213, 129, 0.5)", // Şeffaf orta yeşil
+            "--group-card-hover": "#ffffff", // Beyaz
+            "--seperator": "#c5e1a5", // Açık yeşil
+            "--select-background-color": "#dcedc8", // Açık yeşil
+            "--select-text-color": "#333333", // Koyu gri
+            "--select-focus-border-color": "#aed581", // Orta yeşil
+            "--select-focus-box-shadow": "rgba(174, 213, 129, 0.3)", // Şeffaf orta yeşil
+        },
+        vintageRoseTheme: {
+            "--background": "#ffe0b2", // Açık krem arka plan
+            "--light-background": "#ffffff", // Beyaz yüzey
+            "--surface": "#ffebee", // Soluk pembe yüzey
+            "--primary-text": "#424242", // Koyu gri metin
+            "--secondary-text": "#757575", // Orta gri metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#f8bbd0", // Soluk pembe bölücü
+            "--shadow": "rgba(255, 224, 178, 0.5)", // Şeffaf açık krem gölge
+            "--primary": "#e91e63", // Parlak pembe
+            "--secondary": "#f06292", // Açık pembe
+            "--warning": "#ffb74d", // Açık turuncu
+            "--error": "#ef5350", // Açık kırmızı
+            "--info": "#64b5f6", // Açık mavi
+            "--success": "#c8e6c9", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(233, 30, 99, 0.5)", // Şeffaf parlak pembe
+            "--group-card-hover": "#ffffff", // Beyaz
+            "--seperator": "#f8bbd0", // Soluk pembe
+            "--select-background-color": "#ffebee", // Soluk pembe
+            "--select-text-color": "#424242", // Koyu gri
+            "--select-focus-border-color": "#e91e63", // Parlak pembe
+            "--select-focus-box-shadow": "rgba(233, 30, 99, 0.3)", // Şeffaf parlak pembe
+        },
+        candyCrushTheme: {
+            "--background": "#f9f0f0", // Açık pembe arka plan
+            "--light-background": "#ffffff", // Beyaz yüzey
+            "--surface": "#f4e0e0", // Açık pembe yüzey
+            "--primary-text": "#333333", // Koyu gri metin
+            "--secondary-text": "#666666", // Orta gri metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#e9c4e0", // Açık pembe bölücü
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Açık gri gölge
+            "--primary": "#f48fb1", // Parlak pembe
+            "--secondary": "#81d4fa", // Açık mavi
+            "--warning": "#ffd54f", // Açık sarı
+            "--error": "#e57373", // Açık kırmızı
+            "--info": "#64b5f6", // Açık mavi
+            "--success": "#81c784", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(244, 143, 177, 0.5)", // Şeffaf parlak pembe
+            "--group-card-hover": "#ffffff", // Beyaz
+            "--seperator": "#e9c4e0", // Açık pembe
+            "--select-background-color": "#f4e0e0", // Açık pembe
+            "--select-text-color": "#333333", // Koyu gri
+            "--select-focus-border-color": "#f48fb1", // Parlak pembe
+            "--select-focus-box-shadow": "rgba(244, 143, 177, 0.3)", // Şeffaf parlak pembe
+        },
+        amberYellowTheme: {
+            "--background": "#ffca28" /* Amber yellow background */,
+            "--light-background": "#ffecb3" /* Light amber yellow surface */,
+            "--surface": "#ffca28" /* Amber yellow surface */,
+            "--primary-text": "#3e2723" /* Dark brown primary text */,
+            "--secondary-text": "#795548" /* Medium brown secondary text */,
+            "--dark-text": "#ffffff" /* White text */,
+            "--divider": "#ffe082" /* Light yellow divider */,
+            "--shadow": "rgba(255, 202, 40, 0.5)" /* Amber yellow shadow */,
+            "--primary": "#ffca28" /* Amber yellow primary color */,
+            "--secondary": "#ffe082" /* Light yellow secondary color */,
+            "--warning": "#ffa726" /* Bright orange warning color */,
+            "--error": "#d32f2f" /* Bright red error color */,
+            "--info": "#29b6f6" /* Bright blue info color */,
+            "--success": "#66bb6a" /* Bright green success color */,
+            "--dropdown-box-shadow":
+                "rgba(255, 202, 40, 0.7)" /* Amber yellow shadow */,
+            "--group-card-hover":
+                "#ffecb3" /* Light amber yellow card hover color */,
+            "--separator": "#ffe082" /* Light yellow separator */,
+            "--select-background-color":
+                "#ffca28" /* Amber yellow select background color */,
+            "--select-text-color": "#3e2723" /* Dark brown select text color */,
+            "--select-focus-border-color":
+                "#ffca28" /* Amber yellow focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(255, 202, 40, 0.3)" /* Amber yellow focus shadow */,
         },
         ubuntuTheme: {
             "--background": "#2e3436" /* Dark gray background */,
@@ -201,6 +577,406 @@
             "--select-focus-box-shadow":
                 "rgba(233, 84, 32, 0.3)" /* Bright orange focus shadow */,
         },
+        default: {
+            "--background": "#f5f5f5",
+            "--light-background": "#ffffff",
+            "--surface": "#eeeeee",
+            "--primary-text": "#31363f",
+            "--secondary-text": "#dde6ed",
+            "--dark-text": "#111111",
+            "--divider": "#dde6ed",
+            "--shadow": "rgba(0, 0, 0, 0.25)",
+            "--primary": "#526d82",
+            "--secondary": "#9db2bf",
+            "--warning": "#ffd966",
+            "--error": "#f28b82",
+            "--info": "#7ea8d7",
+            "--success": "#90c695",
+            "--dropdown-box-shadow": "rgba(162, 206, 209, 0.7)",
+            "--group-card-hover": "#f0f0f0",
+            "--seperator": "#cccccc",
+            "--select-background-color": "#f3f4f6",
+            "--select-text-color": "#374151",
+            "--select-focus-border-color": "#2563eb",
+            "--select-focus-box-shadow": "rgba(37, 99, 235, 0.3)",
+        },
+
+        gunmetalSymphonyTheme: {
+            "--background": "#262626", // Gunmetal gri arka plan
+            "--light-background": "#333333", // Koyu gri yüzey
+            "--surface": "#404040", // Antrasit gri yüzey
+            "--primary-text": "#d9d9d9", // Açık gri metin
+            "--secondary-text": "#a9a9a9", // Orta gri metin
+            "--dark-text": "#ffffff", // Beyaz metin
+            "--divider": "#595959", // Koyu gri bölücü
+            "--shadow": "rgba(38, 38, 38, 0.7)", // Şeffaf gunmetal gri gölge
+            "--primary": "#616161", // Koyu gri
+            "--secondary": "#787878", // Orta koyu gri
+            "--warning": "#e5c07b", // Sarımsı turuncu
+            "--error": "#e06c75", // Kırmızımsı pembe
+            "--info": "#56b6c2", // Açık mavi-yeşil
+            "--success": "#98c379", // Yeşilimsi sarı
+            "--dropdown-box-shadow": "rgba(97, 97, 97, 0.5)", // Şeffaf koyu gri
+            "--group-card-hover": "#333333", // Koyu gri
+            "--seperator": "#595959", // Koyu gri
+            "--select-background-color": "#404040", // Antrasit gri
+            "--select-text-color": "#d9d9d9", // Açık gri
+            "--select-focus-border-color": "#616161", // Koyu gri
+            "--select-focus-box-shadow": "rgba(97, 97, 97, 0.3)", // Şeffaf koyu gri
+        },
+
+        desertSunsetTheme: {
+            "--background": "#e67e22", // Turuncu arka plan
+            "--light-background": "#f48fb1", // Açık pembe yüzey
+            "--surface": "#ff9800", // Turuncu yüzey
+            "--primary-text": "#ffffff", // Beyaz metin
+            "--secondary-text": "#e8d9c9", // Açık bej metin
+            "--dark-text": "#3e2723", // Koyu kahverengi metin
+            "--divider": "#ffa726", // Açık turuncu bölücü
+            "--shadow": "rgba(230, 126, 34, 0.7)", // Şeffaf turuncu gölge
+            "--primary": "#9c27b0", // Mor
+            "--secondary": "#f06292", // Açık pembe
+            "--warning": "#ffcc80", // Açık turuncu
+            "--error": "#d32f2f", // Kırmızı
+            "--info": "#4fc3f7", // Açık mavi
+            "--success": "#c8e6c9", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(156, 39, 176, 0.5)", // Şeffaf mor
+            "--group-card-hover": "#f48fb1", // Açık pembe
+            "--seperator": "#ffa726", // Açık turuncu
+            "--select-background-color": "#ff9800", // Turuncu
+            "--select-text-color": "#ffffff", // Beyaz
+            "--select-focus-border-color": "#9c27b0", // Mor
+            "--select-focus-box-shadow": "rgba(156, 39, 176, 0.3)", // Şeffaf mor
+        },
+        enchantedForestTheme: {
+            "--background": "#1b261b", // Koyu yeşil arka plan
+            "--light-background": "#273327", // Orta koyu yeşil yüzey
+            "--surface": "#334033", // Koyu yeşil yüzey
+            "--primary-text": "#d0e0d0", // Açık yeşil-gri metin
+            "--secondary-text": "#a0b0a0", // Orta yeşil-gri metin
+            "--dark-text": "#ffffff", // Beyaz metin
+            "--divider": "#404d40", // Koyu yeşil bölücü
+            "--shadow": "rgba(27, 38, 27, 0.7)", // Şeffaf koyu yeşil gölge
+            "--primary": "#673ab7", // Mor
+            "--secondary": "#ffd700", // Altın sarısı
+            "--warning": "#ffeb3b", // Açık sarı
+            "--error": "#e06c75", // Kırmızımsı pembe
+            "--info": "#56b6c2", // Açık mavi-yeşil
+            "--success": "#98c379", // Yeşilimsi sarı
+            "--dropdown-box-shadow": "rgba(103, 58, 183, 0.5)", // Şeffaf mor
+            "--group-card-hover": "#273327", // Orta koyu yeşil
+            "--seperator": "#404d40", // Koyu yeşil
+            "--select-background-color": "#334033", // Koyu yeşil
+            "--select-text-color": "#d0e0d0", // Açık yeşil-gri
+            "--select-focus-border-color": "#673ab7", // Mor
+            "--select-focus-box-shadow": "rgba(103, 58, 183, 0.3)", // Şeffaf mor
+        },
+        cyberDawnTheme: {
+            "--background": "#221827", // Koyu mor arka plan
+            "--light-background": "#322339", // Orta koyu mor yüzey
+            "--surface": "#422e4b", // Mor yüzey
+            "--primary-text": "#e8d9c9", // Açık bej metin
+            "--secondary-text": "#c5b2a3", // Orta bej metin
+            "--dark-text": "#ffffff", // Beyaz metin
+            "--divider": "#593c5f", // Koyu mor bölücü
+            "--shadow": "rgba(34, 24, 39, 0.7)", // Şeffaf koyu mor gölge
+            "--primary": "#ff7043", // Turuncu
+            "--secondary": "#f48fb1", // Pembe
+            "--warning": "#ffcc80", // Açık turuncu
+            "--error": "#e57373", // Açık kırmızı
+            "--info": "#64b5f6", // Açık mavi
+            "--success": "#aed581", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(255, 112, 67, 0.5)", // Şeffaf turuncu
+            "--group-card-hover": "#322339", // Orta koyu mor
+            "--seperator": "#593c5f", // Koyu mor
+            "--select-background-color": "#422e4b", // Mor
+            "--select-text-color": "#e8d9c9", // Açık bej
+            "--select-focus-border-color": "#ff7043", // Turuncu
+            "--select-focus-box-shadow": "rgba(255, 112, 67, 0.3)", // Şeffaf turuncu
+        },
+        arcticNightTheme: {
+            "--background": "#1e274a", // Koyu mavi arka plan
+            "--light-background": "#283568", // Orta koyu mavi yüzey
+            "--surface": "#32438a", // Koyu mavi yüzey
+            "--primary-text": "#d4e6f1", // Açık mavi metin
+            "--secondary-text": "#aed6f1", // Orta mavi metin
+            "--dark-text": "#ffffff", // Beyaz metin
+            "--divider": "#42549d", // Koyu mavi bölücü
+            "--shadow": "rgba(30, 39, 74, 0.7)", // Şeffaf koyu mavi gölge
+            "--primary": "#64b5f6", // Açık mavi
+            "--secondary": "#4fc3f7", // Açık mavi-yeşil
+            "--warning": "#e5c07b", // Sarımsı turuncu
+            "--error": "#e06c75", // Kırmızımsı pembe
+            "--info": "#29b6f6", // Parlak mavi
+            "--success": "#66bb6a", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(100, 181, 246, 0.5)", // Şeffaf açık mavi
+            "--group-card-hover": "#283568", // Orta koyu mavi
+            "--seperator": "#42549d", // Koyu mavi
+            "--select-background-color": "#32438a", // Koyu mavi
+            "--select-text-color": "#d4e6f1", // Açık mavi
+            "--select-focus-border-color": "#64b5f6", // Açık mavi
+            "--select-focus-box-shadow": "rgba(100, 181, 246, 0.3)", // Şeffaf açık mavi
+        },
+        duskSerenityTheme: {
+            "--background": "#f2e7dc", // Açık bej arka plan
+            "--light-background": "#ffffff", // Beyaz yüzey
+            "--surface": "#e8d9c9", // Açık bej yüzey
+            "--primary-text": "#333333", // Koyu gri metin
+            "--secondary-text": "#666666", // Orta gri metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#d7ccc8", // Açık bej bölücü
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Açık gri gölge
+            "--primary": "#b39ddb", // Açık mor
+            "--secondary": "#ffb74d", // Açık turuncu
+            "--warning": "#ffcc80", // Açık turuncu
+            "--error": "#ef5350", // Açık kırmızı
+            "--info": "#64b5f6", // Açık mavi
+            "--success": "#81c784", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(179, 157, 219, 0.5)", // Şeffaf açık mor
+            "--group-card-hover": "#ffffff", // Beyaz
+            "--seperator": "#d7ccc8", // Açık bej
+            "--select-background-color": "#e8d9c9", // Açık bej
+            "--select-text-color": "#333333", // Koyu gri
+            "--select-focus-border-color": "#b39ddb", // Açık mor
+            "--select-focus-box-shadow": "rgba(179, 157, 219, 0.3)", // Şeffaf açık mor
+        },
+        tranquilForestTheme: {
+            "--background": "#1b4332", // Koyu orman yeşili arka plan
+            "--light-background": "#265941", // Orta koyu yeşil yüzey
+            "--surface": "#316f51", // Koyu yeşil yüzey
+            "--primary-text": "#d0e0d0", // Açık yeşil-gri metin
+            "--secondary-text": "#a0b0a0", // Orta yeşil-gri metin
+            "--dark-text": "#ffffff", // Beyaz metin
+            "--divider": "#417f61", // Koyu yeşil bölücü
+            "--shadow": "rgba(27, 67, 50, 0.7)", // Şeffaf koyu yeşil gölge
+            "--primary": "#66bb6a", // Açık yeşil
+            "--secondary": "#aed581", // Açık yeşil-sarı
+            "--warning": "#e5c07b", // Sarımsı turuncu
+            "--error": "#e06c75", // Kırmızımsı pembe
+            "--info": "#56b6c2", // Açık mavi-yeşil
+            "--success": "#98c379", // Yeşilimsi sarı
+            "--dropdown-box-shadow": "rgba(102, 187, 106, 0.5)", // Şeffaf açık yeşil
+            "--group-card-hover": "#265941", // Orta koyu yeşil
+            "--seperator": "#417f61", // Koyu yeşil
+            "--select-background-color": "#316f51", // Koyu yeşil
+            "--select-text-color": "#d0e0d0", // Açık yeşil-gri
+            "--select-focus-border-color": "#66bb6a", // Açık yeşil
+            "--select-focus-box-shadow": "rgba(102, 187, 106, 0.3)", // Şeffaf açık yeşil
+        },
+        darkNebulaTheme: {
+            "--background": "#000000", // Siyah arka plan
+            "--light-background": "#121212", // Çok koyu gri yüzey
+            "--surface": "#1e1e1e", // Koyu gri yüzey
+            "--primary-text": "#e0e0e0", // Açık gri metin
+            "--secondary-text": "#b0b0b0", // Orta gri metin
+            "--dark-text": "#ffffff", // Beyaz metin
+            "--divider": "#2e2e2e", // Koyu gri bölücü
+            "--shadow": "rgba(0, 0, 0, 0.8)", // Şeffaf siyah gölge
+            "--primary": "#673ab7", // Mor
+            "--secondary": "#3f51b5", // Indigo
+            "--warning": "#ffeb3b", // Sarı
+            "--error": "#f44336", // Kırmızı
+            "--info": "#2196f3", // Mavi
+            "--success": "#4caf50", // Yeşil
+            "--dropdown-box-shadow": "rgba(103, 58, 183, 0.5)", // Şeffaf mor
+            "--group-card-hover": "#121212", // Çok koyu gri
+            "--seperator": "#2e2e2e", // Koyu gri
+            "--select-background-color": "#1e1e1e", // Koyu gri
+            "--select-text-color": "#e0e0e0", // Açık gri
+            "--select-focus-border-color": "#673ab7", // Mor
+            "--select-focus-box-shadow": "rgba(103, 58, 183, 0.3)", // Şeffaf mor
+        },
+        shadowWalkerTheme: {
+            "--background": "#000000", // Siyah arka plan
+            "--light-background": "#181818", // Çok koyu gri yüzey
+            "--surface": "#212121", // Koyu gri yüzey
+            "--primary-text": "#bdbdbd", // Açık gri metin
+            "--secondary-text": "#757575", // Orta gri metin
+            "--dark-text": "#ffffff", // Beyaz metin
+            "--divider": "#424242", // Koyu gri bölücü
+            "--shadow": "rgba(0, 0, 0, 0.7)", // Şeffaf siyah gölge
+            "--primary": "#9c27b0", // Mor
+            "--secondary": "#7b1fa2", // Koyu mor
+            "--warning": "#ffb74d", // Açık turuncu
+            "--error": "#f44336", // Kırmızı
+            "--info": "#29b6f6", // Açık mavi
+            "--success": "#4caf50", // Yeşil
+            "--dropdown-box-shadow": "rgba(156, 39, 176, 0.5)", // Şeffaf mor
+            "--group-card-hover": "#181818", // Çok koyu gri
+            "--seperator": "#424242", // Koyu gri
+            "--select-background-color": "#212121", // Koyu gri
+            "--select-text-color": "#bdbdbd", // Açık gri
+            "--select-focus-border-color": "#9c27b0", // Mor
+            "--select-focus-box-shadow": "rgba(156, 39, 176, 0.3)", // Şeffaf mor
+        },
+        obsidianNightTheme: {
+            "--background": "#121212", // Siyah arka plan
+            "--light-background": "#1f1f1f", // Koyu gri yüzey
+            "--surface": "#262626", // Orta koyu gri yüzey
+            "--primary-text": "#e0e0e0", // Açık gri metin
+            "--secondary-text": "#b0b0b0", // Orta gri metin
+            "--dark-text": "#ffffff", // Beyaz metin
+            "--divider": "#333333", // Koyu gri bölücü
+            "--shadow": "rgba(18, 18, 18, 0.7)", // Şeffaf siyah gölge
+            "--primary": "#3498db", // Parlak mavi
+            "--secondary": "#95a5a6", // Açık gri
+            "--warning": "#f39c12", // Turuncu
+            "--error": "#e74c3c", // Kırmızı
+            "--info": "#29b6f6", // Açık mavi
+            "--success": "#2ecc71", // Yeşil
+            "--dropdown-box-shadow": "rgba(52, 152, 219, 0.5)", // Şeffaf parlak mavi
+            "--group-card-hover": "#1f1f1f", // Koyu gri
+            "--seperator": "#333333", // Koyu gri
+            "--select-background-color": "#262626", // Orta koyu gri
+            "--select-text-color": "#e0e0e0", // Açık gri
+            "--select-focus-border-color": "#3498db", // Parlak mavi
+            "--select-focus-box-shadow": "rgba(52, 152, 219, 0.3)", // Şeffaf parlak mavi
+        },
+
+        cyberpunkHazeTheme: {
+            "--background": "#271845", // Koyu mor arka plan
+            "--light-background": "#392368", // Orta koyu mor yüzey
+            "--surface": "#49328a", // Mor yüzey
+            "--primary-text": "#e0e0e0", // Açık gri metin
+            "--secondary-text": "#b0b0b0", // Orta gri metin
+            "--dark-text": "#ffffff", // Beyaz metin
+            "--divider": "#5c419d", // Koyu mor bölücü
+            "--shadow": "rgba(39, 24, 69, 0.7)", // Şeffaf koyu mor gölge
+            "--primary": "#00ffff", // Parlak mavi
+            "--secondary": "#ff00ff", // Parlak pembe
+            "--warning": "#ffea00", // Parlak sarı
+            "--error": "#ff3300", // Parlak kırmızı
+            "--info": "#64d2ff", // Açık mavi
+            "--success": "#76ff03", // Parlak yeşil
+            "--dropdown-box-shadow": "rgba(0, 255, 255, 0.5)", // Şeffaf parlak mavi
+            "--group-card-hover": "#392368", // Orta koyu mor
+            "--seperator": "#5c419d", // Koyu mor
+            "--select-background-color": "#49328a", // Mor
+            "--select-text-color": "#e0e0e0", // Açık gri
+            "--select-focus-border-color": "#00ffff", // Parlak mavi
+            "--select-focus-box-shadow": "rgba(0, 255, 255, 0.3)", // Şeffaf parlak mavi
+        },
+        emeraldCityTheme: {
+            "--background": "#1b5e20", // Koyu yeşil arka plan
+            "--light-background": "#2e7d32", // Orta koyu yeşil yüzey
+            "--surface": "#388e3c", // Koyu yeşil yüzey
+            "--primary-text": "#ffffff", // Beyaz metin
+            "--secondary-text": "#e0f2f1", // Açık yeşil metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#43a047", // Koyu yeşil bölücü
+            "--shadow": "rgba(27, 94, 32, 0.7)", // Şeffaf koyu yeşil gölge
+            "--primary": "#ffd700", // Altın sarısı
+            "--secondary": "#d4af37", // Koyu altın sarısı
+            "--warning": "#ffcc80", // Açık turuncu
+            "--error": "#f44336", // Kırmızı
+            "--info": "#4fc3f7", // Açık mavi
+            "--success": "#66bb6a", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(255, 215, 0, 0.5)", // Şeffaf altın sarısı
+            "--group-card-hover": "#2e7d32", // Orta koyu yeşil
+            "--seperator": "#43a047", // Koyu yeşil
+            "--select-background-color": "#388e3c", // Koyu yeşil
+            "--select-text-color": "#ffffff", // Beyaz
+            "--select-focus-border-color": "#ffd700", // Altın sarısı
+            "--select-focus-box-shadow": "rgba(255, 215, 0, 0.3)", // Şeffaf altın sarısı
+        },
+        crimsonTideTheme: {
+            "--background": "#260000", // Koyu kırmızı arka plan
+            "--light-background": "#330000", // Orta koyu kırmızı yüzey
+            "--surface": "#400000", // Koyu kırmızı yüzey
+            "--primary-text": "#ffffff", // Beyaz metin
+            "--secondary-text": "#cccccc", // Açık gri metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#590000", // Koyu kırmızı bölücü
+            "--shadow": "rgba(38, 0, 0, 0.7)", // Şeffaf koyu kırmızı gölge
+            "--primary": "#ff5252", // Parlak kırmızı
+            "--secondary": "#ff8a80", // Açık kırmızı
+            "--warning": "#ffab40", // Turuncu
+            "--error": "#ff1744", // Koyu kırmızı
+            "--info": "#64b5f6", // Açık mavi
+            "--success": "#4caf50", // Yeşil
+            "--dropdown-box-shadow": "rgba(255, 82, 82, 0.5)", // Şeffaf parlak kırmızı
+            "--group-card-hover": "#330000", // Orta koyu kırmızı
+            "--seperator": "#590000", // Koyu kırmızı
+            "--select-background-color": "#400000", // Koyu kırmızı
+            "--select-text-color": "#ffffff", // Beyaz
+            "--select-focus-border-color": "#ff5252", // Parlak kırmızı
+            "--select-focus-box-shadow": "rgba(255, 82, 82, 0.3)", // Şeffaf parlak kırmızı
+        },
+
+        nightOwlTheme: {
+            "--background": "#1e222a", // Koyu mavi-gri arka plan
+            "--light-background": "#282c34", // Orta koyu mavi-gri yüzey
+            "--surface": "#353b45", // Orta mavi-gri yüzey
+            "--primary-text": "#abb2bf", // Açık gri-mavi metin
+            "--secondary-text": "#778da9", // Orta gri-mavi metin
+            "--dark-text": "#ffffff", // Beyaz metin
+            "--divider": "#4b5668", // Koyu gri-mavi bölücü
+            "--shadow": "rgba(20, 24, 30, 0.7)", // Şeffaf koyu mavi-gri gölge
+            "--primary": "#61afef", // Parlak mavi
+            "--secondary": "#c678dd", // Açık mor
+            "--warning": "#e5c07b", // Sarımsı turuncu
+            "--error": "#e06c75", // Kırmızımsı pembe
+            "--info": "#56b6c2", // Açık mavi-yeşil
+            "--success": "#98c379", // Yeşilimsi sarı
+            "--dropdown-box-shadow": "rgba(97, 175, 239, 0.5)", // Şeffaf parlak mavi
+            "--group-card-hover": "#282c34", // Orta koyu mavi-gri
+            "--seperator": "#4b5668", // Koyu gri-mavi
+            "--select-background-color": "#353b45", // Orta mavi-gri
+            "--select-text-color": "#abb2bf", // Açık gri-mavi
+            "--select-focus-border-color": "#61afef", // Parlak mavi
+            "--select-focus-box-shadow": "rgba(97, 175, 239, 0.3)", // Şeffaf parlak mavi
+        },
+        darkSteelBlueTheme: {
+            "--background": "#121212",
+            "--light-background": "#1e1e1e",
+            "--surface": "#2a2a2a",
+            "--primary-text": "#e0e0e0",
+            "--secondary-text": "#b0b0b0",
+            "--dark-text": "#ffffff",
+            "--divider": "#3f3f3f",
+            "--shadow": "rgba(18, 18, 18, 0.7)",
+            "--primary": "#607d8b",
+            "--secondary": "#78909c",
+            "--warning": "#ffb300",
+            "--error": "#e53935",
+            "--info": "#0288d1",
+            "--success": "#43a047",
+            "--dropdown-box-shadow": "rgba(96, 125, 139, 0.7)",
+            "--group-card-hover": "#1e1e1e",
+            "--seperator": "#3f3f3f",
+            "--select-background-color": "#2a2a2a",
+            "--select-text-color": "#e0e0e0",
+            "--select-focus-border-color": "#607d8b",
+            "--select-focus-box-shadow": "rgba(96, 125, 139, 0.3)",
+        },
+        blackAndWhiteTheme: {
+            "--background": "#000000" /* Black background */,
+            "--light-background": "#ffffff" /* White surface */,
+            "--surface": "#f0f0f0" /* Light gray surface */,
+            "--primary-text": "#000000" /* White primary text */,
+            "--secondary-text": "#bdbdbd" /* Light gray secondary text */,
+            "--dark-text": "#000000" /* Black text */,
+            "--divider": "#4f4f4f" /* Dark gray divider */,
+            "--shadow": "rgba(0, 0, 0, 0.7)" /* Black shadow */,
+            "--primary": "#ffffff" /* White primary color */,
+            "--secondary": "#bdbdbd" /* Light gray secondary color */,
+            "--warning": "#ffc107" /* Yellow warning color */,
+            "--error": "#f44336" /* Red error color */,
+            "--info": "#2196f3" /* Blue info color */,
+            "--success": "#4caf50" /* Green success color */,
+            "--dropdown-box-shadow":
+                "rgba(255, 255, 255, 0.7)" /* White shadow */,
+            "--group-card-hover": "#1a1a1a" /* Dark gray card hover color */,
+            "--separator": "#4f4f4f" /* Dark gray separator */,
+            "--select-background-color":
+                "#2e2e2e" /* Dark gray select background color */,
+            "--select-text-color": "#ffffff" /* White select text color */,
+            "--select-focus-border-color":
+                "#ffffff" /* White focus border color */,
+            "--select-focus-box-shadow":
+                "rgba(255, 255, 255, 0.3)" /* White focus shadow */,
+        },
+
         fedoraTheme: {
             "--background": "#2c3e50" /* Dark blue-gray background */,
             "--light-background": "#ffffff" /* White surface */,
@@ -259,59 +1035,7 @@
             "--select-focus-box-shadow":
                 "rgba(115, 186, 37, 0.3)" /* Bright green focus shadow */,
         },
-        windows11Theme: {
-            "--background": "#f3f3f3" /* Light gray background */,
-            "--light-background": "#ffffff" /* White surface */,
-            "--surface": "#e5e5e5" /* Very light gray surface */,
-            "--primary-text": "#1a1a1a" /* Dark gray primary text */,
-            "--secondary-text": "#757575" /* Medium gray secondary text */,
-            "--dark-text": "#000000" /* Black text */,
-            "--divider": "#cccccc" /* Light gray divider */,
-            "--shadow": "rgba(0, 0, 0, 0.1)" /* Very light shadow */,
-            "--primary": "#0078d4" /* Bright blue primary color */,
-            "--secondary": "#005a9e" /* Medium blue secondary color */,
-            "--tertiary": "#003a78" /* Dark blue tertiary color */,
-            "--quaternary": "#ffffff" /* White quaternary color */,
-            "--warning": "#ffcc00" /* Bright yellow warning color */,
-            "--error": "#d13438" /* Red error color */,
-            "--info": "#5ac8fa" /* Cyan info color */,
-            "--success": "#107c10" /* Green success color */,
-            "--dropdown-box-shadow":
-                "rgba(0, 120, 212, 0.7)" /* Bright blue shadow */,
-            "--group-card-hover":
-                "#e5e5e5" /* Very light gray card hover color */,
-            "--separator": "#cccccc" /* Light gray separator */,
-            "--select-background-color":
-                "#ffffff" /* White select background color */,
-            "--select-text-color": "#1a1a1a" /* Dark gray select text color */,
-            "--select-focus-border-color":
-                "#0078d4" /* Bright blue focus border color */,
-            "--select-focus-box-shadow":
-                "rgba(0, 120, 212, 0.3)" /* Bright blue focus shadow */,
-        },
-        lightGrayTheme: {
-            "--background": "#fafafa",
-            "--light-background": "#ffffff",
-            "--surface": "#f0f0f0",
-            "--primary-text": "#424242",
-            "--secondary-text": "#9e9e9e",
-            "--dark-text": "#000000",
-            "--divider": "#e0e0e0",
-            "--shadow": "rgba(0, 0, 0, 0.1)",
-            "--primary": "#1976d2",
-            "--secondary": "#c2185b",
-            "--warning": "#ff9800",
-            "--error": "#d32f2f",
-            "--info": "#0288d1",
-            "--success": "#388e3c",
-            "--dropdown-box-shadow": "rgba(25, 118, 210, 0.3)",
-            "--group-card-hover": "#f0f0f0",
-            "--seperator": "#e0e0e0",
-            "--select-background-color": "#ffffff",
-            "--select-text-color": "#424242",
-            "--select-focus-border-color": "#1976d2",
-            "--select-focus-box-shadow": "rgba(25, 118, 210, 0.3)",
-        },
+
         iceBlueTheme: {
             "--background": "#f0f8ff",
             "--light-background": "#ffffff",
@@ -365,35 +1089,7 @@
             "--select-focus-box-shadow":
                 "rgba(98, 125, 152, 0.3)" /* Light steel blue focus shadow */,
         },
-        silverLiningTheme: {
-            "--background": "#e8e8e8" /* Light silver background */,
-            "--light-background": "#ffffff" /* White surface */,
-            "--surface": "#d3d3d3" /* Silver surface */,
-            "--primary-text": "#2e2e2e" /* Dark gray primary text */,
-            "--secondary-text": "#a9a9a9" /* Medium gray secondary text */,
-            "--dark-text": "#000000" /* Black text */,
-            "--divider": "#b0b0b0" /* Light gray divider */,
-            "--shadow": "rgba(232, 232, 232, 0.7)" /* Light silver shadow */,
-            "--primary": "#b0c4de" /* Light steel blue primary color */,
-            "--secondary": "#d3d3d3" /* Silver secondary color */,
-            "--tertiary": "#c0c0c0" /* Light gray tertiary color */,
-            "--quaternary": "#d3d3d3" /* Silver quaternary color */,
-            "--warning": "#ffcc00" /* Bright yellow warning color */,
-            "--error": "#f44336" /* Bright red error color */,
-            "--info": "#33ccff" /* Bright cyan info color */,
-            "--success": "#66ff66" /* Bright green success color */,
-            "--dropdown-box-shadow":
-                "rgba(176, 196, 222, 0.7)" /* Light steel blue shadow */,
-            "--group-card-hover": "#ffffff" /* White card hover color */,
-            "--separator": "#b0b0b0" /* Light gray separator */,
-            "--select-background-color":
-                "#e8e8e8" /* Light silver select background color */,
-            "--select-text-color": "#2e2e2e" /* Dark gray select text color */,
-            "--select-focus-border-color":
-                "#b0c4de" /* Light steel blue focus border color */,
-            "--select-focus-box-shadow":
-                "rgba(176, 196, 222, 0.3)" /* Light steel blue focus shadow */,
-        },
+
         snowyOwlTheme: {
             "--background": "#f5f5f5" /* Very light gray background */,
             "--light-background": "#ffffff" /* White surface */,
@@ -424,29 +1120,7 @@
             "--select-focus-box-shadow":
                 "rgba(158, 158, 158, 0.3)" /* Medium gray focus shadow */,
         },
-        whiteTheme: {
-            "--background": "#ffffff",
-            "--light-background": "#f7f7f7",
-            "--surface": "#e0e0e0",
-            "--primary-text": "#212121",
-            "--secondary-text": "#757575",
-            "--dark-text": "#000000",
-            "--divider": "#bdbdbd",
-            "--shadow": "rgba(0, 0, 0, 0.1)",
-            "--primary": "#3f51b5",
-            "--secondary": "#ff4081",
-            "--warning": "#ffc107",
-            "--error": "#f44336",
-            "--info": "#2196f3",
-            "--success": "#4caf50",
-            "--dropdown-box-shadow": "rgba(63, 81, 181, 0.3)",
-            "--group-card-hover": "#f7f7f7",
-            "--seperator": "#e0e0e0",
-            "--select-background-color": "#ffffff",
-            "--select-text-color": "#212121",
-            "--select-focus-border-color": "#3f51b5",
-            "--select-focus-box-shadow": "rgba(63, 81, 181, 0.3)",
-        },
+
         blueSkyTheme: {
             "--background": "#e3f2fd",
             "--light-background": "#ffffff",
@@ -494,76 +1168,7 @@
             "--select-focus-border-color": "#00796b",
             "--select-focus-box-shadow": "rgba(0, 121, 107, 0.3)",
         },
-        creamTheme: {
-            "--background": "#f0f0e9",
-            "--light-background": "#ffffff",
-            "--surface": "#d9d9d1",
-            "--primary-text": "#4e4e4e",
-            "--secondary-text": "#7d7d7d",
-            "--dark-text": "#1c1c1c",
-            "--divider": "#bfbfbf",
-            "--shadow": "rgba(76, 76, 76, 0.25)",
-            "--primary": "#8c7b75",
-            "--secondary": "#b29e96",
-            "--warning": "#f4a261",
-            "--error": "#e76f51",
-            "--info": "#6d9eeb",
-            "--success": "#9acd32",
-            "--dropdown-box-shadow": "rgba(140, 123, 117, 0.7)",
-            "--group-card-hover": "#ece5e0",
-            "--seperator": "#ccc5be",
-            "--select-background-color": "#ebe7e2",
-            "--select-text-color": "#4e4e4e",
-            "--select-focus-border-color": "#8c7b75",
-            "--select-focus-box-shadow": "rgba(140, 123, 117, 0.3)",
-        },
-        neutralTheme: {
-            "--background": "#f5f5f5",
-            "--light-background": "#ffffff",
-            "--surface": "#e0e0e0",
-            "--primary-text": "#212121",
-            "--secondary-text": "#757575",
-            "--dark-text": "#000000",
-            "--divider": "#bdbdbd",
-            "--shadow": "rgba(33, 33, 33, 0.25)",
-            "--primary": "#3f51b5",
-            "--secondary": "#ff4081",
-            "--warning": "#ffa000",
-            "--error": "#d32f2f",
-            "--info": "#1976d2",
-            "--success": "#388e3c",
-            "--dropdown-box-shadow": "rgba(63, 81, 181, 0.7)",
-            "--group-card-hover": "#e8eaf6",
-            "--seperator": "#c5cae9",
-            "--select-background-color": "#f5f5f5",
-            "--select-text-color": "#212121",
-            "--select-focus-border-color": "#3f51b5",
-            "--select-focus-box-shadow": "rgba(63, 81, 181, 0.3)",
-        },
 
-        paleYellowTheme: {
-            "--background": "#fffde7",
-            "--light-background": "#fffff8",
-            "--surface": "#fff9c4",
-            "--primary-text": "#212121",
-            "--secondary-text": "#757575",
-            "--dark-text": "#000000",
-            "--divider": "#e0e0e0",
-            "--shadow": "rgba(0, 0, 0, 0.1)",
-            "--primary": "#fbc02d",
-            "--secondary": "#ffa000",
-            "--warning": "#ffeb3b",
-            "--error": "#f44336",
-            "--info": "#29b6f6",
-            "--success": "#66bb6a",
-            "--dropdown-box-shadow": "rgba(251, 192, 45, 0.3)",
-            "--group-card-hover": "#fffff8",
-            "--seperator": "#e0e0e0",
-            "--select-background-color": "#fffde7",
-            "--select-text-color": "#212121",
-            "--select-focus-border-color": "#fbc02d",
-            "--select-focus-box-shadow": "rgba(251, 192, 45, 0.3)",
-        },
         desertOasisTheme: {
             "--background": "#3e2723" /* Deep brown background */,
             "--light-background": "#5d4037" /* Medium brown surface */,
@@ -593,34 +1198,7 @@
             "--select-focus-box-shadow":
                 "rgba(255, 152, 0, 0.3)" /* Bright orange focus shadow */,
         },
-        amberYellowTheme: {
-            "--background": "#ffca28" /* Amber yellow background */,
-            "--light-background": "#ffecb3" /* Light amber yellow surface */,
-            "--surface": "#ffca28" /* Amber yellow surface */,
-            "--primary-text": "#3e2723" /* Dark brown primary text */,
-            "--secondary-text": "#795548" /* Medium brown secondary text */,
-            "--dark-text": "#ffffff" /* White text */,
-            "--divider": "#ffe082" /* Light yellow divider */,
-            "--shadow": "rgba(255, 202, 40, 0.5)" /* Amber yellow shadow */,
-            "--primary": "#ffca28" /* Amber yellow primary color */,
-            "--secondary": "#ffe082" /* Light yellow secondary color */,
-            "--warning": "#ffa726" /* Bright orange warning color */,
-            "--error": "#d32f2f" /* Bright red error color */,
-            "--info": "#29b6f6" /* Bright blue info color */,
-            "--success": "#66bb6a" /* Bright green success color */,
-            "--dropdown-box-shadow":
-                "rgba(255, 202, 40, 0.7)" /* Amber yellow shadow */,
-            "--group-card-hover":
-                "#ffecb3" /* Light amber yellow card hover color */,
-            "--separator": "#ffe082" /* Light yellow separator */,
-            "--select-background-color":
-                "#ffca28" /* Amber yellow select background color */,
-            "--select-text-color": "#3e2723" /* Dark brown select text color */,
-            "--select-focus-border-color":
-                "#ffca28" /* Amber yellow focus border color */,
-            "--select-focus-box-shadow":
-                "rgba(255, 202, 40, 0.3)" /* Amber yellow focus shadow */,
-        },
+
         coralTheme: {
             "--background": "#ff6f61",
             "--light-background": "#ffe6e1",
@@ -1518,6 +2096,30 @@
             "--select-focus-border-color": "#26a69a",
             "--select-focus-box-shadow": "rgba(38, 166, 154, 0.3)",
         },
+
+        oceanAbyssTheme: {
+            "--background": "#0d1b2a",
+            "--light-background": "#1b263b",
+            "--surface": "#4f6d7a",
+            "--primary-text": "#e0e1dd",
+            "--secondary-text": "#778da9",
+            "--dark-text": "#ffffff",
+            "--divider": "#415a77",
+            "--shadow": "rgba(13, 27, 42, 0.7)",
+            "--primary": "#4f6d7a", //Slate blue
+            "--secondary": "#1c2541", //Dark navy
+            "--warning": "#ffcc00",
+            "--error": "#ff0033",
+            "--info": "#33ccff",
+            "--success": "#66ff66",
+            "--dropdown-box-shadow": "rgba(79, 109, 122, 0.7)",
+            "--group-card-hover": "#1b263b",
+            "--seperator": "#415a77",
+            "--select-background-color": "#4f6d7a",
+            "--select-text-color": "#e0e1dd",
+            "--select-focus-border-color": "#4f6d7a",
+            "--select-focus-box-shadow": "rgba(79, 109, 122, 0.3)",
+        },
         silverGrayTheme: {
             "--background": "#1f1f1f" /* Dark gray background */,
             "--light-background": "#2e2e2e" /* Dark gray surface */,
@@ -1546,32 +2148,27 @@
                 "rgba(118, 199, 192, 0.3)" /* Primary color focus shadow */,
         },
         midnightBlueTheme: {
-            "--background": "#0a1a2a" /* Dark blue background */,
-            "--light-background": "#1a2a3a" /* Dark blue surface */,
-            "--surface": "#2a3a4a" /* Medium blue surface */,
-            "--primary-text": "#d0e0f0" /* Light blue-gray primary text */,
-            "--secondary-text": "#a0b0c0" /* Medium blue-gray secondary text */,
-            "--dark-text": "#ffffff" /* White text */,
-            "--divider": "#3a4a5a" /* Medium blue-gray divider */,
-            "--shadow": "rgba(10, 26, 42, 0.7)" /* Dark blue shadow */,
-            "--primary": "#1f7a8c" /* Bright turquoise primary color */,
-            "--secondary": "#ff9f1c" /* Bright orange secondary color */,
-            "--warning": "#e71d36" /* Bright red warning color */,
-            "--error": "#ff4040" /* Bright red error color */,
-            "--info": "#4dabf7" /* Bright blue info color */,
-            "--success": "#2ec4b6" /* Bright green success color */,
-            "--dropdown-box-shadow":
-                "rgba(31, 122, 140, 0.5)" /* Primary color shadow */,
-            "--group-card-hover": "#1a2a3a" /* Dark blue card hover color */,
-            "--separator": "#3a4a5a" /* Medium blue-gray separator */,
-            "--select-background-color":
-                "#2a3a4a" /* Medium blue select background color */,
-            "--select-text-color":
-                "#d0e0f0" /* Light blue-gray select text color */,
-            "--select-focus-border-color":
-                "#1f7a8c" /* Primary color focus border */,
-            "--select-focus-box-shadow":
-                "rgba(31, 122, 140, 0.3)" /* Primary color focus shadow */,
+            "--background": "#0a1a2a",
+            "--light-background": "#1a2a3a",
+            "--surface": "#2a3a4a",
+            "--primary-text": "#d0e0f0",
+            "--secondary-text": "#a0b0c0",
+            "--dark-text": "#ffffff",
+            "--divider": "#3a4a5a",
+            "--shadow": "rgba(10, 26, 42, 0.7)",
+            "--primary": "#1f7a8c",
+            "--secondary": "#ff9f1c",
+            "--warning": "#e71d36",
+            "--error": "#ff4040",
+            "--info": "#4dabf7",
+            "--success": "#2ec4b6",
+            "--dropdown-box-shadow": "rgba(31, 122, 140, 0.5)",
+            "--group-card-hover": "#1a2a3a",
+            "--separator": "#3a4a5a",
+            "--select-background-color": "#2a3a4a",
+            "--select-text-color": "#d0e0f0",
+            "--select-focus-border-color": "#1f7a8c",
+            "--select-focus-box-shadow": "rgba(31, 122, 140, 0.3)",
         },
 
         elegantGrayTheme: {
@@ -1602,58 +2199,27 @@
                 "rgba(160, 160, 160, 0.3)" /* Medium gray focus shadow */,
         },
         slateGrayTheme: {
-            "--background": "#1c1c1c" /* Very dark gray background */,
-            "--light-background": "#2a2a2a" /* Dark gray surface */,
-            "--surface": "#3a3a3a" /* Medium dark gray surface */,
-            "--primary-text": "#d0d0d0" /* Light gray primary text */,
-            "--secondary-text": "#a0a0a0" /* Gray secondary text */,
-            "--dark-text": "#ffffff" /* White text */,
-            "--divider": "#4a4a4a" /* Dark gray divider */,
-            "--shadow": "rgba(28, 28, 28, 0.7)" /* Very dark gray shadow */,
-            "--primary": "#5f5f5f" /* Medium gray primary color */,
-            "--secondary": "#8d8d8d" /* Light gray secondary color */,
-            "--warning": "#ffa726" /* Bright orange warning color */,
-            "--error": "#d32f2f" /* Bright red error color */,
-            "--info": "#42a5f5" /* Bright blue info color */,
-            "--success": "#66bb6a" /* Bright green success color */,
-            "--dropdown-box-shadow":
-                "rgba(95, 95, 95, 0.7)" /* Medium gray shadow */,
-            "--group-card-hover": "#2a2a2a" /* Dark gray card hover color */,
-            "--separator": "#4a4a4a" /* Dark gray separator */,
-            "--select-background-color":
-                "#3a3a3a" /* Medium dark gray select background color */,
-            "--select-text-color": "#d0d0d0" /* Light gray select text color */,
-            "--select-focus-border-color":
-                "#5f5f5f" /* Medium gray focus border color */,
-            "--select-focus-box-shadow":
-                "rgba(95, 95, 95, 0.3)" /* Medium gray focus shadow */,
-        },
-        urbanGrayTheme: {
-            "--background": "#1b1b1b" /* Very dark gray background */,
-            "--light-background": "#292929" /* Dark gray surface */,
-            "--surface": "#373737" /* Medium dark gray surface */,
-            "--primary-text": "#c0c0c0" /* Light gray primary text */,
-            "--secondary-text": "#a0a0a0" /* Gray secondary text */,
-            "--dark-text": "#ffffff" /* White text */,
-            "--divider": "#484848" /* Dark gray divider */,
-            "--shadow": "rgba(27, 27, 27, 0.7)" /* Very dark gray shadow */,
-            "--primary": "#6d6d6d" /* Medium gray primary color */,
-            "--secondary": "#9e9e9e" /* Light gray secondary color */,
-            "--warning": "#ffa000" /* Bright orange warning color */,
-            "--error": "#e64a19" /* Bright red error color */,
-            "--info": "#29b6f6" /* Bright blue info color */,
-            "--success": "#4caf50" /* Bright green success color */,
-            "--dropdown-box-shadow":
-                "rgba(109, 109, 109, 0.7)" /* Medium gray shadow */,
-            "--group-card-hover": "#292929" /* Dark gray card hover color */,
-            "--separator": "#484848" /* Dark gray separator */,
-            "--select-background-color":
-                "#373737" /* Medium dark gray select background color */,
-            "--select-text-color": "#c0c0c0" /* Light gray select text color */,
-            "--select-focus-border-color":
-                "#6d6d6d" /* Medium gray focus border color */,
-            "--select-focus-box-shadow":
-                "rgba(109, 109, 109, 0.3)" /* Medium gray focus shadow */,
+            "--background": "#1c1c1c",
+            "--light-background": "#2a2a2a",
+            "--surface": "#3a3a3a",
+            "--primary-text": "#d0d0d0",
+            "--secondary-text": "#a0a0a0",
+            "--dark-text": "#ffffff",
+            "--divider": "#4a4a4a",
+            "--shadow": "rgba(28, 28, 28, 0.7)",
+            "--primary": "#5f5f5f",
+            "--secondary": "#8d8d8d",
+            "--warning": "#ffa726",
+            "--error": "#d32f2f",
+            "--info": "#42a5f5",
+            "--success": "#66bb6a",
+            "--dropdown-box-shadow": "rgba(95, 95, 95, 0.7)",
+            "--group-card-hover": "#2a2a2a",
+            "--separator": "#4a4a4a",
+            "--select-background-color": "#3a3a3a",
+            "--select-text-color": "#d0d0d0",
+            "--select-focus-border-color": "#5f5f5f",
+            "--select-focus-box-shadow": "rgba(95, 95, 95, 0.3)",
         },
 
         findingNemoTheme: {
@@ -1686,6 +2252,7 @@
             "--select-focus-box-shadow":
                 "rgba(255, 133, 27, 0.3)" /* Bright orange focus shadow */,
         },
+
         oceanBlueTheme: {
             "--background": "#0277bd" /* Ocean blue background */,
             "--light-background": "#58a5f0" /* Light ocean blue surface */,
@@ -1951,36 +2518,6 @@
             "--select-focus-box-shadow":
                 "rgba(41, 128, 185, 0.3)" /* Bright blue focus shadow */,
         },
-        oceanAbyssTheme: {
-            "--background": "#0d1b2a" /* Dark blue background */,
-            "--light-background": "#1b263b" /* Medium dark blue surface */,
-            "--surface": "#4f6d7a" /* Slate blue surface */,
-            "--primary-text": "#e0e1dd" /* Light gray primary text */,
-            "--secondary-text": "#778da9" /* Medium gray secondary text */,
-            "--dark-text": "#ffffff" /* White text */,
-            "--divider": "#415a77" /* Medium blue divider */,
-            "--shadow": "rgba(13, 27, 42, 0.7)" /* Dark blue shadow */,
-            "--primary": "#4f6d7a" /* Slate blue primary color */,
-            "--secondary": "#1c2541" /* Dark navy secondary color */,
-            "--tertiary": "#0d3b66" /* Dark blue tertiary color */,
-            "--quaternary": "#3a506b" /* Steel blue quaternary color */,
-            "--warning": "#ffcc00" /* Bright yellow warning color */,
-            "--error": "#ff0033" /* Bright red error color */,
-            "--info": "#33ccff" /* Bright cyan info color */,
-            "--success": "#66ff66" /* Bright green success color */,
-            "--dropdown-box-shadow":
-                "rgba(79, 109, 122, 0.7)" /* Slate blue shadow */,
-            "--group-card-hover":
-                "#1b263b" /* Medium dark blue card hover color */,
-            "--separator": "#415a77" /* Medium blue separator */,
-            "--select-background-color":
-                "#4f6d7a" /* Slate blue select background color */,
-            "--select-text-color": "#e0e1dd" /* Light gray select text color */,
-            "--select-focus-border-color":
-                "#4f6d7a" /* Slate blue focus border color */,
-            "--select-focus-box-shadow":
-                "rgba(79, 109, 122, 0.3)" /* Slate blue focus shadow */,
-        },
 
         inceptionTheme: {
             "--background": "#2c3e50" /* Deep navy blue background */,
@@ -2150,29 +2687,7 @@
             "--select-focus-border-color": "#6200ea",
             "--select-focus-box-shadow": "rgba(98, 0, 234, 0.3)",
         },
-        darkSteelBlueTheme: {
-            "--background": "#121212",
-            "--light-background": "#1e1e1e",
-            "--surface": "#2a2a2a",
-            "--primary-text": "#e0e0e0",
-            "--secondary-text": "#b0b0b0",
-            "--dark-text": "#ffffff",
-            "--divider": "#3f3f3f",
-            "--shadow": "rgba(18, 18, 18, 0.7)",
-            "--primary": "#607d8b",
-            "--secondary": "#78909c",
-            "--warning": "#ffb300",
-            "--error": "#e53935",
-            "--info": "#0288d1",
-            "--success": "#43a047",
-            "--dropdown-box-shadow": "rgba(96, 125, 139, 0.7)",
-            "--group-card-hover": "#1e1e1e",
-            "--seperator": "#3f3f3f",
-            "--select-background-color": "#2a2a2a",
-            "--select-text-color": "#e0e0e0",
-            "--select-focus-border-color": "#607d8b",
-            "--select-focus-box-shadow": "rgba(96, 125, 139, 0.3)",
-        },
+
         darkGrayTheme: {
             "--background": "#1a1a1a",
             "--light-background": "#2e2e2e",
@@ -3030,15 +3545,17 @@
             <button
                 class="theme-button"
                 style="background: linear-gradient(to right, {themes[theme][
-                    '--surface'
-                ]} 60%, {themes[theme]['--primary']} 80%, {themes[theme][
-                    '--secondary'
-                ]} 100%); color: {themes[theme]['--primary-text']};"
+                    '--background'
+                ]} 40%, {themes[theme]['--surface']} 70%, {themes[theme][
+                    '--primary'
+                ]} 90%, {themes[theme]['--secondary']} 95%); color: {themes[
+                    theme
+                ]['--primary-text']};"
                 on:click={() => applyTheme(theme)}
             >
-                <!-- {theme
+                {theme
                     .replace(/([A-Z])/g, " $1")
-                    .replace(/^./, (str) => str.toUpperCase())} -->
+                    .replace(/^./, (str) => str.toUpperCase())}
             </button>
         {/each}
     </div>

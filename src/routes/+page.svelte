@@ -1581,14 +1581,15 @@
     }
   }
 
-  document.addEventListener(
-    "contextmenu",
-    (e: MouseEvent) => {
-      e.preventDefault();
-      return false;
-    },
-    { capture: true },
-  );
+  //release alırken aç
+  // document.addEventListener(
+  //   "contextmenu",
+  //   (e: MouseEvent) => {
+  //     e.preventDefault();
+  //     return false;
+  //   },
+  //   { capture: true },
+  // );
 </script>
 
 {#if $isLoading}
@@ -1603,14 +1604,14 @@
           <button
             type="button"
             on:click={openThemeSwitcherModal}
-            class="button-item hover:text-purple-700"
+            class="button-item hover"
             title="Change Theme"
           >
             <FontAwesomeIcon icon="paint-brush" size="lg" />
           </button>
           <button
             type="button"
-            class="button-item hover:text-blue-700"
+            class="button-item hover"
             title="Change Group"
             on:click={() => {
               groupModalOpen.set(true);
@@ -1621,7 +1622,7 @@
           <button
             type="button"
             on:click={openCustomHeaderPanel}
-            class="button-item hover:text-green-700"
+            class="button-item hover"
             title="Headers"
           >
             <FontAwesomeIcon icon={faEdit} size="lg" />
@@ -1629,7 +1630,7 @@
           <button
             type="button"
             on:click={() => variablesPanelOpen.set(true)}
-            class="button-item hover:text-green-700"
+            class="button-item hover"
             title="Variables"
           >
             <FontAwesomeIcon icon="edit" size="lg" />
@@ -1637,7 +1638,7 @@
           <button
             type="button"
             on:click={importPostmanCollection}
-            class="button-item hover:text-orange-700"
+            class="button-item hover"
             title="Import"
           >
             <FontAwesomeIcon icon="upload" size="lg" />
@@ -1645,7 +1646,7 @@
           <button
             type="button"
             on:click={() => downloadApiDocumentation($history)}
-            class="button-item hover:text-green-700"
+            class="button-item hover"
             title="Doc"
           >
             <FontAwesomeIcon icon="download" size="lg" />

@@ -30,7 +30,7 @@
 /* General Styles */
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: var(--background);
+  background-color: var(--surface);
   color: var(--primary-text);
   font-size: 0.8rem;
   height: 100%;
@@ -54,7 +54,7 @@ body {
   padding: 10px;
  
   margin: 1px;
-  background: var(--surface);
+  background: var(--background);
   box-shadow: 0 2px 3px var(--shadow);
   display: flex;
   flex-direction: column;
