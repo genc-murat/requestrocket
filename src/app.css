@@ -259,11 +259,11 @@ textarea {
 }
 
 .status-box {
-  border: 1px solid #ccc;
+  border: 1px solid var(--divider);
   padding: .4rem !important;
   border-radius: 0.1rem !important;
   margin-bottom: 0.7rem;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: bold;
 }
 

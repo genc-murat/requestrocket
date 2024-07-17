@@ -2087,7 +2087,7 @@
 
       <div class="response-panel panel relative">
         {#if $response}
-          <div class="status-box border border-gray-500 p-4 mb-4 rounded">
+          <div class="status-box border  p-4 mb-4 rounded">
             <div class="flex justify-end">
               <div class="flex items-center">
                 <span
