@@ -696,15 +696,17 @@
   }
 
   function updateUrl() {
-    let urlWithParams = $url;
-    if ($queryParams.length > 0) {
-      const queryString = new URLSearchParams(
-        $queryParams.map((param) => [param.key, param.value]),
-      ).toString();
-      urlWithParams = $url.split("?")[0] + `?${queryString}`;
+  let urlWithParams = $url.split('?')[0]; 
+  if ($queryParams.length > 0) {
+    const queryString = new URLSearchParams(
+      $queryParams.map((param) => [param.key, param.value])
+    ).toString();
+    if (queryString) {
+      urlWithParams += `?${queryString}`;
     }
-    url.set(urlWithParams);
   }
+  url.set(urlWithParams);
+}
 
   async function sendRequest() {
     if (!$url.trim()) {
