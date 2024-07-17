@@ -695,17 +695,55 @@
     }
   }
 
-  function updateUrl() {
-    let urlWithParams = $url.split("?")[0];
-    if ($queryParams.length > 0) {
-      const queryString = new URLSearchParams(
-        $queryParams.map((param) => [param.key, param.value]),
-      ).toString();
-      if (queryString) {
-        urlWithParams += `?${queryString}`;
+  $: {
+    if ($url) {
+      try {
+        const urlObj = new URL($url);
+        const newQueryParams = Array.from(urlObj.searchParams.entries()).map(
+          ([key, value]) => ({ key, value }),
+        );
+
+        if (newQueryParams.length > 0) {
+          queryParams.update((currentParams) => {
+            const currentParamsMap = new Map(
+              currentParams.map((param) => [param.key, param]),
+            );
+            newQueryParams.forEach((param) => {
+              if (!currentParamsMap.has(param.key)) {
+                currentParamsMap.set(param.key, param);
+              }
+            });
+            return Array.from(currentParamsMap.values());
+          });
+
+          url.set(urlObj.origin + urlObj.pathname);
+        }
+      } catch (error) {
+        console.error("Invalid URL:", error);
       }
     }
-    url.set(urlWithParams);
+  }
+
+  function updateUrl() {
+    try {
+      const urlObj = new URL($url);
+      const originalSearch = urlObj.search;
+
+      urlObj.search = ""; 
+      $queryParams.forEach((param) => {
+        if (param.key && param.value) {
+          urlObj.searchParams.set(param.key, param.value);
+        }
+      });
+
+      const newUrl = urlObj.toString();
+
+      if (newUrl !== $url) {
+        url.set(newUrl);
+      }
+    } catch (error) {
+      console.error("Error updating URL:", error);
+    }
   }
 
   async function sendRequest() {
