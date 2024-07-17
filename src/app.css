@@ -32,16 +32,14 @@ body {
   font-family: 'Roboto', sans-serif;
   background-color: var(--surface);
   color: var(--primary-text);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   height: 100%;
   width: 99.4%;
 }
 
 .main-content {
   padding-top: 2.5rem;
-  /* TitleBar yüksekliği kadar boşluk ekleyin */
   height: calc(104vh - 2.55rem);
-  /* TitleBar yüksekliği kadar azaltın */
   display: flex;
   flex-direction: row;
 }
