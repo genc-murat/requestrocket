@@ -1,6 +1,6 @@
 <script lang="ts">
     import { appWindow } from "@tauri-apps/api/window";
-    import logo from "../assets/128x128@2x.png";
+    import logo from "../assets/32x32.png";
 
     async function minimize() {
         await appWindow.minimize();
@@ -84,8 +84,8 @@
     }
 
     .title-logo {
-        width: 40px;
-        height: 40px;
+        width: 32px;
+        height: 32px;
         object-fit: contain;
     }
 
