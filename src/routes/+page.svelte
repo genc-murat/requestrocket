@@ -725,26 +725,28 @@
   }
 
   function updateUrl() {
-    try {
-      const urlObj = new URL($url);
-      const originalSearch = urlObj.search;
+  try {
+    const urlObj = new URL($url);
+    const originalSearch = urlObj.search;
 
-      urlObj.search = ""; 
-      $queryParams.forEach((param) => {
-        if (param.key && param.value) {
-          urlObj.searchParams.set(param.key, param.value);
-        }
+    urlObj.search = ""; 
+    const nonEmptyParams = $queryParams.filter(param => param.key && param.value);
+    
+    if (nonEmptyParams.length > 0) {
+      nonEmptyParams.forEach((param) => {
+        urlObj.searchParams.set(param.key, param.value);
       });
-
-      const newUrl = urlObj.toString();
-
-      if (newUrl !== $url) {
-        url.set(newUrl);
-      }
-    } catch (error) {
-      console.error("Error updating URL:", error);
     }
+
+    const newUrl = urlObj.toString();
+
+    if (newUrl !== $url) {
+      url.set(newUrl);
+    }
+  } catch (error) {
+    console.error("Error updating URL:", error);
   }
+}
 
   async function sendRequest() {
     if (!$url.trim()) {
