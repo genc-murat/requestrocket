@@ -1795,7 +1795,7 @@
               id="url"
               bind:value={$url}
               placeholder="https://api.example.com/data"
-              class="flex-1 p-2 border rounded text-primary bg-accent"
+              class="flex-1 p-2 border rounded"
             />
             {#if $url}
               <span
