@@ -392,13 +392,13 @@
   }
 
   function replaceVariables(
-  str: string,
-  variables: { [key: string]: any },
-): string {
-  return str.replace(/\{\{(.*?)\}\}/g, (match, key) => {
-    return variables[key.trim()] ?? match;
-  });
-}
+    str: string,
+    variables: { [key: string]: any },
+  ): string {
+    return str.replace(/\{\{(.*?)\}\}/g, (match, key) => {
+      return variables[key.trim()] ?? match;
+    });
+  }
 
   type SwitchCase = {
     value: string;
@@ -781,14 +781,23 @@
     }));
 
     const pathParamsObject = Object.fromEntries(
-    $pathParams.map((param) => [param.key, replaceVariables(param.value, $variables)]),
-  );
-  const queryParamsObject = Object.fromEntries(
-    $queryParams.map((param) => [param.key, replaceVariables(param.value, $variables)]),
-  );
-  const formParamsObject = Object.fromEntries(
-    $formParams.map((field) => [field.key, replaceVariables(field.value, $variables)]),
-  );
+      $pathParams.map((param) => [
+        param.key,
+        replaceVariables(param.value, $variables),
+      ]),
+    );
+    const queryParamsObject = Object.fromEntries(
+      $queryParams.map((param) => [
+        param.key,
+        replaceVariables(param.value, $variables),
+      ]),
+    );
+    const formParamsObject = Object.fromEntries(
+      $formParams.map((field) => [
+        field.key,
+        replaceVariables(field.value, $variables),
+      ]),
+    );
 
     let requestBody;
     let contentType;
@@ -822,12 +831,15 @@
           contentType = "multipart/form-data";
           requestBody = formParamsObject;
           break;
-          case "form-urlencoded":
-        contentType = "application/x-www-form-urlencoded";
-        requestBody = new URLSearchParams(
-          $formParams.map((field) => [field.key, replaceVariables(field.value, $variables)]),
-        ).toString();
-        break;
+        case "form-urlencoded":
+          contentType = "application/x-www-form-urlencoded";
+          requestBody = new URLSearchParams(
+            $formParams.map((field) => [
+              field.key,
+              replaceVariables(field.value, $variables),
+            ]),
+          ).toString();
+          break;
         default:
           contentType = "text/plain";
           requestBody = replaceVariables($body, $variables);
@@ -1057,7 +1069,26 @@
       );
     }
   }
+  function isXml(str: string): boolean {
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(str, "text/xml");
+      return !doc.querySelector("parsererror");
+    } catch (error) {
+      return false;
+    }
+  }
 
+  function formatXml(xml: string): string {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xml, "text/xml");
+    const serializer = new XMLSerializer();
+    return serializer
+      .serializeToString(doc)
+      .replace(/>/g, ">\n")
+      .replace(/\n{2,}/g, "\n")
+      .trim();
+  }
   async function loadVariables() {
     console.log("Loading variables...");
     try {
@@ -2190,10 +2221,20 @@
           <div class="tab-content">
             {#if $selectedTab === "response"}
               <div class="response-container relative">
-                <JSONEditor
-                  jsonData={$response && $response.body ? $response.body : "{}"}
-                  theme="light"
-                />
+                {#if $response && $response.body}
+                  {#if isXml($response.body)}
+                    <pre><code>{formatXml($response.body)}</code></pre>
+                  {:else}
+                    <JSONEditor
+                      jsonData={$response && $response.body
+                        ? $response.body
+                        : "{}"}
+                      theme="light"
+                    />
+                  {/if}
+                {:else}
+                  <p>No response body</p>
+                {/if}
               </div>
             {:else if $selectedTab === "table"}
               <div class="table-container">
