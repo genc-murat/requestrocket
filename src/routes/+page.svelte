@@ -2,6 +2,9 @@
   import { onMount, onDestroy } from "svelte";
   import { writable } from "svelte/store";
   import type { Writable } from "svelte/store";
+  import Prism from "prismjs";
+  // import "prismjs/themes/prism-tomorrow.css";
+  import "prismjs/components/prism-markup";
   import { openDB } from "idb";
   import { invoke } from "@tauri-apps/api/tauri";
   import {
@@ -1085,12 +1088,14 @@
     const parser = new DOMParser();
     const doc = parser.parseFromString(xml, "text/xml");
     const serializer = new XMLSerializer();
-    return serializer
+    const formattedXml = serializer
       .serializeToString(doc)
       .replace(/>/g, ">\n")
       .replace(/\n{2,}/g, "\n")
       .trim();
+    return Prism.highlight(formattedXml, Prism.languages.markup, "markup");
   }
+
   async function loadVariables() {
     console.log("Loading variables...");
     try {
@@ -1273,7 +1278,6 @@
     deleteVariableFromDb(key);
   }
 
-
   function jsonToTableData(data: string): { headers: string[]; rows: string[][] } {
   try {
     // First, try to parse as JSON
@@ -1393,7 +1397,7 @@ $: tableData = $response && $response.body ?
     clearInterval(timer);
     clearInterval(timestampUpdateInterval);
   });
-
+  let preElement: HTMLElement;
   onMount(async () => {
     const savedTheme = localStorage.getItem("selectedTheme");
     if (savedTheme) {
@@ -1403,6 +1407,9 @@ $: tableData = $response && $response.body ?
     loadVariables();
     const db = await dbPromise;
     setDatabase(db);
+    if (preElement) {
+      Prism.highlightElement(preElement);
+    }
     await loadCustomHeaders();
   });
 
@@ -1849,24 +1856,24 @@ $: tableData = $response && $response.body ?
                   >
                     <span
                       class="px-2 py-1 rounded
-               {item.method === 'GET' ? 'method-get' : ''} 
-                                 {item.method === 'POST' ? 'method-post' : ''} 
-                                 {item.method === 'PUT' ? 'method-put' : ''} 
-                                 {item.method === 'DELETE'
-                        ? 'method-delete'
-                        : ''} 
-                                 {item.method === 'PATCH'
-                        ? 'method-patch'
-                        : ''} 
-                                 {item.method === 'OPTIONS'
-                        ? 'method-options'
-                        : ''} 
-                                 {item.method === 'HEAD' ? 'method-head' : ''} 
-                                 {item.method === 'CONNECT'
-                        ? 'method-connect'
-                        : ''} 
-                                 {item.method === 'TRACE' ? 'method-trace' : ''}
-                text-white"
+             {item.method === 'GET' ? 'method-get' : ''} 
+                               {item.method === 'POST' ? 'method-post' : ''} 
+                               {item.method === 'PUT' ? 'method-put' : ''} 
+                               {item.method === 'DELETE'
+                      ? 'method-delete'
+                      : ''} 
+                               {item.method === 'PATCH'
+                      ? 'method-patch'
+                      : ''} 
+                               {item.method === 'OPTIONS'
+                      ? 'method-options'
+                      : ''} 
+                               {item.method === 'HEAD' ? 'method-head' : ''} 
+                               {item.method === 'CONNECT'
+                      ? 'method-connect'
+                      : ''} 
+                               {item.method === 'TRACE' ? 'method-trace' : ''}
+              text-white"
                     >
                       {item.method.substring(0, 3)}
                     </span>
@@ -2280,7 +2287,10 @@ $: tableData = $response && $response.body ?
               <div class="response-container relative">
                 {#if $response && $response.body}
                   {#if isXml($response.body)}
-                    <pre><code>{formatXml($response.body)}</code></pre>
+                  <pre bind:this={preElement}>
+                    <code class="language-xml">{$response.body}</code>
+                  </pre>
+                    <!-- <pre><code>{@html formatXml($response.body)}</code></pre> -->
                   {:else}
                     <JSONEditor
                       jsonData={$response && $response.body

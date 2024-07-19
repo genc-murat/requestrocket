@@ -499,3 +499,13 @@ textarea {
   background-color: var(--success);
   color: var(--dark-text);
 }
+
+pre {
+  background: var(--light-background); /* Example background color */
+  padding: 1rem;
+
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  overflow-y: auto;
+  height: 100%;;
+}
