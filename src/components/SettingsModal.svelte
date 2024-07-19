@@ -51,24 +51,43 @@
       border: none;
       cursor: pointer;
     }
+  
+    .field {
+      margin-top: 1rem;
+    }
+  
+    .field label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+  
+    .field input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 0.25rem;
+    }
   </style>
   
-  <div class="settings-modal" on:click|stopPropagation="{closeSettings}">
-    <div class="settings-content" on:click|stopPropagation>
-      <button class="close-button" on:click="{closeSettings}">
-        <FontAwesomeIcon icon={faClose} />
-      </button>
-      <h2>Settings</h2>
-      <div class="field">
-        <label for="timeout">Request Timeout (seconds):</label>
-        <input
-          id="timeout"
-          type="number"
-          min="1"
-          value={$requestTimeout / 1000}
-          on:input={updateTimeout}
-        />
+  {#if $showSettings}
+    <div class="settings-modal" on:click|stopPropagation="{closeSettings}">
+      <div class="settings-content" on:click|stopPropagation>
+        <button class="close-button" on:click="{closeSettings}">
+          <FontAwesomeIcon icon={faClose} />
+        </button>
+        <h2 class="text-lg font-bold mb-4 text-neutral-950">Settings</h2>
+        <div class="field">
+          <label for="timeout">Request Timeout (seconds):</label>
+          <input
+            id="timeout"
+            type="number"
+            min="1"
+            value={$requestTimeout / 1000}
+            on:input={updateTimeout}
+            class="p-2 border rounded text-primary bg-accent"
+          />
+        </div>
       </div>
     </div>
-  </div>
+  {/if}
   
