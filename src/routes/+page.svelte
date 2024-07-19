@@ -392,13 +392,13 @@
   }
 
   function replaceVariables(
-    str: string,
-    variables: { [key: string]: any },
-  ): string {
-    return str.replace(/\{\{(.*?)\}\}/g, (match, key) => {
-      return variables[key.trim()] ?? match;
-    });
-  }
+  str: string,
+  variables: { [key: string]: any },
+): string {
+  return str.replace(/\{\{(.*?)\}\}/g, (match, key) => {
+    return variables[key.trim()] ?? match;
+  });
+}
 
   type SwitchCase = {
     value: string;
@@ -781,14 +781,14 @@
     }));
 
     const pathParamsObject = Object.fromEntries(
-      $pathParams.map((param) => [param.key, param.value]),
-    );
-    const queryParamsObject = Object.fromEntries(
-      $queryParams.map((param) => [param.key, param.value]),
-    );
-    const formParamsObject = Object.fromEntries(
-      $formParams.map((field) => [field.key, field.value]),
-    );
+    $pathParams.map((param) => [param.key, replaceVariables(param.value, $variables)]),
+  );
+  const queryParamsObject = Object.fromEntries(
+    $queryParams.map((param) => [param.key, replaceVariables(param.value, $variables)]),
+  );
+  const formParamsObject = Object.fromEntries(
+    $formParams.map((field) => [field.key, replaceVariables(field.value, $variables)]),
+  );
 
     let requestBody;
     let contentType;
@@ -798,12 +798,12 @@
       switch ($bodyType) {
         case "json":
           contentType = "application/json";
-          requestBody = $body;
+          requestBody = replaceVariables($body, $variables);
           break;
         case "xml":
           if ($body.includes("soapenv:Envelope")) {
             contentType = "text/xml; charset=utf-8";
-            requestBody = $body;
+            requestBody = replaceVariables($body, $variables);
             // Add SOAPAction header if not already present
             if (
               !actualHeaders.some((h) => h.key.toLowerCase() === "soapaction")
@@ -815,22 +815,22 @@
             }
           } else {
             contentType = "application/xml";
-            requestBody = $body;
+            requestBody = replaceVariables($body, $variables);
           }
           break;
         case "form-data":
           contentType = "multipart/form-data";
           requestBody = formParamsObject;
           break;
-        case "form-urlencoded":
-          contentType = "application/x-www-form-urlencoded";
-          requestBody = new URLSearchParams(
-            $formParams.map((field) => [field.key, field.value]),
-          ).toString();
-          break;
+          case "form-urlencoded":
+        contentType = "application/x-www-form-urlencoded";
+        requestBody = new URLSearchParams(
+          $formParams.map((field) => [field.key, replaceVariables(field.value, $variables)]),
+        ).toString();
+        break;
         default:
           contentType = "text/plain";
-          requestBody = $body;
+          requestBody = replaceVariables($body, $variables);
       }
     }
 
