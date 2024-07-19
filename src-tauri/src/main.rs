@@ -24,6 +24,7 @@ struct RequestData {
     path_params: Option<HashMap<String, String>>,
     query_params: Option<HashMap<String, String>>,
     form_data: Option<HashMap<String, String>>,
+    timeout: Option<u64>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -54,6 +55,8 @@ async fn send_request(
 
     let start = std::time::Instant::now();
     let timestamp = Utc::now().to_rfc3339();
+
+    let timeout_duration = std::time::Duration::from_millis(request_data.timeout.unwrap_or(30000));
 
     // Handle path parameters
     let mut url = request_data.url.clone();
@@ -106,7 +109,7 @@ async fn send_request(
         "OPTIONS" => client.request(reqwest::Method::OPTIONS, &url),
         "HEAD" => client.head(&url),
         _ => return Err("Unsupported method".to_string()),
-    };
+    }.timeout(timeout_duration);
 
     // Set the Content-Type header and body according to the content type
     if let Some(content_type) = request_data.content_type {

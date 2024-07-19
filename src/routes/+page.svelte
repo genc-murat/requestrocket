@@ -16,6 +16,7 @@
     faRepeat,
     faDatabase,
     faPaintbrush,
+    faCog,
   } from "@fortawesome/free-solid-svg-icons";
   import { library } from "@fortawesome/fontawesome-svg-core";
   import { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";
@@ -65,6 +66,17 @@
 
   import StatusBar from "../components/StatusBar.svelte";
 
+  import SettingsModal from "../components/SettingsModal.svelte";
+
+  export let showSettings = writable(false);
+  export let requestTimeout = writable(
+    Number(localStorage.getItem("requestTimeout")) || 30000,
+  );
+
+  function openSettings() {
+    showSettings.set(true);
+  }
+
   const themeModalOpen = writable(false);
 
   const statusMessage: Writable<string | null> = writable(null);
@@ -101,6 +113,7 @@
     faRepeat,
     faDatabase,
     faPaintbrush,
+    faCog,
   );
 
   let currentFlow: Writable<Flow | null> = writable(null);
@@ -696,7 +709,7 @@
   }
 
   $: {
-    if ($url) {
+    if ($url.trim()) {
       try {
         const urlObj = new URL($url);
         const newQueryParams = Array.from(urlObj.searchParams.entries()).map(
@@ -725,28 +738,34 @@
   }
 
   function updateUrl() {
-  try {
-    const urlObj = new URL($url);
-    const originalSearch = urlObj.search;
-
-    urlObj.search = ""; 
-    const nonEmptyParams = $queryParams.filter(param => param.key && param.value);
-    
-    if (nonEmptyParams.length > 0) {
-      nonEmptyParams.forEach((param) => {
-        urlObj.searchParams.set(param.key, param.value);
-      });
+    if (!$url.trim()) {
+      return;
     }
 
-    const newUrl = urlObj.toString();
+    try {
+      const urlObj = new URL($url);
+      const originalSearch = urlObj.search;
 
-    if (newUrl !== $url) {
-      url.set(newUrl);
+      urlObj.search = "";
+      const nonEmptyParams = $queryParams.filter(
+        (param) => param.key && param.value,
+      );
+
+      if (nonEmptyParams.length > 0) {
+        nonEmptyParams.forEach((param) => {
+          urlObj.searchParams.set(param.key, param.value);
+        });
+      }
+
+      const newUrl = urlObj.toString();
+
+      if (newUrl !== $url) {
+        url.set(newUrl);
+      }
+    } catch (error) {
+      console.error("Error updating URL:", error);
     }
-  } catch (error) {
-    console.error("Error updating URL:", error);
   }
-}
 
   async function sendRequest() {
     if (!$url.trim()) {
@@ -826,6 +845,7 @@
       query_params: queryParamsObject,
       form_data: $bodyType === "form-data" ? formParamsObject : undefined,
       content_type: contentType,
+      timeout: Number($requestTimeout),
     };
 
     console.log("Sending request with data:", requestData);
@@ -1711,6 +1731,14 @@
           >
             <FontAwesomeIcon icon="download" size="lg" />
           </button>
+          <button
+            type="button"
+            on:click={openSettings}
+            class="button-item hover"
+            title="Settings"
+          >
+            <FontAwesomeIcon icon="cog" size="lg" />
+          </button>
         </div>
       </div>
 
@@ -2089,7 +2117,7 @@
 
       <div class="response-panel panel relative">
         {#if $response}
-          <div class="status-box border  p-4 mb-4 rounded">
+          <div class="status-box border p-4 mb-4 rounded">
             <div class="flex justify-end">
               <div class="flex items-center">
                 <span
@@ -2478,6 +2506,10 @@
       </div>
     </div>
   </div>
+{/if}
+
+{#if $showSettings}
+  <SettingsModal bind:showSettings bind:requestTimeout />
 {/if}
 
 <style>
