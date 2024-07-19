@@ -68,6 +68,8 @@
 
   import SettingsModal from "../components/SettingsModal.svelte";
 
+  import { parseString } from 'xml2js';
+
   export let showSettings = writable(false);
   export let requestTimeout = writable(
     Number(localStorage.getItem("requestTimeout")) || 30000,
@@ -1271,33 +1273,88 @@
     deleteVariableFromDb(key);
   }
 
-  function jsonToTableData(json: string): {
-    headers: string[];
-    rows: string[][];
-  } {
-    try {
-      const data = JSON.parse(json);
-      if (Array.isArray(data)) {
-        const headers = Object.keys(data[0]);
-        const rows = data.map((item) =>
-          headers.map((header) => JSON.stringify(item[header])),
-        );
-        return { headers, rows };
-      } else if (typeof data === "object" && data !== null) {
-        const headers = Object.keys(data);
-        const rows = [headers.map((header) => JSON.stringify(data[header]))];
-        return { headers, rows };
-      }
-    } catch (e) {
-      console.error("Error parsing JSON:", e);
-    }
-    return { headers: [], rows: [] };
-  }
 
-  $: tableData =
-    $response && $response.body && isValidJson($response.body)
-      ? jsonToTableData($response.body)
-      : { headers: [], rows: [] };
+  function jsonToTableData(data: string): { headers: string[]; rows: string[][] } {
+  try {
+    // First, try to parse as JSON
+    const jsonData = JSON.parse(data);
+    return processData(jsonData);
+  } catch (e) {
+    // If JSON parsing fails, try XML
+    try {
+      const xmlData = xmlToJson(data);
+      return processData(xmlData);
+    } catch (xmlError) {
+      console.error("Error parsing data:", xmlError);
+      return { headers: [], rows: [] };
+    }
+  }
+}
+
+function xmlToJson(xml: string): any {
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(xml, "text/xml");
+  
+  function xmlToObj(node: Element): any {
+    const obj: any = {};
+    
+    if (node.childNodes.length === 1 && node.childNodes[0].nodeType === 3) {
+      // Text node
+      return node.textContent;
+    }
+    
+    for (const child of Array.from(node.children)) {
+      const name = child.nodeName;
+      
+      if (obj[name]) {
+        if (!Array.isArray(obj[name])) {
+          obj[name] = [obj[name]];
+        }
+        obj[name].push(xmlToObj(child));
+      } else {
+        obj[name] = xmlToObj(child);
+      }
+    }
+    
+    return obj;
+  }
+  
+  return xmlToObj(xmlDoc.documentElement);
+}
+
+function processData(data: any): { headers: string[]; rows: string[][] } {
+  if (Array.isArray(data)) {
+    // Handle array of objects
+    const headers = Array.from(new Set(data.flatMap(Object.keys)));
+    const rows = data.map(item => 
+      headers.map(header => JSON.stringify(item[header] || ''))
+    );
+    return { headers, rows };
+  } else if (typeof data === 'object' && data !== null) {
+    // Handle single object or XML root
+    const headers = Object.keys(data);
+    const rows = [headers.map(header => {
+      const value = data[header];
+      if (typeof value === 'object' && value !== null) {
+        return JSON.stringify(value);
+      } else {
+        return String(value);
+      }
+    })];
+    return { headers, rows };
+  } else {
+    // Handle primitive values
+    return { 
+      headers: ['Value'], 
+      rows: [[JSON.stringify(data)]]
+    };
+  }
+}
+
+// Usage in your component
+$: tableData = $response && $response.body ? 
+  jsonToTableData($response.body) : 
+  { headers: [], rows: [] };
 
   function isValidJson(json: string): boolean {
     try {
