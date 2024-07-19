@@ -12,6 +12,7 @@
   let options: Option[] = [
     { value: "json", label: "JSON" },
     { value: "xml", label: "XML" },
+    { value: "raw", label: "RAW" },
   ];
 
   function toggleDropdown() {

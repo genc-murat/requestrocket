@@ -464,7 +464,7 @@
 
   let url = writable("");
   let method = writable("GET");
-  let body = writable('{"key": "value"}');
+  let body = writable('');
   // let headers = writable<Header[]>([]);
   let params = writable<Param[]>([]);
   let bodyType = writable("json");
@@ -1452,6 +1452,26 @@ $: tableData = $response && $response.body ?
     return postmanCollection;
   }
 
+  function getBodyPlaceholder(type: string): string {
+    switch (type) {
+      case "json":
+        return '{"key": "value"}';
+      case "xml":
+        return '<root>\n  <element>value</element>\n</root>';
+      case "raw":
+        return 'Enter raw body data here';
+      default:
+        return '';
+    }
+  }
+
+  $: bodyPlaceholder = getBodyPlaceholder($bodyType);
+
+function handleBodyTypeChange(event: CustomEvent<string>) {
+  bodyType.set(event.detail);
+  body.set(getBodyPlaceholder(event.detail));
+}
+
   async function downloadPostmanCollection(historyItems: HistoryItem[]) {
     const postmanCollection = convertToPostmanFormat(historyItems);
     const postmanJson = JSON.stringify(postmanCollection, null, 2);
@@ -1988,16 +2008,14 @@ $: tableData = $response && $response.body ?
         </div>
         <div class="tab-content">
           {#if $selectedRequestTab === "body"}
-            <HttpBodyDropdown selected={bodyType} />
-            {#if $bodyType === "json" || $bodyType === "xml"}
-              <textarea
-                id="body"
-                bind:value={$body}
-                placeholder={$bodyType === "json"
-                  ? '{"key": "value"}'
-                  : "<xml></xml>"}
-                class="w-full mb-4 p-2 border rounded text-primary bg-accent h-4/6"
-              ></textarea>
+          <HttpBodyDropdown bind:selected={bodyType} on:change={handleBodyTypeChange} />
+          {#if $bodyType === "json" || $bodyType === "xml" || $bodyType === "raw"}
+            <textarea
+              id="body"
+              bind:value={$body}
+              placeholder={bodyPlaceholder}
+              class="w-full mb-4 p-2 border rounded text-primary bg-accent h-4/6"
+            ></textarea>
             {/if}
           {:else if $selectedRequestTab === "headers"}
             <div class="params-container">
