@@ -2660,9 +2660,7 @@ function handleBodyTypeChange(event: CustomEvent<string>) {
   .bg-black {
     background-color: rgba(0, 0, 0, 0.5);
   }
-  .bg-opacity-50 {
-    background-opacity: 0.5;
-  }
+
   .bg-white {
     background-color: #ffffff;
   }
