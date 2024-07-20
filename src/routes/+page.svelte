@@ -2722,8 +2722,12 @@
     margin-bottom: 0.5rem;
   }
 
-  .header-row input {
+  .header-row input[type="text"] {
     flex: 1;
+    margin-right: 0.5rem;
+  }
+  .header-row input[type="checkbox"] {
+    margin: 0;
     margin-right: 0.5rem;
   }
 
