@@ -791,8 +791,8 @@
     );
     const queryParamsObject = Object.fromEntries(
       $queryParams.map((param) => [
-        param.key,
-        replaceVariables(param.value, $variables),
+        param.key.replace(/\{\{(.*?)\}\}/g,"$1"),
+        replaceVariables(param.key, $variables),
       ]),
     );
     const formParamsObject = Object.fromEntries(
