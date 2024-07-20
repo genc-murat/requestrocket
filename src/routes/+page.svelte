@@ -87,6 +87,7 @@
   const statusMessage: Writable<string | null> = writable(null);
   const statusType: Writable<"info" | "warn" | "error"> = writable("info");
 
+
   function showStatusMessage(
     message: string,
     type: "info" | "warn" | "error" = "info",
@@ -574,6 +575,12 @@
   type AutocompleteHeaders = string[][];
 
   let headers = writable<Header[]>([]);
+
+  $: headerCount = $headers.length;
+  $: pathParamsCount = $pathParams.length;
+  $: queryParamsCount = $queryParams.length;
+  $: formDataCount = $formParams.length;
+
   let autocompleteHeaders = writable<AutocompleteHeaders>([]);
   let knownHeaders: string[] = [
     "Accept",
@@ -1976,6 +1983,7 @@
             aria-label="Headers Tab"
           >
             Headers
+            <span class="header-count">{headerCount}</span>
           </button>
 
           <button
@@ -1985,6 +1993,7 @@
             aria-label="Path Params Tab"
           >
             Path Params
+            <span class="header-count">{pathParamsCount}</span>
           </button>
           <button
             type="button"
@@ -1993,6 +2002,7 @@
             aria-label="Query Params Tab"
           >
             Query Params
+            <span class="header-count">{queryParamsCount}</span>
           </button>
           <button
             type="button"
@@ -2001,6 +2011,7 @@
             aria-label="Form Data Tab"
           >
             Form Data
+            <span class="header-count">{formDataCount}</span>
           </button>
           <button
             type="button"
@@ -2737,15 +2748,7 @@
 
  
 
-  .tab {
-    cursor: pointer;
-    padding: 0.3rem 0.6rem;
-    margin-right: 0.3rem;
-    border: 1px solid var(--divider);
-    border-bottom: none;
-    background: var(--surface);
-    border-radius: 4px 4px 0 0;
-  }
+ 
 
   .tab.active {
   background: var(--surface);

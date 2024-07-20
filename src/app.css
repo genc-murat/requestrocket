@@ -87,8 +87,8 @@ body {
 
 .tab {
   cursor: pointer;
-  padding: 0.3rem 0.6rem;
-  margin-right: 0.3rem;
+  padding: 0.2rem 0.4rem;
+  margin-right: 0.1rem;
   border: 1px solid var(--divider);
   border-bottom: none;
   background: var(--surface);
@@ -519,7 +519,7 @@ pre {
 }
 
 .response-tabs{
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.05rem;
 }
 
 .delete-all{
@@ -529,4 +529,14 @@ pre {
 .body-textarea{
   color: var(--primary-text) ;
   background-color: var(--light-background);
+}
+
+.header-count {
+  background-color: var(--primary);
+  color: white;
+  border-radius: 50%;
+  padding: 0.2em 0.6em;
+  margin-left: 0.4em;
+  font-size: 0.8em;
+  font-weight: bold;
 }
