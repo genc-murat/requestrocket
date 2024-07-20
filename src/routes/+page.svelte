@@ -71,7 +71,7 @@
 
   import SettingsModal from "../components/SettingsModal.svelte";
 
-  import { parseString } from 'xml2js';
+  import { parseString } from "xml2js";
 
   export let showSettings = writable(false);
   export let requestTimeout = writable(
@@ -464,7 +464,7 @@
 
   let url = writable("");
   let method = writable("GET");
-  let body = writable('');
+  let body = writable("");
   // let headers = writable<Header[]>([]);
   let params = writable<Param[]>([]);
   let bodyType = writable("json");
@@ -559,7 +559,7 @@
   }
 
   async function addHeader() {
-    headers.update((h) => [...h, { key: "", value: "" }]);
+    headers.update((h) => [...h, { key: "", value: "", selected: true }]);
   }
 
   async function addFormField() {
@@ -575,7 +575,7 @@
     headers.set([]);
   }
 
-  type Header = { key: string; value: string };
+  type Header = { key: string; value: string; selected: boolean };
   type AutocompleteHeaders = string[][];
 
   let headers = writable<Header[]>([]);
@@ -780,10 +780,13 @@
 
     isSending.set(true);
     const actualUrl = $url;
-    const actualHeaders = $headers.map((header) => ({
-      key: replaceVariables(header.key, $variables),
-      value: replaceVariables(header.value, $variables),
-    }));
+    const actualHeaders = $headers
+      .filter((header) => header.selected)
+      .map((header) => ({
+        key: replaceVariables(header.key, $variables),
+        value: replaceVariables(header.value, $variables),
+        selected: header.selected,
+      }));
 
     const pathParamsObject = Object.fromEntries(
       $pathParams.map((param) => [
@@ -822,10 +825,11 @@
             if (
               !actualHeaders.some((h) => h.key.toLowerCase() === "soapaction")
             ) {
-              actualHeaders.push({
-                key: "SOAPAction",
-                value: '""', // You might need to set a specific SOAPAction
-              });
+              // actualHeaders.push({
+              //   key: "SOAPAction",
+              //   value: '""',
+              //   selected:true// You might need to set a specific SOAPAction
+              // });
             }
           } else {
             contentType = "application/xml";
@@ -1278,87 +1282,93 @@
     deleteVariableFromDb(key);
   }
 
-  function jsonToTableData(data: string): { headers: string[]; rows: string[][] } {
-  try {
-    // First, try to parse as JSON
-    const jsonData = JSON.parse(data);
-    return processData(jsonData);
-  } catch (e) {
-    // If JSON parsing fails, try XML
+  function jsonToTableData(data: string): {
+    headers: string[];
+    rows: string[][];
+  } {
     try {
-      const xmlData = xmlToJson(data);
-      return processData(xmlData);
-    } catch (xmlError) {
-      console.error("Error parsing data:", xmlError);
-      return { headers: [], rows: [] };
+      // First, try to parse as JSON
+      const jsonData = JSON.parse(data);
+      return processData(jsonData);
+    } catch (e) {
+      // If JSON parsing fails, try XML
+      try {
+        const xmlData = xmlToJson(data);
+        return processData(xmlData);
+      } catch (xmlError) {
+        console.error("Error parsing data:", xmlError);
+        return { headers: [], rows: [] };
+      }
     }
   }
-}
 
-function xmlToJson(xml: string): any {
-  const parser = new DOMParser();
-  const xmlDoc = parser.parseFromString(xml, "text/xml");
-  
-  function xmlToObj(node: Element): any {
-    const obj: any = {};
-    
-    if (node.childNodes.length === 1 && node.childNodes[0].nodeType === 3) {
-      // Text node
-      return node.textContent;
-    }
-    
-    for (const child of Array.from(node.children)) {
-      const name = child.nodeName;
-      
-      if (obj[name]) {
-        if (!Array.isArray(obj[name])) {
-          obj[name] = [obj[name]];
+  function xmlToJson(xml: string): any {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xml, "text/xml");
+
+    function xmlToObj(node: Element): any {
+      const obj: any = {};
+
+      if (node.childNodes.length === 1 && node.childNodes[0].nodeType === 3) {
+        // Text node
+        return node.textContent;
+      }
+
+      for (const child of Array.from(node.children)) {
+        const name = child.nodeName;
+
+        if (obj[name]) {
+          if (!Array.isArray(obj[name])) {
+            obj[name] = [obj[name]];
+          }
+          obj[name].push(xmlToObj(child));
+        } else {
+          obj[name] = xmlToObj(child);
         }
-        obj[name].push(xmlToObj(child));
-      } else {
-        obj[name] = xmlToObj(child);
       }
+
+      return obj;
     }
-    
-    return obj;
-  }
-  
-  return xmlToObj(xmlDoc.documentElement);
-}
 
-function processData(data: any): { headers: string[]; rows: string[][] } {
-  if (Array.isArray(data)) {
-    // Handle array of objects
-    const headers = Array.from(new Set(data.flatMap(Object.keys)));
-    const rows = data.map(item => 
-      headers.map(header => JSON.stringify(item[header] || ''))
-    );
-    return { headers, rows };
-  } else if (typeof data === 'object' && data !== null) {
-    // Handle single object or XML root
-    const headers = Object.keys(data);
-    const rows = [headers.map(header => {
-      const value = data[header];
-      if (typeof value === 'object' && value !== null) {
-        return JSON.stringify(value);
-      } else {
-        return String(value);
-      }
-    })];
-    return { headers, rows };
-  } else {
-    // Handle primitive values
-    return { 
-      headers: ['Value'], 
-      rows: [[JSON.stringify(data)]]
-    };
+    return xmlToObj(xmlDoc.documentElement);
   }
-}
 
-// Usage in your component
-$: tableData = $response && $response.body ? 
-  jsonToTableData($response.body) : 
-  { headers: [], rows: [] };
+  function processData(data: any): { headers: string[]; rows: string[][] } {
+    if (Array.isArray(data)) {
+      // Handle array of objects
+      const headers = Array.from(new Set(data.flatMap(Object.keys)));
+      const rows = data.map((item) =>
+        headers.map((header) => JSON.stringify(item[header] || "")),
+      );
+      return { headers, rows };
+    } else if (typeof data === "object" && data !== null) {
+      // Handle single object or XML root
+      const headers = Object.keys(data);
+      const rows = [
+        headers.map((header) => {
+          const value = data[header];
+          if (typeof value === "object" && value !== null) {
+            return JSON.stringify(value);
+          } else {
+            return String(value);
+          }
+        }),
+      ];
+      return { headers, rows };
+    } else {
+      // Handle primitive values
+      return {
+        headers: ["Value"],
+        rows: [[JSON.stringify(data)]],
+      };
+    }
+  }
+
+  // Usage in your component
+  $: tableData =
+    $response && $response.body
+      ? jsonToTableData($response.body)
+      : { headers: [], rows: [] };
 
   function isValidJson(json: string): boolean {
     try {
@@ -1457,20 +1467,20 @@ $: tableData = $response && $response.body ?
       case "json":
         return '{"key": "value"}';
       case "xml":
-        return '<root>\n  <element>value</element>\n</root>';
+        return "<root>\n  <element>value</element>\n</root>";
       case "raw":
-        return 'Enter raw body data here';
+        return "Enter raw body data here";
       default:
-        return '';
+        return "";
     }
   }
 
   $: bodyPlaceholder = getBodyPlaceholder($bodyType);
 
-function handleBodyTypeChange(event: CustomEvent<string>) {
-  bodyType.set(event.detail);
-  body.set(getBodyPlaceholder(event.detail));
-}
+  function handleBodyTypeChange(event: CustomEvent<string>) {
+    bodyType.set(event.detail);
+    body.set(getBodyPlaceholder(event.detail));
+  }
 
   async function downloadPostmanCollection(historyItems: HistoryItem[]) {
     const postmanCollection = convertToPostmanFormat(historyItems);
@@ -1880,18 +1890,16 @@ function handleBodyTypeChange(event: CustomEvent<string>) {
                                {item.method === 'POST' ? 'method-post' : ''} 
                                {item.method === 'PUT' ? 'method-put' : ''} 
                                {item.method === 'DELETE'
-                      ? 'method-delete'
-                      : ''} 
-                               {item.method === 'PATCH'
-                      ? 'method-patch'
-                      : ''} 
+                        ? 'method-delete'
+                        : ''} 
+                               {item.method === 'PATCH' ? 'method-patch' : ''} 
                                {item.method === 'OPTIONS'
-                      ? 'method-options'
-                      : ''} 
+                        ? 'method-options'
+                        : ''} 
                                {item.method === 'HEAD' ? 'method-head' : ''} 
                                {item.method === 'CONNECT'
-                      ? 'method-connect'
-                      : ''} 
+                        ? 'method-connect'
+                        : ''} 
                                {item.method === 'TRACE' ? 'method-trace' : ''}
               text-white"
                     >
@@ -2008,14 +2016,17 @@ function handleBodyTypeChange(event: CustomEvent<string>) {
         </div>
         <div class="tab-content">
           {#if $selectedRequestTab === "body"}
-          <HttpBodyDropdown bind:selected={bodyType} on:change={handleBodyTypeChange} />
-          {#if $bodyType === "json" || $bodyType === "xml" || $bodyType === "raw"}
-            <textarea
-              id="body"
-              bind:value={$body}
-              placeholder={bodyPlaceholder}
-              class="w-full mb-4 p-2 border rounded text-primary bg-accent h-4/6"
-            ></textarea>
+            <HttpBodyDropdown
+              bind:selected={bodyType}
+              on:change={handleBodyTypeChange}
+            />
+            {#if $bodyType === "json" || $bodyType === "xml" || $bodyType === "raw"}
+              <textarea
+                id="body"
+                bind:value={$body}
+                placeholder={bodyPlaceholder}
+                class="w-full mb-4 p-2 border rounded text-primary bg-accent h-4/6"
+              ></textarea>
             {/if}
           {:else if $selectedRequestTab === "headers"}
             <div class="params-container">
@@ -2034,6 +2045,7 @@ function handleBodyTypeChange(event: CustomEvent<string>) {
               </div>
               {#each $headers as header, index}
                 <div class="header-row relative">
+                  <input type="checkbox" bind:checked={header.selected} />
                   <input
                     type="text"
                     placeholder="Key"
@@ -2305,7 +2317,7 @@ function handleBodyTypeChange(event: CustomEvent<string>) {
               <div class="response-container relative">
                 {#if $response && $response.body}
                   {#if isXml($response.body)}
-                  <pre bind:this={preElement}>
+                    <pre bind:this={preElement}>
                     <code class="language-xml">{$response.body}</code>
                   </pre>
                     <!-- <pre><code>{@html formatXml($response.body)}</code></pre> -->

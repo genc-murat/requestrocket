@@ -12,6 +12,7 @@ export type HistoryItem = {
 export type Header = {
   key: string;
   value: string;
+  selected: boolean;
 };
 
 export type Param = {
