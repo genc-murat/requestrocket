@@ -785,8 +785,8 @@
 
     const pathParamsObject = Object.fromEntries(
       $pathParams.map((param) => [
-        param.key,
-        replaceVariables(param.value, $variables),
+        param.key.replace(/\{\{(.*?)\}\}/g,"$1"),
+        replaceVariables(param.key, $variables),
       ]),
     );
     const queryParamsObject = Object.fromEntries(
@@ -796,9 +796,9 @@
       ]),
     );
     const formParamsObject = Object.fromEntries(
-      $formParams.map((field) => [
-        field.key,
-        replaceVariables(field.value, $variables),
+      $formParams.map((param) => [
+        param.key.replace(/\{\{(.*?)\}\}/g,"$1"),
+        replaceVariables(param.key, $variables),
       ]),
     );
 
