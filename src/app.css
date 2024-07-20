@@ -509,3 +509,7 @@ pre {
   overflow-y: auto;
   height: 100%;;
 }
+
+.sending-request{
+  background-color: var(--surface);
+}

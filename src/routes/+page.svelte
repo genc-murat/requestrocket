@@ -2386,7 +2386,7 @@
 
         {#if $isSending}
           <div
-            class="absolute inset-0 flex items-center justify-center bg-opacity-50 z-50"
+            class="sending-request absolute inset-0 flex items-center justify-center z-50"
           >
             <div class=" p-4 rounded shadow-lg">
               <h2 class="text-lg font-bold mb-4">Sending request...</h2>
