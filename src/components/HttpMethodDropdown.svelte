@@ -87,6 +87,7 @@
       position: relative;
       display: inline-block;
       width: 17%;
+      z-index: 10;
     }
   
     .dropdown-button {

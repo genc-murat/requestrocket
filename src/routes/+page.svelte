@@ -2020,7 +2020,7 @@
                 id="body"
                 bind:value={$body}
                 placeholder={bodyPlaceholder}
-                class="w-full mb-4 p-2 border rounded text-primary bg-accent h-4/6"
+                class=".body-textarea w-full mb-4 p-2 border rounded h-4/6"
               ></textarea>
             {/if}
           {:else if $selectedRequestTab === "headers"}
@@ -2033,7 +2033,7 @@
                 <button
                   type="button"
                   on:click={clearHeaders}
-                  class="text-red-700"
+                  class="delete-all"
                 >
                   <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
                 </button>
@@ -2077,7 +2077,7 @@
                     type="button"
                     on:click={() =>
                       headers.update((h) => h.filter((_, i) => i !== index))}
-                    class="text-red-500"
+                    class="delete-all"
                     disabled={!header.selected}
                   >
                     <FontAwesomeIcon icon="trash-alt" size="lg" />
@@ -2122,7 +2122,7 @@
                 <button
                   type="button"
                   on:click={() => pathParams.set([])}
-                  class="text-red-700"
+                  class="delete-all"
                 >
                   <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
                 </button>
@@ -2145,7 +2145,7 @@
                     type="button"
                     on:click={() =>
                       pathParams.update((p) => p.filter((_, i) => i !== index))}
-                    class="text-red-500"
+                    class="delete-all"
                   >
                     <FontAwesomeIcon icon="trash-alt" size="lg" />
                   </button>
@@ -2162,7 +2162,7 @@
                 <button
                   type="button"
                   on:click={clearParams}
-                  class="text-red-700"
+                  class="delete-all"
                 >
                   <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
                 </button>
@@ -2187,7 +2187,7 @@
                       queryParams.update((p) =>
                         p.filter((_, i) => i !== index),
                       )}
-                    class="text-red-500"
+                    class="delete-all"
                   >
                     <FontAwesomeIcon icon="trash-alt" size="lg" />
                   </button>
@@ -2204,7 +2204,7 @@
                 <button
                   type="button"
                   on:click={() => formParams.set([])}
-                  class="text-red-700"
+                  class="delete-all"
                 >
                   <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
                 </button>
@@ -2227,7 +2227,7 @@
                     type="button"
                     on:click={() =>
                       formParams.update((f) => f.filter((_, i) => i !== index))}
-                    class="text-red-500"
+                    class="delete-all"
                   >
                     <FontAwesomeIcon icon="trash-alt" size="lg" />
                   </button>
@@ -2753,7 +2753,7 @@
   color: var(--primary-text);
   font-weight: bold;
   position: relative;
-  z-index: 10;
+  z-index: 1;
   transform: translateY(-2px);
   box-shadow: 
     0 -5px 8px -1px var(--surface),

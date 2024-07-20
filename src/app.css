@@ -517,3 +517,12 @@ pre {
 .response-tabs{
   margin-bottom: 0.15rem;
 }
+
+.delete-all{
+  color: var(--error);
+}
+
+.body-textarea{
+  color: var(--primary-text) ;
+  background-color: var(--light-background);
+}
