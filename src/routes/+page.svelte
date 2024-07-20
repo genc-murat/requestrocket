@@ -2053,6 +2053,7 @@
                     class="flex-1 p-2 border rounded text-primary bg-accent mr-2"
                     on:input={(e) => filterHeaders(index, e)}
                     on:blur={() => clearAutocomplete(index)}
+                    disabled={!header.selected}
                   />
                   {#if $autocompleteHeaders[index]?.length}
                     <div class="autocomplete-suggestions">
@@ -2075,12 +2076,14 @@
                     placeholder="Value"
                     bind:value={header.value}
                     class="flex-1 p-2 border rounded text-primary bg-accent"
+                    disabled={!header.selected}
                   />
                   <button
                     type="button"
                     on:click={() =>
                       headers.update((h) => h.filter((_, i) => i !== index))}
                     class="text-red-500"
+                    disabled={!header.selected}
                   >
                     <FontAwesomeIcon icon="trash-alt" size="lg" />
                   </button>
