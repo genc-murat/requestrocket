@@ -533,10 +533,10 @@ pre {
 
 .header-count {
   background-color: var(--primary);
-  color: white;
+  color: var(--primary-text);
   border-radius: 50%;
-  padding: 0.2em 0.6em;
-  margin-left: 0.4em;
+  padding: 0.2em 0.45em;
+  margin-left: 0.2em;
   font-size: 0.8em;
   font-weight: bold;
 }
