@@ -226,6 +226,10 @@ textarea {
   display: inline;
 }
 
+.history-item:hover .duplicate-icon {
+  display: inline;
+}
+
 .delete-icon {
   display: none;
   cursor: pointer;

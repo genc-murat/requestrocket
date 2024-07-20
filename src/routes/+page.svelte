@@ -2735,9 +2735,7 @@
     margin-left: 0.5rem;
   }
 
-  .history-item:hover .duplicate-icon {
-    display: inline;
-  }
+ 
 
   .tab {
     cursor: pointer;
