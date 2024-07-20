@@ -405,11 +405,6 @@
     });
   }
 
-  type SwitchCase = {
-    value: string;
-    next: string | null;
-  };
-
   function determineNextBlock(
     currentBlock: FlowBlock,
     result: any,
