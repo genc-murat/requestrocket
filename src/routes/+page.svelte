@@ -1206,7 +1206,9 @@
     params.set(item.params || []);
     response.set(item.response ? JSON.parse(item.response) : null);
     jsonData.set(item.response ? item.response : "{}");
+    queryParams.set(item.params || []);
     loadStatusHistory(item.url);
+
   }
 
   function handleGroupSelect(group: string) {
