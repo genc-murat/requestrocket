@@ -2275,7 +2275,7 @@
               {$response.error}
             </div>
           {/if}
-          <div class="flex mb-4">
+          <div class="flex response-tabs">
             <button
               type="button"
               class="tab {$selectedTab === 'response' ? 'active' : ''}"
@@ -2748,11 +2748,18 @@
   }
 
   .tab.active {
-    background: var(--surface);
-    border-bottom: 1px solid var(--surface);
-    color: var(--primary-text);
-    font-weight: bold;
-  }
+  background: var(--surface);
+  border-bottom: 1px solid var(--surface);
+  color: var(--primary-text);
+  font-weight: bold;
+  position: relative;
+  z-index: 10;
+  transform: translateY(-2px);
+  box-shadow: 
+    0 -5px 8px -1px var(--surface),
+    0 4px 4px -1px var(--divider);
+ 
+}
 
   .tab-content {
     border: 1px solid var(--divider);

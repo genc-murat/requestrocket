@@ -513,3 +513,7 @@ pre {
 .sending-request{
   background-color: var(--surface);
 }
+
+.response-tabs{
+  margin-bottom: 0.15rem;
+}
