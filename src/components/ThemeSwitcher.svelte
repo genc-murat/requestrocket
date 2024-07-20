@@ -823,7 +823,7 @@
             "--surface": "#434C5E",
             "--primary-text": "#D8DEE9",
             "--secondary-text": "#E5E9F0",
-            "--dark-text": "#2E3440",
+            "--dark-text": "#e5e9f0",
             "--divider": "#4C566A",
             "--shadow": "rgba(46, 52, 64, 0.5)",
             "--primary": "#5E81AC",
