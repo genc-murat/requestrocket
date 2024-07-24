@@ -88,7 +88,6 @@
   const statusMessage: Writable<string | null> = writable(null);
   const statusType: Writable<"info" | "warn" | "error"> = writable("info");
 
-
   function showStatusMessage(
     message: string,
     type: "info" | "warn" | "error" = "info",
@@ -121,7 +120,7 @@
     faDatabase,
     faPaintbrush,
     faCog,
-    faFileExport
+    faFileExport,
   );
 
   let currentFlow: Writable<Flow | null> = writable(null);
@@ -794,19 +793,19 @@
 
     const pathParamsObject = Object.fromEntries(
       $pathParams.map((param) => [
-        param.key.replace(/\{\{(.*?)\}\}/g,"$1"),
+        param.key.replace(/\{\{(.*?)\}\}/g, "$1"),
         replaceVariables(param.key, $variables),
       ]),
     );
     const queryParamsObject = Object.fromEntries(
       $queryParams.map((param) => [
-        param.key.replace(/\{\{(.*?)\}\}/g,"$1"),
+        param.key.replace(/\{\{(.*?)\}\}/g, "$1"),
         replaceVariables(param.key, $variables),
       ]),
     );
     const formParamsObject = Object.fromEntries(
       $formParams.map((param) => [
-        param.key.replace(/\{\{(.*?)\}\}/g,"$1"),
+        param.key.replace(/\{\{(.*?)\}\}/g, "$1"),
         replaceVariables(param.key, $variables),
       ]),
     );
@@ -1217,7 +1216,6 @@
     jsonData.set(item.response ? item.response : "{}");
     queryParams.set(item.params || []);
     loadStatusHistory(item.url);
-
   }
 
   function handleGroupSelect(group: string) {
@@ -1775,59 +1773,60 @@
   }
 
   function jsonToCSV(jsonData: any): string {
-  const rows = [];
+    const rows = [];
 
-  // Helper function to convert object to CSV row
-  const convertToRow = (obj: any, headers: string[]): string[] => {
-    return headers.map(header => (obj[header] ? JSON.stringify(obj[header]) : ''));
-  };
+    // Helper function to convert object to CSV row
+    const convertToRow = (obj: any, headers: string[]): string[] => {
+      return headers.map((header) =>
+        obj[header] ? JSON.stringify(obj[header]) : "",
+      );
+    };
 
-  if (Array.isArray(jsonData)) {
-    // If the data is an array, use the union of keys as headers
-    const headers = Array.from(new Set(jsonData.flatMap(Object.keys)));
-    rows.push(headers.join(','));
+    if (Array.isArray(jsonData)) {
+      // If the data is an array, use the union of keys as headers
+      const headers = Array.from(new Set(jsonData.flatMap(Object.keys)));
+      rows.push(headers.join(","));
 
-    for (const item of jsonData) {
-      rows.push(convertToRow(item, headers).join(','));
+      for (const item of jsonData) {
+        rows.push(convertToRow(item, headers).join(","));
+      }
+    } else if (typeof jsonData === "object" && jsonData !== null) {
+      // If the data is a single object, use its keys as headers
+      const headers = Object.keys(jsonData);
+      rows.push(headers.join(","));
+      rows.push(convertToRow(jsonData, headers).join(","));
+    } else {
+      // If the data is a primitive value, wrap it in an array
+      rows.push("Value");
+      rows.push(JSON.stringify(jsonData));
     }
-  } else if (typeof jsonData === 'object' && jsonData !== null) {
-    // If the data is a single object, use its keys as headers
-    const headers = Object.keys(jsonData);
-    rows.push(headers.join(','));
-    rows.push(convertToRow(jsonData, headers).join(','));
-  } else {
-    // If the data is a primitive value, wrap it in an array
-    rows.push('Value');
-    rows.push(JSON.stringify(jsonData));
+
+    return rows.join("\n");
   }
 
-  return rows.join('\n');
-}
+  async function exportResponseToCSV() {
+    if ($response && $response.body) {
+      const csvData = jsonToCSV(JSON.parse($response.body));
+      const filePath = await dialog.save({
+        defaultPath: "response.csv",
+        title: "Save CSV",
+        filters: [
+          {
+            name: "CSV",
+            extensions: ["csv"],
+          },
+        ],
+      });
 
-async function exportResponseToCSV() {
-  if ($response && $response.body) {
-    const csvData = jsonToCSV(JSON.parse($response.body));
-    const filePath = await dialog.save({
-      defaultPath: "response.csv",
-      title: "Save CSV",
-      filters: [
-        {
-          name: "CSV",
-          extensions: ["csv"],
-        },
-      ],
-    });
-
-    if (filePath) {
-      await writeTextFile(filePath, csvData);
-      console.log("CSV file saved successfully:", filePath);
-      showStatusMessage("CSV file saved successfully.");
+      if (filePath) {
+        await writeTextFile(filePath, csvData);
+        console.log("CSV file saved successfully:", filePath);
+        showStatusMessage("CSV file saved successfully.");
+      }
+    } else {
+      showStatusMessage("No response data to export.", "error");
     }
-  } else {
-    showStatusMessage("No response data to export.", "error");
   }
-}
-
 
   //release alırken aç
   // document.addEventListener(
@@ -2229,11 +2228,7 @@ async function exportResponseToCSV() {
                   <FontAwesomeIcon icon="plus" size="lg" /> Add
                 </button>
                 <span class="separator"></span>
-                <button
-                  type="button"
-                  on:click={clearParams}
-                  class="delete-all"
-                >
+                <button type="button" on:click={clearParams} class="delete-all">
                   <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
                 </button>
               </div>
@@ -2384,13 +2379,13 @@ async function exportResponseToCSV() {
             {#if $selectedTab === "response"}
               <div class="response-container relative">
                 {#if $response && $response.body}
-                <button
-                type="button"
-                on:click={exportResponseToCSV}
-                class="text-blue-500"
-              >
-                <FontAwesomeIcon icon="file-export" size="xl" />
-              </button>
+                  <button
+                    type="button"
+                    on:click={exportResponseToCSV}
+                    class="text-blue-500"
+                  >
+                    <FontAwesomeIcon icon="file-export" size="xl" />
+                  </button>
                   {#if isXml($response.body)}
                     <pre bind:this={preElement}>
                     <code class="language-xml">{$response.body}</code>
@@ -2407,7 +2402,6 @@ async function exportResponseToCSV() {
                 {:else}
                   <p>No response body</p>
                 {/if}
-              
               </div>
             {:else if $selectedTab === "table"}
               <div class="table-container">
@@ -2811,23 +2805,18 @@ async function exportResponseToCSV() {
     margin-left: 0.5rem;
   }
 
- 
-
- 
-
   .tab.active {
-  background: var(--surface);
-  border-bottom: 1px solid var(--surface);
-  color: var(--primary-text);
-  font-weight: bold;
-  position: relative;
-  z-index: 1;
-  transform: translateY(-2px);
-  box-shadow: 
-    0 -5px 8px -1px var(--surface),
-    0 4px 4px -1px var(--divider);
- 
-}
+    background: var(--surface);
+    border-bottom: 1px solid var(--surface);
+    color: var(--primary-text);
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+    transform: translateY(-2px);
+    box-shadow:
+      0 -5px 8px -1px var(--surface),
+      0 4px 4px -1px var(--divider);
+  }
 
   .tab-content {
     border: 1px solid var(--divider);
