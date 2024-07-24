@@ -6,6 +6,7 @@
   // import "prismjs/themes/prism-tomorrow.css";
   import "prismjs/components/prism-markup";
   import { openDB } from "idb";
+  import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
   import { invoke } from "@tauri-apps/api/tauri";
   import {
     faPlus,
@@ -21,10 +22,15 @@
     faPaintbrush,
     faCog,
     faFileExport,
+    faFilePdf,
   } from "@fortawesome/free-solid-svg-icons";
   import { library } from "@fortawesome/fontawesome-svg-core";
   import { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";
-  import { writeTextFile, readTextFile } from "@tauri-apps/api/fs";
+  import {
+    writeTextFile,
+    readTextFile,
+    writeBinaryFile,
+  } from "@tauri-apps/api/fs";
   import { dialog } from "@tauri-apps/api";
   import JSONEditor from "../components/JSONEditor.svelte";
   import APIFlowDesigner from "../components/APIFlowDesigner.svelte";
@@ -79,6 +85,65 @@
     Number(localStorage.getItem("requestTimeout")) || 30000,
   );
 
+  async function exportResponseToPDF() {
+    if ($response && $response.body) {
+      const responseBody = JSON.parse($response.body);
+      const pdfDoc = await PDFDocument.create();
+      const page = pdfDoc.addPage();
+      const { width, height } = page.getSize();
+      const fontSize = 12;
+
+      const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+      page.setFont(helveticaFont);
+      page.setFontSize(fontSize);
+
+      let yPosition = height - 40;
+
+      // Helper function to add text to the PDF
+      const addText = (text: string, x: number, y: number) => {
+        page.drawText(text, { x, y, size: fontSize });
+      };
+
+      // Recursive function to add JSON data to the PDF
+      const addJsonToPdf = (json: any, indent = 0) => {
+        const indentSpaces = " ".repeat(indent * 2);
+        for (const key in json) {
+          if (typeof json[key] === "object" && json[key] !== null) {
+            addText(`${indentSpaces}${key}:`, 40, yPosition);
+            yPosition -= fontSize + 5;
+            addJsonToPdf(json[key], indent + 1);
+          } else {
+            addText(`${indentSpaces}${key}: ${json[key]}`, 40, yPosition);
+            yPosition -= fontSize + 5;
+          }
+        }
+      };
+
+      addJsonToPdf(responseBody);
+
+      const pdfBytes = await pdfDoc.save();
+
+      const filePath = await dialog.save({
+        defaultPath: "response.pdf",
+        title: "Save PDF",
+        filters: [
+          {
+            name: "PDF",
+            extensions: ["pdf"],
+          },
+        ],
+      });
+
+      if (filePath) {
+        await writeBinaryFile(filePath, pdfBytes);
+        console.log("PDF file saved successfully:", filePath);
+        showStatusMessage("PDF file saved successfully.");
+      }
+    } else {
+      showStatusMessage("No response data to export.", "error");
+    }
+  }
+
   function openSettings() {
     showSettings.set(true);
   }
@@ -121,6 +186,7 @@
     faPaintbrush,
     faCog,
     faFileExport,
+    faFilePdf,
   );
 
   let currentFlow: Writable<Flow | null> = writable(null);
@@ -2385,6 +2451,13 @@
                     class="text-blue-500"
                   >
                     <FontAwesomeIcon icon="file-export" size="xl" />
+                  </button>
+                  <button
+                    type="button"
+                    on:click={exportResponseToPDF}
+                    class="text-blue-500"
+                  >
+                    <FontAwesomeIcon icon="file-pdf" size="xl" />
                   </button>
                   {#if isXml($response.body)}
                     <pre bind:this={preElement}>
