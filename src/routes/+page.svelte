@@ -20,6 +20,7 @@
     faDatabase,
     faPaintbrush,
     faCog,
+    faFileExport,
   } from "@fortawesome/free-solid-svg-icons";
   import { library } from "@fortawesome/fontawesome-svg-core";
   import { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";
@@ -120,6 +121,7 @@
     faDatabase,
     faPaintbrush,
     faCog,
+    faFileExport
   );
 
   let currentFlow: Writable<Flow | null> = writable(null);
@@ -1772,6 +1774,61 @@
     }
   }
 
+  function jsonToCSV(jsonData: any): string {
+  const rows = [];
+
+  // Helper function to convert object to CSV row
+  const convertToRow = (obj: any, headers: string[]): string[] => {
+    return headers.map(header => (obj[header] ? JSON.stringify(obj[header]) : ''));
+  };
+
+  if (Array.isArray(jsonData)) {
+    // If the data is an array, use the union of keys as headers
+    const headers = Array.from(new Set(jsonData.flatMap(Object.keys)));
+    rows.push(headers.join(','));
+
+    for (const item of jsonData) {
+      rows.push(convertToRow(item, headers).join(','));
+    }
+  } else if (typeof jsonData === 'object' && jsonData !== null) {
+    // If the data is a single object, use its keys as headers
+    const headers = Object.keys(jsonData);
+    rows.push(headers.join(','));
+    rows.push(convertToRow(jsonData, headers).join(','));
+  } else {
+    // If the data is a primitive value, wrap it in an array
+    rows.push('Value');
+    rows.push(JSON.stringify(jsonData));
+  }
+
+  return rows.join('\n');
+}
+
+async function exportResponseToCSV() {
+  if ($response && $response.body) {
+    const csvData = jsonToCSV(JSON.parse($response.body));
+    const filePath = await dialog.save({
+      defaultPath: "response.csv",
+      title: "Save CSV",
+      filters: [
+        {
+          name: "CSV",
+          extensions: ["csv"],
+        },
+      ],
+    });
+
+    if (filePath) {
+      await writeTextFile(filePath, csvData);
+      console.log("CSV file saved successfully:", filePath);
+      showStatusMessage("CSV file saved successfully.");
+    }
+  } else {
+    showStatusMessage("No response data to export.", "error");
+  }
+}
+
+
   //release alırken aç
   // document.addEventListener(
   //   "contextmenu",
@@ -2327,6 +2384,13 @@
             {#if $selectedTab === "response"}
               <div class="response-container relative">
                 {#if $response && $response.body}
+                <button
+                type="button"
+                on:click={exportResponseToCSV}
+                class="text-blue-500"
+              >
+                <FontAwesomeIcon icon="file-export" size="xl" />
+              </button>
                   {#if isXml($response.body)}
                     <pre bind:this={preElement}>
                     <code class="language-xml">{$response.body}</code>
@@ -2343,6 +2407,7 @@
                 {:else}
                   <p>No response body</p>
                 {/if}
+              
               </div>
             {:else if $selectedTab === "table"}
               <div class="table-container">
