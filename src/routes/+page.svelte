@@ -647,6 +647,7 @@
   $: pathParamsCount = $pathParams.length;
   $: queryParamsCount = $queryParams.length;
   $: formDataCount = $formParams.length;
+  $: responseHeaderCount = $response ? $response.headers.length : 0;
 
   let autocompleteHeaders = writable<AutocompleteHeaders>([]);
   let knownHeaders: string[] = [
@@ -2560,6 +2561,7 @@
               aria-label="Headers Tab"
             >
               Headers
+              <span class="header-count">{responseHeaderCount}</span>
             </button>
             <button
               type="button"
