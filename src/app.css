@@ -148,6 +148,7 @@ td {
   text-align: left;
   color: var(--primary-text);
   padding: 0.5rem;
+  font-size: 0.65rem;
 }
 
 th {
