@@ -1189,33 +1189,6 @@
             "--select-focus-border-color": "#607d8b",
             "--select-focus-box-shadow": "rgba(96, 125, 139, 0.3)",
         },
-        blackAndWhiteTheme: {
-            "--background": "#000000" /* Black background */,
-            "--light-background": "#ffffff" /* White surface */,
-            "--surface": "#f0f0f0" /* Light gray surface */,
-            "--primary-text": "#000000" /* White primary text */,
-            "--secondary-text": "#bdbdbd" /* Light gray secondary text */,
-            "--dark-text": "#000000" /* Black text */,
-            "--divider": "#4f4f4f" /* Dark gray divider */,
-            "--shadow": "rgba(0, 0, 0, 0.7)" /* Black shadow */,
-            "--primary": "#ffffff" /* White primary color */,
-            "--secondary": "#bdbdbd" /* Light gray secondary color */,
-            "--warning": "#ffc107" /* Yellow warning color */,
-            "--error": "#f44336" /* Red error color */,
-            "--info": "#2196f3" /* Blue info color */,
-            "--success": "#4caf50" /* Green success color */,
-            "--dropdown-box-shadow":
-                "rgba(255, 255, 255, 0.7)" /* White shadow */,
-            "--group-card-hover": "#1a1a1a" /* Dark gray card hover color */,
-            "--separator": "#4f4f4f" /* Dark gray separator */,
-            "--select-background-color":
-                "#2e2e2e" /* Dark gray select background color */,
-            "--select-text-color": "#ffffff" /* White select text color */,
-            "--select-focus-border-color":
-                "#ffffff" /* White focus border color */,
-            "--select-focus-box-shadow":
-                "rgba(255, 255, 255, 0.3)" /* White focus shadow */,
-        },
 
         iceBlueTheme: {
             "--background": "#f0f8ff",
@@ -4020,6 +3993,148 @@
             "--select-text-color": "#FFFFFF", // Beyaz
             "--select-focus-border-color": "#001F3F", // Derin deniz mavisi
             "--select-focus-box-shadow": "rgba(0, 31, 63, 0.3)", // Derin deniz mavisi gölge
+        },
+        firtinaMavisiTheme: {
+            "--background": "#001F3F", // Derin deniz mavisi arka plan
+            "--light-background": "#B0C4DE", // Gri yüzey
+            "--surface": "#40E0D0", // Turkuaz yüzey
+            "--primary-text": "#FFFFFF", // Beyaz metin
+            "--secondary-text": "#228B22", // Yeşil metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#87CEFA", // Açık mavi bölücü
+            "--shadow": "rgba(0, 31, 63, 0.7)", // Derin deniz mavisi gölge
+            "--primary": "#40E0D0", // Turkuaz
+            "--secondary": "#228B22", // Yeşil
+            "--warning": "#FFA500", // Turuncu
+            "--error": "#FF0000", // Kırmızı
+            "--info": "#4682B4", // Steel mavisi
+            "--success": "#32CD32", // Lime yeşili
+            "--dropdown-box-shadow": "rgba(64, 224, 208, 0.5)", // Turkuaz gölge
+            "--group-card-hover": "#B0C4DE", // Gri
+            "--seperator": "#87CEFA", // Açık mavi
+            "--select-background-color": "#40E0D0", // Turkuaz
+            "--select-text-color": "#FFFFFF", // Beyaz
+            "--select-focus-border-color": "#228B22", // Yeşil
+            "--select-focus-box-shadow": "rgba(34, 139, 34, 0.3)", // Yeşil gölge
+        },
+        cyberpunkSunrise: {
+            "--background": "#111827",
+            "--light-background": "#21293f",
+            "--surface": "#334155",
+            "--primary-text": "#ffffff",
+            "--secondary-text": "#d4d4d4",
+            "--dark-text": "#111827",
+            "--divider": "#4f4f4f",
+            "--shadow": "rgba(33, 41, 63, 0.7)",
+            "--primary": "#ff5722", // Bright Orange
+            "--secondary": "#ff00ff", // Neon Pink
+            "--warning": "#ffea00", // Neon Yellow
+            "--error": "#f44336", // Red
+            "--info": "#29b6f6", // Blue
+            "--success": "#81c784", // Green
+            "--dropdown-box-shadow": "rgba(255, 87, 34, 0.7)",
+            "--group-card-hover": "#21293f",
+            "--seperator": "#4f4f4f",
+            "--select-background-color": "#334155",
+            "--select-text-color": "#ffffff",
+            "--select-focus-border-color": "#ff5722",
+            "--select-focus-box-shadow": "rgba(255, 87, 34, 0.3)",
+        },
+
+        mysticOcean: {
+            "--background": "#1A237E",
+            "--light-background": "#283593",
+            "--surface": "#3949AB",
+            "--primary-text": "#ffffff",
+            "--secondary-text": "#e1f5fe",
+            "--dark-text": "#0D47A1",
+            "--divider": "#5C6BC0",
+            "--shadow": "rgba(57, 73, 171, 0.5)",
+            "--primary": "#00ACC1", // Turquoise
+            "--secondary": "#4FC3F7", // Light Blue
+            "--warning": "#FFB74D", // Light Orange
+            "--error": "#EF5350", // Light Red
+            "--info": "#3F51B5", // Indigo
+            "--success": "#81C784", // Light Green
+            "--dropdown-box-shadow": "rgba(0, 172, 193, 0.7)",
+            "--group-card-hover": "#283593",
+            "--seperator": "#5C6BC0",
+            "--select-background-color": "#3949AB",
+            "--select-text-color": "#ffffff",
+            "--select-focus-border-color": "#00ACC1",
+            "--select-focus-box-shadow": "rgba(0, 172, 193, 0.3)",
+        },
+
+        goldenHour: {
+            "--background": "#FFF8E1",
+            "--light-background": "#FFFFFF",
+            "--surface": "#FFE082",
+            "--primary-text": "#4E342E",
+            "--secondary-text": "#795548",
+            "--dark-text": "#3E2723",
+            "--divider": "#FFCC80",
+            "--shadow": "rgba(255, 224, 178, 0.5)",
+            "--primary": "#FFD700", // Gold Yellow
+            "--secondary": "#FF9800", // Orange
+            "--warning": "#FFC107", // Amber
+            "--error": "#EF5350", // Light Red
+            "--info": "#29B6F6", // Blue
+            "--success": "#66BB6A", // Green
+            "--dropdown-box-shadow": "rgba(255, 215, 0, 0.7)",
+            "--group-card-hover": "#FFFFFF",
+            "--seperator": "#FFCC80",
+            "--select-background-color": "#FFE082",
+            "--select-text-color": "#4E342E",
+            "--select-focus-border-color": "#FFD700",
+            "--select-focus-box-shadow": "rgba(255, 215, 0, 0.3)",
+        },
+
+        arcticFire: {
+            "--background": "#1A237E",
+            "--light-background": "#283593",
+            "--surface": "#303F9F",
+            "--primary-text": "#ffffff",
+            "--secondary-text": "#ECEFF1",
+            "--dark-text": "#0D47A1",
+            "--divider": "#455A64",
+            "--shadow": "rgba(57, 73, 171, 0.5)",
+            "--primary": "#FF5252", // Bright Red
+            "--secondary": "#90A4AE", // Blue Gray
+            "--warning": "#FFB74D", // Light Orange
+            "--error": "#D32F2F", // Red
+            "--info": "#29B6F6", // Blue
+            "--success": "#4CAF50", // Green
+            "--dropdown-box-shadow": "rgba(255, 82, 82, 0.7)",
+            "--group-card-hover": "#283593",
+            "--seperator": "#455A64",
+            "--select-background-color": "#303F9F",
+            "--select-text-color": "#ffffff",
+            "--select-focus-border-color": "#FF5252",
+            "--select-focus-box-shadow": "rgba(255, 82, 82, 0.3)",
+        },
+
+        verdantSpring: {
+            "--background": "#C8E6C9",
+            "--light-background": "#FFFFFF",
+            "--surface": "#DCEDC8",
+            "--primary-text": "#333333",
+            "--secondary-text": "#666666",
+            "--dark-text": "#000000",
+            "--divider": "#AED581",
+            "--shadow": "rgba(220, 237, 200, 0.5)",
+            "--primary": "#8BC34A", // Light Green
+            "--secondary": "#7CB342", // Green
+            "--warning": "#FFEB3B", // Yellow
+            "--error": "#F44336", // Red
+            "--info": "#29B6F6", // Blue
+            "--success": "#4CAF50", // Green
+            "--dropdown-box-shadow": "rgba(139, 195, 74, 0.7)",
+            "--group-card-hover": "#FFFFFF",
+            "--seperator": "#AED581",
+            "--select-background-color": "#DCEDC8",
+            "--select-text-color": "#333333",
+            "--select-focus-border-color": "#8BC34A",
+            "--select-focus-box-shadow": "rgba(139, 195, 74, 0.3)",
         },
     };
 
