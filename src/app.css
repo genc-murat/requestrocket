@@ -541,24 +541,58 @@ pre {
   font-weight: bold;
 }
 
-.input-container .autocomplete-suggestions {
+.header-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.header-inputs {
+  display: flex;
+  flex: 1;
+  margin-right: 0.5rem;
+}
+
+.input-container {
+  position: relative;
+  flex: 1;
+  margin-right: 0.5rem;
+}
+
+.header-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--divider);
+  border-radius: 0.25rem;
+  background-color: var(--accent);
+  color: var(--primary-text);
+}
+
+.header-row input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+.header-row button {
+  margin-left: 0.5rem;
+}
+
+.autocomplete-suggestions {
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
-  background: var(--surface);
   border: 1px solid var(--divider);
-  border-top: none;
+  background-color: var(--light-background);
   max-height: 150px;
   overflow-y: auto;
   z-index: 1000;
 }
 
-.input-container .autocomplete-suggestion {
+.autocomplete-suggestion {
   padding: 0.5rem;
   cursor: pointer;
 }
 
-.input-container .autocomplete-suggestion:hover {
-  background: var(--light-background);
+.autocomplete-suggestion:hover {
+  background-color: var(--surface);
 }

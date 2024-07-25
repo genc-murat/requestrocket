@@ -1021,6 +1021,7 @@
   }
 
   let urlAutocomplete = writable<string[]>([]);
+  let headerAutocomplete = writable<string[]>([]);
 
   function handleUrlInput(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -1037,10 +1038,35 @@
     }
   }
 
+  function handleHeaderInput(event: Event, index: number) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    const lastOpenBrace = value.lastIndexOf("{{");
+    if (lastOpenBrace !== -1 && lastOpenBrace > value.lastIndexOf("}}")) {
+      const partial = value.slice(lastOpenBrace + 2);
+      const suggestions = Object.keys($variables).filter((key) =>
+        key.toLowerCase().includes(partial.toLowerCase()),
+      );
+      headerAutocomplete.set(suggestions);
+    } else {
+      headerAutocomplete.set([]);
+    }
+  }
+
   function selectUrlSuggestion(suggestion: string) {
     const lastOpenBrace = $url.lastIndexOf("{{");
     url.set($url.slice(0, lastOpenBrace) + "{{" + suggestion + "}}");
     urlAutocomplete.set([]);
+  }
+
+  function selectHeaderSuggestion(index: number, suggestion: string) {
+    headers.update((h) => {
+      const lastOpenBrace = h[index].key.lastIndexOf("{{");
+      h[index].key =
+        h[index].key.slice(0, lastOpenBrace) + "{{" + suggestion + "}}";
+      return h;
+    });
+    headerAutocomplete.set([]);
   }
 
   async function cancelRequest() {
@@ -2090,6 +2116,7 @@
       <div class="request-panel panel">
         <div class="flex mb-4">
           <HttpMethodDropdown {method} />
+
           <div class="input-container">
             <input
               type="text"
@@ -2210,41 +2237,42 @@
                   <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
                 </button>
               </div>
+
               {#each $headers as header, index}
                 <div class="header-row relative">
                   <input type="checkbox" bind:checked={header.selected} />
-                  <input
-                    type="text"
-                    placeholder="Key"
-                    bind:value={header.key}
-                    class="flex-1 p-2 border rounded text-primary bg-accent mr-2"
-                    on:input={(e) => filterHeaders(index, e)}
-                    on:blur={() => clearAutocomplete(index)}
-                    disabled={!header.selected}
-                  />
-                  {#if $autocompleteHeaders[index]?.length}
-                    <div class="autocomplete-suggestions">
-                      {#each $autocompleteHeaders[index] as suggestion}
-                        <div
-                          class="autocomplete-suggestion"
-                          role="option"
-                          tabindex="0"
-                          aria-selected={false}
-                          on:mousedown={() =>
-                            selectAutocompleteItem(index, suggestion)}
-                        >
-                          {suggestion}
+                  <div class="header-inputs">
+                    <div class="input-container">
+                      <input
+                        type="text"
+                        placeholder="Key"
+                        bind:value={header.key}
+                        on:input={(e) => handleHeaderInput(e, index)}
+                        class="header-input"
+                        disabled={!header.selected}
+                      />
+                      {#if $headerAutocomplete.length > 0}
+                        <div class="autocomplete-suggestions">
+                          {#each $headerAutocomplete as suggestion}
+                            <div
+                              class="autocomplete-suggestion"
+                              on:mousedown={() =>
+                                selectHeaderSuggestion(index, suggestion)}
+                            >
+                              {suggestion}
+                            </div>
+                          {/each}
                         </div>
-                      {/each}
+                      {/if}
                     </div>
-                  {/if}
-                  <input
-                    type="text"
-                    placeholder="Value"
-                    bind:value={header.value}
-                    class="flex-1 p-2 border rounded text-primary bg-accent"
-                    disabled={!header.selected}
-                  />
+                    <input
+                      type="text"
+                      placeholder="Value"
+                      bind:value={header.value}
+                      class="header-input"
+                      disabled={!header.selected}
+                    />
+                  </div>
                   <button
                     type="button"
                     on:click={() =>
