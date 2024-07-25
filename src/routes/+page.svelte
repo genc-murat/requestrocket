@@ -818,8 +818,8 @@
     }
 
     try {
-      const urlObj = new URL($url);
-      const originalSearch = urlObj.search;
+      const updatedUrl = replaceVariables($url, $variables);
+      const urlObj = new URL(updatedUrl);
 
       urlObj.search = "";
       const nonEmptyParams = $queryParams.filter(
