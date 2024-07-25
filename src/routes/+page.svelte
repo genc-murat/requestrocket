@@ -1075,24 +1075,35 @@
       );
       headerAutocomplete.set(suggestions);
     } else {
-      headerAutocomplete.set([]);
+      const suggestions = [
+        ...knownHeaders,
+        ...$customHeaders.map((h) => h.name),
+      ].filter((header) => header.toLowerCase().includes(value.toLowerCase()));
+      headerAutocomplete.set(suggestions);
     }
+  }
+
+  function selectHeaderSuggestion(index: number, suggestion: string) {
+    headers.update((h) => {
+      const lastOpenBrace = h[index].key.lastIndexOf("{{");
+      if (
+        lastOpenBrace !== -1 &&
+        lastOpenBrace > h[index].key.lastIndexOf("}}")
+      ) {
+        h[index].key =
+          h[index].key.slice(0, lastOpenBrace) + "{{" + suggestion + "}}";
+      } else {
+        h[index].key = suggestion;
+      }
+      return h;
+    });
+    headerAutocomplete.set([]);
   }
 
   function selectUrlSuggestion(suggestion: string) {
     const lastOpenBrace = $url.lastIndexOf("{{");
     url.set($url.slice(0, lastOpenBrace) + "{{" + suggestion + "}}");
     urlAutocomplete.set([]);
-  }
-
-  function selectHeaderSuggestion(index: number, suggestion: string) {
-    headers.update((h) => {
-      const lastOpenBrace = h[index].key.lastIndexOf("{{");
-      h[index].key =
-        h[index].key.slice(0, lastOpenBrace) + "{{" + suggestion + "}}";
-      return h;
-    });
-    headerAutocomplete.set([]);
   }
 
   async function cancelRequest() {
