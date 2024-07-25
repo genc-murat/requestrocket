@@ -785,7 +785,8 @@
   $: {
     if ($url.trim()) {
       try {
-        const urlObj = new URL($url);
+        const updatedUrl = replaceVariables($url, $variables);
+        const urlObj = new URL(updatedUrl);
         const newQueryParams = Array.from(urlObj.searchParams.entries()).map(
           ([key, value]) => ({ key, value }),
         );
