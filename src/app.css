@@ -540,3 +540,25 @@ pre {
   font-size: 0.8em;
   font-weight: bold;
 }
+
+.input-container .autocomplete-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--divider);
+  border-top: none;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.input-container .autocomplete-suggestion {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.input-container .autocomplete-suggestion:hover {
+  background: var(--light-background);
+}

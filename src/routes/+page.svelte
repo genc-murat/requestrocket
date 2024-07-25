@@ -1020,6 +1020,29 @@
     }
   }
 
+  let urlAutocomplete = writable<string[]>([]);
+
+  function handleUrlInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    const lastOpenBrace = value.lastIndexOf("{{");
+    if (lastOpenBrace !== -1 && lastOpenBrace > value.lastIndexOf("}}")) {
+      const partial = value.slice(lastOpenBrace + 2);
+      const suggestions = Object.keys($variables).filter((key) =>
+        key.toLowerCase().includes(partial.toLowerCase()),
+      );
+      urlAutocomplete.set(suggestions);
+    } else {
+      urlAutocomplete.set([]);
+    }
+  }
+
+  function selectUrlSuggestion(suggestion: string) {
+    const lastOpenBrace = $url.lastIndexOf("{{");
+    url.set($url.slice(0, lastOpenBrace) + "{{" + suggestion + "}}");
+    urlAutocomplete.set([]);
+  }
+
   async function cancelRequest() {
     await invoke("cancel_request");
     isSending.set(false);
@@ -2072,9 +2095,22 @@
               type="text"
               id="url"
               bind:value={$url}
+              on:input={handleUrlInput}
               placeholder="https://api.example.com/data"
               class="flex-1 p-2 border rounded"
             />
+            {#if $urlAutocomplete.length > 0}
+              <div class="autocomplete-suggestions">
+                {#each $urlAutocomplete as suggestion}
+                  <div
+                    class="autocomplete-suggestion"
+                    on:mousedown={() => selectUrlSuggestion(suggestion)}
+                  >
+                    {suggestion}
+                  </div>
+                {/each}
+              </div>
+            {/if}
             {#if $url}
               <span
                 class="clear-icon"
