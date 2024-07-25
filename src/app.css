@@ -596,3 +596,15 @@ pre {
 .autocomplete-suggestion:hover {
   background-color: var(--surface);
 }
+
+.group-title {
+  max-width: 200px; /* veya istediğiniz bir genişlik */
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.truncate {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+}

@@ -3607,6 +3607,420 @@
             "--select-focus-box-shadow":
                 "rgba(0, 0, 0, 0.3)" /* Black focus shadow */,
         },
+        etherealGlowTheme: {
+            "--background": "#121212", // Çok koyu gri arka plan
+            "--light-background": "#1f1f1f", // Koyu gri yüzey
+            "--surface": "#262626", // Orta koyu gri yüzey
+            "--primary-text": "#e8eaed", // Açık gri metin
+            "--secondary-text": "#bdbdbd", // Orta gri metin
+            "--dark-text": "#ffffff", // Beyaz metin
+            "--divider": "#424242", // Koyu gri bölücü
+            "--shadow": "rgba(0, 0, 0, 0.7)", // Şeffaf siyah gölge
+            "--primary": "#82b1ff", // Açık mavi
+            "--secondary": "#d500f9", // Parlak mor
+            "--warning": "#ffea00", // Parlak sarı
+            "--error": "#ff3d00", // Parlak kırmızı
+            "--info": "#4fc3f7", // Açık mavi-yeşil
+            "--success": "#76ff03", // Parlak yeşil
+            "--dropdown-box-shadow": "rgba(130, 177, 255, 0.7)", // Şeffaf açık mavi gölge
+            "--group-card-hover": "#1f1f1f", // Koyu gri
+            "--seperator": "#424242", // Koyu gri
+            "--select-background-color": "#262626", // Orta koyu gri
+            "--select-text-color": "#e8eaed", // Açık gri
+            "--select-focus-border-color": "#82b1ff", // Açık mavi
+            "--select-focus-box-shadow": "rgba(130, 177, 255, 0.3)", // Şeffaf açık mavi gölge
+        },
+        velvetSunsetTheme: {
+            "--background": "#261129", // Derin mor arka plan
+            "--light-background": "#381B45", // Orta koyu mor yüzey
+            "--surface": "#4A2563", // Mor yüzey
+            "--primary-text": "#E1BEE7", // Açık lavanta metni
+            "--secondary-text": "#BA68C8", // Orta lavanta metni
+            "--dark-text": "#FFFFFF", // Beyaz metin
+            "--divider": "#795548", // Koyu kahverengi bölücü
+            "--shadow": "rgba(38, 17, 41, 0.7)", // Şeffaf derin mor gölge
+            "--primary": "#F06292", // Açık pembe
+            "--secondary": "#FFB74D", // Açık turuncu
+            "--warning": "#FFCC80", // Açık turuncu
+            "--error": "#EF5350", // Açık kırmızı
+            "--info": "#64B5F6", // Açık mavi
+            "--success": "#C8E6C9", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(240, 98, 146, 0.5)", // Şeffaf açık pembe gölge
+            "--group-card-hover": "#381B45", // Orta koyu mor
+            "--seperator": "#795548", // Koyu kahverengi
+            "--select-background-color": "#4A2563", // Mor
+            "--select-text-color": "#E1BEE7", // Açık lavanta
+            "--select-focus-border-color": "#F06292", // Açık pembe
+            "--select-focus-box-shadow": "rgba(240, 98, 146, 0.3)", // Şeffaf açık pembe gölge
+        },
+        midnightBloomTheme: {
+            "--background": "#101820", // Koyu lacivert arka plan
+            "--light-background": "#1F2937", // Orta koyu mavi yüzey
+            "--surface": "#293548", // Koyu mavi yüzey
+            "--primary-text": "#D1D5DB", // Açık gri metin
+            "--secondary-text": "#9CA3AF", // Orta gri metin
+            "--dark-text": "#FFFFFF", // Beyaz metin
+            "--divider": "#4B5563", // Koyu gri bölücü
+            "--shadow": "rgba(16, 24, 32, 0.7)", // Şeffaf koyu lacivert gölge
+            "--primary": "#8B5CF6", // Parlak mor
+            "--secondary": "#EC4899", // Parlak pembe
+            "--warning": "#FBBF24", // Altın sarısı
+            "--error": "#EF4444", // Açık kırmızı
+            "--info": "#3B82F6", // Açık mavi
+            "--success": "#4ADE80", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(139, 92, 246, 0.5)", // Şeffaf parlak mor gölge
+            "--group-card-hover": "#1F2937", // Orta koyu mavi
+            "--seperator": "#4B5563", // Koyu gri
+            "--select-background-color": "#293548", // Koyu mavi
+            "--select-text-color": "#D1D5DB", // Açık gri
+            "--select-focus-border-color": "#8B5CF6", // Parlak mor
+            "--select-focus-box-shadow": "rgba(139, 92, 246, 0.3)", // Şeffaf parlak mor gölge
+        },
+        crystalWatersTheme: {
+            "--background": "#e0f7fa", // Açık turkuaz arka plan
+            "--light-background": "#ffffff", // Beyaz yüzey
+            "--surface": "#b2ebf2", // Açık turkuaz yüzey
+            "--primary-text": "#263238", // Koyu gri-mavi metin
+            "--secondary-text": "#546e7a", // Orta gri-mavi metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#80deea", // Açık turkuaz bölücü
+            "--shadow": "rgba(176, 247, 250, 0.5)", // Şeffaf turkuaz gölge
+            "--primary": "#00acc1", // Turkuaz
+            "--secondary": "#4dd0e1", // Açık turkuaz
+            "--warning": "#ffb74d", // Açık turuncu
+            "--error": "#f44336", // Açık kırmızı
+            "--info": "#29b6f6", // Açık mavi
+            "--success": "#81c784", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(0, 172, 193, 0.5)", // Şeffaf turkuaz gölge
+            "--group-card-hover": "#ffffff", // Beyaz
+            "--seperator": "#80deea", // Açık turkuaz
+            "--select-background-color": "#b2ebf2", // Açık turkuaz
+            "--select-text-color": "#263238", // Koyu gri-mavi
+            "--select-focus-border-color": "#00acc1", // Turkuaz
+            "--select-focus-box-shadow": "rgba(0, 172, 193, 0.3)", // Şeffaf turkuaz gölge
+        },
+        urbanDuskTheme: {
+            "--background": "#212121", // Koyu gri arka plan
+            "--light-background": "#303030", // Orta koyu gri yüzey
+            "--surface": "#424242", // Koyu gri yüzey
+            "--primary-text": "#EEEEEE", // Açık gri metin
+            "--secondary-text": "#BDBDBD", // Orta gri metin
+            "--dark-text": "#FFFFFF", // Beyaz metin
+            "--divider": "#616161", // Koyu gri bölücü
+            "--shadow": "rgba(33, 33, 33, 0.7)", // Şeffaf koyu gri gölge
+            "--primary": "#FF9800", // Turuncu
+            "--secondary": "#FF5722", // Derin turuncu
+            "--warning": "#FFEB3B", // Sarı
+            "--error": "#F44336", // Kırmızı
+            "--info": "#2196F3", // Mavi
+            "--success": "#4CAF50", // Yeşil
+            "--dropdown-box-shadow": "rgba(255, 152, 0, 0.5)", // Şeffaf turuncu gölge
+            "--group-card-hover": "#303030", // Orta koyu gri
+            "--seperator": "#616161", // Koyu gri
+            "--select-background-color": "#424242", // Koyu gri
+            "--select-text-color": "#EEEEEE", // Açık gri
+            "--select-focus-border-color": "#FF9800", // Turuncu
+            "--select-focus-box-shadow": "rgba(255, 152, 0, 0.3)", // Şeffaf turuncu gölge
+        },
+        amethystDreamTheme: {
+            "--background": "#281C2D", // Koyu mor arka plan
+            "--light-background": "#38243F", // Orta koyu mor yüzey
+            "--surface": "#493250", // Mor yüzey
+            "--primary-text": "#E0DADA", // Açık mor metin
+            "--secondary-text": "#BDB5C6", // Orta mor metin
+            "--dark-text": "#FFFFFF", // Beyaz metin
+            "--divider": "#5D405F", // Koyu mor bölücü
+            "--shadow": "rgba(40, 28, 45, 0.7)", // Şeffaf koyu mor gölge
+            "--primary": "#9C27B0", // Ametist moru
+            "--secondary": "#D500F9", // Parlak mor
+            "--warning": "#FFC107", // Kehribar sarısı
+            "--error": "#E91E63", // Pembe
+            "--info": "#673AB7", // Derin mor
+            "--success": "#81C784", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(156, 39, 176, 0.5)", // Şeffaf ametist moru gölge
+            "--group-card-hover": "#38243F", // Orta koyu mor
+            "--seperator": "#5D405F", // Koyu mor
+            "--select-background-color": "#493250", // Mor
+            "--select-text-color": "#E0DADA", // Açık mor
+            "--select-focus-border-color": "#9C27B0", // Ametist moru
+            "--select-focus-box-shadow": "rgba(156, 39, 176, 0.3)", // Şeffaf ametist moru gölge
+        },
+        northernLightsTheme: {
+            "--background": "#2E3440", // Koyu mavi-gri arka plan
+            "--light-background": "#3B4252", // Orta koyu mavi-gri yüzey
+            "--surface": "#434C5E", // Koyu gri yüzey
+            "--primary-text": "#ECEFF4", // Açık gri metin
+            "--secondary-text": "#D8DEE9", // Orta gri metin
+            "--dark-text": "#FFFFFF", // Beyaz metin
+            "--divider": "#4C566A", // Koyu gri bölücü
+            "--shadow": "rgba(46, 52, 64, 0.7)", // Şeffaf koyu gri gölge
+            "--primary": "#5E81AC", // Soluk mavi
+            "--secondary": "#81A1C1", // Açık mavi
+            "--warning": "#EBCB8B", // Soluk sarı
+            "--error": "#BF616A", // Koyu kırmızı
+            "--info": "#88C0D0", // Açık turkuaz
+            "--success": "#A3BE8C", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(94, 129, 172, 0.5)", // Şeffaf soluk mavi gölge
+            "--group-card-hover": "#3B4252", // Orta koyu mavi-gri
+            "--seperator": "#4C566A", // Koyu gri
+            "--select-background-color": "#434C5E", // Koyu gri
+            "--select-text-color": "#ECEFF4", // Açık gri
+            "--select-focus-border-color": "#5E81AC", // Soluk mavi
+            "--select-focus-box-shadow": "rgba(94, 129, 172, 0.3)", // Şeffaf soluk mavi gölge
+        },
+        cherryBlossomTheme: {
+            "--background": "#FFF0F5", // Çok açık pembe arka plan
+            "--light-background": "#FFFFFF", // Beyaz yüzey
+            "--surface": "#FCE4EC", // Açık pembe yüzey
+            "--primary-text": "#424242", // Koyu gri metin
+            "--secondary-text": "#757575", // Orta gri metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#F8BBD0", // Açık pembe bölücü
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Açık gri gölge
+            "--primary": "#EC4899", // Parlak pembe
+            "--secondary": "#F48FB1", // Açık pembe
+            "--warning": "#FFB74D", // Açık turuncu
+            "--error": "#EF4444", // Açık kırmızı
+            "--info": "#64B5F6", // Açık mavi
+            "--success": "#81C784", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(236, 72, 153, 0.5)", // Şeffaf parlak pembe gölge
+            "--group-card-hover": "#FFFFFF", // Beyaz
+            "--seperator": "#F8BBD0", // Açık pembe
+            "--select-background-color": "#FCE4EC", // Açık pembe
+            "--select-text-color": "#424242", // Koyu gri
+            "--select-focus-border-color": "#EC4899", // Parlak pembe
+            "--select-focus-box-shadow": "rgba(236, 72, 153, 0.3)", // Şeffaf parlak pembe gölge
+        },
+        copperSparkleTheme: {
+            "--background": "#3E2723", // Koyu kahverengi arka plan
+            "--light-background": "#4E342E", // Orta koyu kahverengi yüzey
+            "--surface": "#607D8B", // Koyu mavi-gri yüzey
+            "--primary-text": "#FFFDE7", // Açık krem metin
+            "--secondary-text": "#D7CCC8", // Açık kahverengi metin
+            "--dark-text": "#FFFFFF", // Beyaz metin
+            "--divider": "#795548", // Koyu kahverengi bölücü
+            "--shadow": "rgba(62, 39, 35, 0.7)", // Şeffaf koyu kahverengi gölge
+            "--primary": "#B7410E", // Bakır rengi
+            "--secondary": "#FF9800", // Turuncu
+            "--warning": "#FFC107", // Kehribar sarısı
+            "--error": "#D32F2F", // Kırmızı
+            "--info": "#3F51B5", // İndigo mavisi
+            "--success": "#4CAF50", // Yeşil
+            "--dropdown-box-shadow": "rgba(183, 65, 14, 0.5)", // Şeffaf bakır rengi gölge
+            "--group-card-hover": "#4E342E", // Orta koyu kahverengi
+            "--seperator": "#795548", // Koyu kahverengi
+            "--select-background-color": "#607D8B", // Koyu mavi-gri
+            "--select-text-color": "#FFFDE7", // Açık krem
+            "--select-focus-border-color": "#B7410E", // Bakır rengi
+            "--select-focus-box-shadow": "rgba(183, 65, 14, 0.3)", // Şeffaf bakır rengi gölge
+        },
+        oceanMistTheme: {
+            "--background": "#F0F8FF", // Açık mavi-gri arka plan
+            "--light-background": "#FFFFFF", // Beyaz yüzey
+            "--surface": "#E0EAF0", // Açık gri-mavi yüzey
+            "--primary-text": "#37474F", // Koyu gri-mavi metin
+            "--secondary-text": "#607D8B", // Orta gri-mavi metin
+            "--dark-text": "#212121", // Koyu gri metin
+            "--divider": "#B0BEC5", // Açık gri-mavi bölücü
+            "--shadow": "rgba(207, 216, 220, 0.5)", // Şeffaf gri-mavi gölge
+            "--primary": "#4FC3F7", // Açık mavi
+            "--secondary": "#29B6F6", // Orta mavi
+            "--warning": "#FFB74D", // Açık turuncu
+            "--error": "#EF5350", // Açık kırmızı
+            "--info": "#64B5F6", // Açık mavi
+            "--success": "#81C784", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(79, 195, 247, 0.5)", // Şeffaf açık mavi gölge
+            "--group-card-hover": "#FFFFFF", // Beyaz
+            "--seperator": "#B0BEC5", // Açık gri-mavi
+            "--select-background-color": "#E0EAF0", // Açık gri-mavi
+            "--select-text-color": "#37474F", // Koyu gri-mavi
+            "--select-focus-border-color": "#4FC3F7", // Açık mavi
+            "--select-focus-box-shadow": "rgba(79, 195, 247, 0.3)", // Şeffaf açık mavi gölge
+        },
+        spicedChaiTheme: {
+            "--background": "#D7CCC8", // Açık bej arka plan
+            "--light-background": "#EFEBE9", // Çok açık bej yüzey
+            "--surface": "#BCAAA4", // Açık kahverengi yüzey
+            "--primary-text": "#3E2723", // Koyu kahverengi metin
+            "--secondary-text": "#795548", // Orta kahverengi metin
+            "--dark-text": "#5D4037", // Koyu kahverengi metin
+            "--divider": "#A1887F", // Açık kahverengi bölücü
+            "--shadow": "rgba(189, 170, 164, 0.5)", // Şeffaf açık kahverengi gölge
+            "--primary": "#A1887F", // Açık kahverengi
+            "--secondary": "#8D6E63", // Orta kahverengi
+            "--warning": "#FFB74D", // Açık turuncu
+            "--error": "#D32F2F", // Kırmızı
+            "--info": "#64B5F6", // Açık mavi
+            "--success": "#4CAF50", // Yeşil
+            "--dropdown-box-shadow": "rgba(161, 136, 127, 0.5)", // Şeffaf açık kahverengi gölge
+            "--group-card-hover": "#EFEBE9", // Çok açık bej
+            "--seperator": "#A1887F", // Açık kahverengi
+            "--select-background-color": "#BCAAA4", // Açık kahverengi
+            "--select-text-color": "#3E2723", // Koyu kahverengi
+            "--select-focus-border-color": "#A1887F", // Açık kahverengi
+            "--select-focus-box-shadow": "rgba(161, 136, 127, 0.3)", // Şeffaf açık kahverengi gölge
+        },
+        enchantedTwilightTheme: {
+            "--background": "#262626", // Koyu gri arka plan
+            "--light-background": "#333333", // Orta koyu gri yüzey
+            "--surface": "#404040", // Koyu gri yüzey
+            "--primary-text": "#D9D9D9", // Açık gri metin
+            "--secondary-text": "#A9A9A9", // Orta gri metin
+            "--dark-text": "#FFFFFF", // Beyaz metin
+            "--divider": "#595959", // Koyu gri bölücü
+            "--shadow": "rgba(38, 38, 38, 0.7)", // Şeffaf koyu gri gölge
+            "--primary": "#673AB7", // Mor
+            "--secondary": "#9C27B0", // Ametist moru
+            "--warning": "#FFEB3B", // Sarı
+            "--error": "#E06C75", // Kırmızımsı pembe
+            "--info": "#56B6C2", // Açık mavi-yeşil
+            "--success": "#98C379", // Yeşilimsi sarı
+            "--dropdown-box-shadow": "rgba(103, 58, 183, 0.5)", // Şeffaf mor gölge
+            "--group-card-hover": "#333333", // Orta koyu gri
+            "--seperator": "#595959", // Koyu gri
+            "--select-background-color": "#404040", // Koyu gri
+            "--select-text-color": "#D9D9D9", // Açık gri
+            "--select-focus-border-color": "#673AB7", // Mor
+            "--select-focus-box-shadow": "rgba(103, 58, 183, 0.3)", // Şeffaf mor gölge
+        },
+        frozenLavenderTheme: {
+            "--background": "#f2f0f4", // Çok açık lavanta arka planı
+            "--light-background": "#ffffff", // Beyaz yüzey
+            "--surface": "#e6e2e8", // Açık lavanta yüzeyi
+            "--primary-text": "#424242", // Koyu gri metin
+            "--secondary-text": "#757575", // Orta gri metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#d1c4e9", // Açık lavanta bölücü
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Açık gri gölge
+            "--primary": "#9575cd", // Lavanta moru
+            "--secondary": "#b39ddb", // Açık lavanta moru
+            "--warning": "#ffb74d", // Açık turuncu
+            "--error": "#ef5350", // Açık kırmızı
+            "--info": "#64b5f6", // Açık mavi
+            "--success": "#81c784", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(149, 117, 205, 0.5)", // Şeffaf lavanta moru gölge
+            "--group-card-hover": "#ffffff", // Beyaz
+            "--seperator": "#d1c4e9", // Açık lavanta
+            "--select-background-color": "#e6e2e8", // Açık lavanta
+            "--select-text-color": "#424242", // Koyu gri
+            "--select-focus-border-color": "#9575cd", // Lavanta moru
+            "--select-focus-box-shadow": "rgba(149, 117, 205, 0.3)", // Şeffaf lavanta moru gölge
+        },
+        mysticForestTheme: {
+            "--background": "#182820", // Koyu yeşil arka plan
+            "--light-background": "#22382C", // Orta koyu yeşil yüzey
+            "--surface": "#2D4838", // Koyu yeşil yüzey
+            "--primary-text": "#C8E6C9", // Açık yeşil metin
+            "--secondary-text": "#A5D6A7", // Orta yeşil metin
+            "--dark-text": "#FFFFFF", // Beyaz metin
+            "--divider": "#43A047", // Koyu yeşil bölücü
+            "--shadow": "rgba(24, 40, 32, 0.7)", // Şeffaf koyu yeşil gölge
+            "--primary": "#388E3C", // Orman yeşili
+            "--secondary": "#66BB6A", // Açık yeşil
+            "--warning": "#FFEB3B", // Sarı
+            "--error": "#EF5350", // Açık kırmızı
+            "--info": "#42A5F5", // Açık mavi
+            "--success": "#689F38", // Koyu yeşil
+            "--dropdown-box-shadow": "rgba(56, 142, 60, 0.5)", // Şeffaf orman yeşili gölge
+            "--group-card-hover": "#22382C", // Orta koyu yeşil
+            "--seperator": "#43A047", // Koyu yeşil
+            "--select-background-color": "#2D4838", // Koyu yeşil
+            "--select-text-color": "#C8E6C9", // Açık yeşil
+            "--select-focus-border-color": "#388E3C", // Orman yeşili
+            "--select-focus-box-shadow": "rgba(56, 142, 60, 0.3)", // Şeffaf orman yeşili gölge
+        },
+        cottonCandyCloudsTheme: {
+            "--background": "#FFF7F8", // Çok açık pembe arka plan
+            "--light-background": "#FFFFFF", // Beyaz yüzey
+            "--surface": "#FFE4E6", // Açık pembe yüzey
+            "--primary-text": "#424242", // Koyu gri metin
+            "--secondary-text": "#757575", // Orta gri metin
+            "--dark-text": "#000000", // Siyah metin
+            "--divider": "#F8BBD0", // Açık pembe bölücü
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Açık gri gölge
+            "--primary": "#F48FB1", // Açık pembe
+            "--secondary": "#9C27B0", // Mor
+            "--warning": "#FFEB3B", // Açık sarı
+            "--error": "#EF4444", // Açık kırmızı
+            "--info": "#64B5F6", // Açık mavi
+            "--success": "#A5D6A7", // Açık yeşil
+            "--dropdown-box-shadow": "rgba(244, 143, 177, 0.5)", // Şeffaf açık pembe gölge
+            "--group-card-hover": "#FFFFFF", // Beyaz
+            "--seperator": "#F8BBD0", // Açık pembe
+            "--select-background-color": "#FFE4E6", // Açık pembe
+            "--select-text-color": "#424242", // Koyu gri
+            "--select-focus-border-color": "#F48FB1", // Açık pembe
+            "--select-focus-box-shadow": "rgba(244, 143, 177, 0.3)", // Şeffaf açık pembe gölge
+        },
+        espressoSunriseTheme: {
+            "--background": "#4E342E", // Koyu kahverengi arka plan
+            "--light-background": "#61483C", // Orta koyu kahverengi yüzey
+            "--surface": "#795548", // Kahverengi yüzey
+            "--primary-text": "#FFFDE7", // Açık krem metin
+            "--secondary-text": "#D7CCC8", // Açık kahverengi metin
+            "--dark-text": "#FFFFFF", // Beyaz metin
+            "--divider": "#8D6E63", // Orta kahverengi bölücü
+            "--shadow": "rgba(78, 52, 46, 0.7)", // Şeffaf koyu kahverengi gölge
+            "--primary": "#FF9800", // Turuncu
+            "--secondary": "#FFC107", // Açık sarı
+            "--warning": "#FFEB3B", // Sarı
+            "--error": "#EF5350", // Açık kırmızı
+            "--info": "#3F51B5", // İndigo mavisi
+            "--success": "#4CAF50", // Yeşil
+            "--dropdown-box-shadow": "rgba(255, 152, 0, 0.5)", // Şeffaf turuncu gölge
+            "--group-card-hover": "#61483C", // Orta koyu kahverengi
+            "--seperator": "#8D6E63", // Orta kahverengi
+            "--select-background-color": "#795548", // Kahverengi
+            "--select-text-color": "#FFFDE7", // Açık krem
+            "--select-focus-border-color": "#FF9800", // Turuncu
+            "--select-focus-box-shadow": "rgba(255, 152, 0, 0.3)", // Şeffaf turuncu gölge
+        },
+        besiktasTheme: {
+            "--background": "#000000", // Siyah arka plan
+            "--light-background": "#222222", // Koyu gri yüzey
+            "--surface": "#333333", // Orta koyu gri yüzey
+            "--primary-text": "#FFFFFF", // Beyaz metin
+            "--secondary-text": "#BDBDBD", // Açık gri metin
+            "--dark-text": "#FFFFFF", // Beyaz metin
+            "--divider": "#444444", // Koyu gri bölücü
+            "--shadow": "rgba(0, 0, 0, 0.7)", // Siyah gölge
+            "--primary": "#FFFFFF", // Beyaz
+            "--secondary": "#000000", // Siyah
+            "--warning": "#FFEB3B", // Sarı
+            "--error": "#F44336", // Kırmızı
+            "--info": "#29B6F6", // Mavi
+            "--success": "#4CAF50", // Yeşil
+            "--dropdown-box-shadow": "rgba(255, 255, 255, 0.5)", // Beyaz gölge
+            "--group-card-hover": "#222222", // Koyu gri
+            "--seperator": "#444444", // Koyu gri
+            "--select-background-color": "#333333", // Orta koyu gri
+            "--select-text-color": "#FFFFFF", // Beyaz
+            "--select-focus-border-color": "#FFFFFF", // Beyaz
+            "--select-focus-box-shadow": "rgba(255, 255, 255, 0.3)", // Beyaz gölge
+        },
+        karadenizYesiliTheme: {
+            "--background": "#228B22", // Koyu orman yeşili arka plan
+            "--light-background": "#3CB371", // Orta yeşil yüzey
+            "--surface": "#2E8B57", // Koyu deniz yeşili yüzey
+            "--primary-text": "#FFFFFF", // Beyaz metin
+            "--secondary-text": "#F0FFF0", // Açık yeşil metin
+            "--dark-text": "#006400", // Koyu yeşil metin
+            "--divider": "#87CEFA", // Açık mavi bölücü
+            "--shadow": "rgba(34, 139, 34, 0.7)", // Koyu orman yeşili gölge
+            "--primary": "#001F3F", // Derin deniz mavisi
+            "--secondary": "#F4A460", // Kum rengi
+            "--warning": "#FFA500", // Turuncu
+            "--error": "#FF0000", // Kırmızı
+            "--info": "#4682B4", // Steel mavisi
+            "--success": "#32CD32", // Lime yeşili
+            "--dropdown-box-shadow": "rgba(0, 31, 63, 0.5)", // Derin deniz mavisi gölge
+            "--group-card-hover": "#3CB371", // Orta yeşil
+            "--seperator": "#87CEFA", // Açık mavi
+            "--select-background-color": "#2E8B57", // Koyu deniz yeşili
+            "--select-text-color": "#FFFFFF", // Beyaz
+            "--select-focus-border-color": "#001F3F", // Derin deniz mavisi
+            "--select-focus-box-shadow": "rgba(0, 31, 63, 0.3)", // Derin deniz mavisi gölge
+        },
     };
 
     export function applyTheme(theme: string) {

@@ -2084,8 +2084,8 @@
         {#if $selectedGroup}
           <div class="group">
             <div class="flex justify-between items-center">
-              <h4 class="text-base font-semibold mb-2 flex items-center">
-                {$selectedGroup}
+              <h4 class="text-base font-semibold mb-2 flex items-center group-title" title="{$selectedGroup}">
+                <span class="truncate">{$selectedGroup}</span>
               </h4>
             </div>
 
