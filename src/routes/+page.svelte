@@ -2613,11 +2613,11 @@
                 {#if tableData.headers.length > 0}
                   <table>
                     <thead>
-                      <tr>
+                      <th>
                         {#each tableData.headers as header}
                           <th>{header}</th>
                         {/each}
-                      </tr>
+                      </th>
                     </thead>
                     <tbody>
                       {#each tableData.rows as row}
