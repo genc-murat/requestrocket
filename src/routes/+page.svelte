@@ -2634,11 +2634,11 @@
                 {/if}
               </div>
             {:else if $selectedTab === "headers"}
-              <table>
+            <table class="w-full">
                 {#each $response.headers as [key, value]}
-                  <tr>
-                    <th>{key}</th>
-                    <td>{value}</td>
+                  <tr class="w-full">
+                    <th class="w-1/3">{key}</th>
+                    <td class="w-2/3">{value}</td>
                   </tr>
                 {/each}
               </table>
