@@ -812,6 +812,8 @@
     }
   }
 
+  let searchTerm = writable("");
+
   function updateUrl() {
     if (!$url.trim()) {
       return;
@@ -2083,14 +2085,30 @@
       <div class="history-panel panel">
         {#if $selectedGroup}
           <div class="group">
-            <div class="flex justify-between items-center">
-              <h1 class="text-base font-semibold mb-2 flex items-center group-title" title="{$selectedGroup}">
+            <div class="flex justify-between items-center mb-2">
+              <h1
+                class="text-base font-semibold flex items-center group-title"
+                title={$selectedGroup}
+              >
                 <span class="truncate">{$selectedGroup}</span>
               </h1>
             </div>
 
+            <div class="search-container mb-2">
+              <input
+                type="text"
+                bind:value={$searchTerm}
+                placeholder="Search history..."
+                class="w-full p-2 border rounded"
+              />
+            </div>
+
             <ul>
-              {#each $history as item}
+              {#each $history.filter((item) => item.url
+                    .toLowerCase()
+                    .includes($searchTerm.toLowerCase()) || item.method
+                    .toLowerCase()
+                    .includes($searchTerm.toLowerCase())) as item}
                 <li class="mb-2 history-item flex justify-between items-center">
                   <button
                     type="button"
@@ -2099,26 +2117,19 @@
                   >
                     <span
                       class="px-2 py-1 rounded
-             {item.method === 'GET' ? 'method-get' : ''} 
-                               {item.method === 'POST' ? 'method-post' : ''} 
-                               {item.method === 'PUT' ? 'method-put' : ''} 
-                               {item.method === 'DELETE'
-                        ? 'method-delete'
-                        : ''} 
-                               {item.method === 'PATCH' ? 'method-patch' : ''} 
-                               {item.method === 'OPTIONS'
-                        ? 'method-options'
-                        : ''} 
-                               {item.method === 'HEAD' ? 'method-head' : ''} 
-                               {item.method === 'CONNECT'
-                        ? 'method-connect'
-                        : ''} 
-                               {item.method === 'TRACE' ? 'method-trace' : ''}
-              text-white"
+                        {item.method === 'GET' ? 'method-get' : ''} 
+                        {item.method === 'POST' ? 'method-post' : ''} 
+                        {item.method === 'PUT' ? 'method-put' : ''} 
+                        {item.method === 'DELETE' ? 'method-delete' : ''} 
+                        {item.method === 'PATCH' ? 'method-patch' : ''} 
+                        {item.method === 'OPTIONS' ? 'method-options' : ''} 
+                        {item.method === 'HEAD' ? 'method-head' : ''} 
+                        {item.method === 'CONNECT' ? 'method-connect' : ''} 
+                        {item.method === 'TRACE' ? 'method-trace' : ''}
+                        text-white"
                     >
                       {item.method.substring(0, 3)}
                     </span>
-
                     <span class="url">{item.url}</span>
                   </button>
                   <button
