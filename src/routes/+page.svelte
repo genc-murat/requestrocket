@@ -1022,6 +1022,32 @@
 
   let urlAutocomplete = writable<string[]>([]);
   let headerAutocomplete = writable<string[]>([]);
+  let queryParamAutocomplete = writable<string[]>([]);
+
+  function handleQueryParamInput(event: Event, index: number) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    const lastOpenBrace = value.lastIndexOf("{{");
+    if (lastOpenBrace !== -1 && lastOpenBrace > value.lastIndexOf("}}")) {
+      const partial = value.slice(lastOpenBrace + 2);
+      const suggestions = Object.keys($variables).filter((key) =>
+        key.toLowerCase().includes(partial.toLowerCase()),
+      );
+      queryParamAutocomplete.set(suggestions);
+    } else {
+      queryParamAutocomplete.set([]);
+    }
+  }
+
+  function selectQueryParamSuggestion(index: number, suggestion: string) {
+    queryParams.update((qp) => {
+      const lastOpenBrace = qp[index].key.lastIndexOf("{{");
+      qp[index].key =
+        qp[index].key.slice(0, lastOpenBrace) + "{{" + suggestion + "}}";
+      return qp;
+    });
+    queryParamAutocomplete.set([]);
+  }
 
   function handleUrlInput(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -2363,14 +2389,31 @@
                   <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
                 </button>
               </div>
+
               {#each $queryParams as param, index}
                 <div class="header-row">
-                  <input
-                    type="text"
-                    placeholder="Key"
-                    bind:value={param.key}
-                    class="flex-1 p-2 border rounded text-primary bg-accent mr-2"
-                  />
+                  <div class="input-container">
+                    <input
+                      type="text"
+                      placeholder="Key"
+                      bind:value={param.key}
+                      on:input={(e) => handleQueryParamInput(e, index)}
+                      class="flex-1 p-2 border rounded text-primary bg-accent mr-2"
+                    />
+                    {#if $queryParamAutocomplete.length > 0}
+                      <div class="autocomplete-suggestions">
+                        {#each $queryParamAutocomplete as suggestion}
+                          <div
+                            class="autocomplete-suggestion"
+                            on:mousedown={() =>
+                              selectQueryParamSuggestion(index, suggestion)}
+                          >
+                            {suggestion}
+                          </div>
+                        {/each}
+                      </div>
+                    {/if}
+                  </div>
                   <input
                     type="text"
                     placeholder="Value"
