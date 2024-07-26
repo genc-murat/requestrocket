@@ -78,12 +78,30 @@
 
   import SettingsModal from "../components/SettingsModal.svelte";
 
-  import { parseString } from "xml2js";
+  type EnvVariable = {
+    key: string;
+    values: { [env: string]: string };
+  };
+
+  export let currentEnvironment = writable("default");
+
+  export let envVariables: Writable<EnvVariable[]> = writable([]);
 
   export let showSettings = writable(false);
   export let requestTimeout = writable(
     Number(localStorage.getItem("requestTimeout")) || 30000,
   );
+
+  function getEnvVariableValue(key: string): string {
+    let value = "";
+    envVariables.subscribe((vars) => {
+      const variable = vars.find((v) => v.key === key);
+      if (variable) {
+        value = variable.values[$currentEnvironment] || "";
+      }
+    })();
+    return value;
+  }
 
   async function exportResponseToPDF() {
     if ($response && $response.body) {
@@ -469,7 +487,16 @@
     variables: { [key: string]: any },
   ): string {
     return str.replace(/\{\{(.*?)\}\}/g, (match, key) => {
-      return variables[key.trim()] ?? match;
+      let value = "";
+      envVariables.subscribe((vars) => {
+        const variable = vars.find((v) => v.key === key.trim());
+        if (variable) {
+          value = variable.values[$currentEnvironment] || match;
+        } else {
+          value = match; // If variable not found, keep the original placeholder
+        }
+      })();
+      return value;
     });
   }
 
@@ -786,8 +813,11 @@
   $: {
     if ($url.trim()) {
       try {
-        const updatedUrl = replaceVariables($url, $variables);
-        const urlObj = new URL(updatedUrl);
+        // Replace variables in the URL string before creating the URL object
+        const replacedUrl = replaceVariables($url, $variables);
+        const urlObj = new URL(replacedUrl);
+
+        // Extract query parameters from the URL
         const newQueryParams = Array.from(urlObj.searchParams.entries()).map(
           ([key, value]) => ({ key, value }),
         );
@@ -805,6 +835,7 @@
             return Array.from(currentParamsMap.values());
           });
 
+          // Update the URL store without query parameters
           url.set(urlObj.origin + urlObj.pathname);
         }
       } catch (error) {
@@ -1023,6 +1054,18 @@
     }
   }
 
+  function getVariableSuggestions(partial: string): string[] {
+    const environment = $currentEnvironment;
+    let suggestions: string[] = [];
+    envVariables.subscribe((vars) => {
+      suggestions = vars
+        .filter((variable) => variable.values[environment] !== undefined)
+        .map((variable) => variable.key)
+        .filter((key) => key.toLowerCase().includes(partial.toLowerCase()));
+    })();
+    return suggestions;
+  }
+
   let urlAutocomplete = writable<string[]>([]);
   let headerAutocomplete = writable<string[]>([]);
   let queryParamAutocomplete = writable<string[]>([]);
@@ -1033,9 +1076,7 @@
     const lastOpenBrace = value.lastIndexOf("{{");
     if (lastOpenBrace !== -1 && lastOpenBrace > value.lastIndexOf("}}")) {
       const partial = value.slice(lastOpenBrace + 2);
-      const suggestions = Object.keys($variables).filter((key) =>
-        key.toLowerCase().includes(partial.toLowerCase()),
-      );
+      const suggestions = getVariableSuggestions(partial);
       queryParamAutocomplete.set(suggestions);
     } else {
       queryParamAutocomplete.set([]);
@@ -1045,8 +1086,13 @@
   function selectQueryParamSuggestion(index: number, suggestion: string) {
     queryParams.update((qp) => {
       const lastOpenBrace = qp[index].key.lastIndexOf("{{");
-      qp[index].key =
-        qp[index].key.slice(0, lastOpenBrace) + "{{" + suggestion + "}}";
+      if (lastOpenBrace !== -1) {
+        const partial = qp[index].key.slice(lastOpenBrace + 2);
+        qp[index].key =
+          qp[index].key.slice(0, lastOpenBrace + 2) + suggestion + "}}";
+      } else {
+        qp[index].key = "{{" + suggestion + "}}";
+      }
       return qp;
     });
     queryParamAutocomplete.set([]);
@@ -1058,9 +1104,7 @@
     const lastOpenBrace = value.lastIndexOf("{{");
     if (lastOpenBrace !== -1 && lastOpenBrace > value.lastIndexOf("}}")) {
       const partial = value.slice(lastOpenBrace + 2);
-      const suggestions = Object.keys($variables).filter((key) =>
-        key.toLowerCase().includes(partial.toLowerCase()),
-      );
+      const suggestions = getVariableSuggestions(partial);
       urlAutocomplete.set(suggestions);
     } else {
       urlAutocomplete.set([]);
@@ -1073,9 +1117,7 @@
     const lastOpenBrace = value.lastIndexOf("{{");
     if (lastOpenBrace !== -1 && lastOpenBrace > value.lastIndexOf("}}")) {
       const partial = value.slice(lastOpenBrace + 2);
-      const suggestions = Object.keys($variables).filter((key) =>
-        key.toLowerCase().includes(partial.toLowerCase()),
-      );
+      const suggestions = getVariableSuggestions(partial);
       headerAutocomplete.set(suggestions);
     } else {
       const suggestions = [
@@ -1210,11 +1252,17 @@
     selectHistoryItem(newHistoryItem);
   }
 
-  async function saveVariable(key: string, value: string) {
-    console.log("Saving variable:", { key, value });
+  async function saveVariable(key: string, environment: string, value: string) {
+    console.log("Saving variable:", { key, environment, value });
     try {
       const db = await dbPromise;
-      await db.put("variables", { key, value });
+      const variable = await db.get("variables", key);
+      if (variable) {
+        variable.values[environment] = value;
+        await db.put("variables", variable);
+      } else {
+        await db.put("variables", { key, values: { [environment]: value } });
+      }
       console.log("Variable saved successfully.");
     } catch (error) {
       console.error(
@@ -1237,6 +1285,7 @@
       );
     }
   }
+
   function isXml(str: string): boolean {
     try {
       const parser = new DOMParser();
@@ -1264,10 +1313,11 @@
     try {
       const db = await dbPromise;
       const allVariables = await db.getAll("variables");
-      const variablesObject = Object.fromEntries(
-        allVariables.map((v) => [v.key, v.value]),
-      );
-      variables.set(variablesObject);
+      const variablesList = allVariables.map((v) => ({
+        key: v.key,
+        values: v.values,
+      }));
+      envVariables.set(variablesList);
     } catch (error) {
       console.error(
         "Failed to load variables:",
@@ -1393,52 +1443,38 @@
       return;
     }
 
-    if (!$newVariableValue.trim()) {
-      showStatusMessage("Variable value cannot be empty", "error");
-      return;
-    }
-
     const trimmedKey = $newVariableKey.trim();
     const trimmedValue = $newVariableValue.trim();
+    const environment = $currentEnvironment;
 
-    let shouldAdd = true;
+    let variableExists = false;
 
-    variables.update((vars) => {
-      if (trimmedKey in vars) {
-        shouldAdd = confirm(
-          `Variable "${trimmedKey}" already exists. Do you want to update it?`,
-        );
-        if (shouldAdd) {
-          showStatusMessage(`Variable "${trimmedKey}" updated`, "info");
-        } else {
-          showStatusMessage(`Variable "${trimmedKey}" not updated`, "warn");
-        }
-      }
-
-      if (shouldAdd) {
-        return { ...vars, [trimmedKey]: trimmedValue };
+    envVariables.update((vars) => {
+      const variable = vars.find((v) => v.key === trimmedKey);
+      if (variable) {
+        variable.values[environment] = trimmedValue;
+        variableExists = true;
+      } else {
+        vars.push({ key: trimmedKey, values: { [environment]: trimmedValue } });
       }
       return vars;
     });
 
-    if (shouldAdd) {
-      await saveVariable(trimmedKey, trimmedValue);
-      newVariableKey.set("");
-      newVariableValue.set("");
-      if (!(trimmedKey in $variables)) {
-        showStatusMessage(
-          `Variable "${trimmedKey}" added successfully`,
-          "info",
-        );
-      }
+    if (variableExists) {
+      showStatusMessage(`Variable "${trimmedKey}" updated`, "info");
+    } else {
+      showStatusMessage(`Variable "${trimmedKey}" added successfully`, "info");
     }
+
+    await saveVariable(trimmedKey, environment, trimmedValue);
+    newVariableKey.set("");
+    newVariableValue.set("");
   }
 
   function deleteVariable(key: string) {
-    variables.update((vars) => {
-      const { [key]: _, ...rest } = vars;
-      return rest;
-    });
+    envVariables.update((vars) =>
+      vars.filter((variable) => variable.key !== key),
+    );
     deleteVariableFromDb(key);
   }
 
@@ -1568,10 +1604,18 @@
     clearInterval(timestampUpdateInterval);
   });
   let preElement: HTMLElement;
+
+  $: $currentEnvironment,
+    localStorage.setItem("selectedEnvironment", $currentEnvironment);
+
   onMount(async () => {
     const savedTheme = localStorage.getItem("selectedTheme");
     if (savedTheme) {
       applyTheme(savedTheme);
+    }
+    const savedEnvironment = localStorage.getItem("selectedEnvironment");
+    if (savedEnvironment) {
+      currentEnvironment.set(savedEnvironment);
     }
     loadGroups();
     loadVariables();
@@ -2760,13 +2804,25 @@
     </div>
   </div>
 {/if}
+
 {#if $variablesPanelOpen}
   <div class="fixed inset-0 flex items-center justify-center bg-opacity-50">
     <div
       class="variables-panel p-8 rounded-lg shadow-2xl relative max-w-2xl w-full"
     >
       <h2 class="text-2xl font-bold mb-6">Variables</h2>
+
       <div class="flex mb-6">
+        <select
+          bind:value={$currentEnvironment}
+          class="flex-1 p-3 border rounded-lg text-primary bg-accent mr-4"
+        >
+          <option value="default">Default</option>
+          <option value="development">Development</option>
+          <option value="test">Test</option>
+          <option value="staging">Staging</option>
+          <option value="production">Production</option>
+        </select>
         <input
           type="text"
           placeholder="Key"
@@ -2784,18 +2840,20 @@
           on:click={addVariable}
           class="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
         >
-          <FontAwesomeIcon icon={faPlus} size="lg" class="mr-2" />Add
+          <FontAwesomeIcon icon={faPlus} size="lg" class="mr-2" /> Add
         </button>
       </div>
 
       <ul>
-        {#each Object.entries($variables) as [key, value]}
+        {#each $envVariables as variable}
           <li class="mb-4 flex justify-between items-center">
-            <strong class="text-primary">{key}:</strong>
-            <span class="text-secondary">{value}</span>
+            <strong class="text-primary">{variable.key}:</strong>
+            <span class="text-secondary">
+              {variable.values[$currentEnvironment] || "Not set"}
+            </span>
             <button
               type="button"
-              on:click={() => deleteVariable(key)}
+              on:click={() => deleteVariable(variable.key)}
               class="text-red-500 hover:text-red-700"
             >
               <FontAwesomeIcon icon="trash-alt" />
@@ -2803,17 +2861,19 @@
           </li>
         {/each}
       </ul>
+
       <button
         type="button"
         on:click={() => variablesPanelOpen.set(false)}
         style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
-        class=" rounded-full p-2 shadow-lg absolute top-2 right-2 flex items-center justify-center"
+        class="rounded-full p-2 shadow-lg absolute top-2 right-2 flex items-center justify-center"
       >
         <FontAwesomeIcon icon="close" />
       </button>
     </div>
   </div>
 {/if}
+
 {#if $customHeaderPanelOpen}
   <CustomHeaderPanel />
 {/if}
