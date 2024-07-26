@@ -2019,7 +2019,7 @@
             class="button-item hover"
             title="Change Theme"
           >
-            <Icon icon="mdi:paint-outline" width="24" height="24" />
+            <Icon icon="mdi:paint-outline" width="28" height="28" />
           </button>
           <button
             type="button"
@@ -3114,7 +3114,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.2rem;
+    gap: 0.1rem;
     margin-bottom: 0.5rem;
     padding-bottom: 0.2rem;
     padding-top: 0.2rem;
@@ -3125,7 +3125,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1rem;
+    padding: .85rem;
     width: 100%;
     border-top: 1px solid var(--divider);
     border-bottom: 1px solid var(--divider);

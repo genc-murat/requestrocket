@@ -60,7 +60,7 @@
 
 <style>
   .editor-container {
-    height: 100%;
+    height: 98%;
   }
 
   :global(.jsoneditor) {
