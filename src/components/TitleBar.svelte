@@ -62,56 +62,58 @@
 
 <style>
     .titlebar {
-        background-color: var(--background);
+        background: linear-gradient(
+            to bottom,
+            var(--background) 0%,
+            var(--background-secondary) 100%
+        );
         color: var(--primary-text);
         padding: 0.5rem 1rem;
         display: flex;
         justify-content: space-between;
-        align-items: center;  
+        align-items: center;
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 2.5rem;
         z-index: 1000;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-
     .title-container {
         display: flex;
         align-items: center;
         gap: 0.5rem;
     }
-
     .title-logo {
         width: 32px;
         height: 32px;
         object-fit: contain;
     }
-
     .titlebar .title {
         color: var(--dark-text);
+        font-weight: bolder;
     }
-
     .titlebar .buttons {
         display: flex;
         gap: 0.5rem;
     }
-
     .titlebar button {
         background: none;
         border: none;
         color: var(--primary-text);
         cursor: pointer;
         font-size: 1rem;
+        transition: all 0.2s ease;
     }
-
     .titlebar button:hover {
         color: var(--error);
+        transform: translateY(-1px);
     }
-
     .titlebar button svg {
         width: 20px;
         height: 20px;
         display: block;
+        filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
     }
 </style>
