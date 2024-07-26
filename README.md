@@ -81,10 +81,6 @@ Request Rocket is a powerful API testing tool designed to streamline the process
   - **Minimap**: Overview of the entire flow for easier navigation.
   - **Context Menu**: Right-click context menu for quick actions like duplication and deletion of blocks.
 
-## Screenshots
-
-[Add screenshots here]
-
 ## Installation
 
 ### Prerequisites
@@ -206,7 +202,9 @@ We welcome contributions! Please follow these steps to contribute:
 5. **Create a Pull Request:**
    - Go to your forked repository on GitHub.
    - Click on the "Compare & pull request" button.
-   - Submit your pull request.
+   - Submit your
+
+ pull request.
 
 ## License
 
@@ -216,8 +214,6 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 - [SvelteKit](https://kit.svelte.dev/) - The framework used for building the application.
 - [Tailwind CSS](https://tailwindcss.com/) - The utility-first CSS framework.
-- [Tauri](https://tauri.studio/) - For packaging
-
- the application.
+- [Tauri](https://tauri.studio/) - For packaging the application.
 - [JSONEditor](https://github.com/josdejong/jsoneditor) - JSON editor library.
 - [FontAwesome](https://fontawesome.com/) - Icons library.
