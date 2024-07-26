@@ -2883,8 +2883,8 @@
       <button
         type="button"
         on:click={() => variablesPanelOpen.set(false)}
-        style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
-        class="rounded-full p-2 shadow-lg absolute top-2 right-2 flex items-center justify-center"
+        style="box-shadow: 0 7px 12px rgba(0, 0, 0, 0.3);"
+        class="rounded-full p-1 shadow-lg absolute top-1 right-1 flex items-center justify-center"
       >
         <Icon icon="eva:close-fill" width="20" height="20" />
       </button>
