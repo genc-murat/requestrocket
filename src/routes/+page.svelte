@@ -3,29 +3,12 @@
   import { writable } from "svelte/store";
   import type { Writable } from "svelte/store";
   import Prism from "prismjs";
-  // import "prismjs/themes/prism-tomorrow.css";
   import "prismjs/components/prism-markup";
   import { openDB } from "idb";
   import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
   import { invoke } from "@tauri-apps/api/tauri";
-  import {
-    faPlus,
-    faTrashAlt,
-    faClone,
-    faEdit,
-    faCopy,
-    faDownload,
-    faUpload,
-    faClose,
-    faRepeat,
-    faDatabase,
-    faPaintbrush,
-    faCog,
-    faFileExport,
-    faFilePdf,
-  } from "@fortawesome/free-solid-svg-icons";
-  import { library } from "@fortawesome/fontawesome-svg-core";
-  import { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";
+
+  import Icon from "@iconify/svelte";
   import {
     writeTextFile,
     readTextFile,
@@ -189,23 +172,6 @@
   function closeThemeSwitcherModal() {
     themeModalOpen.set(false);
   }
-
-  library.add(
-    faPlus,
-    faTrashAlt,
-    faClone,
-    faEdit,
-    faCopy,
-    faDownload,
-    faUpload,
-    faClose,
-    faRepeat,
-    faDatabase,
-    faPaintbrush,
-    faCog,
-    faFileExport,
-    faFilePdf,
-  );
 
   let currentFlow: Writable<Flow | null> = writable(null);
   let flowResults: Writable<{ [key: string]: any } | null> = writable(null);
@@ -2053,7 +2019,8 @@
             class="button-item hover"
             title="Change Theme"
           >
-            <FontAwesomeIcon icon="paint-brush" size="lg" />
+            <!-- <FontAwesomeIcon icon="paint-brush" size="lg" /> -->
+            <Icon icon="mdi:paint-outline" width="24" height="24" />
           </button>
           <button
             type="button"
@@ -2063,7 +2030,9 @@
               groupModalOpen.set(true);
             }}
           >
-            <FontAwesomeIcon icon="database" size="lg" />
+            <!-- <FontAwesomeIcon icon="database" size="lg" /> -->
+            <!-- <Icon icon={icons.database} height="1.2rem" /> -->
+            <Icon icon="fluent-mdl2:database-sync" width="24" height="24" />
           </button>
           <button
             type="button"
@@ -2071,7 +2040,9 @@
             class="button-item hover"
             title="Headers"
           >
-            <FontAwesomeIcon icon={faEdit} size="lg" />
+            <!-- <FontAwesomeIcon icon={faEdit} size="lg" /> -->
+            <!-- <Icon icon={icons.edit} height="1.2rem"/> -->
+            <Icon icon="cil:header" width="24" height="24" />
           </button>
           <button
             type="button"
@@ -2079,7 +2050,13 @@
             class="button-item hover"
             title="Variables"
           >
-            <FontAwesomeIcon icon="edit" size="lg" />
+            <!-- <FontAwesomeIcon icon="edit" size="lg" /> -->
+            <!-- <Icon icon={icons.edit} height="1.2rem"/> -->
+            <Icon
+              icon="gravity-ui:curly-brackets-function"
+              width="24"
+              height="24"
+            />
           </button>
           <button
             type="button"
@@ -2087,7 +2064,8 @@
             class="button-item hover"
             title="Import"
           >
-            <FontAwesomeIcon icon="upload" size="lg" />
+            <!-- <FontAwesomeIcon icon="upload" size="lg" /> -->
+            <Icon icon="logos:postman-icon" width="24" height="24" />
           </button>
           <button
             type="button"
@@ -2095,7 +2073,8 @@
             class="button-item hover"
             title="Doc"
           >
-            <FontAwesomeIcon icon="download" size="lg" />
+            <!-- <FontAwesomeIcon icon="download" size="lg" /> -->
+            <Icon icon="icon-park-solid:download-web" width="24" height="24" />
           </button>
           <button
             type="button"
@@ -2104,7 +2083,8 @@
             title="Designer"
             disabled
           >
-            <FontAwesomeIcon icon="edit" size="lg" />
+            <!-- <FontAwesomeIcon icon="edit" size="lg" /> -->
+            <Icon icon="mdi:design" width="24" height="24" />
           </button>
           <button
             type="button"
@@ -2113,7 +2093,8 @@
             title="Export"
             disabled
           >
-            <FontAwesomeIcon icon="download" size="lg" />
+            <!-- <FontAwesomeIcon icon="download" size="lg" /> -->
+            <Icon icon="foundation:page-export-csv" width="24" height="24" />
           </button>
           <button
             type="button"
@@ -2121,7 +2102,8 @@
             class="button-item hover"
             title="Settings"
           >
-            <FontAwesomeIcon icon="cog" size="lg" />
+            <!-- <FontAwesomeIcon icon="cog" size="lg" /> -->
+            <Icon icon="fluent:settings-32-light" width="24" height="24" />
           </button>
         </div>
       </div>
@@ -2185,7 +2167,8 @@
                         duplicateHistoryItem(item);
                     }}
                   >
-                    <FontAwesomeIcon icon="clone" size="lg" />
+                    <!-- <FontAwesomeIcon icon="clone" size="lg" /> -->
+                    <Icon icon="clarity:clone-solid" width="18" height="18" />
                   </button>
                   <button
                     class="delete-icon"
@@ -2196,7 +2179,11 @@
                         openModal(item.id);
                     }}
                   >
-                    <FontAwesomeIcon icon="trash-alt" size="lg" />
+                    <Icon
+                      icon="material-symbols:delete-outline"
+                      width="18"
+                      height="18"
+                    />
                   </button>
                 </li>
               {/each}
@@ -2318,7 +2305,7 @@
             <div class="params-container">
               <div class="top-buttons">
                 <button type="button" on:click={addHeader} class="">
-                  <FontAwesomeIcon icon="plus" size="lg" /> Add
+                  <Icon icon="fluent-mdl2:add-to" width="18" height="18" />
                 </button>
                 <span class="separator"></span>
                 <button
@@ -2326,7 +2313,11 @@
                   on:click={clearHeaders}
                   class="delete-all"
                 >
-                  <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
+                  <Icon
+                    icon="material-symbols:delete-outline"
+                    width="18"
+                    height="18"
+                  />
                 </button>
               </div>
 
@@ -2372,7 +2363,11 @@
                     class="delete-all"
                     disabled={!header.selected}
                   >
-                    <FontAwesomeIcon icon="trash-alt" size="lg" />
+                    <Icon
+                      icon="material-symbols:delete-outline"
+                      width="24"
+                      height="24"
+                    />
                   </button>
                 </div>
               {/each}
@@ -2408,7 +2403,7 @@
                     pathParams.update((p) => [...p, { key: "", value: "" }])}
                   class=""
                 >
-                  <FontAwesomeIcon icon="plus" size="lg" /> Add
+                  <Icon icon="fluent-mdl2:add-to" width="18" height="18" />
                 </button>
                 <span class="separator"></span>
                 <button
@@ -2416,7 +2411,11 @@
                   on:click={() => pathParams.set([])}
                   class="delete-all"
                 >
-                  <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
+                  <Icon
+                    icon="material-symbols:delete-outline"
+                    width="18"
+                    height="18"
+                  />
                 </button>
               </div>
               {#each $pathParams as param, index}
@@ -2439,7 +2438,11 @@
                       pathParams.update((p) => p.filter((_, i) => i !== index))}
                     class="delete-all"
                   >
-                    <FontAwesomeIcon icon="trash-alt" size="lg" />
+                    <Icon
+                      icon="material-symbols:delete-outline"
+                      width="18"
+                      height="18"
+                    />
                   </button>
                 </div>
               {/each}
@@ -2448,11 +2451,15 @@
             <div class="params-container">
               <div class="top-buttons">
                 <button type="button" on:click={addParam} class="">
-                  <FontAwesomeIcon icon="plus" size="lg" /> Add
+                  <Icon icon="fluent-mdl2:add-to" width="18" height="18" />
                 </button>
                 <span class="separator"></span>
                 <button type="button" on:click={clearParams} class="delete-all">
-                  <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
+                  <Icon
+                    icon="material-symbols:delete-outline"
+                    width="18"
+                    height="18"
+                  />
                 </button>
               </div>
 
@@ -2494,7 +2501,11 @@
                       )}
                     class="delete-all"
                   >
-                    <FontAwesomeIcon icon="trash-alt" size="lg" />
+                    <Icon
+                      icon="material-symbols:delete-outline"
+                      width="18"
+                      height="18"
+                    />
                   </button>
                 </div>
               {/each}
@@ -2503,7 +2514,7 @@
             <div class="params-container">
               <div class="top-buttons">
                 <button type="button" on:click={addFormField} class="">
-                  <FontAwesomeIcon icon="plus" size="lg" /> Add
+                  <Icon icon="fluent-mdl2:add-to" width="18" height="18" />
                 </button>
                 <span class="separator"></span>
                 <button
@@ -2511,7 +2522,11 @@
                   on:click={() => formParams.set([])}
                   class="delete-all"
                 >
-                  <FontAwesomeIcon icon="trash-alt" size="lg" /> Delete All
+                  <Icon
+                    icon="material-symbols:delete-outline"
+                    width="18"
+                    height="18"
+                  />
                 </button>
               </div>
               {#each $formParams as field, index}
@@ -2534,7 +2549,11 @@
                       formParams.update((f) => f.filter((_, i) => i !== index))}
                     class="delete-all"
                   >
-                    <FontAwesomeIcon icon="trash-alt" size="lg" />
+                    <Icon
+                      icon="material-symbols:delete-outline"
+                      width="18"
+                      height="18"
+                    />
                   </button>
                 </div>
               {/each}
@@ -2625,14 +2644,22 @@
                     on:click={exportResponseToCSV}
                     class="text-blue-500"
                   >
-                    <FontAwesomeIcon icon="file-export" size="xl" />
+                    <Icon
+                      icon="foundation:page-export-csv"
+                      width="18"
+                      height="18"
+                    />
                   </button>
                   <button
                     type="button"
                     on:click={exportResponseToPDF}
                     class="text-blue-500"
                   >
-                    <FontAwesomeIcon icon="file-pdf" size="xl" />
+                    <Icon
+                      icon="foundation:page-export-pdf"
+                      width="18"
+                      height="18"
+                    />
                   </button>
                   {#if isXml($response.body)}
                     <pre bind:this={preElement}>
@@ -2691,7 +2718,7 @@
                   on:click={() => copyToClipboard($response.curl_command)}
                   class="text-blue-500"
                 >
-                  <FontAwesomeIcon icon="copy" size="xl" />
+                  <Icon icon="mingcute:copy-line" width="18" height="18" />
                 </button>
               </div>
             {/if}
@@ -2732,7 +2759,7 @@
         class="rounded-full p-2 absolute top-2 right-2 flex items-center justify-center"
         style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
       >
-        <FontAwesomeIcon icon="close" />
+        <Icon icon="eva:close-fill" width="20" height="20" />
       </button>
 
       {#if $statusHistory.length === 0}
@@ -2840,7 +2867,7 @@
           on:click={addVariable}
           class="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
         >
-          <FontAwesomeIcon icon={faPlus} size="lg" class="mr-2" /> Add
+          <Icon icon="fluent-mdl2:add-to" width="20" height="20" class="mr-2" />
         </button>
       </div>
 
@@ -2856,7 +2883,11 @@
               on:click={() => deleteVariable(variable.key)}
               class="text-red-500 hover:text-red-700"
             >
-              <FontAwesomeIcon icon="trash-alt" />
+              <Icon
+                icon="material-symbols:delete-outline"
+                width="24"
+                height="24"
+              />
             </button>
           </li>
         {/each}
@@ -2868,7 +2899,7 @@
         style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
         class="rounded-full p-2 shadow-lg absolute top-2 right-2 flex items-center justify-center"
       >
-        <FontAwesomeIcon icon="close" />
+        <Icon icon="eva:close-fill" width="20" height="20" />
       </button>
     </div>
   </div>
@@ -2897,7 +2928,7 @@
           on:click={closeThemeSwitcherModal}
           class="text-red-900 bg-slate-50 rounded-full p-4 shadow flex items-center justify-center"
         >
-          <FontAwesomeIcon icon={faClose} />
+          <Icon icon="eva:close-fill" width="20" height="20" />
         </button>
       </div>
       <ThemeSwitcher />
@@ -2961,7 +2992,7 @@
           style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
           class="rounded-full p-4 shadow flex items-center justify-center"
         >
-          <FontAwesomeIcon icon="close" />
+          <Icon icon="eva:close-fill" width="20" height="20" />
         </button>
       </div>
 
@@ -3123,7 +3154,7 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 1rem;
+    gap: 0.2rem;
     margin-bottom: 1rem;
     border-bottom: 1px solid var(--divider);
     border-top: 1px solid var(--divider);

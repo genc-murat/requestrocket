@@ -6,12 +6,8 @@
     deleteCustomHeader,
     closeCustomHeaderPanel,
   } from "./CustomHeaderModule";
-  import { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";
-  import {
-    faPlus,
-    faTrashAlt,
-    faClose,
-  } from "@fortawesome/free-solid-svg-icons";
+
+  import  Icon  from '@iconify/svelte';
 
   function handleAddCustomHeader() {
     if ($newCustomHeaderName) {
@@ -38,7 +34,8 @@
         on:click={handleAddCustomHeader}
         class="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
       >
-        <FontAwesomeIcon icon={faPlus} size="lg" class="mr-2" />Add
+     
+        <Icon icon="fluent-mdl2:add-to" width="18" height="18" class="mr-2" /> Add
       </button>
     </div>
 
@@ -51,7 +48,11 @@
             on:click={() => deleteCustomHeader(header.id)}
             class="text-red-500 hover:text-red-700"
           >
-            <FontAwesomeIcon icon={faTrashAlt} />
+          <Icon
+          icon="material-symbols:delete-outline"
+          width="18"
+          height="18"
+        />
           </button>
         </li>
       {/each}
@@ -62,7 +63,7 @@
       style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
       class=" rounded-full p-2 shadow-lg absolute top-2 right-2 flex items-center justify-center hover:bg-slate-200"
     >
-      <FontAwesomeIcon icon={faClose} />
+    <Icon icon="eva:close-fill" width="20" height="20" />
     </button>
   </div>
 </div>

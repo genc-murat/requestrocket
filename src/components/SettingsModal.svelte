@@ -1,7 +1,6 @@
 <script lang="ts">
     import { writable } from 'svelte/store';
-    import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
-    import { faClose } from '@fortawesome/free-solid-svg-icons';
+    import  Icon  from '@iconify/svelte';
   
     export let showSettings = writable(false);
     export let requestTimeout = writable(Number(localStorage.getItem('requestTimeout')) || 30000);
@@ -73,7 +72,7 @@
     <div class="settings-modal" on:click|stopPropagation="{closeSettings}">
       <div class="settings-content" on:click|stopPropagation>
         <button class="close-button" on:click="{closeSettings}">
-          <FontAwesomeIcon icon={faClose} />
+          <Icon icon="eva:close-fill" width="20" height="20" />
         </button>
         <h2 class="text-lg font-bold mb-4 text-neutral-950">Settings</h2>
         <div class="field">
