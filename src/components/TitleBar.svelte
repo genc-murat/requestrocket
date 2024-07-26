@@ -67,8 +67,7 @@
         padding: 0.5rem 1rem;
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        border-bottom: 2px solid var(--divider);
+        align-items: center;  
         position: fixed;
         top: 0;
         left: 0;
