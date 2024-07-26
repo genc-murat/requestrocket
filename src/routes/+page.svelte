@@ -2854,7 +2854,7 @@
           on:click={addVariable}
           class="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
         >
-          <Icon icon="fluent-mdl2:add-to" width="20" height="20" class="mr-2" />
+          <Icon icon="fluent-mdl2:add-to" width="20" height="20" class="mr-2" /> Add
         </button>
       </div>
 
