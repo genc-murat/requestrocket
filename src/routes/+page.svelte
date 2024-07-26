@@ -1689,9 +1689,9 @@
         const postmanJson = await readTextFile(filePath);
         const postmanCollection = JSON.parse(postmanJson);
 
-        // Dosya adını al
+        // Dosya adını platformdan bağımsız olarak al ve uzantıyı çıkar
         const fileName =
-          filePath.split("/").pop()?.split(".").slice(0, -1).join(".") ||
+          filePath.split(/[/\\]/).pop()?.split(".")[0] ||
           "Imported from Postman";
 
         // Postman koleksiyonunu işle
@@ -1719,7 +1719,6 @@
       showStatusMessage("Failed to import Postman collection.", "error");
     }
   }
-
   function processPostmanCollection(
     collection: any,
     groupName: string,
