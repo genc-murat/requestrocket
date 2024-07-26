@@ -68,7 +68,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 1px solid var(--divider);
+        border-bottom: 2px solid var(--divider);
         position: fixed;
         top: 0;
         left: 0;
