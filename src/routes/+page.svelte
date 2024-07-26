@@ -2019,7 +2019,6 @@
             class="button-item hover"
             title="Change Theme"
           >
-            <!-- <FontAwesomeIcon icon="paint-brush" size="lg" /> -->
             <Icon icon="mdi:paint-outline" width="24" height="24" />
           </button>
           <button
@@ -2030,8 +2029,6 @@
               groupModalOpen.set(true);
             }}
           >
-            <!-- <FontAwesomeIcon icon="database" size="lg" /> -->
-            <!-- <Icon icon={icons.database} height="1.2rem" /> -->
             <Icon icon="fluent-mdl2:database-sync" width="24" height="24" />
           </button>
           <button
@@ -2040,8 +2037,6 @@
             class="button-item hover"
             title="Headers"
           >
-            <!-- <FontAwesomeIcon icon={faEdit} size="lg" /> -->
-            <!-- <Icon icon={icons.edit} height="1.2rem"/> -->
             <Icon icon="cil:header" width="24" height="24" />
           </button>
           <button
@@ -2050,8 +2045,6 @@
             class="button-item hover"
             title="Variables"
           >
-            <!-- <FontAwesomeIcon icon="edit" size="lg" /> -->
-            <!-- <Icon icon={icons.edit} height="1.2rem"/> -->
             <Icon
               icon="gravity-ui:curly-brackets-function"
               width="24"
@@ -2064,7 +2057,6 @@
             class="button-item hover"
             title="Import"
           >
-            <!-- <FontAwesomeIcon icon="upload" size="lg" /> -->
             <Icon icon="logos:postman-icon" width="24" height="24" />
           </button>
           <button
@@ -2073,7 +2065,6 @@
             class="button-item hover"
             title="Doc"
           >
-            <!-- <FontAwesomeIcon icon="download" size="lg" /> -->
             <Icon icon="icon-park-solid:download-web" width="24" height="24" />
           </button>
           <button
@@ -2083,7 +2074,6 @@
             title="Designer"
             disabled
           >
-            <!-- <FontAwesomeIcon icon="edit" size="lg" /> -->
             <Icon icon="mdi:design" width="24" height="24" />
           </button>
           <button
@@ -2093,7 +2083,6 @@
             title="Export"
             disabled
           >
-            <!-- <FontAwesomeIcon icon="download" size="lg" /> -->
             <Icon icon="foundation:page-export-csv" width="24" height="24" />
           </button>
           <button
@@ -2102,8 +2091,7 @@
             class="button-item hover"
             title="Settings"
           >
-            <!-- <FontAwesomeIcon icon="cog" size="lg" /> -->
-            <Icon icon="fluent:settings-32-light" width="24" height="24" />
+            <Icon icon="iconamoon:settings-fill" width="24" height="24" />
           </button>
         </div>
       </div>
@@ -2167,7 +2155,6 @@
                         duplicateHistoryItem(item);
                     }}
                   >
-                    <!-- <FontAwesomeIcon icon="clone" size="lg" /> -->
                     <Icon icon="clarity:clone-solid" width="18" height="18" />
                   </button>
                   <button
