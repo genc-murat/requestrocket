@@ -2609,39 +2609,35 @@
                 {/if}
               </div>
             {:else if $selectedTab === "table"}
-              <div class="table-container">
-                {#if tableData.headers.length > 0}
-                  <table>
-                    <thead>
-                      <th>
-                        {#each tableData.headers as header}
-                          <th>{header}</th>
-                        {/each}
-                      </th>
-                    </thead>
-                    <tbody>
-                      {#each tableData.rows as row}
-                        <tr>
-                          {#each row as cell}
-                            <td>{cell}</td>
-                          {/each}
-                        </tr>
+              {#if tableData.headers.length > 0}
+                <div class="table">
+                  <div class="row header">
+                    {#each tableData.headers as header}
+                      <div class="cell" title={header}>{header}</div>
+                    {/each}
+                  </div>
+                  {#each tableData.rows as row}
+                    <div class="row">
+                      {#each row as cell}
+                        <div class="cell" title={cell}>{cell}</div>
                       {/each}
-                    </tbody>
-                  </table>
-                {:else}
-                  <p>Unable to display data in table format.</p>
-                {/if}
-              </div>
+                    </div>
+                  {/each}
+                </div>
+              {:else}
+                <p>Unable to display data in table format.</p>
+              {/if}
             {:else if $selectedTab === "headers"}
-            <table class="w-full">
-                {#each $response.headers as [key, value]}
-                  <tr class="w-full">
-                    <th class="w-1/3">{key}</th>
-                    <td class="w-2/3">{value}</td>
-                  </tr>
-                {/each}
-              </table>
+              <div class="table-container">
+                <table class="w-full">
+                  {#each $response.headers as [key, value]}
+                    <tr class="w-full">
+                      <th class="w-1/4">{key}</th>
+                      <td class="w-3/4">{value}</td>
+                    </tr>
+                  {/each}
+                </table>
+              </div>
             {:else if $selectedTab === "curl"}
               <div class="flex justify-between">
                 <span class="p-2 rounded">
@@ -2852,7 +2848,7 @@
 
 {#if $groupModalOpen}
   <div
-    class="fixed inset-0 flex items-center justify-center  bg-opacity-50 z-50"
+    class="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50"
   >
     <div class="bg-white p-4 rounded shadow-lg w-1/2">
       <h2 class="text-lg font-bold mb-4 text-neutral-950">Select Group</h2>

@@ -50,7 +50,7 @@ body {
 
 .panel {
   padding: 10px;
- 
+
   margin: 1px;
   background: var(--background);
   box-shadow: 0 2px 3px var(--shadow);
@@ -132,13 +132,27 @@ li:hover {
   color: var(--dark-text);
 }
 
+.table-container {
+  max-height: 99%;
+  /* Adjust this value as needed */
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
   overflow-y: auto;
-  display: block;
+
   max-height: 100%;
   table-layout: fixed;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
 }
 
 th,
@@ -506,29 +520,31 @@ textarea {
 }
 
 pre {
-  background: var(--light-background); /* Example background color */
+  background: var(--light-background);
+  /* Example background color */
   padding: 1rem;
 
   border-radius: 0.5rem;
   overflow-x: auto;
   overflow-y: auto;
-  height: 100%;;
+  height: 100%;
+  ;
 }
 
-.sending-request{
+.sending-request {
   background-color: var(--surface);
 }
 
-.response-tabs{
+.response-tabs {
   margin-bottom: 0.05rem;
 }
 
-.delete-all{
+.delete-all {
   color: var(--error);
 }
 
-.body-textarea{
-  color: var(--primary-text) ;
+.body-textarea {
+  color: var(--primary-text);
   background-color: var(--light-background);
 }
 
@@ -630,4 +646,47 @@ pre {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+
+.table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid var(--divider);
+}
+
+.row {
+  display: flex;
+  width: 100%;
+}
+
+.cell {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid var(--divider);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cell:hover::after {
+  content: attr(title);
+  position: absolute;
+  left: 0;
+  top: 100%;
+  white-space: nowrap;
+
+  border-radius: 3px;
+  padding: 3px 5px;
+  z-index: 2;
+}
+
+.header {
+  background-color: var(--secondary);
+  font-weight: bold;
+}
+
+.header .cell {
+  border-top: none;
 }
