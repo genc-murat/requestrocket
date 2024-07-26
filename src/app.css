@@ -661,6 +661,16 @@ pre {
   width: 100%;
 }
 
+.cell-header {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid var(--divider);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--background);
+}
+
 .cell {
   flex: 1;
   padding: 0.5rem;
@@ -668,6 +678,7 @@ pre {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--primary-text);
 }
 
 .cell:hover::after {

@@ -2612,7 +2612,7 @@
                 <div class="table">
                   <div class="row header">
                     {#each tableData.headers as header}
-                      <div class="cell" title={header}>{header}</div>
+                      <div class="cell-header" title={header}>{header}</div>
                     {/each}
                   </div>
                   {#each tableData.rows as row}
