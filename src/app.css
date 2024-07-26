@@ -681,18 +681,6 @@ pre {
   color: var(--primary-text);
 }
 
-.cell:hover::after {
-  content: attr(title);
-  position: absolute;
-  left: 0;
-  top: 100%;
-  white-space: nowrap;
-
-  border-radius: 3px;
-  padding: 3px 5px;
-  z-index: 2;
-}
-
 .header {
   background-color: var(--secondary);
   font-weight: bold;

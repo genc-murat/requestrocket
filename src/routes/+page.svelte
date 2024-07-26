@@ -1178,7 +1178,7 @@
       const filteredHistory = allHistoryItems.filter(
         (item) => item.group === selectedGroup,
       );
-      history.set(filteredHistory);
+      history.set(filteredHistory.reverse());
     } catch (error) {
       console.error(
         "Failed to load history:",
@@ -1210,7 +1210,7 @@
       url: item.url,
     };
     history.update((h) => {
-      const newHistory = [...h, newHistoryItem];
+      const newHistory = [newHistoryItem, ...h];
       saveHistory(newHistoryItem);
       return newHistory;
     });
