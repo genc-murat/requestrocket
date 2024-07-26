@@ -202,9 +202,7 @@ We welcome contributions! Please follow these steps to contribute:
 5. **Create a Pull Request:**
    - Go to your forked repository on GitHub.
    - Click on the "Compare & pull request" button.
-   - Submit your
-
- pull request.
+   - Submit your pull request.
 
 ## License
 
