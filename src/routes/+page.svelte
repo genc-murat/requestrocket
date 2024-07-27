@@ -2904,23 +2904,23 @@
 />
 
 {#if $themeModalOpen}
-  <div
-    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-  >
-    <div class="bg-white p-4 rounded shadow-lg w-1/2">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-lg font-bold text-neutral-950">Change Theme</h2>
-        <button
-          type="button"
-          on:click={closeThemeSwitcherModal}
-          class="text-red-900 bg-slate-50 rounded-full p-4 shadow flex items-center justify-center"
-        >
-          <Icon icon="eva:close-fill" width="20" height="20" />
-        </button>
-      </div>
-      <ThemeSwitcher />
+<div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  <div class="bg-white p-6 rounded shadow-2xl w-11/12 md:w-3/5 max-w-6xl">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-bold text-neutral-950">Change Theme</h2>
+      <button
+        type="button"
+        on:click={closeThemeSwitcherModal}
+        style="box-shadow: 0 7px 12px rgba(0, 0, 0, 0.3);"
+        class="rounded-full p-2 shadow-lg flex items-center justify-center"
+      >
+        <Icon icon="eva:close-fill" width="24" height="24" />
+      </button>
     </div>
+    <ThemeSwitcher />
   </div>
+</div>
+
 {/if}
 
 {#if $groupModalOpen}

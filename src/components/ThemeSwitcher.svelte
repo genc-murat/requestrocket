@@ -610,7 +610,7 @@
             "--background": "#2c3e50" /* Dark blue-gray background */,
             "--light-background": "#ffffff" /* White surface */,
             "--surface": "#e0e0e0" /* Light gray surface */,
-            "--primary-text": "#e0e0e0" /* Dark gray primary text */,
+            "--primary-text": "#666666" /* Dark gray primary text */,
             "--secondary-text": "#777777" /* Medium gray secondary text */,
             "--dark-text": "#000000" /* Black text */,
             "--divider": "#d0d0d0" /* Medium light gray divider */,
@@ -4163,27 +4163,26 @@
     });
 </script>
 
-<div class="theme-switcher">
-    <div class="grid grid-cols-12 gap-2">
-        {#each Object.keys(themes) as theme}
-            <button
-                class="theme-button"
-                style="background: linear-gradient(to right, {themes[theme][
-                    '--background'
-                ]} 40%, {themes[theme]['--surface']} 70%, {themes[theme][
-                    '--primary'
-                ]} 90%, {themes[theme]['--secondary']} 95%); color: {themes[
-                    theme
-                ]['--primary-text']};"
-                on:click={() => applyTheme(theme)}
-            >
-                {theme
-                    .replace(/([A-Z])/g, " $1")
-                    .replace(/^./, (str) => str.toUpperCase())}
-            </button>
-        {/each}
-    </div>
-</div>
+<div class="theme-switcher grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+    {#each Object.keys(themes) as theme}
+      <button
+        class="theme-button"
+        style="background: linear-gradient(to right, {themes[theme][
+            '--background'
+          ]} 40%, {themes[theme]['--surface']} 70%, {themes[theme][
+            '--primary'
+          ]} 90%, {themes[theme]['--secondary']} 95%); color: {themes[
+            theme
+          ]['--primary-text']};"
+        on:click={() => applyTheme(theme)}
+      >
+        {theme
+          .replace(/([A-Z])/g, " $1")
+          .replace(/^./, (str) => str.toUpperCase())}
+      </button>
+    {/each}
+  </div>
+
 
 <style>
     .theme-switcher {
@@ -4194,14 +4193,12 @@
 
     .theme-button {
         padding: 5px;
-        cursor: pointer;
-        border: none;
-        border-radius: 5px;
-        transition:
-            background-color 0.3s ease,
-            color 0.3s ease;
-        text-align: center;
-        width: 75px;
-        height: 45px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    text-align: center;
+    width: 91px;
+    height: 45px;
     }
 </style>
