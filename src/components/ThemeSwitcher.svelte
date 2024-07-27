@@ -185,6 +185,105 @@
             "--select-focus-box-shadow":
                 "rgba(120, 144, 156, 0.3)" /* Medium gray-blue focus shadow */,
         },
+        // Spring Blossom Theme
+        springBlossomTheme: {
+            "--background": "#fce4ec", // Light pink background
+            "--light-background": "#ffffff", // White surface
+            "--surface": "#f8bbd0", // Light pink surface
+            "--primary-text": "#212121", // Dark gray text
+            "--secondary-text": "#757575", // Medium gray text
+            "--dark-text": "#000000", // Black text
+            "--divider": "#f48fb1", // Pink divider
+            "--shadow": "rgba(244, 143, 177, 0.5)", // Transparent pink shadow
+            "--primary": "#e91e63", // Bright pink
+            "--secondary": "#c8e6c9", // Light green
+            "--warning": "#ffcc80", // Light orange
+            "--error": "#ef5350", // Light red
+            "--info": "#64b5f6", // Light blue
+            "--success": "#81c784", // Light green
+            "--dropdown-box-shadow": "rgba(233, 30, 99, 0.5)", // Transparent bright pink shadow
+            "--group-card-hover": "#ffffff", // White
+            "--seperator": "#f8bbd0", // Light pink
+            "--select-background-color": "#fce4ec", // Light pink
+            "--select-text-color": "#212121", // Dark gray
+            "--select-focus-border-color": "#e91e63", // Bright pink
+            "--select-focus-box-shadow": "rgba(233, 30, 99, 0.3)", // Transparent bright pink shadow
+        },
+
+        // Autumn Leaf Theme
+        autumnLeafTheme: {
+            "--background": "#f0d59e", // Light orange-brown background
+            "--light-background": "#ffffff", // White surface
+            "--surface": "#e6b87b", // Medium orange-brown surface
+            "--primary-text": "#212121", // Dark gray text
+            "--secondary-text": "#757575", // Medium gray text
+            "--dark-text": "#000000", // Black text
+            "--divider": "#c58c5e", // Orange-brown divider
+            "--shadow": "rgba(229, 184, 123, 0.5)", // Transparent orange-brown shadow
+            "--primary": "#ff9800", // Bright orange
+            "--secondary": "#a1887f", // Light brown
+            "--warning": "#ffb74d", // Light orange
+            "--error": "#ef5350", // Light red
+            "--info": "#64b5f6", // Light blue
+            "--success": "#81c784", // Light green
+            "--dropdown-box-shadow": "rgba(255, 152, 0, 0.5)", // Transparent bright orange shadow
+            "--group-card-hover": "#ffffff", // White
+            "--seperator": "#c58c5e", // Orange-brown
+            "--select-background-color": "#e6b87b", // Medium orange-brown
+            "--select-text-color": "#212121", // Dark gray
+            "--select-focus-border-color": "#ff9800", // Bright orange
+            "--select-focus-box-shadow": "rgba(255, 152, 0, 0.3)", // Transparent bright orange shadow
+        },
+
+        // Forest Moss Theme
+        forestMossTheme: {
+            "--background": "#264632", // Dark green background
+            "--light-background": "#385941", // Medium dark green surface
+            "--surface": "#4A6C50", // Dark green surface
+            "--primary-text": "#D0E0D0", // Light green-gray text
+            "--secondary-text": "#A0B0A0", // Medium green-gray text
+            "--dark-text": "#FFFFFF", // White text
+            "--divider": "#688060", // Dark green divider
+            "--shadow": "rgba(40, 70, 56, 0.5)", // Transparent dark green shadow
+            "--primary": "#66BB6A", // Light green
+            "--secondary": "#81C784", // Light green
+            "--warning": "#FFB74D", // Light orange
+            "--error": "#EF5350", // Light red
+            "--info": "#29B6F6", // Light blue
+            "--success": "#689F38", // Dark green
+            "--dropdown-box-shadow": "rgba(102, 187, 106, 0.5)", // Transparent light green shadow
+            "--group-card-hover": "#385941", // Medium dark green
+            "--seperator": "#688060", // Dark green
+            "--select-background-color": "#4A6C50", // Dark green
+            "--select-text-color": "#D0E0D0", // Light green-gray
+            "--select-focus-border-color": "#66BB6A", // Light green
+            "--select-focus-box-shadow": "rgba(102, 187, 106, 0.3)", // Transparent light green shadow
+        },
+
+        // Ocean Wave Theme
+        oceanWaveTheme: {
+            "--background": "#e0f7fa", // Light blue-green background
+            "--light-background": "#ffffff", // White surface
+            "--surface": "#b2ebf2", // Light blue-green surface
+            "--primary-text": "#263238", // Dark gray-blue text
+            "--secondary-text": "#546e7a", // Medium gray-blue text
+            "--dark-text": "#000000", // Black text
+            "--divider": "#80deea", // Light blue-green divider
+            "--shadow": "rgba(176, 247, 250, 0.5)", // Transparent blue-green shadow
+            "--primary": "#29b6f6", // Bright blue
+            "--secondary": "#4fc3f7", // Light blue-green
+            "--warning": "#ffcc80", // Light orange
+            "--error": "#ef5350", // Light red
+            "--info": "#64b5f6", // Light blue
+            "--success": "#81c784", // Light green
+            "--dropdown-box-shadow": "rgba(41, 182, 246, 0.5)", // Transparent bright blue shadow
+            "--group-card-hover": "#ffffff", // White
+            "--seperator": "#80deea", // Light blue-green
+            "--select-background-color": "#b2ebf2", // Light blue-green
+            "--select-text-color": "#263238", // Dark gray-blue
+            "--select-focus-border-color": "#29b6f6", // Bright blue
+            "--select-focus-box-shadow": "rgba(41, 182, 246, 0.3)", // Transparent bright blue shadow
+        },
         macosTheme: {
             "--background": "#f8f8f8" /* Light gray background */,
             "--light-background": "#ffffff" /* White surface */,
@@ -213,6 +312,251 @@
                 "#007aff" /* Bright blue focus border color */,
             "--select-focus-box-shadow":
                 "rgba(0, 122, 255, 0.3)" /* Bright blue focus shadow */,
+        },
+        // Black and White Theme
+        blackAndWhiteTheme: {
+            "--background": "#ffffff", // White background
+            "--light-background": "#ffffff", // White surface
+            "--surface": "#f5f5f5", // Light gray surface
+            "--primary-text": "#000000", // Black text
+            "--secondary-text": "#424242", // Dark gray text
+            "--dark-text": "#000000", // Black text
+            "--divider": "#e0e0e0", // Light gray divider
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Light gray shadow
+            "--primary": "#000000", // Black
+            "--secondary": "#424242", // Dark gray
+            "--warning": "#ffc107", // Yellow
+            "--error": "#f44336", // Red
+            "--info": "#2196f3", // Blue
+            "--success": "#4caf50", // Green
+            "--dropdown-box-shadow": "rgba(0, 0, 0, 0.5)", // Transparent black shadow
+            "--group-card-hover": "#f5f5f5", // Light gray
+            "--seperator": "#e0e0e0", // Light gray
+            "--select-background-color": "#ffffff", // White
+            "--select-text-color": "#000000", // Black
+            "--select-focus-border-color": "#000000", // Black
+            "--select-focus-box-shadow": "rgba(0, 0, 0, 0.3)", // Transparent black shadow
+        },
+
+        // Grayscale Theme
+        grayscaleTheme: {
+            "--background": "#f5f5f5", // Light gray background
+            "--light-background": "#ffffff", // White surface
+            "--surface": "#e0e0e0", // Light gray surface
+            "--primary-text": "#212121", // Dark gray text
+            "--secondary-text": "#757575", // Medium gray text
+            "--dark-text": "#000000", // Black text
+            "--divider": "#bdbdbd", // Light gray divider
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Light gray shadow
+            "--primary": "#616161", // Dark gray
+            "--secondary": "#9e9e9e", // Medium gray
+            "--warning": "#bdbdbd", // Light gray
+            "--error": "#424242", // Dark gray
+            "--info": "#757575", // Medium gray
+            "--success": "#9e9e9e", // Medium gray
+            "--dropdown-box-shadow": "rgba(97, 97, 97, 0.5)", // Transparent dark gray shadow
+            "--group-card-hover": "#e0e0e0", // Light gray
+            "--seperator": "#bdbdbd", // Light gray
+            "--select-background-color": "#f5f5f5", // Light gray
+            "--select-text-color": "#212121", // Dark gray
+            "--select-focus-border-color": "#616161", // Dark gray
+            "--select-focus-box-shadow": "rgba(97, 97, 97, 0.3)", // Transparent dark gray shadow
+        },
+
+        // Pastel Blue Theme
+        pastelBlueTheme: {
+            "--background": "#e3f2fd", // Light blue background
+            "--light-background": "#ffffff", // White surface
+            "--surface": "#bbdefb", // Light blue surface
+            "--primary-text": "#212121", // Dark gray text
+            "--secondary-text": "#757575", // Medium gray text
+            "--dark-text": "#000000", // Black text
+            "--divider": "#90caf9", // Light blue divider
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Light gray shadow
+            "--primary": "#2196f3", // Blue
+            "--secondary": "#64b5f6", // Light blue
+            "--warning": "#ffcc80", // Light orange
+            "--error": "#f44336", // Red
+            "--info": "#29b6f6", // Bright blue
+            "--success": "#81c784", // Light green
+            "--dropdown-box-shadow": "rgba(33, 150, 243, 0.5)", // Transparent blue shadow
+            "--group-card-hover": "#e1f5fe", // Lighter blue
+            "--seperator": "#90caf9", // Light blue
+            "--select-background-color": "#e3f2fd", // Light blue
+            "--select-text-color": "#212121", // Dark gray
+            "--select-focus-border-color": "#2196f3", // Blue
+            "--select-focus-box-shadow": "rgba(33, 150, 243, 0.3)", // Transparent blue shadow
+        },
+        // Japanese Garden Theme
+        japaneseGardenTheme: {
+            "--background": "#f2f2f2", // Light gray background
+            "--light-background": "#ffffff", // White surface
+            "--surface": "#e0e0e0", // Light gray surface
+            "--primary-text": "#212121", // Dark gray text
+            "--secondary-text": "#757575", // Medium gray text
+            "--dark-text": "#000000", // Black text
+            "--divider": "#d9d9d9", // Light gray divider
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Light gray shadow
+            "--primary": "#7cb342", // Green
+            "--secondary": "#a1887f", // Light brown
+            "--warning": "#ffb74d", // Light orange
+            "--error": "#ef5350", // Light red
+            "--info": "#64b5f6", // Light blue
+            "--success": "#81c784", // Light green
+            "--dropdown-box-shadow": "rgba(124, 179, 66, 0.5)", // Transparent green shadow
+            "--group-card-hover": "#ffffff", // White
+            "--seperator": "#d9d9d9", // Light gray
+            "--select-background-color": "#e0e0e0", // Light gray
+            "--select-text-color": "#212121", // Dark gray
+            "--select-focus-border-color": "#7cb342", // Green
+            "--select-focus-box-shadow": "rgba(124, 179, 66, 0.3)", // Transparent green shadow
+        },
+
+        // Bohemian Theme
+        bohemianTheme: {
+            "--background": "#f0e5d8", // Light brown background
+            "--light-background": "#ffffff", // White surface
+            "--surface": "#e6b87b", // Medium brown surface
+            "--primary-text": "#212121", // Dark gray text
+            "--secondary-text": "#757575", // Medium gray text
+            "--dark-text": "#000000", // Black text
+            "--divider": "#c58c5e", // Brown divider
+            "--shadow": "rgba(229, 184, 123, 0.5)", // Transparent brown shadow
+            "--primary": "#a1887f", // Light brown
+            "--secondary": "#d4af37", // Dark gold
+            "--warning": "#ffb74d", // Light orange
+            "--error": "#ef5350", // Light red
+            "--info": "#64b5f6", // Light blue
+            "--success": "#81c784", // Light green
+            "--dropdown-box-shadow": "rgba(161, 136, 127, 0.5)", // Transparent light brown shadow
+            "--group-card-hover": "#ffffff", // White
+            "--seperator": "#c58c5e", // Brown
+            "--select-background-color": "#e6b87b", // Medium brown
+            "--select-text-color": "#212121", // Dark gray
+            "--select-focus-border-color": "#a1887f", // Light brown
+            "--select-focus-box-shadow": "rgba(161, 136, 127, 0.3)", // Transparent light brown shadow
+        },
+        // Galaxy Theme
+        galaxyTheme: {
+            "--background": "#261827", // Dark purple background
+            "--light-background": "#39233d", // Medium dark purple surface
+            "--surface": "#4c3250", // Purple surface
+            "--primary-text": "#e8d9c9", // Light beige text
+            "--secondary-text": "#c5b2a3", // Medium beige text
+            "--dark-text": "#ffffff", // White text
+            "--divider": "#593c5f", // Dark purple divider
+            "--shadow": "rgba(34, 24, 39, 0.7)", // Transparent dark purple shadow
+            "--primary": "#9c27b0", // Purple
+            "--secondary": "#3f51b5", // Indigo
+            "--warning": "#ffeb3b", // Yellow
+            "--error": "#f44336", // Red
+            "--info": "#2196f3", // Blue
+            "--success": "#4caf50", // Green
+            "--dropdown-box-shadow": "rgba(156, 39, 176, 0.5)", // Transparent purple shadow
+            "--group-card-hover": "#39233d", // Medium dark purple
+            "--seperator": "#593c5f", // Dark purple
+            "--select-background-color": "#4c3250", // Purple
+            "--select-text-color": "#e8d9c9", // Light beige
+            "--select-focus-border-color": "#9c27b0", // Purple
+            "--select-focus-box-shadow": "rgba(156, 39, 176, 0.3)", // Transparent purple shadow
+        },
+
+        // Dragon Theme
+        dragonTheme: {
+            "--background": "#400000", // Dark red background
+            "--light-background": "#590000", // Medium dark red surface
+            "--surface": "#720000", // Dark red surface
+            "--primary-text": "#ffffff", // White text
+            "--secondary-text": "#cccccc", // Light gray text
+            "--dark-text": "#ffffff", // White text
+            "--divider": "#8b0000", // Red divider
+            "--shadow": "rgba(64, 0, 0, 0.7)", // Transparent dark red shadow
+            "--primary": "#f44336", // Red
+            "--secondary": "#ff5722", // Orange
+            "--warning": "#ffeb3b", // Yellow
+            "--error": "#d32f2f", // Dark red
+            "--info": "#2196f3", // Blue
+            "--success": "#4caf50", // Green
+            "--dropdown-box-shadow": "rgba(244, 67, 54, 0.5)", // Transparent red shadow
+            "--group-card-hover": "#590000", // Medium dark red
+            "--seperator": "#8b0000", // Red
+            "--select-background-color": "#720000", // Dark red
+            "--select-text-color": "#ffffff", // White
+            "--select-focus-border-color": "#f44336", // Red
+            "--select-focus-box-shadow": "rgba(244, 67, 54, 0.3)", // Transparent red shadow
+        },
+
+        // Fairy Theme
+        fairyTheme: {
+            "--background": "#fce4ec", // Light pink background
+            "--light-background": "#ffffff", // White surface
+            "--surface": "#f8bbd0", // Light pink surface
+            "--primary-text": "#212121", // Dark gray text
+            "--secondary-text": "#757575", // Medium gray text
+            "--dark-text": "#000000", // Black text
+            "--divider": "#f48fb1", // Pink divider
+            "--shadow": "rgba(244, 143, 177, 0.5)", // Transparent pink shadow
+            "--primary": "#e91e63", // Bright pink
+            "--secondary": "#64b5f6", // Light blue
+            "--warning": "#ffcc80", // Light orange
+            "--error": "#ef5350", // Light red
+            "--info": "#29b6f6", // Bright blue
+            "--success": "#81c784", // Light green
+            "--dropdown-box-shadow": "rgba(233, 30, 99, 0.5)", // Transparent bright pink shadow
+            "--group-card-hover": "#ffffff", // White
+            "--seperator": "#f8bbd0", // Light pink
+            "--select-background-color": "#fce4ec", // Light pink
+            "--select-text-color": "#212121", // Dark gray
+            "--select-focus-border-color": "#e91e63", // Bright pink
+            "--select-focus-box-shadow": "rgba(233, 30, 99, 0.3)", // Transparent bright pink shadow
+        },
+        // Industrial Theme
+        industrialTheme: {
+            "--background": "#424242", // Dark gray background
+            "--light-background": "#616161", // Medium dark gray surface
+            "--surface": "#757575", // Medium gray surface
+            "--primary-text": "#ffffff", // White text
+            "--secondary-text": "#bdbdbd", // Light gray text
+            "--dark-text": "#ffffff", // White text
+            "--divider": "#9e9e9e", // Medium gray divider
+            "--shadow": "rgba(66, 66, 66, 0.7)", // Transparent dark gray shadow
+            "--primary": "#f44336", // Red
+            "--secondary": "#9e9e9e", // Medium gray
+            "--warning": "#ffeb3b", // Yellow
+            "--error": "#d32f2f", // Dark red
+            "--info": "#2196f3", // Blue
+            "--success": "#4caf50", // Green
+            "--dropdown-box-shadow": "rgba(244, 67, 54, 0.5)", // Transparent red shadow
+            "--group-card-hover": "#616161", // Medium dark gray
+            "--seperator": "#9e9e9e", // Medium gray
+            "--select-background-color": "#757575", // Medium gray
+            "--select-text-color": "#ffffff", // White
+            "--select-focus-border-color": "#f44336", // Red
+            "--select-focus-box-shadow": "rgba(244, 67, 54, 0.3)", // Transparent red shadow
+        },
+        // Pastel Green Theme
+        pastelGreenTheme: {
+            "--background": "#e8f5e9", // Light green background
+            "--light-background": "#ffffff", // White surface
+            "--surface": "#c8e6c9", // Light green surface
+            "--primary-text": "#212121", // Dark gray text
+            "--secondary-text": "#757575", // Medium gray text
+            "--dark-text": "#000000", // Black text
+            "--divider": "#a5d6a7", // Light green divider
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Light gray shadow
+            "--primary": "#4caf50", // Green
+            "--secondary": "#81c784", // Light green
+            "--warning": "#ffcc80", // Light orange
+            "--error": "#f44336", // Red
+            "--info": "#29b6f6", // Bright blue
+            "--success": "#66bb6a", // Brighter green
+            "--dropdown-box-shadow": "rgba(76, 175, 80, 0.5)", // Transparent green shadow
+            "--group-card-hover": "#dcedc8", // Lighter green
+            "--seperator": "#a5d6a7", // Light green
+            "--select-background-color": "#e8f5e9", // Light green
+            "--select-text-color": "#212121", // Dark gray
+            "--select-focus-border-color": "#4caf50", // Green
+            "--select-focus-box-shadow": "rgba(76, 175, 80, 0.3)", // Transparent green shadow
         },
         silverLiningTheme: {
             "--background": "#f0f0f0", // Açık gümüş gri arka plan
@@ -4136,6 +4480,273 @@
             "--select-focus-border-color": "#8BC34A",
             "--select-focus-box-shadow": "rgba(139, 195, 74, 0.3)",
         },
+        // Sunset Beach Theme
+        sunsetBeachTheme: {
+            "--background": "#FCE4EC", // Light pink background
+            "--light-background": "#FFF8E1", // Light yellow surface
+            "--surface": "#FFE0B2", // Light orange surface
+            "--primary-text": "#212121", // Dark gray text
+            "--secondary-text": "#795548", // Medium brown text
+            "--dark-text": "#3E2723", // Dark brown text
+            "--divider": "#FFCC80", // Light orange divider
+            "--shadow": "rgba(255, 224, 178, 0.5)", // Transparent light orange shadow
+            "--primary": "#FFA000", // Orange
+            "--secondary": "#FFC107", // Amber
+            "--warning": "#FFEB3B", // Yellow
+            "--error": "#EF5350", // Light Red
+            "--info": "#29B6F6", // Blue
+            "--success": "#66BB6A", // Green
+            "--dropdown-box-shadow": "rgba(255, 160, 0, 0.7)", // Transparent orange shadow
+            "--group-card-hover": "#FFF8E1", // Light yellow
+            "--seperator": "#FFCC80", // Light orange
+            "--select-background-color": "#FFE0B2", // Light orange
+            "--select-text-color": "#4E342E", // Dark brown
+            "--select-focus-border-color": "#FFA000", // Orange
+            "--select-focus-box-shadow": "rgba(255, 160, 0, 0.3)", // Transparent orange shadow
+        },
+
+        // Rainy Forest Theme
+        rainyForestTheme: {
+            "--background": "#263238", // Dark grayish green background
+            "--light-background": "#37474F", // Dark blue-gray surface
+            "--surface": "#455A64", // Grayish blue surface
+            "--primary-text": "#ECEFF1", // Light gray text
+            "--secondary-text": "#CFD8DC", // Light blue-gray text
+            "--dark-text": "#FFFFFF", // White text
+            "--divider": "#607D8B", // Medium blue-gray divider
+            "--shadow": "rgba(68, 90, 100, 0.5)", // Transparent grayish blue shadow
+            "--primary": "#26A69A", // Teal
+            "--secondary": "#4DB6AC", // Light teal
+            "--warning": "#FFB74D", // Light orange
+            "--error": "#EF5350", // Light Red
+            "--info": "#29B6F6", // Blue
+            "--success": "#81C784", // Light green
+            "--dropdown-box-shadow": "rgba(38, 166, 154, 0.7)", // Transparent teal shadow
+            "--group-card-hover": "#37474F", // Dark blue-gray
+            "--seperator": "#607D8B", // Medium blue-gray
+            "--select-background-color": "#455A64", // Grayish blue
+            "--select-text-color": "#ECEFF1", // Light gray
+            "--select-focus-border-color": "#26A69A", // Teal
+            "--select-focus-box-shadow": "rgba(38, 166, 154, 0.3)", // Transparent teal shadow
+        },
+        // Neon Sunset Theme
+        neonSunsetTheme: {
+            "--background": "#1A1A1A", // Dark Gray Background
+            "--light-background": "#262626", // Darker Gray Surface
+            "--surface": "#333333", // Medium Gray Surface
+            "--primary-text": "#FFFFFF", // White Text
+            "--secondary-text": "#D4D4D4", // Light Gray Text
+            "--dark-text": "#000000", // Black Text
+            "--divider": "#4D4D4D", // Dark Gray Divider
+            "--shadow": "rgba(26, 26, 26, 0.7)", // Dark Gray Shadow
+            "--primary": "#FF9800", // Neon Orange
+            "--secondary": "#FF5722", // Neon Red
+            "--warning": "#FFEB3B", // Neon Yellow
+            "--error": "#FF0033", // Neon Pink
+            "--info": "#00FFFF", // Neon Cyan
+            "--success": "#76FF03", // Neon Green
+            "--dropdown-box-shadow": "rgba(255, 152, 0, 0.7)", // Neon Orange Shadow
+            "--group-card-hover": "#262626", // Darker Gray
+            "--seperator": "#4D4D4D", // Dark Gray
+            "--select-background-color": "#333333", // Medium Gray
+            "--select-text-color": "#FFFFFF", // White
+            "--select-focus-border-color": "#FF9800", // Neon Orange
+            "--select-focus-box-shadow": "rgba(255, 152, 0, 0.3)", // Neon Orange Shadow
+        },
+        // Moroccan Bazaar Theme
+        moroccanBazaarTheme: {
+            "--background": "#F0D59E", // Light Orange-Brown background
+            "--light-background": "#FFF59D", // Light Yellow surface
+            "--surface": "#E6B87B", // Medium Brown surface
+            "--primary-text": "#212121", // Dark gray text
+            "--secondary-text": "#795548", // Medium brown text
+            "--dark-text": "#3E2723", // Dark brown text
+            "--divider": "#C58C5E", // Brown divider
+            "--shadow": "rgba(229, 184, 123, 0.5)", // Transparent brown shadow
+            "--primary": "#8D6E63", // Dark Brown
+            "--secondary": "#D4AF37", // Gold
+            "--warning": "#FFB74D", // Light Orange
+            "--error": "#EF5350", // Light Red
+            "--info": "#29B6F6", // Blue
+            "--success": "#4CAF50", // Green
+            "--dropdown-box-shadow": "rgba(141, 110, 99, 0.7)", // Transparent dark brown shadow
+            "--group-card-hover": "#FFF59D", // Light yellow
+            "--seperator": "#C58C5E", // Brown
+            "--select-background-color": "#E6B87B", // Medium brown
+            "--select-text-color": "#212121", // Dark gray
+            "--select-focus-border-color": "#8D6E63", // Dark Brown
+            "--select-focus-box-shadow": "rgba(141, 110, 99, 0.3)", // Transparent dark brown shadow
+        },
+        // Enchanted Forest Theme
+        enchantedForestTheme2: {
+            "--background": "#182820",
+            "--light-background": "#22382C",
+            "--surface": "#2D4838",
+            "--primary-text": "#C8E6C9",
+            "--secondary-text": "#A5D6A7",
+            "--dark-text": "#FFFFFF",
+            "--divider": "#43A047",
+            "--shadow": "rgba(24, 40, 32, 0.7)",
+            "--primary": "#66BB6A",
+            "--secondary": "#AED581",
+            "--warning": "#FFEB3B",
+            "--error": "#EF5350",
+            "--info": "#42A5F5",
+            "--success": "#689F38",
+            "--dropdown-box-shadow": "rgba(102, 187, 106, 0.5)",
+            "--group-card-hover": "#22382C",
+            "--seperator": "#43A047",
+            "--select-background-color": "#2D4838",
+            "--select-text-color": "#C8E6C9",
+            "--select-focus-border-color": "#66BB6A",
+            "--select-focus-box-shadow": "rgba(102, 187, 106, 0.3)",
+        },
+        // Mountain Meadow Theme
+        mountainMeadowTheme: {
+            "--background": "#b9f6ca", // Light green background
+            "--light-background": "#f1f8e9", // Lighter green surface
+            "--surface": "#dcedc8", // Light green surface
+            "--primary-text": "#212121", // Dark gray text
+            "--secondary-text": "#757575", // Medium gray text
+            "--dark-text": "#000000", // Black text
+            "--divider": "#c5e1a5", // Light green divider
+            "--shadow": "rgba(220, 237, 200, 0.5)", // Transparent light green shadow
+            "--primary": "#4caf50", // Green
+            "--secondary": "#81c784", // Light green
+            "--warning": "#ffcc80", // Light orange
+            "--error": "#ef5350", // Light red
+            "--info": "#64b5f6", // Light blue
+            "--success": "#66bb6a", // Brighter green
+            "--dropdown-box-shadow": "rgba(76, 175, 80, 0.5)", // Transparent green shadow
+            "--group-card-hover": "#f1f8e9", // Lighter green
+            "--seperator": "#c5e1a5", // Light green
+            "--select-background-color": "#dcedc8", // Light green
+            "--select-text-color": "#212121", // Dark gray
+            "--select-focus-border-color": "#4caf50", // Green
+            "--select-focus-box-shadow": "rgba(76, 175, 80, 0.3)", // Transparent green shadow
+        },
+
+        // Desert Bloom Theme
+        desertBloomTheme: {
+            "--background": "#F5F5F5", // Light gray background
+            "--light-background": "#FFFFFF", // White surface
+            "--surface": "#FFE0B2", // Light orange surface
+            "--primary-text": "#3E2723", // Dark brown text
+            "--secondary-text": "#795548", // Medium brown text
+            "--dark-text": "#000000", // Black text
+            "--divider": "#FFCC80", // Light orange divider
+            "--shadow": "rgba(255, 224, 178, 0.5)", // Transparent light orange shadow
+            "--primary": "#F48FB1", // Pink
+            "--secondary": "#9C27B0", // Purple
+            "--warning": "#FFB74D", // Light orange
+            "--error": "#EF5350", // Light red
+            "--info": "#64B5F6", // Light blue
+            "--success": "#4CAF50", // Green
+            "--dropdown-box-shadow": "rgba(244, 143, 177, 0.5)", // Transparent pink shadow
+            "--group-card-hover": "#FFFFFF", // White
+            "--seperator": "#FFCC80", // Light orange
+            "--select-background-color": "#FFE0B2", // Light orange
+            "--select-text-color": "#3E2723", // Dark brown
+            "--select-focus-border-color": "#F48FB1", // Pink
+            "--select-focus-box-shadow": "rgba(244, 143, 177, 0.3)", // Transparent pink shadow
+        },
+        // Geometric Shapes Theme
+        geometricShapesTheme: {
+            "--background": "#FFFFFF", // White background
+            "--light-background": "#F5F5F5", // Light gray surface
+            "--surface": "#EEEEEE", // Light gray surface
+            "--primary-text": "#212121", // Dark gray text
+            "--secondary-text": "#757575", // Medium gray text
+            "--dark-text": "#000000", // Black text
+            "--divider": "#BDBDBD", // Light gray divider
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Light gray shadow
+            "--primary": "#607D8B", // Blue Gray
+            "--secondary": "#90A4AE", // Light Blue Gray
+            "--warning": "#FFEB3B", // Yellow
+            "--error": "#EF5350", // Light Red
+            "--info": "#29B6F6", // Blue
+            "--success": "#81C784", // Light Green
+            "--dropdown-box-shadow": "rgba(96, 125, 139, 0.5)", // Transparent blue gray shadow
+            "--group-card-hover": "#F5F5F5", // Light gray
+            "--seperator": "#BDBDBD", // Light gray
+            "--select-background-color": "#EEEEEE", // Light gray
+            "--select-text-color": "#212121", // Dark gray
+            "--select-focus-border-color": "#607D8B", // Blue Gray
+            "--select-focus-box-shadow": "rgba(96, 125, 139, 0.3)", // Transparent blue gray shadow
+        },
+        // Aztec Temple Theme
+        aztecTempleTheme: {
+            "--background": "#5D4037", // Dark brown background
+            "--light-background": "#795548", // Medium brown surface
+            "--surface": "#A1887F", // Light brown surface
+            "--primary-text": "#FFFDE7", // Light cream text
+            "--secondary-text": "#D7CCC8", // Light brown text
+            "--dark-text": "#FFFFFF", // White text
+            "--divider": "#BCAAA4", // Light brown divider
+            "--shadow": "rgba(93, 64, 55, 0.7)", // Transparent dark brown shadow
+            "--primary": "#FFC107", // Amber
+            "--secondary": "#FF9800", // Orange
+            "--warning": "#FFEB3B", // Yellow
+            "--error": "#D32F2F", // Red
+            "--info": "#29B6F6", // Blue
+            "--success": "#4CAF50", // Green
+            "--dropdown-box-shadow": "rgba(255, 193, 7, 0.5)", // Transparent amber shadow
+            "--group-card-hover": "#795548", // Medium brown
+            "--seperator": "#BCAAA4", // Light brown
+            "--select-background-color": "#A1887F", // Light brown
+            "--select-text-color": "#FFFDE7", // Light cream
+            "--select-focus-border-color": "#FFC107", // Amber
+            "--select-focus-box-shadow": "rgba(255, 193, 7, 0.3)", // Transparent amber shadow
+        },
+
+        // Scandinavian Cabin Theme
+        scandinavianCabinTheme: {
+            "--background": "#F5F5F5", // Light gray background
+            "--light-background": "#FFFFFF", // White surface
+            "--surface": "#EEEEEE", // Light gray surface
+            "--primary-text": "#212121", // Dark gray text
+            "--secondary-text": "#757575", // Medium gray text
+            "--dark-text": "#000000", // Black text
+            "--divider": "#BDBDBD", // Light gray divider
+            "--shadow": "rgba(0, 0, 0, 0.1)", // Light gray shadow
+            "--primary": "#607D8B", // Blue Gray
+            "--secondary": "#90A4AE", // Light Blue Gray
+            "--warning": "#FFEB3B", // Yellow
+            "--error": "#EF5350", // Light Red
+            "--info": "#29B6F6", // Blue
+            "--success": "#81C784", // Light Green
+            "--dropdown-box-shadow": "rgba(96, 125, 139, 0.5)", // Transparent blue gray shadow
+            "--group-card-hover": "#FFFFFF", // White
+            "--seperator": "#BDBDBD", // Light gray
+            "--select-background-color": "#EEEEEE", // Light gray
+            "--select-text-color": "#212121", // Dark gray
+            "--select-focus-border-color": "#607D8B", // Blue Gray
+            "--select-focus-box-shadow": "rgba(96, 125, 139, 0.3)", // Transparent blue gray shadow
+        },
+        // Moonlit Castle Theme
+        moonlitCastleTheme: {
+            "--background": "#1C1C1C", // Dark Charcoal background
+            "--light-background": "#2E2E2E", // Medium charcoal surface
+            "--surface": "#3E3E3E", // Light charcoal surface
+            "--primary-text": "#EEEEEE", // Light gray text
+            "--secondary-text": "#BDBDBD", // Medium gray text
+            "--dark-text": "#FFFFFF", // White text
+            "--divider": "#4E4E4E", // Medium gray divider
+            "--shadow": "rgba(28, 28, 28, 0.7)", // Transparent charcoal shadow
+            "--primary": "#78909C", // Blue Gray
+            "--secondary": "#90A4AE", // Light Blue Gray
+            "--warning": "#FFEB3B", // Yellow
+            "--error": "#EF5350", // Light Red
+            "--info": "#29B6F6", // Blue
+            "--success": "#81C784", // Light Green
+            "--dropdown-box-shadow": "rgba(120, 144, 156, 0.5)", // Transparent blue gray shadow
+            "--group-card-hover": "#2E2E2E", // Medium charcoal
+            "--seperator": "#4E4E4E", // Medium gray
+            "--select-background-color": "#3E3E3E", // Light charcoal
+            "--select-text-color": "#EEEEEE", // Light gray
+            "--select-focus-border-color": "#78909C", // Blue Gray
+            "--select-focus-box-shadow": "rgba(120, 144, 156, 0.3)", // Transparent blue gray shadow
+        },
     };
 
     export function applyTheme(theme: string) {
@@ -4189,11 +4800,10 @@
     .theme-switcher {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 3px;
     }
 
     .theme-button {
-        padding: 5px;
         cursor: pointer;
         border: none;
         border-radius: 5px;
@@ -4201,7 +4811,7 @@
             background-color 0.3s ease,
             color 0.3s ease;
         text-align: center;
-        width: 91px;
-        height: 45px;
+        width: 97px;
+        height: 28px;
     }
 </style>
