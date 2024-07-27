@@ -2854,7 +2854,8 @@
           on:click={addVariable}
           class="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
         >
-          <Icon icon="fluent-mdl2:add-to" width="20" height="20" class="mr-2" /> Add
+          <Icon icon="fluent-mdl2:add-to" width="20" height="20" class="mr-2" />
+          Add
         </button>
       </div>
 
@@ -2904,23 +2905,24 @@
 />
 
 {#if $themeModalOpen}
-<div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-  <div class="bg-white p-6 rounded shadow-2xl w-11/12 md:w-3/5 max-w-6xl">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-bold text-neutral-950">Change Theme</h2>
-      <button
-        type="button"
-        on:click={closeThemeSwitcherModal}
-        style="box-shadow: 0 7px 12px rgba(0, 0, 0, 0.3);"
-        class="rounded-full p-2 shadow-lg flex items-center justify-center"
-      >
-        <Icon icon="eva:close-fill" width="24" height="24" />
-      </button>
+  <div
+    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+  >
+    <div class="bg-white p-6 rounded shadow-2xl w-11/12 md:w-3/5 max-w-6xl">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold text-neutral-950">Change Theme</h2>
+        <button
+          type="button"
+          on:click={closeThemeSwitcherModal}
+          style="box-shadow: 0 7px 12px rgba(0, 0, 0, 0.3);"
+          class="rounded-full p-2 shadow-lg flex items-center justify-center"
+        >
+          <Icon icon="eva:close-fill" width="24" height="24" />
+        </button>
+      </div>
+      <ThemeSwitcher />
     </div>
-    <ThemeSwitcher />
   </div>
-</div>
-
 {/if}
 
 {#if $groupModalOpen}
@@ -3125,7 +3127,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: .85rem;
+    padding: 0.85rem;
     width: 100%;
     border-top: 1px solid var(--divider);
     border-bottom: 1px solid var(--divider);
