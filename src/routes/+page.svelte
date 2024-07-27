@@ -2130,41 +2130,44 @@
         </div>
       </div>
 
-      <div class="history-panel panel">
-        {#if $selectedGroup}
-          <div class="group">
-            <div class="flex justify-between items-center mb-2">
-              <h1
-                class="text-base font-semibold flex items-center group-title"
-                title={$selectedGroup}
-              >
-                <span class="truncate">{$selectedGroup}</span>
-              </h1>
-            </div>
+      {#if $currentLayout === "default"}
+        <div class="history-panel-horizontal panel">
+          {#if $selectedGroup}
+            <div class="group">
+              <div class="flex justify-between items-center mb-2">
+                <h1
+                  class="text-base font-semibold flex items-center group-title"
+                  title={$selectedGroup}
+                >
+                  <span class="truncate">{$selectedGroup}</span>
+                </h1>
+              </div>
 
-            <div class="search-container mb-2">
-              <input
-                type="text"
-                bind:value={$searchTerm}
-                placeholder="Search history..."
-                class="w-full p-2 border rounded"
-              />
-            </div>
+              <div class="search-container mb-2">
+                <input
+                  type="text"
+                  bind:value={$searchTerm}
+                  placeholder="Search history..."
+                  class="w-full p-2 border rounded"
+                />
+              </div>
 
-            <ul>
-              {#each $history.filter((item) => item.url
-                    .toLowerCase()
-                    .includes($searchTerm.toLowerCase()) || item.method
-                    .toLowerCase()
-                    .includes($searchTerm.toLowerCase())) as item}
-                <li class="mb-2 history-item flex justify-between items-center">
-                  <button
-                    type="button"
-                    class="w-full text-left"
-                    on:click={() => selectHistoryItem(item)}
+              <ul>
+                {#each $history.filter((item) => item.url
+                      .toLowerCase()
+                      .includes($searchTerm.toLowerCase()) || item.method
+                      .toLowerCase()
+                      .includes($searchTerm.toLowerCase())) as item}
+                  <li
+                    class="mb-2 history-item flex justify-between items-center"
                   >
-                    <span
-                      class="px-2 py-1 rounded
+                    <button
+                      type="button"
+                      class="w-full text-left"
+                      on:click={() => selectHistoryItem(item)}
+                    >
+                      <span
+                        class="px-2 py-1 rounded
                         {item.method === 'GET' ? 'method-get' : ''} 
                         {item.method === 'POST' ? 'method-post' : ''} 
                         {item.method === 'PUT' ? 'method-put' : ''} 
@@ -2175,45 +2178,43 @@
                         {item.method === 'CONNECT' ? 'method-connect' : ''} 
                         {item.method === 'TRACE' ? 'method-trace' : ''}
                         text-white"
+                      >
+                        {item.method.substring(0, 3)}
+                      </span>
+                      <span class="url">{item.url}</span>
+                    </button>
+                    <button
+                      class="duplicate-icon"
+                      aria-label="Duplicate history item"
+                      on:click={() => duplicateHistoryItem(item)}
+                      on:keydown={(e) => {
+                        if (e.key === "Enter" || e.key === " ")
+                          duplicateHistoryItem(item);
+                      }}
                     >
-                      {item.method.substring(0, 3)}
-                    </span>
-                    <span class="url">{item.url}</span>
-                  </button>
-                  <button
-                    class="duplicate-icon"
-                    aria-label="Duplicate history item"
-                    on:click={() => duplicateHistoryItem(item)}
-                    on:keydown={(e) => {
-                      if (e.key === "Enter" || e.key === " ")
-                        duplicateHistoryItem(item);
-                    }}
-                  >
-                    <Icon icon="clarity:clone-solid" width="18" height="18" />
-                  </button>
-                  <button
-                    class="delete-icon"
-                    aria-label="Delete history item"
-                    on:click={() => openModal(item.id)}
-                    on:keydown={(e) => {
-                      if (e.key === "Enter" || e.key === " ")
-                        openModal(item.id);
-                    }}
-                  >
-                    <Icon
-                      icon="material-symbols:delete-outline"
-                      width="18"
-                      height="18"
-                    />
-                  </button>
-                </li>
-              {/each}
-            </ul>
-          </div>
-        {/if}
-      </div>
-
-      {#if $currentLayout === "default"}
+                      <Icon icon="clarity:clone-solid" width="18" height="18" />
+                    </button>
+                    <button
+                      class="delete-icon"
+                      aria-label="Delete history item"
+                      on:click={() => openModal(item.id)}
+                      on:keydown={(e) => {
+                        if (e.key === "Enter" || e.key === " ")
+                          openModal(item.id);
+                      }}
+                    >
+                      <Icon
+                        icon="material-symbols:delete-outline"
+                        width="18"
+                        height="18"
+                      />
+                    </button>
+                  </li>
+                {/each}
+              </ul>
+            </div>
+          {/if}
+        </div>
         <div class="request-panel panel">
           <div class="flex mb-4">
             <HttpMethodDropdown {method} />
@@ -2778,6 +2779,90 @@
           {/if}
         </div>
       {:else}
+        <div class="history-panel-vertical panel">
+          {#if $selectedGroup}
+            <div class="group">
+              <div class="flex justify-between items-center mb-2">
+                <h1
+                  class="text-base font-semibold flex items-center group-title"
+                  title={$selectedGroup}
+                >
+                  <span class="truncate">{$selectedGroup}</span>
+                </h1>
+              </div>
+
+              <div class="search-container mb-2">
+                <input
+                  type="text"
+                  bind:value={$searchTerm}
+                  placeholder="Search history..."
+                  class="w-full p-2 border rounded"
+                />
+              </div>
+
+              <ul>
+                {#each $history.filter((item) => item.url
+                      .toLowerCase()
+                      .includes($searchTerm.toLowerCase()) || item.method
+                      .toLowerCase()
+                      .includes($searchTerm.toLowerCase())) as item}
+                  <li
+                    class="mb-2 history-item flex justify-between items-center"
+                  >
+                    <button
+                      type="button"
+                      class="w-full text-left"
+                      on:click={() => selectHistoryItem(item)}
+                    >
+                      <span
+                        class="px-2 py-1 rounded
+                        {item.method === 'GET' ? 'method-get' : ''} 
+                        {item.method === 'POST' ? 'method-post' : ''} 
+                        {item.method === 'PUT' ? 'method-put' : ''} 
+                        {item.method === 'DELETE' ? 'method-delete' : ''} 
+                        {item.method === 'PATCH' ? 'method-patch' : ''} 
+                        {item.method === 'OPTIONS' ? 'method-options' : ''} 
+                        {item.method === 'HEAD' ? 'method-head' : ''} 
+                        {item.method === 'CONNECT' ? 'method-connect' : ''} 
+                        {item.method === 'TRACE' ? 'method-trace' : ''}
+                        text-white"
+                      >
+                        {item.method.substring(0, 3)}
+                      </span>
+                      <span class="url">{item.url}</span>
+                    </button>
+                    <button
+                      class="duplicate-icon"
+                      aria-label="Duplicate history item"
+                      on:click={() => duplicateHistoryItem(item)}
+                      on:keydown={(e) => {
+                        if (e.key === "Enter" || e.key === " ")
+                          duplicateHistoryItem(item);
+                      }}
+                    >
+                      <Icon icon="clarity:clone-solid" width="18" height="18" />
+                    </button>
+                    <button
+                      class="delete-icon"
+                      aria-label="Delete history item"
+                      on:click={() => openModal(item.id)}
+                      on:keydown={(e) => {
+                        if (e.key === "Enter" || e.key === " ")
+                          openModal(item.id);
+                      }}
+                    >
+                      <Icon
+                        icon="material-symbols:delete-outline"
+                        width="18"
+                        height="18"
+                      />
+                    </button>
+                  </li>
+                {/each}
+              </ul>
+            </div>
+          {/if}
+        </div>
         <div class="combined-panel panel">
           <div class="request-section">
             <div class="request-panel panel">
