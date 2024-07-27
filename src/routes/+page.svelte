@@ -89,9 +89,11 @@
   let currentLayout = writable("default"); // 'default' or 'alternative'
 
   function toggleLayout() {
-    currentLayout.update((layout) =>
-      layout === "default" ? "alternative" : "default",
-    );
+    currentLayout.update((layout) => {
+      const newLayout = layout === "default" ? "alternative" : "default";
+      localStorage.setItem("preferredLayout", newLayout);
+      return newLayout;
+    });
   }
 
   async function exportResponseToPDF() {
@@ -1586,6 +1588,10 @@
     const savedTheme = localStorage.getItem("selectedTheme");
     if (savedTheme) {
       applyTheme(savedTheme);
+    }
+    const savedLayout = localStorage.getItem("preferredLayout");
+    if (savedLayout === "default" || savedLayout === "alternative") {
+      currentLayout.set(savedLayout);
     }
     const savedEnvironment = localStorage.getItem("selectedEnvironment");
     if (savedEnvironment) {
