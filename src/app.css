@@ -100,7 +100,7 @@ body {
 .request-section {
   flex: 0 0 auto;
   height: 35%;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .response-section {

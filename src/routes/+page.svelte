@@ -2969,7 +2969,7 @@
                   Group
                 </button>
               </div>
-              <div class="tab-content">
+              <div class="tab-content" style="overflow-y: hidden !important;">
                 {#if $selectedRequestTab === "body"}
                   <HttpBodyDropdown
                     bind:selected={bodyType}
@@ -3839,15 +3839,6 @@
       0 4px 4px -1px var(--divider);
   }
 
-  .tab-content {
-    border: 1px solid var(--divider);
-    padding: 0.5rem;
-    background: var(--surface);
-    white-space: pre-wrap;
-    word-break: break-word;
-    overflow-y: auto;
-    max-height: 100%;
-  }
 
   .vertical-buttons {
     display: flex;
