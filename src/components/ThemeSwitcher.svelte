@@ -66,6 +66,6 @@
             color 0.3s ease;
         text-align: center;
         width: 97px;
-        height: 28px;
+        height: 33px;
     }
 </style>

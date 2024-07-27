@@ -4743,4 +4743,359 @@ export const themes: { [key: string]: ThemeProperties } = {
         "--select-focus-border-color": "#78909C", // Blue Gray
         "--select-focus-box-shadow": "rgba(120, 144, 156, 0.3)", // Transparent blue gray shadow
     },
+    pastelMintTheme: {
+        "--background": "#F0FFF0", // Very light mint green background
+        "--light-background": "#FFFFFF", // White surface
+        "--surface": "#E0F2F1", // Light mint green surface
+        "--primary-text": "#212121", // Dark gray text
+        "--secondary-text": "#757575", // Medium gray text
+        "--dark-text": "#000000", // Black text
+        "--divider": "#B2DFDB", // Medium mint green divider
+        "--shadow": "rgba(224, 242, 241, 0.5)", // Transparent mint green shadow
+        "--primary": "#00ACC1", // Turquoise
+        "--secondary": "#4DB6AC", // Light teal
+        "--warning": "#FFB74D", // Light orange
+        "--error": "#EF5350", // Light red
+        "--info": "#29B6F6", // Light blue
+        "--success": "#81C784", // Light green
+        "--dropdown-box-shadow": "rgba(0, 172, 193, 0.5)", // Transparent turquoise shadow
+        "--group-card-hover": "#FFFFFF", // White
+        "--seperator": "#B2DFDB", // Medium mint green
+        "--select-background-color": "#E0F2F1", // Light mint green
+        "--select-text-color": "#212121", // Dark gray
+        "--select-focus-border-color": "#00ACC1", // Turquoise
+        "--select-focus-box-shadow": "rgba(0, 172, 193, 0.3)", // Transparent turquoise shadow
+    },
+    pastelPeachTheme: {
+        "--background": "#FFF3E0", // Very light peach background
+        "--light-background": "#FFFFFF", // White surface
+        "--surface": "#FFE0B2", // Light peach surface
+        "--primary-text": "#212121", // Dark gray text
+        "--secondary-text": "#795548", // Medium brown text
+        "--dark-text": "#3E2723", // Dark brown text
+        "--divider": "#FFCC80", // Light peach divider
+        "--shadow": "rgba(255, 224, 178, 0.5)", // Transparent peach shadow
+        "--primary": "#FF9800", // Orange
+        "--secondary": "#FFB74D", // Light orange
+        "--warning": "#FFEB3B", // Light yellow
+        "--error": "#EF5350", // Light red
+        "--info": "#29B6F6", // Light blue
+        "--success": "#81C784", // Light green
+        "--dropdown-box-shadow": "rgba(255, 152, 0, 0.5)", // Transparent orange shadow
+        "--group-card-hover": "#FFFFFF", // White
+        "--seperator": "#FFCC80", // Light peach
+        "--select-background-color": "#FFE0B2", // Light peach
+        "--select-text-color": "#212121", // Dark gray
+        "--select-focus-border-color": "#FF9800", // Orange
+        "--select-focus-box-shadow": "rgba(255, 152, 0, 0.3)", // Transparent orange shadow
+    },
+    pastelLavenderTheme: {
+        "--background": "#F8F0F8", // Very light lavender background
+        "--light-background": "#FFFFFF", // White surface
+        "--surface": "#E6E2E8", // Light lavender surface
+        "--primary-text": "#212121", // Dark gray text
+        "--secondary-text": "#757575", // Medium gray text
+        "--dark-text": "#000000", // Black text
+        "--divider": "#D1C4E9", // Light lavender divider
+        "--shadow": "rgba(209, 196, 233, 0.5)", // Transparent lavender shadow
+        "--primary": "#9575CD", // Lavender purple
+        "--secondary": "#B39DDB", // Light lavender purple
+        "--warning": "#FFB74D", // Light orange
+        "--error": "#EF5350", // Light red
+        "--info": "#64B5F6", // Light blue
+        "--success": "#81C784", // Light green
+        "--dropdown-box-shadow": "rgba(149, 117, 205, 0.5)", // Transparent lavender purple shadow
+        "--group-card-hover": "#FFFFFF", // White
+        "--seperator": "#D1C4E9", // Light lavender
+        "--select-background-color": "#E6E2E8", // Light lavender
+        "--select-text-color": "#212121", // Dark gray
+        "--select-focus-border-color": "#9575CD", // Lavender purple
+        "--select-focus-box-shadow": "rgba(149, 117, 205, 0.3)", // Transparent lavender purple shadow
+    },
+    // Glacial Clarity Theme
+    glacialClarityTheme: {
+        "--background": "#F0F7FA", // Light blue-gray background
+        "--light-background": "#FFFFFF", // White surface
+        "--surface": "#E3F2FD", // Lighter blue-gray surface for cards
+        "--primary-text": "#263238", // Dark blue-gray text
+        "--secondary-text": "#607D8B", // Medium blue-gray text
+        "--dark-text": "#102A43", // Darker blue text for emphasis
+        "--divider": "#B0BEC5", // Light blue-gray divider
+        "--shadow": "rgba(98, 125, 152, 0.3)", // Subtle blue-gray shadow for cards
+        "--primary": "#627D98", // Medium blue-gray primary color
+        "--secondary": "#9FB3C8", // Lighter blue-gray secondary color
+        "--warning": "#FFCC00", // Yellow warning color
+        "--error": "#EF5350", // Light red error color
+        "--info": "#29B6F6", // Light blue info color
+        "--success": "#43A047", // Green success color
+        "--dropdown-box-shadow": "rgba(98, 125, 152, 0.7)", // Stronger shadow for dropdown
+        "--group-card-hover": "#D9E2EC", // Slightly darker hover color for cards
+        "--seperator": "#BCCCDC", // Light blue separator
+        "--select-background-color": "#E3F2FD", // Light blue-gray for select background
+        "--select-text-color": "#263238", // Dark blue-gray select text
+        "--select-focus-border-color": "#627D98", // Medium blue-gray focus border
+        "--select-focus-box-shadow": "rgba(98, 125, 152, 0.5)", // Stronger shadow for select focus
+    },
+
+    // Arctic Dusk Theme
+    arcticDuskTheme: {
+        "--background": "#2E3440", // Dark blue-gray background
+        "--light-background": "#3B4252", // Darker blue-gray surface
+        "--surface": "#434C5E", // Grayish blue surface for cards
+        "--primary-text": "#ECEFF4", // Light gray text
+        "--secondary-text": "#D8DEE9", // Medium gray text
+        "--dark-text": "#FFFFFF", // White text for emphasis
+        "--divider": "#4C566A", // Dark blue-gray divider
+        "--shadow": "rgba(46, 52, 64, 0.5)", // Subtle shadow for cards
+        "--primary": "#88C0D0", // Light blue primary color
+        "--secondary": "#81A1C1", // Light blue secondary color
+        "--warning": "#EBCB8B", // Yellow warning color
+        "--error": "#BF616A", // Red error color
+        "--info": "#5E81AC", // Darker blue info color
+        "--success": "#A3BE8C", // Green success color
+        "--dropdown-box-shadow": "rgba(136, 192, 208, 0.7)", // Stronger shadow for dropdown
+        "--group-card-hover": "#4C566A", // Slightly darker hover color for cards
+        "--seperator": "#4C566A", // Dark blue-gray separator
+        "--select-background-color": "#434C5E", // Grayish blue select background
+        "--select-text-color": "#ECEFF4", // Light gray select text
+        "--select-focus-border-color": "#88C0D0", // Light blue focus border
+        "--select-focus-box-shadow": "rgba(136, 192, 208, 0.5)", // Stronger shadow for select focus
+    },
+
+    // Winter Moon Theme
+    winterMoonTheme: {
+        "--background": "#21293F", // Dark blue background
+        "--light-background": "#334155", // Darker blue surface
+        "--surface": "#445566", // Deep blue surface for cards
+        "--primary-text": "#E0E1DD", // Light gray text
+        "--secondary-text": "#778DA9", // Medium gray text
+        "--dark-text": "#FFFFFF", // White text for emphasis
+        "--divider": "#4F5D75", // Dark blue divider
+        "--shadow": "rgba(67, 89, 122, 0.3)", // Subtle blue shadow for cards
+        "--primary": "#66FCF1", // Cyan primary color
+        "--secondary": "#45A29E", // Teal secondary color
+        "--warning": "#F39C12", // Yellow warning color
+        "--error": "#E74C3C", // Red error color
+        "--info": "#3498DB", // Blue info color
+        "--success": "#2ECC71", // Green success color
+        "--dropdown-box-shadow": "rgba(102, 252, 241, 0.7)", // Stronger cyan shadow for dropdown
+        "--group-card-hover": "#556677", // Slightly darker hover color for cards
+        "--seperator": "#4F5D75", // Dark blue separator
+        "--select-background-color": "#445566", // Deep blue select background
+        "--select-text-color": "#E0E1DD", // Light gray select text
+        "--select-focus-border-color": "#66FCF1", // Cyan focus border
+        "--select-focus-box-shadow": "rgba(102, 252, 241, 0.5)", // Stronger cyan shadow for select focus
+    },
+    // Obsidian Elegance Theme
+    obsidianEleganceTheme: {
+        "--background": "#121212", // Very dark gray background
+        "--light-background": "#1F1F1F", // Dark gray surface
+        "--surface": "#262626", // Deep gray surface for cards
+        "--primary-text": "#EEEEEE", // Light gray text
+        "--secondary-text": "#BDBDBD", // Medium gray text
+        "--dark-text": "#FFFFFF", // White text for emphasis
+        "--divider": "#333333", // Dark gray divider
+        "--shadow": "rgba(18, 18, 18, 0.5)", // Subtle shadow for cards
+        "--primary": "#9C27B0", // Deep purple primary color
+        "--secondary": "#673AB7", // Purple secondary color
+        "--warning": "#FFC107", // Yellow warning color
+        "--error": "#EF5350", // Red error color
+        "--info": "#29B6F6", // Blue info color
+        "--success": "#4CAF50", // Green success color
+        "--dropdown-box-shadow": "rgba(156, 39, 176, 0.7)", // Stronger purple shadow for dropdown
+        "--group-card-hover": "#1F1F1F", // Slightly lighter hover color for cards
+        "--seperator": "#424242", // Dark gray separator
+        "--select-background-color": "#262626", // Deep gray select background
+        "--select-text-color": "#EEEEEE", // Light gray select text
+        "--select-focus-border-color": "#9C27B0", // Deep purple focus border
+        "--select-focus-box-shadow": "rgba(156, 39, 176, 0.5)", // Stronger purple shadow for select focus
+    },
+
+    // Midnight Ink Theme
+    midnightInkTheme: {
+        "--background": "#0D0D0D", // Dark black background
+        "--light-background": "#1A1A1A", // Very dark gray surface
+        "--surface": "#212121", // Dark gray surface for cards
+        "--primary-text": "#BDBDBD", // Light gray text
+        "--secondary-text": "#757575", // Medium gray text
+        "--dark-text": "#FFFFFF", // White text for emphasis
+        "--divider": "#424242", // Dark gray divider
+        "--shadow": "rgba(33, 33, 33, 0.5)", // Subtle shadow for cards
+        "--primary": "#3949AB", // Indigo primary color
+        "--secondary": "#5C6BC0", // Light indigo secondary color
+        "--warning": "#FFEB3B", // Yellow warning color
+        "--error": "#E53935", // Red error color
+        "--info": "#1976D2", // Blue info color
+        "--success": "#388E3C", // Green success color
+        "--dropdown-box-shadow": "rgba(57, 73, 171, 0.7)", // Stronger indigo shadow for dropdown
+        "--group-card-hover": "#1A1A1A", // Slightly lighter hover color for cards
+        "--seperator": "#424242", // Dark gray separator
+        "--select-background-color": "#212121", // Dark gray select background
+        "--select-text-color": "#BDBDBD", // Light gray select text
+        "--select-focus-border-color": "#3949AB", // Indigo focus border
+        "--select-focus-box-shadow": "rgba(57, 73, 171, 0.5)", // Stronger indigo shadow for select focus
+    },
+
+    // Shadow City Theme
+    shadowCityTheme: {
+        "--background": "#111827", // Very dark blue background
+        "--light-background": "#1F2937", // Dark blue surface
+        "--surface": "#273548", // Deep blue surface for cards
+        "--primary-text": "#D1D5DB", // Light gray text
+        "--secondary-text": "#9CA3AF", // Medium gray text
+        "--dark-text": "#FFFFFF", // White text for emphasis
+        "--divider": "#374151", // Dark blue divider
+        "--shadow": "rgba(39, 49, 69, 0.5)", // Subtle shadow for cards
+        "--primary": "#8B5CF6", // Purple primary color
+        "--secondary": "#6366F1", // Indigo secondary color
+        "--warning": "#FBBF24", // Yellow warning color
+        "--error": "#EF4444", // Red error color
+        "--info": "#3B82F6", // Blue info color
+        "--success": "#22C55E", // Green success color
+        "--dropdown-box-shadow": "rgba(139, 92, 246, 0.7)", // Stronger purple shadow for dropdown
+        "--group-card-hover": "#1F2937", // Slightly lighter hover color for cards
+        "--seperator": "#4B5563", // Dark blue separator
+        "--select-background-color": "#273548", // Deep blue select background
+        "--select-text-color": "#D1D5DB", // Light gray select text
+        "--select-focus-border-color": "#8B5CF6", // Purple focus border
+        "--select-focus-box-shadow": "rgba(139, 92, 246, 0.5)", // Stronger purple shadow for select focus
+    },
+    tokyoNightsTheme: {
+        "--background": "#261827", // Deep purple background inspired by neon lights
+        "--light-background": "#39233D", // Darker purple surface
+        "--surface": "#4C3250", // Purple surface for cards
+        "--primary-text": "#E8D9C9", // Light beige text
+        "--secondary-text": "#C5B2A3", // Medium beige text
+        "--dark-text": "#FFFFFF", // White text for emphasis
+        "--divider": "#593C5F", // Dark purple divider
+        "--shadow": "rgba(34, 24, 39, 0.7)", // Transparent dark purple shadow
+        "--primary": "#F44336", // Bright red inspired by Japanese Torii gates
+        "--secondary": "#FF9800", // Bright orange inspired by city lights
+        "--warning": "#FFEB3B", // Bright yellow 
+        "--error": "#D32F2F", // Dark red
+        "--info": "#29B6F6", // Blue
+        "--success": "#4CAF50", // Green
+        "--dropdown-box-shadow": "rgba(244, 67, 54, 0.5)", // Red shadow for dropdown
+        "--group-card-hover": "#39233D", // Slightly lighter hover color for cards
+        "--seperator": "#593C5F", // Dark purple separator
+        "--select-background-color": "#4C3250", // Purple select background
+        "--select-text-color": "#E8D9C9", // Light beige select text
+        "--select-focus-border-color": "#F44336", // Red focus border
+        "--select-focus-box-shadow": "rgba(244, 67, 54, 0.3)", // Red shadow for select focus
+    },
+    moroccanSpiceMarketTheme: {
+        "--background": "#F0D59E", // Light warm brown background
+        "--light-background": "#FFF59D", // Light yellow surface
+        "--surface": "#E6B87B", // Medium warm brown surface for cards
+        "--primary-text": "#212121", // Dark gray text
+        "--secondary-text": "#795548", // Medium brown text
+        "--dark-text": "#3E2723", // Dark brown text for emphasis
+        "--divider": "#C58C5E", // Medium brown divider
+        "--shadow": "rgba(229, 184, 123, 0.5)", // Transparent brown shadow for cards
+        "--primary": "#8D6E63", // Deep warm brown primary color
+        "--secondary": "#D4AF37", // Gold secondary color inspired by spice colors
+        "--warning": "#FFB74D", // Light orange
+        "--error": "#EF5350", // Light red
+        "--info": "#29B6F6", // Blue
+        "--success": "#4CAF50", // Green
+        "--dropdown-box-shadow": "rgba(141, 110, 99, 0.7)", // Deep brown shadow for dropdown
+        "--group-card-hover": "#FFF59D", // Lighter yellow hover for cards
+        "--seperator": "#C58C5E", // Medium brown separator
+        "--select-background-color": "#E6B87B", // Medium brown select background
+        "--select-text-color": "#212121", // Dark gray select text
+        "--select-focus-border-color": "#8D6E63", // Deep brown focus border
+        "--select-focus-box-shadow": "rgba(141, 110, 99, 0.3)", // Deep brown shadow for select focus
+    },
+    aztecSunsetTheme: {
+        "--background": "#CD6155", // Terracotta background inspired by Aztec pottery
+        "--light-background": "#D98880", // Lighter terracotta surface
+        "--surface": "#E74C3C", // Bright red surface for cards
+        "--primary-text": "#FDFEFE", // Off-white text 
+        "--secondary-text": "#F5B7B1", // Light red text
+        "--dark-text": "#FFFFFF", // White text for emphasis
+        "--divider": "#EC7063", // Medium red divider
+        "--shadow": "rgba(231, 76, 60, 0.5)", // Red shadow for cards
+        "--primary": "#F1C40F", // Bright yellow inspired by Aztec gold
+        "--secondary": "#F39C12", // Bright orange 
+        "--warning": "#FFEB3B", // Lighter yellow
+        "--error": "#C0392B", // Dark red
+        "--info": "#3498DB", // Blue
+        "--success": "#2ECC71", // Green
+        "--dropdown-box-shadow": "rgba(241, 196, 15, 0.7)", // Yellow shadow for dropdown
+        "--group-card-hover": "#D98880", // Lighter terracotta hover for cards
+        "--seperator": "#EC7063", // Medium red separator
+        "--select-background-color": "#E74C3C", // Red select background
+        "--select-text-color": "#FDFEFE", // Off-white select text
+        "--select-focus-border-color": "#F1C40F", // Yellow focus border
+        "--select-focus-box-shadow": "rgba(241, 196, 15, 0.3)", // Yellow shadow for select focus
+    },
+    realMadridTheme: {
+        "--background": "#FEFEFE", // Beyaz arka plan
+        "--light-background": "#F2F2F2", // Açık gri yüzey
+        "--surface": "#E0E0E0", // Açık gri
+        "--primary-text": "#212121", // Koyu gri metin
+        "--secondary-text": "#757575", // Orta gri metin
+        "--dark-text": "#000000", // Siyah metin
+        "--divider": "#BDBDBD", // Gri bölücü
+        "--shadow": "rgba(0, 0, 0, 0.1)", // Açık gri gölge
+        "--primary": "#00529F", // Koyu mavi
+        "--secondary": "#FFC107", // Altın sarısı
+        "--warning": "#FF9800", // Turuncu
+        "--error": "#F44336", // Kırmızı
+        "--info": "#29B6F6", // Mavi
+        "--success": "#4CAF50", // Yeşil
+        "--dropdown-box-shadow": "rgba(0, 82, 159, 0.5)", // Koyu mavi gölge
+        "--group-card-hover": "#F2F2F2", // Açık gri
+        "--seperator": "#BDBDBD", // Gri
+        "--select-background-color": "#E0E0E0", // Açık gri
+        "--select-text-color": "#212121", // Koyu gri
+        "--select-focus-border-color": "#00529F", // Koyu mavi
+        "--select-focus-box-shadow": "rgba(0, 82, 159, 0.3)", // Koyu mavi gölge
+    },
+    barcelonaTheme: {
+        "--background": "#004D98", // Koyu mavi arka plan
+        "--light-background": "#00529F", // Daha koyu mavi yüzey
+        "--surface": "#2980B9", // Mavi yüzey
+        "--primary-text": "#FDFEFE", // Açık gri metin
+        "--secondary-text": "#BDBDBD", // Orta gri metin
+        "--dark-text": "#FFFFFF", // Beyaz metin
+        "--divider": "#7F8C8D", // Gri bölücü
+        "--shadow": "rgba(41, 128, 185, 0.5)", // Mavi gölge
+        "--primary": "#A52A2A", // Bordo
+        "--secondary": "#FFC107", // Altın sarısı
+        "--warning": "#FFA726", // Turuncu
+        "--error": "#F44336", // Kırmızı
+        "--info": "#3498DB", // Açık mavi
+        "--success": "#2ECC71", // Yeşil
+        "--dropdown-box-shadow": "rgba(165, 42, 42, 0.7)", // Bordo gölge
+        "--group-card-hover": "#00529F", // Daha koyu mavi
+        "--seperator": "#7F8C8D", // Gri
+        "--select-background-color": "#2980B9", // Mavi
+        "--select-text-color": "#FDFEFE", // Açık gri
+        "--select-focus-border-color": "#A52A2A", // Bordo
+        "--select-focus-box-shadow": "rgba(165, 42, 42, 0.3)", // Bordo gölge
+    },
+    atleticoMadridTheme: {
+        "--background": "#FFFFFF", // Beyaz arka plan
+        "--light-background": "#F2F2F2", // Açık gri yüzey
+        "--surface": "#E0E0E0", // Açık gri
+        "--primary-text": "#212121", // Koyu gri metin
+        "--secondary-text": "#757575", // Orta gri metin
+        "--dark-text": "#000000", // Siyah metin
+        "--divider": "#BDBDBD", // Gri bölücü
+        "--shadow": "rgba(0, 0, 0, 0.1)", // Açık gri gölge
+        "--primary": "#B71C1C", // Kırmızı
+        "--secondary": "#004D98", // Mavi
+        "--warning": "#FFC107", // Altın sarısı
+        "--error": "#D32F2F", // Koyu kırmızı
+        "--info": "#29B6F6", // Açık mavi
+        "--success": "#4CAF50", // Yeşil
+        "--dropdown-box-shadow": "rgba(183, 28, 28, 0.5)", // Kırmızı gölge
+        "--group-card-hover": "#F2F2F2", // Açık gri
+        "--seperator": "#BDBDBD", // Gri
+        "--select-background-color": "#E0E0E0", // Açık gri
+        "--select-text-color": "#212121", // Koyu gri
+        "--select-focus-border-color": "#B71C1C", // Kırmızı
+        "--select-focus-box-shadow": "rgba(183, 28, 28, 0.3)", // Kırmızı gölge
+    },
 };
