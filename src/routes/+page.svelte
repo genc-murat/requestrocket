@@ -60,11 +60,14 @@
   import StatusBar from "../components/StatusBar.svelte";
 
   import SettingsModal from "../components/SettingsModal.svelte";
+  import { currentLayout } from "../stores/layoutStore";
 
   type EnvVariable = {
     key: string;
     values: { [env: string]: string };
   };
+
+  $: $currentLayout, localStorage.setItem("preferredLayout", $currentLayout);
 
   export let currentEnvironment = writable("default");
 
@@ -84,16 +87,6 @@
       }
     })();
     return value;
-  }
-
-  let currentLayout = writable("default"); // 'default' or 'alternative'
-
-  function toggleLayout() {
-    currentLayout.update((layout) => {
-      const newLayout = layout === "default" ? "alternative" : "default";
-      localStorage.setItem("preferredLayout", newLayout);
-      return newLayout;
-    });
   }
 
   async function exportResponseToPDF() {
@@ -2029,26 +2022,6 @@
         <div class="vertical-buttons">
           <button
             type="button"
-            on:click={toggleLayout}
-            class="button-item hover"
-            title="Toggle Layout"
-          >
-            {#if $currentLayout === "default"}
-              <Icon
-                icon="fluent:layout-column-two-focus-right-20-filled"
-                width="24"
-                height="24"
-              />
-            {:else}
-              <Icon
-                icon="fluent:layout-row-two-focus-bottom-16-filled"
-                width="24"
-                height="24"
-              />
-            {/if}
-          </button>
-          <button
-            type="button"
             on:click={openThemeSwitcherModal}
             class="button-item hover"
             title="Change Theme"
@@ -3838,7 +3811,6 @@
       0 -5px 8px -1px var(--surface),
       0 4px 4px -1px var(--divider);
   }
-
 
   .vertical-buttons {
     display: flex;

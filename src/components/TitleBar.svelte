@@ -1,6 +1,8 @@
 <script lang="ts">
     import { appWindow } from "@tauri-apps/api/window";
     import logo from "../assets/32x32.png";
+    import Icon from "@iconify/svelte";
+    import { currentLayout } from '../stores/layoutStore';
 
     async function minimize() {
         await appWindow.minimize();
@@ -13,6 +15,10 @@
     async function close() {
         await appWindow.close();
     }
+
+    function toggleLayout() {
+        currentLayout.update(layout => layout === "default" ? "alternative" : "default");
+    }
 </script>
 
 <div data-tauri-drag-region class="titlebar">
@@ -21,45 +27,30 @@
         <div class="title">Request Rocket</div>
     </div>
     <div class="buttons">
+        <button on:click={toggleLayout} title="Toggle Layout">
+            {#if $currentLayout === "default"}
+                <Icon icon="fluent:layout-column-two-focus-right-20-filled" width="24" height="24" />
+            {:else}
+                <Icon icon="fluent:layout-row-two-focus-bottom-16-filled" width="24" height="24" />
+            {/if}
+        </button>
         <button on:click={minimize}>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                 <path fill="currentColor" d="M19 13H5v-2h14v2z" />
             </svg>
         </button>
         <button on:click={maximize}>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-            >
-                <path
-                    fill="currentColor"
-                    d="M3 5v14h18V5H3zm16 12H5V7h14v10z"
-                />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M3 5v14h18V5H3zm16 12H5V7h14v10z" />
             </svg>
         </button>
         <button on:click={close}>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-            >
-                <path
-                    fill="currentColor"
-                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-                />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
             </svg>
         </button>
     </div>
 </div>
-
 <style>
     .titlebar {
         background: linear-gradient(
@@ -97,7 +88,9 @@
     .titlebar .buttons {
         display: flex;
         gap: 0.5rem;
+        align-items: center;
     }
+
     .titlebar button {
         background: none;
         border: none;
@@ -105,6 +98,9 @@
         cursor: pointer;
         font-size: 1rem;
         transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .titlebar button:hover {
         color: var(--error);
