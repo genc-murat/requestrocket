@@ -99,7 +99,7 @@ body {
 .request-section {
   flex: 0 0 auto;
   /* Adjust height as needed */
-  height: 40%;
+  height: 35%;
   overflow-y: auto;
 }
 
@@ -156,7 +156,7 @@ li:hover {
 }
 
 .table-container {
-  max-height: 99%;
+  max-height: auto;
   /* Adjust this value as needed */
   overflow-y: auto;
   overflow-x: auto;
