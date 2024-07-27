@@ -94,19 +94,21 @@ body {
   flex: 1 0 77%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .request-section {
   flex: 0 0 auto;
-  /* Adjust height as needed */
   height: 35%;
   overflow-y: auto;
 }
 
 .response-section {
-  flex: 1 0 auto;
-  overflow-y: auto;
+  flex: 1;
+  overflow-y: hidden;
+  flex-direction: column;
 }
+
 
 .tab {
   cursor: pointer;
