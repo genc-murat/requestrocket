@@ -99,10 +99,15 @@ body {
 
 .request-section {
   flex: 0 0 auto;
-  height: 35%;
+ 
   overflow-y: hidden;
 }
+.divider {
+  height: 1px;
+  background-color: var(--divider);
+  cursor: ns-resize;
 
+}
 .response-section {
   flex: 1;
   overflow-y: hidden;

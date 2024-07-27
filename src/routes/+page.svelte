@@ -62,6 +62,8 @@
   import SettingsModal from "../components/SettingsModal.svelte";
   import { currentLayout } from "../stores/layoutStore";
 
+  import { dividerPosition, handleMouseDown } from "../stores/resizablePanel";
+
   type EnvVariable = {
     key: string;
     values: { [env: string]: string };
@@ -2196,6 +2198,7 @@
             </div>
           {/if}
         </div>
+        
         <div class="request-panel panel">
           <div class="flex mb-2 w-full">
             <HttpMethodDropdown {method} />
@@ -2853,7 +2856,7 @@
           {/if}
         </div>
         <div class="combined-panel panel">
-          <div class="request-section">
+          <div class="request-section" style="height: {$dividerPosition}%;">
             <div class="request-panel panel">
               <div class="flex mb-2">
                 <HttpMethodDropdown {method} />
@@ -3265,7 +3268,8 @@
               </div>
             </div>
           </div>
-          <div class="response-section">
+          <div class="divider" on:mousedown={handleMouseDown}></div>
+          <div class="response-section" style="height: {100 - $dividerPosition}%;">
             <div class="response-panel panel relative">
               {#if $response}
                 <div class="status-box border p-4 mb-4 rounded">
