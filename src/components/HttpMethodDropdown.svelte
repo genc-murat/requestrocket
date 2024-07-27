@@ -88,6 +88,7 @@
       display: inline-block;
       width: 17%;
       z-index: 10;
+      margin-right: .75rem;
     }
   
     .dropdown-button {
@@ -106,6 +107,7 @@
       transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
       height: 2.3rem;
       line-height: 2.3rem;
+   
     }
   
     .dropdown-button:focus {

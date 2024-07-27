@@ -598,7 +598,7 @@ pre {
 .input-container {
   position: relative;
   flex: 1;
-  margin-right: 0.5rem;
+width: 100%;
 }
 
 .header-input {

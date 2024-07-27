@@ -2189,7 +2189,7 @@
           {/if}
         </div>
         <div class="request-panel panel">
-          <div class="flex mb-4">
+          <div class="flex mb-2 w-full">
             <HttpMethodDropdown {method} />
 
             <div class="input-container">
@@ -2224,7 +2224,7 @@
               {/if}
             </div>
           </div>
-          <button type="button" on:click={sendRequest} class="button mb-4"
+          <button type="button" on:click={sendRequest} class="button mb-2"
             >Send Request</button
           >
           <div class="tabs">
@@ -2839,7 +2839,7 @@
         <div class="combined-panel panel">
           <div class="request-section">
             <div class="request-panel panel">
-              <div class="flex mb-4">
+              <div class="flex mb-2">
                 <HttpMethodDropdown {method} />
 
                 <div class="input-container">
@@ -2875,7 +2875,7 @@
                   {/if}
                 </div>
               </div>
-              <button type="button" on:click={sendRequest} class="button mb-4"
+              <button type="button" on:click={sendRequest} class="button mb-2"
                 >Send Request</button
               >
               <div class="tabs">
@@ -3764,11 +3764,6 @@
 
   .group-card:hover {
     background-color: var(--group-card-hover);
-  }
-
-  .input-container {
-    position: relative;
-    width: 100%;
   }
 
   .clear-icon:hover {
