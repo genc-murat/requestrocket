@@ -598,26 +598,26 @@
   }
 
   async function loadStatusHistory(url: string) {
-    console.log("Loading status history for URL:", url);
-    try {
-      const db = await dbPromise;
-      const tx = db.transaction("statusHistory", "readonly");
-      const store = tx.objectStore("statusHistory");
+  console.log("Loading status history for URL:", url);
+  try {
+    const db = await dbPromise;
+    const tx = db.transaction("statusHistory", "readonly");
+    const store = tx.objectStore("statusHistory");
 
-      if (!store.indexNames.contains("url")) {
-        throw new Error("Index 'url' not found");
-      }
-
-      const index = store.index("url");
-      const allStatusHistoryItems = await index.getAll(IDBKeyRange.only(url));
-      statusHistory.set(allStatusHistoryItems);
-    } catch (error) {
-      console.error(
-        "Failed to load status history:",
-        error instanceof Error ? error.message : error,
-      );
+    if (!store.indexNames.contains("url")) {
+      throw new Error("Index 'url' not found");
     }
+
+    const index = store.index("url");
+    const allStatusHistoryItems = await index.getAll(IDBKeyRange.only(url));
+    statusHistory.set(allStatusHistoryItems);
+  } catch (error) {
+    console.error(
+      "Failed to load status history:",
+      error instanceof Error ? error.message : error,
+    );
   }
+}
 
   async function addHeader() {
     headers.update((h) => [...h, { key: "", value: "", selected: true }]);
@@ -1886,6 +1886,29 @@
     }
   }
 
+  async function deleteAllStatusHistory(url: string) {
+  console.log("Deleting all status history for URL:", url);
+  try {
+    const db = await dbPromise;
+    const tx = db.transaction("statusHistory", "readwrite");
+    const store = tx.objectStore("statusHistory");
+    const index = store.index("url");
+    
+    let cursor = await index.openCursor(IDBKeyRange.only(url));
+    while (cursor) {
+      await cursor.delete();
+      cursor = await cursor.continue();
+    }
+    
+    await tx.done;
+    
+    statusHistory.update(history => history.filter(item => item.url !== url));
+    console.log("All status history for the URL deleted successfully.");
+  } catch (error) {
+    console.error("Error deleting status history:", error instanceof Error ? error.message : error);
+  }
+}
+
   function timeAgo(timestamp: string): string {
     const now = new Date();
     const past = new Date(timestamp);
@@ -2001,6 +2024,21 @@
       showStatusMessage("No response data to export.", "error");
     }
   }
+
+  let showConfirmModal = writable(false);
+
+function openConfirmModal() {
+  showConfirmModal.set(true);
+}
+
+function closeConfirmModal() {
+  showConfirmModal.set(false);
+}
+
+function handleConfirmDelete() {
+  deleteAllStatusHistory($url);
+  closeConfirmModal();
+}
 
   //release alırken aç
   // document.addEventListener(
@@ -3473,11 +3511,22 @@
       <button
         type="button"
         on:click={toggleStatusHistory}
-        class="rounded-full p-2 absolute top-2 right-2 flex items-center justify-center"
-        style="box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);"
+          style="box-shadow: 0 7px 12px rgba(0, 0, 0, 0.3);"
+        class="close-button rounded-full p-1 shadow-lg absolute top-1 right-1 flex items-center justify-center"
       >
         <Icon icon="eva:close-fill" width="20" height="20" />
       </button>
+
+      {#if $statusHistory.length > 0}
+      <button
+        type="button"
+        on:click={openConfirmModal}
+        class="delete-all-button"
+      >
+        <Icon icon="mdi:delete-sweep" width="20" height="20" />
+        Delete All History for this URL
+      </button>
+    {/if}
 
       {#if $statusHistory.length === 0}
         <p>No status history available.</p>
@@ -3729,6 +3778,13 @@
 {#if $showSettings}
   <SettingsModal bind:showSettings bind:requestTimeout />
 {/if}
+
+<ConfirmModal
+  bind:show={$showConfirmModal}
+  message="Are you sure you want to delete all history for this URL? This action cannot be undone."
+  on:confirm={handleConfirmDelete}
+  on:close={closeConfirmModal}
+/>
 
 <style>
   .fixed {
