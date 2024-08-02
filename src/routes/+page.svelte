@@ -3789,8 +3789,7 @@
         <button
           type="button"
           on:click={closeThemeSwitcherModal}
-          style="box-shadow: 0 7px 12px rgba(0, 0, 0, 0.3);"
-          class="rounded-full p-2 shadow-lg flex items-center justify-center"
+          class="close-button" aria-label="Close"
         >
           <Icon icon="eva:close-fill" width="24" height="24" />
         </button>
