@@ -66,6 +66,13 @@
 
   import DiffViewer from "../components/DiffViewer.svelte";
 
+  import {
+    sendRequest,
+    prepareRequestData,
+    createNewStatusHistoryItem,
+    createNewHistoryItem,
+  } from "$lib/requestModule";
+
   type EnvVariable = {
     key: string;
     values: { [env: string]: string };
@@ -849,7 +856,7 @@
     }
   }
 
-  async function sendRequest() {
+  async function handleSendRequest() {
     if (!$url.trim()) {
       showStatusMessage("URL cannot be empty", "error");
       return;
@@ -857,118 +864,27 @@
 
     isSending.set(true);
     const actualUrl = $url;
-    const actualHeaders = $headers
-      .filter((header) => header.selected)
-      .map((header) => ({
-        key: replaceVariables(header.key, $variables),
-        value: replaceVariables(header.value, $variables),
-        selected: header.selected,
-      }));
 
-    const pathParamsObject = Object.fromEntries(
-      $pathParams.map((param) => [
-        param.key.replace(/\{\{(.*?)\}\}/g, "$1"),
-        replaceVariables(param.key, $variables),
-      ]),
+    const requestData = prepareRequestData(
+      actualUrl,
+      $method,
+      $headers,
+      $body,
+      $pathParams,
+      $queryParams,
+      $formParams,
+      $bodyType,
+      $variables,
+      $requestTimeout,
     );
-    const queryParamsObject = Object.fromEntries(
-      $queryParams.map((param) => [
-        param.key.replace(/\{\{(.*?)\}\}/g, "$1"),
-        replaceVariables(param.key, $variables),
-      ]),
-    );
-    const formParamsObject = Object.fromEntries(
-      $formParams.map((param) => [
-        param.key.replace(/\{\{(.*?)\}\}/g, "$1"),
-        replaceVariables(param.key, $variables),
-      ]),
-    );
-
-    let requestBody;
-    let contentType;
-    if ($method === "GET") {
-      requestBody = null;
-    } else {
-      switch ($bodyType) {
-        case "json":
-          contentType = "application/json";
-          requestBody = replaceVariables($body, $variables);
-          break;
-        case "xml":
-          if ($body.includes("soapenv:Envelope")) {
-            contentType = "text/xml; charset=utf-8";
-            requestBody = replaceVariables($body, $variables);
-            // Add SOAPAction header if not already present
-            if (
-              !actualHeaders.some((h) => h.key.toLowerCase() === "soapaction")
-            ) {
-              // actualHeaders.push({
-              //   key: "SOAPAction",
-              //   value: '""',
-              //   selected:true// You might need to set a specific SOAPAction
-              // });
-            }
-          } else {
-            contentType = "application/xml";
-            requestBody = replaceVariables($body, $variables);
-          }
-          break;
-        case "form-data":
-          contentType = "multipart/form-data";
-          requestBody = formParamsObject;
-          break;
-        case "form-urlencoded":
-          contentType = "application/x-www-form-urlencoded";
-          requestBody = new URLSearchParams(
-            $formParams.map((field) => [
-              field.key,
-              replaceVariables(field.value, $variables),
-            ]),
-          ).toString();
-          break;
-        default:
-          contentType = "text/plain";
-          requestBody = replaceVariables($body, $variables);
-      }
-    }
-
-    const requestData: any = {
-      url: actualUrl,
-      method: $method,
-      body: requestBody,
-      headers: Object.fromEntries(
-        actualHeaders.map((header) => [header.key, header.value]),
-      ),
-      path_params: pathParamsObject,
-      query_params: queryParamsObject,
-      form_data: $bodyType === "form-data" ? formParamsObject : undefined,
-      content_type: contentType,
-      timeout: Number($requestTimeout),
-    };
-
-    console.log("Sending request with data:", requestData);
 
     try {
-      const res: ResponseData = await invoke<ResponseData>("send_request", {
-        requestData,
-      });
-      console.log("Response received:", res);
+      const res = await sendRequest(requestData, $variables);
       response.set(res);
       isSending.set(false);
 
-      const newStatusHistoryItem: StatusHistoryItem = {
-        id: Date.now(),
-        url: actualUrl,
-        status: res.status,
-        duration: res.duration,
-        size: res.size,
-        timestamp: new Date().toISOString(),
-      };
-
-      // Save new status history
+      const newStatusHistoryItem = createNewStatusHistoryItem(actualUrl, res);
       saveStatusHistory(newStatusHistoryItem);
-
-      // Update status history state
       statusHistory.update((history) => [...history, newStatusHistoryItem]);
 
       const existingHistoryItem = $history.find(
@@ -977,26 +893,26 @@
           item.method === $method &&
           item.group === $selectedGroup,
       );
+
       if (existingHistoryItem) {
-        const updatedHistoryItem: HistoryItem = {
+        const updatedHistoryItem = {
           ...existingHistoryItem,
           body: $body,
-          headers: actualHeaders,
+          headers: requestData.headers,
           params: $params,
           response: JSON.stringify(res),
         };
         updateHistoryItem(updatedHistoryItem);
       } else {
-        const newHistoryItem: HistoryItem = {
-          id: Date.now(),
-          url: actualUrl,
-          method: $method,
-          body: $body,
-          headers: actualHeaders,
-          params: $params,
-          response: JSON.stringify(res),
-          group: $selectedGroup,
-        };
+        const newHistoryItem = createNewHistoryItem(
+          actualUrl,
+          $method,
+          $body,
+          requestData.headers,
+          $params,
+          JSON.stringify(res),
+          $selectedGroup,
+        );
         history.update((h) => {
           const newHistory = [...h, newHistoryItem];
           saveHistory(newHistoryItem);
@@ -1005,13 +921,7 @@
       }
     } catch (error) {
       console.error("Request failed:", error);
-      let errorMessage: string;
-      if (error instanceof Error) {
-        errorMessage = error.message;
-        console.error("Error stack:", error.stack);
-      } else {
-        errorMessage = String(error);
-      }
+      let errorMessage = error instanceof Error ? error.message : String(error);
       response.set({
         status: 0,
         duration: 0,
@@ -1020,9 +930,8 @@
         headers: [],
         curl_command: "",
         timestamp: new Date().toISOString(),
-        error: error instanceof Error ? error.message : String(error),
+        error: errorMessage,
       });
-
       isSending.set(false);
     }
   }
@@ -2338,7 +2247,7 @@
               {/if}
             </div>
           </div>
-          <button type="button" on:click={sendRequest} class="button mb-2"
+          <button type="button" on:click={handleSendRequest} class="button mb-2"
             >Send Request</button
           >
           <div class="tabs">
@@ -3035,8 +2944,10 @@
                   {/if}
                 </div>
               </div>
-              <button type="button" on:click={sendRequest} class="button mb-2"
-                >Send Request</button
+              <button
+                type="button"
+                on:click={handleSendRequest}
+                class="button mb-2">Send Request</button
               >
               <div class="tabs">
                 <button
