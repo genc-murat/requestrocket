@@ -72,7 +72,7 @@ export function importCurlCommand(curlCommand: string): Promise<HistoryItem> {
         body,
         params: [],
         response: '',
-        group: 'Imported'
+        group: 'Imported',
       };
       
       resolve(historyItem);

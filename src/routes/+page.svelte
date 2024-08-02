@@ -77,6 +77,34 @@
 
   import { importCurlCommand, validateCurlCommand } from "$lib/curlImporter";
 
+  import { importHarFile } from "$lib/harImporter";
+
+  async function handleImportHar() {
+    try {
+      const selected = await dialog.open({
+        multiple: false,
+        filters: [{ name: "HAR Files", extensions: ["har"] }],
+      });
+
+      if (selected) {
+        const content = await readTextFile(selected as string);
+        const importedItems = await importHarFile(content);
+
+        for (const item of importedItems) {
+          history.update((h) => [item, ...h]);
+          await saveHistory(item);
+        }
+
+        showStatusMessage(
+          `Imported ${importedItems.length} requests from HAR file`,
+          "info",
+        );
+      }
+    } catch (error) {
+      console.error("Error importing HAR file:", error);
+      showStatusMessage("Failed to import HAR file", "error");
+    }
+  }
   let showCurlImportDialog = false;
 
   function openCurlImportDialog() {
@@ -2058,6 +2086,14 @@
               width="24"
               height="24"
             />
+          </button>
+          <button
+            type="button"
+            on:click={handleImportHar}
+            class="button-item hover"
+            title="Import HAR"
+          >
+            <Icon icon="mdi:file-import" width="24" height="24" />
           </button>
           <button
             type="button"
