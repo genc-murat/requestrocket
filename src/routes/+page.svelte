@@ -2093,7 +2093,7 @@
             class="button-item hover"
             title="Import HAR"
           >
-            <Icon icon="material-symbols:http-rounded" width="32" height="32" />
+            <Icon icon="material-symbols:http-rounded" width="24" height="24" />
           </button>
           <button
             type="button"
@@ -2101,7 +2101,7 @@
             class="button-item hover"
             title="Import cURL"
           >
-            <Icon icon="logos:curl" width="32" height="32" />
+            <Icon icon="logos:curl" width="24" height="24" />
           </button>
           <button
             type="button"
@@ -3996,8 +3996,8 @@
     align-items: center;
     gap: 0.1rem;
     margin-bottom: 0.5rem;
-    padding-bottom: 0.2rem;
-    padding-top: 0.2rem;
+    padding-bottom: 0.1rem;
+    padding-top: 0.1rem;
     border-bottom: 1px solid var(--divider);
     border-top: 1px solid var(--divider);
   }
@@ -4005,8 +4005,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0.85rem;
+    padding: 0.65rem;
     width: 100%;
+    height: 2.5rem;
     border-top: 1px solid var(--divider);
     border-bottom: 1px solid var(--divider);
     background-color: var(--surface);
