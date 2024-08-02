@@ -3986,6 +3986,7 @@
     box-shadow:
       0 -5px 8px -1px var(--surface),
       0 4px 4px -1px var(--divider);
+      border-bottom: 2px solid var(--primary);
   }
 
   .vertical-buttons {

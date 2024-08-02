@@ -120,11 +120,10 @@ body {
 .tab {
   cursor: pointer;
   padding: 0.2rem 0.4rem;
-  margin-right: 0.1rem;
-  border: 1px solid var(--divider);
+  transition: all 0.3s ease;
+  margin-right: .1rem;
   border-bottom: none;
   background: var(--surface);
-  border-radius: 4px 4px 0 0;
 }
 
 .tab-content {
