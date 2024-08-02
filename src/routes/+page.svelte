@@ -2192,18 +2192,28 @@
                     class="w-full p-2 border rounded"
                   />
                   {#if $selectedHistoryItems.length === 2}
-                  <button on:click={openDiffView} class="compare-button">
-                    <span class="button-text">Compare Selected</span>
-                    <span class="button-icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="16 3 21 3 21 8"></polyline>
-                        <line x1="4" y1="20" x2="21" y2="3"></line>
-                        <polyline points="21 16 21 21 16 21"></polyline>
-                        <line x1="15" y1="15" x2="21" y2="21"></line>
-                        <line x1="4" y1="4" x2="9" y2="9"></line>
-                      </svg>
-                    </span>
-                  </button>
+                    <button on:click={openDiffView} class="compare-button">
+                      <span class="button-text">Compare Selected</span>
+                      <span class="button-icon">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="16 3 21 3 21 8"></polyline>
+                          <line x1="4" y1="20" x2="21" y2="3"></line>
+                          <polyline points="21 16 21 21 16 21"></polyline>
+                          <line x1="15" y1="15" x2="21" y2="21"></line>
+                          <line x1="4" y1="4" x2="9" y2="9"></line>
+                        </svg>
+                      </span>
+                    </button>
                   {/if}
                 </div>
               </div>
@@ -2218,7 +2228,6 @@
                     <li
                       class="mb-2 history-item flex justify-between items-center"
                     >
-                      
                       <button
                         type="button"
                         class="w-full text-left"
@@ -2856,7 +2865,7 @@
           {#if $selectedGroup}
             <div class="group">
               <div class="group-header sticky top-0 z-10">
-                <div class="flex justify-between items-center">
+                <div class="flex justify-between items-center mb-2">
                   <h1
                     class="text-base font-semibold flex items-center group-title"
                     title={$selectedGroup}
@@ -2870,12 +2879,36 @@
                     type="text"
                     bind:value={$searchTerm}
                     placeholder="Search history..."
-                    class="w-full p-1 border rounded"
+                    class="w-full p-2 border rounded"
                   />
+                  {#if $selectedHistoryItems.length === 2}
+                    <button on:click={openDiffView} class="compare-button">
+                      <span class="button-text">Compare Selected</span>
+                      <span class="button-icon">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="16 3 21 3 21 8"></polyline>
+                          <line x1="4" y1="20" x2="21" y2="3"></line>
+                          <polyline points="21 16 21 21 16 21"></polyline>
+                          <line x1="15" y1="15" x2="21" y2="21"></line>
+                          <line x1="4" y1="4" x2="9" y2="9"></line>
+                        </svg>
+                      </span>
+                    </button>
+                  {/if}
                 </div>
               </div>
 
-              <div class="history-list-vertical">
+              <div class="history-list-horizontal">
                 <ul>
                   {#each $history.filter((item) => item.url
                         .toLowerCase()
@@ -2907,6 +2940,15 @@
                         </span>
                         <span class="url">{item.url}</span>
                       </button>
+                      <input
+                        type="checkbox"
+                        checked={$selectedHistoryItems.some(
+                          (i) => i.id === item.id,
+                        )}
+                        on:change={() => toggleHistoryItemSelection(item)}
+                        disabled={$selectedHistoryItems.length === 2 &&
+                          !$selectedHistoryItems.some((i) => i.id === item.id)}
+                      />
                       <button
                         class="duplicate-icon"
                         aria-label="Duplicate history item"

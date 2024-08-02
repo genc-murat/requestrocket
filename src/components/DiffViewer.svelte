@@ -200,7 +200,7 @@
 
   .diff-result {
     font-family: monospace;
-    font-size: 0.9rem;
+    font-size: 0.7rem;
     line-height: 1.5;
     border: 1px solid var(--divider);
     border-radius: 4px;
@@ -245,15 +245,15 @@
   }
 
   .diff-line.added .line-indicator {
-    color: green;
+    color: var(--success);
   }
 
   .diff-line.removed .line-indicator {
-    color: red;
+    color: var(--error);
   }
 
   .error {
-    color: var(--error-color);
+    color: var(--error);
     padding: 0.5rem;
   }
 
