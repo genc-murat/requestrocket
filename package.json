@@ -35,6 +35,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@types/diff": "^5.2.1",
+		"diff": "^5.2.0",
 		"idb": "^8.0.0",
 		"jsoneditor": "^10.1.0",
 		"pdf-lib": "^1.17.1",

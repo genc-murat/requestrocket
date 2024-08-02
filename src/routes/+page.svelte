@@ -64,6 +64,8 @@
 
   import { dividerPosition, handleMouseDown } from "../stores/resizablePanel";
 
+  import DiffViewer from "../components/DiffViewer.svelte";
+
   type EnvVariable = {
     key: string;
     values: { [env: string]: string };
@@ -2040,6 +2042,26 @@ function handleConfirmDelete() {
   closeConfirmModal();
 }
 
+let selectedHistoryItems = writable<HistoryItem[]>([]);
+  function toggleHistoryItemSelection(item: HistoryItem) {
+    selectedHistoryItems.update(items => {
+      const index = items.findIndex(i => i.id === item.id);
+      if (index !== -1) {
+        return items.filter(i => i.id !== item.id);
+      } else if (items.length < 2) {
+        return [...items, item];
+      }
+      return items;
+    });
+  }
+
+  let showDiffView = writable(false);
+
+  function openDiffView() {
+    if ($selectedHistoryItems.length === 2) {
+      showDiffView.set(true);
+    }
+  }
   //release alırken aç
   // document.addEventListener(
   //   "contextmenu",
@@ -2164,6 +2186,11 @@ function handleConfirmDelete() {
                     placeholder="Search history..."
                     class="w-full p-2 border rounded"
                   />
+                  {#if $selectedHistoryItems.length === 2}
+  <button on:click={openDiffView} class="button">
+    Compare Selected
+  </button>
+{/if}
                 </div>
               </div>
 
@@ -2177,6 +2204,12 @@ function handleConfirmDelete() {
                     <li
                       class="mb-2 history-item flex justify-between items-center"
                     >
+                    <input
+                    type="checkbox"
+                    checked={$selectedHistoryItems.some(i => i.id === item.id)}
+                    on:change={() => toggleHistoryItemSelection(item)}
+                    disabled={$selectedHistoryItems.length === 2 && !$selectedHistoryItems.some(i => i.id === item.id)}
+                  />
                       <button
                         type="button"
                         class="w-full text-left"
@@ -3785,6 +3818,18 @@ function handleConfirmDelete() {
   on:confirm={handleConfirmDelete}
   on:close={closeConfirmModal}
 />
+
+
+
+{#if $showDiffView}
+  <div class="diff-view-modal">
+    <DiffViewer 
+      leftItem={$selectedHistoryItems[0]} 
+      rightItem={$selectedHistoryItems[1]} 
+      on:close={() => showDiffView.set(false)}
+    />
+  </div>
+{/if}
 
 <style>
   .fixed {
