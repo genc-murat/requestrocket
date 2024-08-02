@@ -73,6 +73,38 @@
     createNewHistoryItem,
   } from "$lib/requestModule";
 
+  import CurlImportDialog from "../components/CurlImportDialog.svelte";
+
+  import { importCurlCommand, validateCurlCommand } from "$lib/curlImporter";
+
+  let showCurlImportDialog = false;
+
+  function openCurlImportDialog() {
+    showCurlImportDialog = true;
+  }
+
+  async function handleCurlImport(event: CustomEvent<string>) {
+    const curlCommand = event.detail;
+    if (validateCurlCommand(curlCommand)) {
+      try {
+        const historyItem = await importCurlCommand(curlCommand);
+        history.update((h) => [historyItem, ...h]);
+        await saveHistory(historyItem);
+        showStatusMessage("cURL command imported successfully", "info");
+
+        // Optionally, you can also set the current request to the imported one
+        url.set(historyItem.url);
+        method.set(historyItem.method);
+        body.set(historyItem.body);
+        headers.set(historyItem.headers);
+      } catch (error) {
+        showStatusMessage("Failed to import cURL command", "error");
+      }
+    } else {
+      showStatusMessage("Invalid cURL command", "error");
+    }
+  }
+
   type EnvVariable = {
     key: string;
     values: { [env: string]: string };
@@ -2029,6 +2061,14 @@
           </button>
           <button
             type="button"
+            on:click={openCurlImportDialog}
+            class="button-item hover"
+            title="Import cURL"
+          >
+            <Icon icon="mdi:import" width="24" height="24" />
+          </button>
+          <button
+            type="button"
             on:click={importPostmanCollection}
             class="button-item hover"
             title="Import"
@@ -3809,6 +3849,12 @@
     />
   </div>
 {/if}
+
+<CurlImportDialog
+  bind:show={showCurlImportDialog}
+  on:submit={handleCurlImport}
+  on:cancel={() => (showCurlImportDialog = false)}
+/>
 
 <style>
   .fixed {
