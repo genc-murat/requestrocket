@@ -2093,7 +2093,7 @@
             class="button-item hover"
             title="Import HAR"
           >
-            <Icon icon="mdi:file-import" width="24" height="24" />
+            <Icon icon="material-symbols:http-rounded" width="32" height="32" />
           </button>
           <button
             type="button"
@@ -2101,7 +2101,7 @@
             class="button-item hover"
             title="Import cURL"
           >
-            <Icon icon="mdi:import" width="24" height="24" />
+            <Icon icon="logos:curl" width="32" height="32" />
           </button>
           <button
             type="button"
