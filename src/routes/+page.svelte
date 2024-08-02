@@ -1450,15 +1450,6 @@
       ? jsonToTableData($response.body)
       : { headers: [], rows: [] };
 
-  function isValidJson(json: string): boolean {
-    try {
-      JSON.parse(json);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
   async function copyToClipboard(text: string) {
     try {
       await navigator.clipboard.writeText(text);
