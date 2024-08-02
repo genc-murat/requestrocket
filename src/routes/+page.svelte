@@ -600,26 +600,26 @@
   }
 
   async function loadStatusHistory(url: string) {
-  console.log("Loading status history for URL:", url);
-  try {
-    const db = await dbPromise;
-    const tx = db.transaction("statusHistory", "readonly");
-    const store = tx.objectStore("statusHistory");
+    console.log("Loading status history for URL:", url);
+    try {
+      const db = await dbPromise;
+      const tx = db.transaction("statusHistory", "readonly");
+      const store = tx.objectStore("statusHistory");
 
-    if (!store.indexNames.contains("url")) {
-      throw new Error("Index 'url' not found");
+      if (!store.indexNames.contains("url")) {
+        throw new Error("Index 'url' not found");
+      }
+
+      const index = store.index("url");
+      const allStatusHistoryItems = await index.getAll(IDBKeyRange.only(url));
+      statusHistory.set(allStatusHistoryItems);
+    } catch (error) {
+      console.error(
+        "Failed to load status history:",
+        error instanceof Error ? error.message : error,
+      );
     }
-
-    const index = store.index("url");
-    const allStatusHistoryItems = await index.getAll(IDBKeyRange.only(url));
-    statusHistory.set(allStatusHistoryItems);
-  } catch (error) {
-    console.error(
-      "Failed to load status history:",
-      error instanceof Error ? error.message : error,
-    );
   }
-}
 
   async function addHeader() {
     headers.update((h) => [...h, { key: "", value: "", selected: true }]);
@@ -1889,27 +1889,32 @@
   }
 
   async function deleteAllStatusHistory(url: string) {
-  console.log("Deleting all status history for URL:", url);
-  try {
-    const db = await dbPromise;
-    const tx = db.transaction("statusHistory", "readwrite");
-    const store = tx.objectStore("statusHistory");
-    const index = store.index("url");
-    
-    let cursor = await index.openCursor(IDBKeyRange.only(url));
-    while (cursor) {
-      await cursor.delete();
-      cursor = await cursor.continue();
+    console.log("Deleting all status history for URL:", url);
+    try {
+      const db = await dbPromise;
+      const tx = db.transaction("statusHistory", "readwrite");
+      const store = tx.objectStore("statusHistory");
+      const index = store.index("url");
+
+      let cursor = await index.openCursor(IDBKeyRange.only(url));
+      while (cursor) {
+        await cursor.delete();
+        cursor = await cursor.continue();
+      }
+
+      await tx.done;
+
+      statusHistory.update((history) =>
+        history.filter((item) => item.url !== url),
+      );
+      console.log("All status history for the URL deleted successfully.");
+    } catch (error) {
+      console.error(
+        "Error deleting status history:",
+        error instanceof Error ? error.message : error,
+      );
     }
-    
-    await tx.done;
-    
-    statusHistory.update(history => history.filter(item => item.url !== url));
-    console.log("All status history for the URL deleted successfully.");
-  } catch (error) {
-    console.error("Error deleting status history:", error instanceof Error ? error.message : error);
   }
-}
 
   function timeAgo(timestamp: string): string {
     const now = new Date();
@@ -2029,25 +2034,25 @@
 
   let showConfirmModal = writable(false);
 
-function openConfirmModal() {
-  showConfirmModal.set(true);
-}
+  function openConfirmModal() {
+    showConfirmModal.set(true);
+  }
 
-function closeConfirmModal() {
-  showConfirmModal.set(false);
-}
+  function closeConfirmModal() {
+    showConfirmModal.set(false);
+  }
 
-function handleConfirmDelete() {
-  deleteAllStatusHistory($url);
-  closeConfirmModal();
-}
+  function handleConfirmDelete() {
+    deleteAllStatusHistory($url);
+    closeConfirmModal();
+  }
 
-let selectedHistoryItems = writable<HistoryItem[]>([]);
+  let selectedHistoryItems = writable<HistoryItem[]>([]);
   function toggleHistoryItemSelection(item: HistoryItem) {
-    selectedHistoryItems.update(items => {
-      const index = items.findIndex(i => i.id === item.id);
+    selectedHistoryItems.update((items) => {
+      const index = items.findIndex((i) => i.id === item.id);
       if (index !== -1) {
-        return items.filter(i => i.id !== item.id);
+        return items.filter((i) => i.id !== item.id);
       } else if (items.length < 2) {
         return [...items, item];
       }
@@ -2187,10 +2192,19 @@ let selectedHistoryItems = writable<HistoryItem[]>([]);
                     class="w-full p-2 border rounded"
                   />
                   {#if $selectedHistoryItems.length === 2}
-  <button on:click={openDiffView} class="button">
-    Compare Selected
-  </button>
-{/if}
+                  <button on:click={openDiffView} class="compare-button">
+                    <span class="button-text">Compare Selected</span>
+                    <span class="button-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 3 21 3 21 8"></polyline>
+                        <line x1="4" y1="20" x2="21" y2="3"></line>
+                        <polyline points="21 16 21 21 16 21"></polyline>
+                        <line x1="15" y1="15" x2="21" y2="21"></line>
+                        <line x1="4" y1="4" x2="9" y2="9"></line>
+                      </svg>
+                    </span>
+                  </button>
+                  {/if}
                 </div>
               </div>
 
@@ -2204,12 +2218,7 @@ let selectedHistoryItems = writable<HistoryItem[]>([]);
                     <li
                       class="mb-2 history-item flex justify-between items-center"
                     >
-                    <input
-                    type="checkbox"
-                    checked={$selectedHistoryItems.some(i => i.id === item.id)}
-                    on:change={() => toggleHistoryItemSelection(item)}
-                    disabled={$selectedHistoryItems.length === 2 && !$selectedHistoryItems.some(i => i.id === item.id)}
-                  />
+                      
                       <button
                         type="button"
                         class="w-full text-left"
@@ -2232,6 +2241,15 @@ let selectedHistoryItems = writable<HistoryItem[]>([]);
                         </span>
                         <span class="url">{item.url}</span>
                       </button>
+                      <input
+                        type="checkbox"
+                        checked={$selectedHistoryItems.some(
+                          (i) => i.id === item.id,
+                        )}
+                        on:change={() => toggleHistoryItemSelection(item)}
+                        disabled={$selectedHistoryItems.length === 2 &&
+                          !$selectedHistoryItems.some((i) => i.id === item.id)}
+                      />
                       <button
                         class="duplicate-icon"
                         aria-label="Duplicate history item"
@@ -2269,7 +2287,7 @@ let selectedHistoryItems = writable<HistoryItem[]>([]);
             </div>
           {/if}
         </div>
-        
+
         <div class="request-panel panel">
           <div class="flex mb-2 w-full">
             <HttpMethodDropdown {method} />
@@ -3340,7 +3358,10 @@ let selectedHistoryItems = writable<HistoryItem[]>([]);
             </div>
           </div>
           <div class="divider" on:mousedown={handleMouseDown}></div>
-          <div class="response-section" style="height: {100 - $dividerPosition}%;">
+          <div
+            class="response-section"
+            style="height: {100 - $dividerPosition}%;"
+          >
             <div class="response-panel panel relative">
               {#if $response}
                 <div class="status-box border p-4 mb-4 rounded">
@@ -3544,22 +3565,22 @@ let selectedHistoryItems = writable<HistoryItem[]>([]);
       <button
         type="button"
         on:click={toggleStatusHistory}
-          style="box-shadow: 0 7px 12px rgba(0, 0, 0, 0.3);"
+        style="box-shadow: 0 7px 12px rgba(0, 0, 0, 0.3);"
         class="close-button rounded-full p-1 shadow-lg absolute top-1 right-1 flex items-center justify-center"
       >
         <Icon icon="eva:close-fill" width="20" height="20" />
       </button>
 
       {#if $statusHistory.length > 0}
-      <button
-        type="button"
-        on:click={openConfirmModal}
-        class="delete-all-button"
-      >
-        <Icon icon="mdi:delete-sweep" width="20" height="20" />
-        Delete All History for this URL
-      </button>
-    {/if}
+        <button
+          type="button"
+          on:click={openConfirmModal}
+          class="delete-all-button"
+        >
+          <Icon icon="mdi:delete-sweep" width="20" height="20" />
+          Delete All History for this URL
+        </button>
+      {/if}
 
       {#if $statusHistory.length === 0}
         <p>No status history available.</p>
@@ -3819,13 +3840,11 @@ let selectedHistoryItems = writable<HistoryItem[]>([]);
   on:close={closeConfirmModal}
 />
 
-
-
 {#if $showDiffView}
   <div class="diff-view-modal">
-    <DiffViewer 
-      leftItem={$selectedHistoryItems[0]} 
-      rightItem={$selectedHistoryItems[1]} 
+    <DiffViewer
+      leftItem={$selectedHistoryItems[0]}
+      rightItem={$selectedHistoryItems[1]}
       on:close={() => showDiffView.set(false)}
     />
   </div>

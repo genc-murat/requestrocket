@@ -99,15 +99,17 @@ body {
 
 .request-section {
   flex: 0 0 auto;
- 
+
   overflow-y: hidden;
 }
+
 .divider {
   height: 1px;
   background-color: var(--divider);
   cursor: ns-resize;
 
 }
+
 .response-section {
   flex: 1;
   overflow-y: hidden;
@@ -795,4 +797,52 @@ pre {
   height: 90%;
   overflow: auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.compare-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  background-color: var(--surface);
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  outline: none;
+  margin-top: 1rem;
+}
+
+.compare-button:hover {
+  background-color: var(--primary-dark);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.compare-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button-text {
+  margin-right: 10px;
+}
+
+.button-icon {
+  display: flex;
+  align-items: center;
+}
+
+.button-icon svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+.compare-button:hover .button-icon svg {
+  transform: rotate(45deg);
 }
