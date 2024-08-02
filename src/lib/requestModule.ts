@@ -116,13 +116,13 @@ export function createNewStatusHistoryItem(url: string, res: ResponseData): Stat
     };
 }
 
-export function createNewHistoryItem(url: string, method: string, body: string, headers: any[], params: any[], response: string, group: string): HistoryItem {
+export function createNewHistoryItem(url: string, method: string, body: string, headers: any, params: any[], response: string, group: string): HistoryItem {
     return {
         id: Date.now(),
         url,
         method,
         body,
-        headers,
+        headers: Array.isArray(headers) ? headers : Object.entries(headers).map(([key, value]) => ({ key, value, selected: true })),
         params,
         response,
         group,

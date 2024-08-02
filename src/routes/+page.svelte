@@ -650,7 +650,7 @@
 
   let headers = writable<Header[]>([]);
 
-  $: headerCount = $headers.length;
+  $: headerCount = $headers ? $headers.length : 0;
   $: pathParamsCount = $pathParams.length;
   $: queryParamsCount = $queryParams.length;
   $: formDataCount = $formParams.length;
@@ -898,7 +898,7 @@
         const updatedHistoryItem = {
           ...existingHistoryItem,
           body: $body,
-          headers: requestData.headers,
+          headers: $headers, // Değişiklik burada
           params: $params,
           response: JSON.stringify(res),
         };
@@ -908,7 +908,7 @@
           actualUrl,
           $method,
           $body,
-          requestData.headers,
+          $headers, // Değişiklik burada
           $params,
           JSON.stringify(res),
           $selectedGroup,
@@ -1091,9 +1091,12 @@
     try {
       const db = await dbPromise;
       const allHistoryItems = await db.getAll("history");
-      const filteredHistory = allHistoryItems.filter(
-        (item) => item.group === selectedGroup,
-      );
+      const filteredHistory = allHistoryItems
+        .filter((item) => item.group === selectedGroup)
+        .map((item) => ({
+          ...item,
+          headers: item.headers || [], // Ensure headers is always an array
+        }));
       history.set(filteredHistory.reverse());
     } catch (error) {
       console.error(
@@ -1293,12 +1296,11 @@
   }
 
   let jsonData = writable("{}");
-
   function selectHistoryItem(item: HistoryItem) {
     url.set(item.url);
     method.set(item.method);
     body.set(item.body);
-    headers.set(item.headers || []);
+    headers.set(item.headers || []); // Ensure it's always an array
     params.set(item.params || []);
     response.set(item.response ? JSON.parse(item.response) : null);
     jsonData.set(item.response ? item.response : "{}");
@@ -2344,56 +2346,60 @@
                   </button>
                 </div>
 
-                {#each $headers as header, index}
-                  <div class="header-row relative">
-                    <input type="checkbox" bind:checked={header.selected} />
-                    <div class="header-inputs">
-                      <div class="input-container">
+                {#if Array.isArray($headers)}
+                  {#each $headers as header, index}
+                    <div class="header-row relative">
+                      <input type="checkbox" bind:checked={header.selected} />
+                      <div class="header-inputs">
+                        <div class="input-container">
+                          <input
+                            type="text"
+                            placeholder="Key"
+                            bind:value={header.key}
+                            on:input={(e) => handleHeaderInput(e, index)}
+                            class="header-input"
+                            disabled={!header.selected}
+                          />
+                          {#if $headerAutocomplete.length > 0}
+                            <div class="autocomplete-suggestions">
+                              {#each $headerAutocomplete as suggestion}
+                                <div
+                                  class="autocomplete-suggestion"
+                                  on:mousedown={() =>
+                                    selectHeaderSuggestion(index, suggestion)}
+                                >
+                                  {suggestion}
+                                </div>
+                              {/each}
+                            </div>
+                          {/if}
+                        </div>
                         <input
                           type="text"
-                          placeholder="Key"
-                          bind:value={header.key}
-                          on:input={(e) => handleHeaderInput(e, index)}
+                          placeholder="Value"
+                          bind:value={header.value}
                           class="header-input"
                           disabled={!header.selected}
                         />
-                        {#if $headerAutocomplete.length > 0}
-                          <div class="autocomplete-suggestions">
-                            {#each $headerAutocomplete as suggestion}
-                              <div
-                                class="autocomplete-suggestion"
-                                on:mousedown={() =>
-                                  selectHeaderSuggestion(index, suggestion)}
-                              >
-                                {suggestion}
-                              </div>
-                            {/each}
-                          </div>
-                        {/if}
                       </div>
-                      <input
-                        type="text"
-                        placeholder="Value"
-                        bind:value={header.value}
-                        class="header-input"
+                      <button
+                        type="button"
+                        on:click={() =>
+                          headers.update((h) =>
+                            h.filter((_, i) => i !== index),
+                          )}
+                        class="delete-all"
                         disabled={!header.selected}
-                      />
+                      >
+                        <Icon
+                          icon="material-symbols:delete-outline"
+                          width="24"
+                          height="24"
+                        />
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      on:click={() =>
-                        headers.update((h) => h.filter((_, i) => i !== index))}
-                      class="delete-all"
-                      disabled={!header.selected}
-                    >
-                      <Icon
-                        icon="material-symbols:delete-outline"
-                        width="24"
-                        height="24"
-                      />
-                    </button>
-                  </div>
-                {/each}
+                  {/each}
+                {/if}
               </div>
             {:else if $selectedRequestTab === "group"}
               <div class="mb-4">
