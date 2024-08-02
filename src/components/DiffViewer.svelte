@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte';
-  import type { HistoryItem } from './api-types';
-  import { diffJson, diffLines } from 'diff';
-  import type { Change } from 'diff';
-  import Prism from 'prismjs';
-  import 'prismjs/components/prism-json';
+  import { createEventDispatcher, onMount } from "svelte";
+  import type { HistoryItem } from "./api-types";
+  import { diffJson, diffLines } from "diff";
+  import type { Change } from "diff";
+  import Prism from "prismjs";
+  import "prismjs/components/prism-json";
 
   export let leftItem: HistoryItem;
   export let rightItem: HistoryItem;
@@ -12,24 +12,36 @@
   const dispatch = createEventDispatcher();
 
   let diffResults: { [key: string]: Change[] } = {};
-  const fields = ['body', 'curl_command', 'duration', 'error', 'headers'];
+  const fields = ["body", "curl_command", "duration", "error", "headers"];
+  let activeTab = "body";
 
   onMount(() => {
-    fields.forEach(field => {
+    fields.forEach((field) => {
       diffResults[field] = getDiff(field);
     });
   });
 
   function getDiff(field: string): Change[] {
     try {
-      const leftContent = leftItem.response ? JSON.parse(leftItem.response)[field] : '';
-      const rightContent = rightItem.response ? JSON.parse(rightItem.response)[field] : '';
+      const leftContent = leftItem.response
+        ? JSON.parse(leftItem.response)[field]
+        : "";
+      const rightContent = rightItem.response
+        ? JSON.parse(rightItem.response)[field]
+        : "";
 
-      if (field === 'body') {
+      if (field === "body") {
         const leftFormatted = JSON.stringify(JSON.parse(leftContent), null, 2);
-        const rightFormatted = JSON.stringify(JSON.parse(rightContent), null, 2);
+        const rightFormatted = JSON.stringify(
+          JSON.parse(rightContent),
+          null,
+          2,
+        );
         return diffLines(leftFormatted, rightFormatted);
-      } else if (typeof leftContent === 'string' && typeof rightContent === 'string') {
+      } else if (
+        typeof leftContent === "string" &&
+        typeof rightContent === "string"
+      ) {
         return diffLines(leftContent, rightContent);
       } else {
         return diffJson(leftContent || {}, rightContent || {});
@@ -41,42 +53,63 @@
   }
 
   function highlightJson(json: string): string {
-    return Prism.highlight(json, Prism.languages.json, 'json');
+    return Prism.highlight(json, Prism.languages.json, "json");
   }
 
   function closeModal() {
-    dispatch('close');
+    dispatch("close");
   }
 </script>
-
 
 <div class="diff-viewer">
   <div class="diff-header">
     <h2>Response Differences</h2>
-    <button on:click={closeModal} class="close-button" aria-label="Close">×</button>
+    <button on:click={closeModal} class="close-button" aria-label="Close"
+      >×</button
+    >
+  </div>
+
+  <div class="tabs">
+    {#each fields as field}
+      <button
+        class="tab-button {activeTab === field ? 'active' : ''}"
+        on:click={() => (activeTab = field)}
+      >
+        {field}
+      </button>
+    {/each}
   </div>
 
   <div class="diff-content">
     {#each fields as field}
-      <div class="panel diff-panel {field}">
-        <h3>{field}</h3>
-        <div class="diff-result">
-          {#if Array.isArray(diffResults[field])}
-            {#each diffResults[field] as part}
-              <div class="diff-line {part.added ? 'added' : part.removed ? 'removed' : 'unchanged'}">
-                <span class="line-indicator">{part.added ? '+' : part.removed ? '-' : ' '}</span>
-                {#if field === 'body' || field === 'headers'}
-                  <pre><code>{@html highlightJson(part.value)}</code></pre>
-                {:else}
-                  <pre><code>{part.value}</code></pre>
-                {/if}
-              </div>
-            {/each}
-          {:else}
-            <div class="error">No diff available for this field.</div>
-          {/if}
+      {#if activeTab === field}
+        <div class="panel diff-panel {field}">
+          <div class="diff-result">
+            {#if Array.isArray(diffResults[field])}
+              {#each diffResults[field] as part}
+                <div
+                  class="diff-line {part.added
+                    ? 'added'
+                    : part.removed
+                      ? 'removed'
+                      : 'unchanged'}"
+                >
+                  <span class="line-indicator"
+                    >{part.added ? "+" : part.removed ? "-" : " "}</span
+                  >
+                  {#if field === "body" || field === "headers"}
+                    <pre><code>{@html highlightJson(part.value)}</code></pre>
+                  {:else}
+                    <pre><code>{part.value}</code></pre>
+                  {/if}
+                </div>
+              {/each}
+            {:else}
+              <div class="error">No diff available for this field.</div>
+            {/if}
+          </div>
         </div>
-      </div>
+      {/if}
     {/each}
   </div>
 </div>
@@ -110,16 +143,49 @@
   }
 
   .close-button {
-    background: none;
+    background: var(--surface);
     border: none;
     cursor: pointer;
-    color: var(--secondary-text);
     font-size: 1.5rem;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .close-button:hover {
+    background: var(--hover-background);
+    color: var(--error);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .close-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  .tabs {
+    display: flex;
+    background-color: var(--surface);
+    border-bottom: 1px solid var(--divider);
+  }
+
+  .tab-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1rem;
+
+    transition: all 0.3s ease;
+  }
+
+  .tab-button.active {
     color: var(--primary-text);
+    border-bottom: 2px solid var(--primary);
   }
 
   .diff-content {
@@ -129,14 +195,7 @@
   }
 
   .panel {
-    margin-bottom: 2rem;
-  }
-
-  .panel h3 {
-    font-size: 1.2rem;
-    color: var(--dark-text);
-    margin-bottom: 0.5rem;
-    text-transform: capitalize;
+    height: 100%;
   }
 
   .diff-result {
@@ -146,28 +205,7 @@
     border: 1px solid var(--divider);
     border-radius: 4px;
     overflow: auto;
-  }
-
-  .panel.body .diff-result {
-    max-height: 98%;
-  }
-
-  .panel.headers .diff-result {
-    max-height: 98%;
-  }
-
-  /* Yeni eklenen stiller */
-  .panel.error,
-  .panel.duration,
-  .panel.curl_command {
-    height: auto;
-  }
-
-  .panel.error .diff-result,
-  .panel.duration .diff-result,
-  .panel.curl_command .diff-result {
-    max-height: none;
-    height: auto;
+    height: 100%;
   }
 
   .diff-line {
@@ -220,9 +258,19 @@
   }
 
   /* Prism.js tema ayarları */
-  :global(.token.property) { color: #f8c555; }
-  :global(.token.string) { color: #7ec699; }
-  :global(.token.number) { color: #f08d49; }
-  :global(.token.boolean) { color: #ff8b50; }
-  :global(.token.null) { color: #ff8b50; }
+  :global(.token.property) {
+    color: #f8c555;
+  }
+  :global(.token.string) {
+    color: #7ec699;
+  }
+  :global(.token.number) {
+    color: #f08d49;
+  }
+  :global(.token.boolean) {
+    color: #ff8b50;
+  }
+  :global(.token.null) {
+    color: #ff8b50;
+  }
 </style>
