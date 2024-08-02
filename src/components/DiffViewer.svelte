@@ -242,7 +242,7 @@
     color: #f8c555;
   }
   :global(.token.string) {
-    color: #7ec699;
+    color: var(--dark-text);
   }
   :global(.token.number) {
     color: #f08d49;
