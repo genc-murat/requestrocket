@@ -2250,15 +2250,20 @@
                         </span>
                         <span class="url">{item.url}</span>
                       </button>
-                      <input
-                        type="checkbox"
-                        checked={$selectedHistoryItems.some(
-                          (i) => i.id === item.id,
-                        )}
-                        on:change={() => toggleHistoryItemSelection(item)}
-                        disabled={$selectedHistoryItems.length === 2 &&
-                          !$selectedHistoryItems.some((i) => i.id === item.id)}
-                      />
+                      <label class="custom-checkbox">
+                        <input
+                          type="checkbox"
+                          checked={$selectedHistoryItems.some(
+                            (i) => i.id === item.id,
+                          )}
+                          on:change={() => toggleHistoryItemSelection(item)}
+                          disabled={$selectedHistoryItems.length === 2 &&
+                            !$selectedHistoryItems.some(
+                              (i) => i.id === item.id,
+                            )}
+                        />
+                        <span class="checkmark"></span>
+                      </label>
                       <button
                         class="duplicate-icon"
                         aria-label="Duplicate history item"
@@ -2940,15 +2945,20 @@
                         </span>
                         <span class="url">{item.url}</span>
                       </button>
-                      <input
-                        type="checkbox"
-                        checked={$selectedHistoryItems.some(
-                          (i) => i.id === item.id,
-                        )}
-                        on:change={() => toggleHistoryItemSelection(item)}
-                        disabled={$selectedHistoryItems.length === 2 &&
-                          !$selectedHistoryItems.some((i) => i.id === item.id)}
-                      />
+                      <label class="custom-checkbox">
+                        <input
+                          type="checkbox"
+                          checked={$selectedHistoryItems.some(
+                            (i) => i.id === item.id,
+                          )}
+                          on:change={() => toggleHistoryItemSelection(item)}
+                          disabled={$selectedHistoryItems.length === 2 &&
+                            !$selectedHistoryItems.some(
+                              (i) => i.id === item.id,
+                            )}
+                        />
+                        <span class="checkmark"></span>
+                      </label>
                       <button
                         class="duplicate-icon"
                         aria-label="Duplicate history item"
@@ -3789,7 +3799,8 @@
         <button
           type="button"
           on:click={closeThemeSwitcherModal}
-          class="close-button" aria-label="Close"
+          class="close-button"
+          aria-label="Close"
         >
           <Icon icon="eva:close-fill" width="24" height="24" />
         </button>
@@ -3986,7 +3997,7 @@
     box-shadow:
       0 -5px 8px -1px var(--surface),
       0 4px 4px -1px var(--divider);
-      border-bottom: 2px solid var(--primary);
+    border-bottom: 2px solid var(--primary);
   }
 
   .vertical-buttons {

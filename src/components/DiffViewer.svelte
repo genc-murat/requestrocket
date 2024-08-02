@@ -224,10 +224,12 @@
 
   .diff-line.added .line-indicator {
     color: var(--success);
+    font-weight: bold;
   }
 
   .diff-line.removed .line-indicator {
     color: var(--error);
+    font-weight: bold;
   }
 
   .error {
