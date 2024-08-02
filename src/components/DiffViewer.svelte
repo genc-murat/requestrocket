@@ -186,7 +186,7 @@
 
   .diff-line {
     display: flex;
-    padding: 2px 0;
+    padding: 5px 0;
     transition: background-color 0.2s ease;
   }
 
@@ -214,10 +214,12 @@
 
   .diff-line.added {
     background-color: rgba(0, 255, 0, 0.1);
+    font-weight: bold;
   }
 
   .diff-line.removed {
     background-color: rgba(255, 0, 0, 0.1);
+    font-weight: bold;
   }
 
   .diff-line.added .line-indicator {
