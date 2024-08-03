@@ -83,6 +83,8 @@
 
   import HarAnalyzerModal from "../components/HarAnalyzerModal.svelte";
 
+  import { url, method } from "../stores/urlStore";
+
   let showHarAnalyzerModal = false;
 
   function openHarAnalyzerModal() {
@@ -621,8 +623,6 @@
     apiFlowModalOpen.set(false);
   }
 
-  let url = writable("");
-  let method = writable("GET");
   let body = writable("");
   let params = writable<Param[]>([]);
   let bodyType = writable("json");
