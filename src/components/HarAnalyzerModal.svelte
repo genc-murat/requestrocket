@@ -598,9 +598,6 @@
     <div class="modal-overlay" on:click|self={closeModal}>
         <div class="modal-content" on:click|stopPropagation>
             <h2 class="text-2xl font-bold mb-4">HAR File Analyzer</h2>
-            <button class="close-button" on:click={closeModal}>
-                <Icon icon="mdi:close" />
-            </button>
 
             <div class="file-upload mb-4">
                 <label for="har-file" class="file-input-label">
@@ -1031,17 +1028,6 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-    .close-button {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: #666;
-    }
-
     .file-input-label {
         display: inline-flex;
         align-items: center;
@@ -1106,7 +1092,6 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        justify-content: center;
         overflow: hidden;
     }
 
