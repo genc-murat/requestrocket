@@ -86,6 +86,8 @@
 
   import { url, method } from "../stores/urlStore";
 
+  import { urlAutocomplete, headerAutocomplete, queryParamAutocomplete } from "../stores/autoCompleteStore";
+
   let showHarAnalyzerModal = false;
 
   function openHarAnalyzerModal() {
@@ -1027,10 +1029,6 @@
     })();
     return suggestions;
   }
-
-  let urlAutocomplete = writable<string[]>([]);
-  let headerAutocomplete = writable<string[]>([]);
-  let queryParamAutocomplete = writable<string[]>([]);
 
   function handleQueryParamInput(event: Event, index: number) {
     const input = event.target as HTMLInputElement;
