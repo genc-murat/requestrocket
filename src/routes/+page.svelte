@@ -3719,7 +3719,7 @@
       <div class="flex mb-6">
         <select
           bind:value={$currentEnvironment}
-          class="flex-1 p-3 border rounded-lg text-primary bg-accent mr-4"
+          class="flex-1 p-3 border rounded-lg mr-4 variables-select"
         >
           <option value="default">Default</option>
           <option value="development">Development</option>

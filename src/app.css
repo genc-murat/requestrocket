@@ -944,3 +944,7 @@ pre {
   width: 100%;
   height: 2.5rem;
 }
+
+.variables-select {
+  background-color: var(--surface);
+}

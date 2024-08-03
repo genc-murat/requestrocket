@@ -32,7 +32,7 @@
       <button
         type="button"
         on:click={handleAddCustomHeader}
-        class="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
+        class="flex items-center  px-4 py-2 rounded-lg shadow-md "
       >
      
         <Icon icon="fluent-mdl2:add-to" width="18" height="18" class="mr-2" /> Add
@@ -42,7 +42,7 @@
     <ul>
       {#each $customHeaders as header}
         <li class="mb-4 flex justify-between items-center">
-          <span class="text-primary font-medium">{header.name}</span>
+          <span class="font-medium">{header.name}</span>
           <button
             type="button"
             on:click={() => deleteCustomHeader(header.id)}
@@ -67,3 +67,7 @@
     </button>
   </div>
 </div>
+
+<style>
+
+</style>
