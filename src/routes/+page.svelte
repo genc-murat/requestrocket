@@ -85,9 +85,9 @@
 
   let showHarAnalyzerModal = false;
 
-function openHarAnalyzerModal() {
-  showHarAnalyzerModal = true;
-}
+  function openHarAnalyzerModal() {
+    showHarAnalyzerModal = true;
+  }
 
   let showImportMenu = false;
 
@@ -157,7 +157,6 @@ function openHarAnalyzerModal() {
         await saveHistory(historyItem);
         showStatusMessage("cURL command imported successfully", "info");
 
-        // Optionally, you can also set the current request to the imported one
         url.set(historyItem.url);
         method.set(historyItem.method);
         body.set(historyItem.body);
@@ -211,12 +210,10 @@ function openHarAnalyzerModal() {
 
       let yPosition = height - 40;
 
-      // Helper function to add text to the PDF
       const addText = (text: string, x: number, y: number) => {
         page.drawText(text, { x, y, size: fontSize });
       };
 
-      // Recursive function to add JSON data to the PDF
       const addJsonToPdf = (json: any, indent = 0) => {
         const indentSpaces = " ".repeat(indent * 2);
         for (const key in json) {
@@ -359,7 +356,6 @@ function openHarAnalyzerModal() {
           case "end":
           case "comment":
           case "group":
-            // Bu bloklar için özel bir işlem yapılmıyor
             result = { message: `${block.type} block executed` };
             break;
           default:
@@ -369,11 +365,9 @@ function openHarAnalyzerModal() {
 
         flowResults.update((results) => ({ ...results, [block.id]: result }));
 
-        // Sonraki bloğu belirle
         const nextBlockId = determineNextBlock(block, result, flow);
-        if (!nextBlockId) break; // Eğer sonraki blok yoksa akışı sonlandır
+        if (!nextBlockId) break;
 
-        // Sonraki bloğu bul
         const nextBlockIndex = flow.blocks.findIndex(
           (b) => b.id === nextBlockId,
         );
@@ -382,7 +376,6 @@ function openHarAnalyzerModal() {
           break;
         }
 
-        // Döngüyü sonraki blokla devam ettir
         currentBlockIndex = nextBlockIndex;
       } catch (error) {
         console.error("Error in flow execution:", error);
@@ -473,7 +466,6 @@ function openHarAnalyzerModal() {
         }
       }
 
-      // Döngüden çıkma kontrolü
       if (currentBlockId === null) break;
     }
 
@@ -515,7 +507,7 @@ function openHarAnalyzerModal() {
     variables: { [key: string]: any },
   ): any {
     const script = replaceVariables(block.data.script, variables);
-    return eval(script); // Not: eval kullanımı güvenlik riskleri taşıyabilir, dikkatli kullanılmalıdır.
+    return eval(script);
   }
 
   async function executeWebhook(
@@ -570,7 +562,7 @@ function openHarAnalyzerModal() {
         if (variable) {
           value = variable.values[$currentEnvironment] || match;
         } else {
-          value = match; // If variable not found, keep the original placeholder
+          value = match;
         }
       })();
       return value;
@@ -632,7 +624,6 @@ function openHarAnalyzerModal() {
   let url = writable("");
   let method = writable("GET");
   let body = writable("");
-  // let headers = writable<Header[]>([]);
   let params = writable<Param[]>([]);
   let bodyType = writable("json");
   let pathParams = writable<Param[]>([]);
@@ -674,7 +665,6 @@ function openHarAnalyzerModal() {
           keyPath: "id",
           autoIncrement: true,
         });
-        // Create index on "url"
         statusHistoryStore.createIndex("url", "url");
       }
 
@@ -834,7 +824,7 @@ function openHarAnalyzerModal() {
 
   async function createNewGroup() {
     const trimmedGroupName = $newGroupName.trim();
-    const MAX_GROUP_NAME_LENGTH = 50; // Örnek bir sınır
+    const MAX_GROUP_NAME_LENGTH = 50;
 
     if (!trimmedGroupName) {
       showStatusMessage("Group name cannot be empty", "error");
@@ -890,11 +880,9 @@ function openHarAnalyzerModal() {
   $: {
     if ($url.trim()) {
       try {
-        // Replace variables in the URL string before creating the URL object
         const replacedUrl = replaceVariables($url, $variables);
         const urlObj = new URL(replacedUrl);
 
-        // Extract query parameters from the URL
         const newQueryParams = Array.from(urlObj.searchParams.entries()).map(
           ([key, value]) => ({ key, value }),
         );
@@ -912,7 +900,6 @@ function openHarAnalyzerModal() {
             return Array.from(currentParamsMap.values());
           });
 
-          // Update the URL store without query parameters
           url.set(urlObj.origin + urlObj.pathname);
         }
       } catch (error) {
@@ -995,7 +982,7 @@ function openHarAnalyzerModal() {
         const updatedHistoryItem = {
           ...existingHistoryItem,
           body: $body,
-          headers: $headers, // Değişiklik burada
+          headers: $headers,
           params: $params,
           response: JSON.stringify(res),
         };
@@ -1005,7 +992,7 @@ function openHarAnalyzerModal() {
           actualUrl,
           $method,
           $body,
-          $headers, // Değişiklik burada
+          $headers,
           $params,
           JSON.stringify(res),
           $selectedGroup,
@@ -1192,7 +1179,7 @@ function openHarAnalyzerModal() {
         .filter((item) => item.group === selectedGroup)
         .map((item) => ({
           ...item,
-          headers: item.headers || [], // Ensure headers is always an array
+          headers: item.headers || [],
         }));
       history.set(filteredHistory.reverse());
     } catch (error) {
@@ -1354,7 +1341,7 @@ function openHarAnalyzerModal() {
     "415": "bg-yellow-500",
     "416": "bg-yellow-500",
     "417": "bg-yellow-500",
-    "418": "bg-yellow-500", // I'm a teapot (RFC 2324)
+    "418": "bg-yellow-500",
     "422": "bg-yellow-500",
     "425": "bg-yellow-500",
     "426": "bg-yellow-500",
@@ -1365,10 +1352,10 @@ function openHarAnalyzerModal() {
     "4xx": "bg-yellow-500",
 
     // Server errors
-    "500": "bg-red-500", // Internal Server Error
+    "500": "bg-red-500",
     "501": "bg-red-600",
-    "502": "bg-red-700", // Bad Gateway
-    "503": "bg-red-800", // Service Unavailable
+    "502": "bg-red-700",
+    "503": "bg-red-800",
     "504": "bg-red-600",
     "505": "bg-red-600",
     "506": "bg-red-600",
@@ -1397,7 +1384,7 @@ function openHarAnalyzerModal() {
     url.set(item.url);
     method.set(item.method);
     body.set(item.body);
-    headers.set(item.headers || []); // Ensure it's always an array
+    headers.set(item.headers || []);
     params.set(item.params || []);
     response.set(item.response ? JSON.parse(item.response) : null);
     jsonData.set(item.response ? item.response : "{}");
@@ -1464,11 +1451,9 @@ function openHarAnalyzerModal() {
     rows: string[][];
   } {
     try {
-      // First, try to parse as JSON
       const jsonData = JSON.parse(data);
       return processData(jsonData);
     } catch (e) {
-      // If JSON parsing fails, try XML
       try {
         const xmlData = xmlToJson(data);
         return processData(xmlData);
@@ -1487,7 +1472,6 @@ function openHarAnalyzerModal() {
       const obj: any = {};
 
       if (node.childNodes.length === 1 && node.childNodes[0].nodeType === 3) {
-        // Text node
         return node.textContent;
       }
 
@@ -1512,14 +1496,12 @@ function openHarAnalyzerModal() {
 
   function processData(data: any): { headers: string[]; rows: string[][] } {
     if (Array.isArray(data)) {
-      // Handle array of objects
       const headers = Array.from(new Set(data.flatMap(Object.keys)));
       const rows = data.map((item) =>
         headers.map((header) => JSON.stringify(item[header] || "")),
       );
       return { headers, rows };
     } else if (typeof data === "object" && data !== null) {
-      // Handle single object or XML root
       const headers = Object.keys(data);
       const rows = [
         headers.map((header) => {
@@ -1533,7 +1515,6 @@ function openHarAnalyzerModal() {
       ];
       return { headers, rows };
     } else {
-      // Handle primitive values
       return {
         headers: ["Value"],
         rows: [[JSON.stringify(data)]],
@@ -1541,7 +1522,6 @@ function openHarAnalyzerModal() {
     }
   }
 
-  // Usage in your component
   $: tableData =
     $response && $response.body
       ? jsonToTableData($response.body)
@@ -1563,7 +1543,7 @@ function openHarAnalyzerModal() {
         startTime = Date.now();
         timer = setInterval(() => {
           elapsedTime.set(Date.now() - startTime);
-        }, 10); // Update every 10 milliseconds
+        }, 10);
       } else {
         clearInterval(timer);
         elapsedTime.set(0);
@@ -1709,18 +1689,15 @@ function openHarAnalyzerModal() {
         const postmanJson = await readTextFile(filePath);
         const postmanCollection = JSON.parse(postmanJson);
 
-        // Dosya adını platformdan bağımsız olarak al ve uzantıyı çıkar
         const fileName =
           filePath.split(/[/\\]/).pop()?.split(".")[0] ||
           "Imported from Postman";
 
-        // Postman koleksiyonunu işle
         const importedHistoryItems: HistoryItem[] = processPostmanCollection(
           postmanCollection,
           fileName,
         );
 
-        // Yeni öğeleri history store'a ekle
         history.update((h) => {
           const newHistory = [...h, ...importedHistoryItems];
           importedHistoryItems.forEach((item) => saveHistory(item));
@@ -1746,7 +1723,7 @@ function openHarAnalyzerModal() {
     const processItem = (item: any): HistoryItem | null => {
       if (item.request) {
         return {
-          id: Date.now() + Math.random(), // Benzersiz bir ID oluştur
+          id: Date.now() + Math.random(),
           url:
             typeof item.request.url === "string"
               ? item.request.url
@@ -1978,7 +1955,6 @@ function openHarAnalyzerModal() {
   function jsonToCSV(jsonData: any): string {
     const rows = [];
 
-    // Helper function to convert object to CSV row
     const convertToRow = (obj: any, headers: string[]): string[] => {
       return headers.map((header) =>
         obj[header] ? JSON.stringify(obj[header]) : "",
@@ -1986,7 +1962,6 @@ function openHarAnalyzerModal() {
     };
 
     if (Array.isArray(jsonData)) {
-      // If the data is an array, use the union of keys as headers
       const headers = Array.from(new Set(jsonData.flatMap(Object.keys)));
       rows.push(headers.join(","));
 
@@ -1994,12 +1969,10 @@ function openHarAnalyzerModal() {
         rows.push(convertToRow(item, headers).join(","));
       }
     } else if (typeof jsonData === "object" && jsonData !== null) {
-      // If the data is a single object, use its keys as headers
       const headers = Object.keys(jsonData);
       rows.push(headers.join(","));
       rows.push(convertToRow(jsonData, headers).join(","));
     } else {
-      // If the data is a primitive value, wrap it in an array
       rows.push("Value");
       rows.push(JSON.stringify(jsonData));
     }
@@ -2125,13 +2098,13 @@ function openHarAnalyzerModal() {
             />
           </button>
           <button
-          type="button"
-          on:click={openHarAnalyzerModal}
-          class="button-item hover"
-          title="HAR Analyzer"
-        >
-          <Icon icon="mdi:file-document-outline" width="24" height="24" />
-        </button>
+            type="button"
+            on:click={openHarAnalyzerModal}
+            class="button-item hover"
+            title="HAR Analyzer"
+          >
+            <Icon icon="mdi:file-document-outline" width="24" height="24" />
+          </button>
           <div class="import-button-container">
             <button
               type="button"
@@ -3951,7 +3924,7 @@ function openHarAnalyzerModal() {
 
 <HarAnalyzerModal
   bind:show={showHarAnalyzerModal}
-  on:close={() => showHarAnalyzerModal = false}
+  on:close={() => (showHarAnalyzerModal = false)}
 />
 
 <style>
