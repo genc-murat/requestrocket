@@ -1,7 +1,9 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, onMount } from "svelte";
     import type { HarFile, HarEntry } from "./har-types";
     import Icon from "@iconify/svelte";
+    import { Chart } from "chart.js/auto";
+    import type { ChartType, ChartData, ChartOptions } from "chart.js/auto";
 
     export let show = false;
 
@@ -15,6 +17,159 @@
     function closeModal() {
         show = false;
         dispatch("close");
+    }
+
+    let statusCodeChartCanvas: HTMLCanvasElement;
+    let mimeTypeChartCanvas: HTMLCanvasElement;
+    let loadTimeChartCanvas: HTMLCanvasElement;
+
+    let statusCodeChart: Chart | undefined;
+    let mimeTypeChart: Chart | undefined;
+    let loadTimeChart: Chart | undefined;
+
+    function createChart(
+        canvas: HTMLCanvasElement,
+        type: ChartType,
+        data: ChartData,
+        options: ChartOptions,
+    ): Chart {
+        if (canvas) {
+            const ctx = canvas.getContext("2d");
+            if (ctx) {
+                return new Chart(ctx, {
+                    type,
+                    data,
+                    options: {
+                        ...options,
+                        maintainAspectRatio: false,
+                        responsive: true,
+                    },
+                });
+            }
+        }
+        throw new Error("Canvas context not available");
+    }
+
+    function createStatusCodeChart(distribution: { [key: string]: number }) {
+        if (statusCodeChart) statusCodeChart.destroy();
+        statusCodeChart = createChart(
+            statusCodeChartCanvas,
+            "pie",
+            {
+                labels: Object.keys(distribution),
+                datasets: [
+                    {
+                        data: Object.values(distribution),
+                        backgroundColor: [
+                            "#FF6384",
+                            "#36A2EB",
+                            "#FFCE56",
+                            "#4BC0C0",
+                            "#9966FF",
+                        ],
+                    },
+                ],
+            },
+            {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: "right",
+                    },
+                    title: {
+                        display: true,
+                        text: "Status Code Distribution",
+                    },
+                },
+            },
+        );
+    }
+
+    function createMimeTypeChart(distribution: { [key: string]: number }) {
+        if (mimeTypeChart) mimeTypeChart.destroy();
+        mimeTypeChart = createChart(
+            mimeTypeChartCanvas,
+            "doughnut",
+            {
+                labels: Object.keys(distribution),
+                datasets: [
+                    {
+                        data: Object.values(distribution),
+                        backgroundColor: [
+                            "#FF6384",
+                            "#36A2EB",
+                            "#FFCE56",
+                            "#4BC0C0",
+                            "#9966FF",
+                            "#FF9F40",
+                        ],
+                    },
+                ],
+            },
+            {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: "right",
+                    },
+                    title: {
+                        display: true,
+                        text: "MIME Type Distribution",
+                    },
+                },
+            },
+        );
+    }
+
+    function createLoadTimeChart(distribution: number[]) {
+        if (loadTimeChart) loadTimeChart.destroy();
+        loadTimeChart = createChart(
+            loadTimeChartCanvas,
+            "bar",
+            {
+                labels: [
+                    "0-100",
+                    "100-200",
+                    "200-500",
+                    "500-1000",
+                    "1000-2000",
+                    "2000-5000",
+                    "5000+",
+                ],
+                datasets: [
+                    {
+                        label: "Number of Requests",
+                        data: distribution,
+                        backgroundColor: "#36A2EB",
+                    },
+                ],
+            },
+            {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                    title: {
+                        display: true,
+                        text: "Load Time Distribution",
+                    },
+                },
+            },
+        );
+    }
+
+    $: if (analysisData) {
+        setTimeout(() => {
+            createStatusCodeChart(analysisData.statusCodeDistribution);
+            createMimeTypeChart(analysisData.mimeTypeDistribution);
+            createLoadTimeChart(analysisData.loadTimeDistribution);
+        }, 0);
     }
 
     async function handleFileUpload(event: Event) {
@@ -553,6 +708,43 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="analysis-card">
+                            <div class="card-content">
+                                <h3 class="card-title">
+                                    <Icon icon="mdi:chart-pie" /> Status Codes
+                                </h3>
+                                <div class="card-details chart-container">
+                                    <canvas bind:this={statusCodeChartCanvas}
+                                    ></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="analysis-card">
+                            <div class="card-content">
+                                <h3 class="card-title">
+                                    <Icon icon="mdi:file-type" /> MIME Types
+                                </h3>
+                                <div class="card-details chart-container">
+                                    <canvas bind:this={mimeTypeChartCanvas}
+                                    ></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="analysis-card">
+                            <div class="card-content">
+                                <h3 class="card-title">
+                                    <Icon icon="mdi:chart-timeline" /> Load Time
+                                    Distribution
+                                </h3>
+                                <div class="card-details chart-container">
+                                    <canvas bind:this={loadTimeChartCanvas}
+                                    ></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="mt-8">
@@ -681,45 +873,36 @@
         border-radius: 0.5rem;
         padding: 1rem;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
     }
 
     .card-content {
         display: flex;
-        align-items: flex-start;
+        flex-direction: column;
+        height: 100%;
     }
 
     .card-title {
         font-size: 1.2rem;
         font-weight: bold;
-        margin-right: 1rem;
-        min-width: 200px;
+        margin-bottom: 1rem;
         display: flex;
         align-items: center;
     }
 
-    .card-title :global(svg) {
-        margin-right: 0.5rem;
+    .chart-container {
+        height: 650px;
+        width: 100%;
     }
 
     .card-details {
         flex: 1;
         display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem 1rem;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
     }
-
-    .card-details > * {
-        flex-basis: calc(33.333% - 1rem);
-    }
-
-    .load-time-chart {
-        display: flex;
-        align-items: flex-end;
-        height: 150px;
-        margin-top: 1rem;
-        width: 100%;
-    }
-
     .bar-container {
         flex: 1;
         display: flex;
