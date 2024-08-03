@@ -79,6 +79,35 @@
 
   import { importHarFile } from "$lib/harImporter";
 
+  import ImportPopupMenu from "../components/ImportPopupMenu.svelte";
+
+  let showImportMenu = false;
+
+  function handleImport(
+    event: CustomEvent<{ type: "har" | "curl" | "postman" }>,
+  ) {
+    const { type } = event.detail;
+    switch (type) {
+      case "har":
+        handleImportHar();
+        break;
+      case "curl":
+        openCurlImportDialog();
+        break;
+      case "postman":
+        importPostmanCollection();
+        break;
+    }
+    closeImportMenu();
+  }
+
+  function toggleImportMenu() {
+    showImportMenu = !showImportMenu;
+  }
+
+  function closeImportMenu() {
+    showImportMenu = false;
+  }
   async function handleImportHar() {
     try {
       const selected = await dialog.open({
@@ -2087,30 +2116,22 @@
               height="24"
             />
           </button>
-          <button
-            type="button"
-            on:click={handleImportHar}
-            class="button-item hover"
-            title="Import HAR"
-          >
-            <Icon icon="material-symbols:http-rounded" width="24" height="24" />
-          </button>
-          <button
-            type="button"
-            on:click={openCurlImportDialog}
-            class="button-item hover"
-            title="Import cURL"
-          >
-            <Icon icon="logos:curl" width="24" height="24" />
-          </button>
-          <button
-            type="button"
-            on:click={importPostmanCollection}
-            class="button-item hover"
-            title="Import"
-          >
-            <Icon icon="logos:postman-icon" width="24" height="24" />
-          </button>
+
+          <div class="import-button-container">
+            <button
+              type="button"
+              on:click={toggleImportMenu}
+              class="button-item hover"
+              title="Import"
+            >
+              <Icon icon="mdi:import" width="24" height="24" />
+            </button>
+            <ImportPopupMenu
+              bind:show={showImportMenu}
+              on:import={handleImport}
+              on:close={closeImportMenu}
+            />
+          </div>
           <button
             type="button"
             on:click={() => downloadApiDocumentation($history)}
