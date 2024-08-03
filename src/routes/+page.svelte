@@ -2337,9 +2337,29 @@
               {/if}
             </div>
           </div>
-          <button type="button" on:click={handleSendRequest} class="button mb-2"
-            >Send Request</button
+          <button
+            type="button"
+            on:click={handleSendRequest}
+            class="button mb-2 send-request-button"
           >
+            <span class="button-text">Send Request</span>
+            <span class="button-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </span>
+          </button>
           <div class="tabs">
             <button
               type="button"
@@ -3041,8 +3061,9 @@
               <button
                 type="button"
                 on:click={handleSendRequest}
-                class="button mb-2">Send Request</button
-              >
+                class="button mb-2"
+                >Send Request
+              </button>
               <div class="tabs">
                 <button
                   type="button"
