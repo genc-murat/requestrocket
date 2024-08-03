@@ -27,6 +27,7 @@
   import CustomHeaderPanel from "../components/CustomHeaderPanel.svelte";
 
   import ConfirmModal from "../components/ConfirmModal.svelte";
+  import { headers, queryParams, pathParams, formParams } from "../stores/paramsStore";
 
   import type {
     Flow,
@@ -626,9 +627,6 @@
   let body = writable("");
   let params = writable<Param[]>([]);
   let bodyType = writable("json");
-  let pathParams = writable<Param[]>([]);
-  let queryParams = writable<Param[]>([]);
-  let formParams = writable<Param[]>([]);
   let response = writable<ResponseData | null>(null);
   let history = writable<HistoryItem[]>([]);
   let selectedTab = writable("response");
@@ -734,8 +732,6 @@
 
   type Header = { key: string; value: string; selected: boolean };
   type AutocompleteHeaders = string[][];
-
-  let headers = writable<Header[]>([]);
 
   $: headerCount = $headers ? $headers.length : 0;
   $: pathParamsCount = $pathParams.length;
