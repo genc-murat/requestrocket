@@ -81,6 +81,14 @@
 
   import ImportPopupMenu from "../components/ImportPopupMenu.svelte";
 
+  import HarAnalyzerModal from "../components/HarAnalyzerModal.svelte";
+
+  let showHarAnalyzerModal = false;
+
+function openHarAnalyzerModal() {
+  showHarAnalyzerModal = true;
+}
+
   let showImportMenu = false;
 
   function handleImport(
@@ -2116,7 +2124,14 @@
               height="24"
             />
           </button>
-
+          <button
+          type="button"
+          on:click={openHarAnalyzerModal}
+          class="button-item hover"
+          title="HAR Analyzer"
+        >
+          <Icon icon="mdi:file-document-outline" width="24" height="24" />
+        </button>
           <div class="import-button-container">
             <button
               type="button"
@@ -3932,6 +3947,11 @@
   bind:show={showCurlImportDialog}
   on:submit={handleCurlImport}
   on:cancel={() => (showCurlImportDialog = false)}
+/>
+
+<HarAnalyzerModal
+  bind:show={showHarAnalyzerModal}
+  on:close={() => showHarAnalyzerModal = false}
 />
 
 <style>

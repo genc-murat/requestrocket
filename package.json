@@ -36,6 +36,7 @@
 	"type": "module",
 	"dependencies": {
 		"@types/diff": "^5.2.1",
+		"chart.js": "^4.4.3",
 		"diff": "^5.2.0",
 		"idb": "^8.0.0",
 		"jsoneditor": "^10.1.0",
