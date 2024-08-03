@@ -22,10 +22,16 @@
     let statusCodeChartCanvas: HTMLCanvasElement;
     let mimeTypeChartCanvas: HTMLCanvasElement;
     let loadTimeChartCanvas: HTMLCanvasElement;
+    let contentTypesChartCanvas: HTMLCanvasElement;
+    let timingBreakdownChartCanvas: HTMLCanvasElement;
+    let resourcesPerDomainChartCanvas: HTMLCanvasElement;
 
     let statusCodeChart: Chart | undefined;
     let mimeTypeChart: Chart | undefined;
     let loadTimeChart: Chart | undefined;
+    let contentTypesChart: Chart | undefined;
+    let timingBreakdownChart: Chart | undefined;
+    let resourcesPerDomainChart: Chart | undefined;
 
     function createChart(
         canvas: HTMLCanvasElement,
@@ -71,7 +77,6 @@
                 ],
             },
             {
-                responsive: true,
                 plugins: {
                     legend: {
                         position: "right",
@@ -107,7 +112,6 @@
                 ],
             },
             {
-                responsive: true,
                 plugins: {
                     legend: {
                         position: "right",
@@ -145,7 +149,6 @@
                 ],
             },
             {
-                responsive: true,
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -164,12 +167,116 @@
         );
     }
 
-    $: if (analysisData) {
-        setTimeout(() => {
-            createStatusCodeChart(analysisData.statusCodeDistribution);
-            createMimeTypeChart(analysisData.mimeTypeDistribution);
-            createLoadTimeChart(analysisData.loadTimeDistribution);
-        }, 0);
+    function createContentTypesChart(breakdown: { [key: string]: number }) {
+        if (contentTypesChart) contentTypesChart.destroy();
+        contentTypesChart = createChart(
+            contentTypesChartCanvas,
+            "doughnut",
+            {
+                labels: Object.keys(breakdown),
+                datasets: [
+                    {
+                        data: Object.values(breakdown),
+                        backgroundColor: [
+                            "#FF6384",
+                            "#36A2EB",
+                            "#FFCE56",
+                            "#4BC0C0",
+                            "#9966FF",
+                            "#FF9F40",
+                            "#FF6384",
+                            "#36A2EB",
+                            "#FFCE56",
+                            "#4BC0C0",
+                        ],
+                    },
+                ],
+            },
+            {
+                plugins: {
+                    legend: {
+                        position: "right",
+                    },
+                    title: {
+                        display: true,
+                        text: "Content Types Breakdown",
+                    },
+                },
+            },
+        );
+    }
+
+    function createTimingBreakdownChart(breakdown: { [key: string]: number }) {
+        if (timingBreakdownChart) timingBreakdownChart.destroy();
+        timingBreakdownChart = createChart(
+            timingBreakdownChartCanvas,
+            "bar",
+            {
+                labels: Object.keys(breakdown),
+                datasets: [
+                    {
+                        label: "Time (ms)",
+                        data: Object.values(breakdown),
+                        backgroundColor: "#36A2EB",
+                    },
+                ],
+            },
+            {
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                    title: {
+                        display: true,
+                        text: "Timing Breakdown",
+                    },
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+            },
+        );
+    }
+
+    function createResourcesPerDomainChart(breakdown: {
+        [key: string]: number;
+    }) {
+        if (resourcesPerDomainChart) resourcesPerDomainChart.destroy();
+        const sortedData = Object.entries(breakdown)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 10);
+        resourcesPerDomainChart = createChart(
+            resourcesPerDomainChartCanvas,
+            "bar",
+            {
+                labels: sortedData.map(([domain]) => domain),
+                datasets: [
+                    {
+                        label: "Number of Requests",
+                        data: sortedData.map(([, count]) => count),
+                        backgroundColor: "#FF6384",
+                    },
+                ],
+            },
+            {
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                    title: {
+                        display: true,
+                        text: "Top 10 Domains by Number of Requests",
+                    },
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+            },
+        );
     }
 
     async function handleFileUpload(event: Event) {
@@ -352,6 +459,84 @@
         };
     }
 
+    function getContentTypesBreakdown(entries: HarEntry[]): {
+        [key: string]: number;
+    } {
+        return entries.reduce(
+            (breakdown, entry) => {
+                const contentType =
+                    entry.response.content.mimeType.split(";")[0];
+                breakdown[contentType] = (breakdown[contentType] || 0) + 1;
+                return breakdown;
+            },
+            {} as { [key: string]: number },
+        );
+    }
+
+    function getTimingBreakdown(entries: HarEntry[]): {
+        [key: string]: number;
+    } {
+        const timings = [
+            "blocked",
+            "dns",
+            "connect",
+            "send",
+            "wait",
+            "receive",
+            "ssl",
+        ] as const;
+        return entries.reduce(
+            (breakdown, entry) => {
+                if (entry.timings) {
+                    timings.forEach((timing) => {
+                        const value = entry.timings[timing];
+                        if (typeof value === "number" && !isNaN(value)) {
+                            breakdown[timing] =
+                                (breakdown[timing] || 0) + value;
+                        }
+                    });
+                }
+                return breakdown;
+            },
+            {} as { [key: string]: number },
+        );
+    }
+
+    function getThirdPartyRequests(
+        entries: HarEntry[],
+        mainDomain: string,
+    ): HarEntry[] {
+        return entries.filter((entry) => {
+            const url = new URL(entry.request.url);
+            return url.hostname !== mainDomain;
+        });
+    }
+
+    function getPageLoadTime(entries: HarEntry[]): number {
+        return Math.max(...entries.map((entry) => entry.time));
+    }
+
+    function getFirstContentfulPaint(entries: HarEntry[]): number {
+        // This is a simplification. In reality, FCP is more complex to calculate.
+        const htmlEntry = entries.find((entry) =>
+            entry.response.content.mimeType.includes("text/html"),
+        );
+        return htmlEntry ? htmlEntry.time : 0;
+    }
+
+    function getResourcesPerDomain(entries: HarEntry[]): {
+        [key: string]: number;
+    } {
+        return entries.reduce(
+            (domains, entry) => {
+                const url = new URL(entry.request.url);
+                domains[url.hostname] = (domains[url.hostname] || 0) + 1;
+                return domains;
+            },
+            {} as { [key: string]: number },
+        );
+    }
+
     $: analysisData = harData
         ? {
               totalRequests: harData.log.entries.length,
@@ -373,6 +558,19 @@
               loadTimeDistribution: getLoadTimeDistribution(
                   harData.log.entries,
               ),
+              contentTypesBreakdown: getContentTypesBreakdown(
+                  harData.log.entries,
+              ),
+              timingBreakdown: getTimingBreakdown(harData.log.entries),
+              thirdPartyRequests: getThirdPartyRequests(
+                  harData.log.entries,
+                  new URL(harData.log.entries[0].request.url).hostname,
+              ),
+              pageLoadTime: getPageLoadTime(harData.log.entries),
+              firstContentfulPaint: getFirstContentfulPaint(
+                  harData.log.entries,
+              ),
+              resourcesPerDomain: getResourcesPerDomain(harData.log.entries),
           }
         : null;
 
@@ -383,6 +581,17 @@
               0,
           )
         : 0;
+
+    $: if (analysisData) {
+        setTimeout(() => {
+            createStatusCodeChart(analysisData.statusCodeDistribution);
+            createMimeTypeChart(analysisData.mimeTypeDistribution);
+            createLoadTimeChart(analysisData.loadTimeDistribution);
+            createContentTypesChart(analysisData.contentTypesBreakdown);
+            createTimingBreakdownChart(analysisData.timingBreakdown);
+            createResourcesPerDomainChart(analysisData.resourcesPerDomain);
+        }, 0);
+    }
 </script>
 
 {#if show}
@@ -423,7 +632,7 @@
                 </div>
             {:else if analysisData && harData}
                 <div class="har-analysis">
-                    <div class="grid grid-cols-1 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="analysis-card">
                             <div class="card-content">
                                 <h3 class="card-title">
@@ -437,6 +646,16 @@
                                     <p>
                                         Avg Response Time: {analysisData.averageResponseTime}
                                     </p>
+                                    <p>
+                                        Page Load Time: {analysisData.pageLoadTime.toFixed(
+                                            2,
+                                        )} ms
+                                    </p>
+                                    <p>
+                                        First Contentful Paint: {analysisData.firstContentfulPaint.toFixed(
+                                            2,
+                                        )} ms
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -444,15 +663,11 @@
                         <div class="analysis-card">
                             <div class="card-content">
                                 <h3 class="card-title">
-                                    <Icon icon="mdi:chart-bar" /> Status Codes
+                                    <Icon icon="mdi:chart-pie" /> Status Codes
                                 </h3>
-                                <div class="card-details">
-                                    {#each Object.entries(analysisData.statusCodeDistribution) as [status, count]}
-                                        <div class="flex justify-between">
-                                            <span>{status}:</span>
-                                            <span>{count}</span>
-                                        </div>
-                                    {/each}
+                                <div class="card-details chart-container">
+                                    <canvas bind:this={statusCodeChartCanvas}
+                                    ></canvas>
                                 </div>
                             </div>
                         </div>
@@ -462,13 +677,60 @@
                                 <h3 class="card-title">
                                     <Icon icon="mdi:file-type" /> MIME Types
                                 </h3>
-                                <div class="card-details">
-                                    {#each Object.entries(analysisData.mimeTypeDistribution) as [mimeType, count]}
-                                        <div class="flex justify-between">
-                                            <span>{mimeType}:</span>
-                                            <span>{count}</span>
-                                        </div>
-                                    {/each}
+                                <div class="card-details chart-container">
+                                    <canvas bind:this={mimeTypeChartCanvas}
+                                    ></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="analysis-card">
+                            <div class="card-content">
+                                <h3 class="card-title">
+                                    <Icon icon="mdi:chart-timeline" /> Load Time
+                                    Distribution
+                                </h3>
+                                <div class="card-details chart-container">
+                                    <canvas bind:this={loadTimeChartCanvas}
+                                    ></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="analysis-card">
+                            <div class="card-content">
+                                <h3 class="card-title">
+                                    <Icon icon="mdi:file-tree" /> Content Types Breakdown
+                                </h3>
+                                <div class="card-details chart-container">
+                                    <canvas bind:this={contentTypesChartCanvas}
+                                    ></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="analysis-card">
+                            <div class="card-content">
+                                <h3 class="card-title">
+                                    <Icon icon="mdi:clock-outline" /> Timing Breakdown
+                                </h3>
+                                <div class="card-details chart-container">
+                                    <canvas
+                                        bind:this={timingBreakdownChartCanvas}
+                                    ></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="analysis-card">
+                            <div class="card-content">
+                                <h3 class="card-title">
+                                    <Icon icon="mdi:web" /> Resources Per Domain
+                                </h3>
+                                <div class="card-details chart-container">
+                                    <canvas
+                                        bind:this={resourcesPerDomainChartCanvas}
+                                    ></canvas>
                                 </div>
                             </div>
                         </div>
@@ -512,22 +774,6 @@
                                             </li>
                                         {/each}
                                     </ol>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="analysis-card">
-                            <div class="card-content">
-                                <h3 class="card-title">
-                                    <Icon icon="mdi:web" /> Domain Distribution
-                                </h3>
-                                <div class="card-details">
-                                    {#each Object.entries(analysisData.domainDistribution) as [domain, count]}
-                                        <div class="flex justify-between">
-                                            <span>{domain}:</span>
-                                            <span>{count}</span>
-                                        </div>
-                                    {/each}
                                 </div>
                             </div>
                         </div>
@@ -605,45 +851,6 @@
                         <div class="analysis-card">
                             <div class="card-content">
                                 <h3 class="card-title">
-                                    <Icon icon="mdi:chart-timeline" /> Load Time
-                                    Distribution
-                                </h3>
-                                <div class="card-details">
-                                    <div class="load-time-chart">
-                                        {#each analysisData.loadTimeDistribution as count, i}
-                                            <div class="bar-container">
-                                                <div
-                                                    class="bar"
-                                                    style="height: {(count /
-                                                        analysisData.totalRequests) *
-                                                        100}%"
-                                                ></div>
-                                                <span class="bar-label">
-                                                    {i === 6
-                                                        ? "5000+"
-                                                        : i === 0
-                                                          ? "0-100"
-                                                          : `${[0, 100, 200, 500, 1000, 2000, 5000][i]}-${
-                                                                [
-                                                                    0, 100, 200,
-                                                                    500, 1000,
-                                                                    2000, 5000,
-                                                                ][i + 1]
-                                                            }`}
-                                                </span>
-                                            </div>
-                                        {/each}
-                                    </div>
-                                    <p class="text-center mt-2">
-                                        Response Time (ms)
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="analysis-card">
-                            <div class="card-content">
-                                <h3 class="card-title">
                                     <Icon icon="mdi:earth" /> Top Domains
                                 </h3>
                                 <div class="card-details">
@@ -712,36 +919,21 @@
                         <div class="analysis-card">
                             <div class="card-content">
                                 <h3 class="card-title">
-                                    <Icon icon="mdi:chart-pie" /> Status Codes
+                                    <Icon icon="mdi:web-box" /> Third-Party Requests
                                 </h3>
-                                <div class="card-details chart-container">
-                                    <canvas bind:this={statusCodeChartCanvas}
-                                    ></canvas>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="analysis-card">
-                            <div class="card-content">
-                                <h3 class="card-title">
-                                    <Icon icon="mdi:file-type" /> MIME Types
-                                </h3>
-                                <div class="card-details chart-container">
-                                    <canvas bind:this={mimeTypeChartCanvas}
-                                    ></canvas>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="analysis-card">
-                            <div class="card-content">
-                                <h3 class="card-title">
-                                    <Icon icon="mdi:chart-timeline" /> Load Time
-                                    Distribution
-                                </h3>
-                                <div class="card-details chart-container">
-                                    <canvas bind:this={loadTimeChartCanvas}
-                                    ></canvas>
+                                <div class="card-details">
+                                    <p>
+                                        Count: {analysisData.thirdPartyRequests
+                                            .length}
+                                    </p>
+                                    <p>
+                                        Percentage: {(
+                                            (analysisData.thirdPartyRequests
+                                                .length /
+                                                analysisData.totalRequests) *
+                                            100
+                                        ).toFixed(2)}%
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -790,6 +982,20 @@
                                 <li>
                                     The largest resource is over 1MB. Consider
                                     optimizing or compressing large files.
+                                </li>
+                            {/if}
+                            {#if analysisData.pageLoadTime > 3000}
+                                <li>
+                                    Page load time is over 3 seconds ({analysisData.pageLoadTime.toFixed(
+                                        2,
+                                    )} ms). Consider optimizing for faster load times.
+                                </li>
+                            {/if}
+                            {#if analysisData.thirdPartyRequests.length / analysisData.totalRequests > 0.3}
+                                <li>
+                                    More than 30% of requests are to third-party
+                                    domains. Consider reducing reliance on
+                                    third-party resources.
                                 </li>
                             {/if}
                         </ul>
@@ -892,38 +1098,16 @@
     }
 
     .chart-container {
-        height: 650px;
+        height: 300px;
         width: 100%;
     }
 
     .card-details {
         flex: 1;
         display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-    }
-    .bar-container {
-        flex: 1;
-        display: flex;
         flex-direction: column;
-        align-items: center;
-        margin: 0 2px;
-    }
-
-    .bar {
-        width: 100%;
-        background-color: #3498db;
-        transition: height 0.5s ease-out;
-    }
-
-    .bar-label {
-        font-size: 0.7rem;
-        writing-mode: vertical-rl;
-        text-orientation: mixed;
-        transform: rotate(180deg);
-        margin-top: 0.5rem;
-        white-space: nowrap;
+        justify-content: center;
+        overflow: hidden;
     }
 
     @media (max-width: 768px) {
@@ -935,22 +1119,13 @@
             padding: 0.75rem;
         }
 
-        .card-content {
-            flex-direction: column;
-        }
-
         .card-title {
             font-size: 1rem;
-            min-width: 0;
             margin-bottom: 0.5rem;
         }
 
-        .card-details > * {
-            flex-basis: 100%;
-        }
-
-        .bar-label {
-            font-size: 0.6rem;
+        .chart-container {
+            height: 200px;
         }
     }
 </style>
