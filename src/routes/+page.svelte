@@ -27,7 +27,12 @@
   import CustomHeaderPanel from "../components/CustomHeaderPanel.svelte";
 
   import ConfirmModal from "../components/ConfirmModal.svelte";
-  import { headers, queryParams, pathParams, formParams } from "../stores/paramsStore";
+  import {
+    headers,
+    queryParams,
+    pathParams,
+    formParams,
+  } from "../stores/paramsStore";
 
   import type {
     Flow,
@@ -86,7 +91,21 @@
 
   import { url, method } from "../stores/urlStore";
 
-  import { urlAutocomplete, headerAutocomplete, queryParamAutocomplete } from "../stores/autoCompleteStore";
+  import {
+    urlAutocomplete,
+    headerAutocomplete,
+    queryParamAutocomplete,
+  } from "../stores/autoCompleteStore";
+
+  import {
+    showModal,
+    itemToDelete,
+    variablesPanelOpen,
+    groupModalOpen,
+    themeModalOpen,
+    apiFlowModalOpen,
+    showDiffView,
+  } from "../stores/modalStatesStore";
 
   let showHarAnalyzerModal = false;
 
@@ -185,7 +204,6 @@
 
   export let envVariables: Writable<EnvVariable[]> = writable([]);
 
-  export let showSettings = writable(false);
   export let requestTimeout = writable(
     Number(localStorage.getItem("requestTimeout")) || 30000,
   );
@@ -257,12 +275,10 @@
       showStatusMessage("No response data to export.", "error");
     }
   }
-
+  export let showSettings = writable(false);
   function openSettings() {
     showSettings.set(true);
   }
-
-  const themeModalOpen = writable(false);
 
   const statusMessage: Writable<string | null> = writable(null);
   const statusType: Writable<"info" | "warn" | "error"> = writable("info");
@@ -289,8 +305,6 @@
   let currentFlow: Writable<Flow | null> = writable(null);
   let flowResults: Writable<{ [key: string]: any } | null> = writable(null);
 
-  const showModal = writable(false);
-  const itemToDelete = writable<number | null>(null);
   function openModal(id: number) {
     itemToDelete.set(id);
     showModal.set(true);
@@ -616,7 +630,6 @@
   function handleFlowRun(event: CustomEvent<Flow>) {
     runFlow(event.detail);
   }
-  let apiFlowModalOpen = writable(false);
 
   function openApiFlowModal() {
     apiFlowModalOpen.set(true);
@@ -636,7 +649,7 @@
   let selectedGroup = writable("");
   let groups = writable<string[]>([]);
   let newGroupName = writable("");
-  let groupModalOpen = writable(true);
+
   let isSending = writable(false);
   let elapsedTime = writable(0);
   let startTime: number;
@@ -645,7 +658,6 @@
   let variables = writable<{ [key: string]: string }>({});
   let newVariableKey = writable("");
   let newVariableValue = writable("");
-  let variablesPanelOpen = writable(false);
 
   const DB_NAME = "request-rocket-db";
   const DB_VERSION = 1;
@@ -2025,8 +2037,6 @@
       return items;
     });
   }
-
-  let showDiffView = writable(false);
 
   function openDiffView() {
     if ($selectedHistoryItems.length === 2) {
