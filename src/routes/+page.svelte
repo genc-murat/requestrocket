@@ -109,6 +109,8 @@
 
   import ResponseHeadersTable from "../components/ResponseHeadersTable.svelte";
 
+  import AdvancedDataTable from "../components/AdvancedDataTable.svelte";
+
   let showHarAnalyzerModal = false;
 
   function openHarAnalyzerModal() {
@@ -2704,24 +2706,7 @@
                   {/if}
                 </div>
               {:else if $selectedTab === "table"}
-                {#if tableData.headers.length > 0}
-                  <div class="table">
-                    <div class="row header">
-                      {#each tableData.headers as header}
-                        <div class="cell-header" title={header}>{header}</div>
-                      {/each}
-                    </div>
-                    {#each tableData.rows as row}
-                      <div class="row">
-                        {#each row as cell}
-                          <div class="cell" title={cell}>{cell}</div>
-                        {/each}
-                      </div>
-                    {/each}
-                  </div>
-                {:else}
-                  <p>Unable to display data in table format.</p>
-                {/if}
+                <AdvancedDataTable data={tableData} itemsPerPage={20} />
               {:else if $selectedTab === "headers"}
                 <ResponseHeadersTable headers={$response.headers} />
               {:else if $selectedTab === "curl"}
@@ -3428,26 +3413,7 @@
                       {/if}
                     </div>
                   {:else if $selectedTab === "table"}
-                    {#if tableData.headers.length > 0}
-                      <div class="table">
-                        <div class="row header">
-                          {#each tableData.headers as header}
-                            <div class="cell-header" title={header}>
-                              {header}
-                            </div>
-                          {/each}
-                        </div>
-                        {#each tableData.rows as row}
-                          <div class="row">
-                            {#each row as cell}
-                              <div class="cell" title={cell}>{cell}</div>
-                            {/each}
-                          </div>
-                        {/each}
-                      </div>
-                    {:else}
-                      <p>Unable to display data in table format.</p>
-                    {/if}
+                    <AdvancedDataTable data={tableData} itemsPerPage={10} />
                   {:else if $selectedTab === "headers"}
                     <ResponseHeadersTable headers={$response.headers} />
                   {:else if $selectedTab === "curl"}
