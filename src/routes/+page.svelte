@@ -68,7 +68,7 @@
   import SettingsModal from "../components/SettingsModal.svelte";
   import { currentLayout } from "../stores/layoutStore";
 
-  import { dividerPosition, handleMouseDown } from "../stores/resizablePanel";
+  import { dividerPosition, handleMouseDown } from "../lib/resizablePanel";
 
   import DiffViewer from "../components/DiffViewer.svelte";
 
