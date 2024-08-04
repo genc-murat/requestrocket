@@ -85,7 +85,7 @@
 
   import { importHarFile } from "$lib/harImporter";
 
-  import ImportPopupMenu from "../components/ImportPopupMenu.svelte";
+  import MenuPanel from "../components/MenuPanel.svelte";
 
   import HarAnalyzerModal from "../components/HarAnalyzerModal.svelte";
 
@@ -2037,105 +2037,18 @@
 
   <div class="flex h-screen flex-col">
     <div class="main-content">
-      <div class="menu-panel panel">
-        <div class="vertical-buttons">
-          <button
-            type="button"
-            on:click={openThemeSwitcherModal}
-            class="button-item hover"
-            title="Change Theme"
-          >
-            <Icon icon="mdi:paint-outline" width="28" height="28" />
-          </button>
-          <button
-            type="button"
-            class="button-item hover"
-            title="Change Group"
-            on:click={() => {
-              groupModalOpen.set(true);
-            }}
-          >
-            <Icon icon="fluent-mdl2:database-sync" width="24" height="24" />
-          </button>
-          <button
-            type="button"
-            on:click={openCustomHeaderPanel}
-            class="button-item hover"
-            title="Headers"
-          >
-            <Icon icon="cil:header" width="24" height="24" />
-          </button>
-          <button
-            type="button"
-            on:click={() => variablesPanelOpen.set(true)}
-            class="button-item hover"
-            title="Variables"
-          >
-            <Icon
-              icon="gravity-ui:curly-brackets-function"
-              width="24"
-              height="24"
-            />
-          </button>
-          <button
-            type="button"
-            on:click={openHarAnalyzerModal}
-            class="button-item hover"
-            title="HAR Analyzer"
-          >
-            <Icon icon="mdi:file-document-outline" width="24" height="24" />
-          </button>
-          <div class="import-button-container">
-            <button
-              type="button"
-              on:click={toggleImportMenu}
-              class="button-item hover"
-              title="Import"
-            >
-              <Icon icon="mdi:import" width="24" height="24" />
-            </button>
-            <ImportPopupMenu
-              bind:show={showImportMenu}
-              on:import={handleImport}
-              on:close={closeImportMenu}
-            />
-          </div>
-          <button
-            type="button"
-            on:click={() => downloadApiDocumentation($history)}
-            class="button-item hover"
-            title="Doc"
-          >
-            <Icon icon="icon-park-solid:download-web" width="24" height="24" />
-          </button>
-          <button
-            type="button"
-            on:click={openApiFlowModal}
-            class="button-item bg-gray-300 rounded-md cursor-not-allowed opacity-50"
-            title="Designer"
-            disabled
-          >
-            <Icon icon="mdi:design" width="24" height="24" />
-          </button>
-          <button
-            type="button"
-            on:click={handleExport}
-            class="button-item bg-gray-300 rounded-md cursor-not-allowed opacity-50"
-            title="Export"
-            disabled
-          >
-            <Icon icon="foundation:page-export-csv" width="24" height="24" />
-          </button>
-          <button
-            type="button"
-            on:click={openSettings}
-            class="button-item hover"
-            title="Settings"
-          >
-            <Icon icon="iconamoon:settings-fill" width="24" height="24" />
-          </button>
-        </div>
-      </div>
+      <MenuPanel
+        on:openThemeSwitcher={() => themeModalOpen.set(true)}
+        on:openGroupModal={() => groupModalOpen.set(true)}
+        on:openCustomHeaderPanel={openCustomHeaderPanel}
+        on:openVariablesPanel={() => variablesPanelOpen.set(true)}
+        on:openHarAnalyzer={openHarAnalyzerModal}
+        on:import={handleImport}
+        on:downloadApiDocumentation={() => downloadApiDocumentation($history)}
+        on:openApiFlowModal={openApiFlowModal}
+        on:handleExport={handleExport}
+        on:openSettings={openSettings}
+      />
 
       {#if $currentLayout === "default"}
         <div class="history-panel-horizontal panel">
