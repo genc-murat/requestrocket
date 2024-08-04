@@ -107,6 +107,8 @@
     showDiffView,
   } from "../stores/modalStatesStore";
 
+  import ResponseHeadersTable from "../components/ResponseHeadersTable.svelte";
+
   let showHarAnalyzerModal = false;
 
   function openHarAnalyzerModal() {
@@ -1547,8 +1549,7 @@
     if (savedTheme) {
       applyTheme(savedTheme);
     }
-  
-    
+
     const savedEnvironment = localStorage.getItem("selectedEnvironment");
     if (savedEnvironment) {
       currentEnvironment.set(savedEnvironment);
@@ -2722,16 +2723,7 @@
                   <p>Unable to display data in table format.</p>
                 {/if}
               {:else if $selectedTab === "headers"}
-                <div class="table-container">
-                  <table class="w-full">
-                    {#each $response.headers as [key, value]}
-                      <tr class="w-full">
-                        <th class="w-1/4">{key}</th>
-                        <td class="w-3/4">{value}</td>
-                      </tr>
-                    {/each}
-                  </table>
-                </div>
+                <ResponseHeadersTable headers={$response.headers} />
               {:else if $selectedTab === "curl"}
                 <div class="flex justify-between">
                   <span class="p-2 rounded">
@@ -3457,16 +3449,7 @@
                       <p>Unable to display data in table format.</p>
                     {/if}
                   {:else if $selectedTab === "headers"}
-                    <div class="table-container">
-                      <table class="w-full">
-                        {#each $response.headers as [key, value]}
-                          <tr class="w-full">
-                            <th class="w-1/4">{key}</th>
-                            <td class="w-3/4">{value}</td>
-                          </tr>
-                        {/each}
-                      </table>
-                    </div>
+                    <ResponseHeadersTable headers={$response.headers} />
                   {:else if $selectedTab === "curl"}
                     <div class="flex justify-between">
                       <span class="p-2 rounded">
