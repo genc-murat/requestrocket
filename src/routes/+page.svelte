@@ -803,30 +803,6 @@
     "Strict-Transport-Security",
   ];
 
-  function filterHeaders(index: number, event: Event) {
-    const input = event.target as HTMLInputElement;
-    const value = input.value;
-    const allHeaders = [...knownHeaders, ...$customHeaders.map((h) => h.name)];
-    const filtered = allHeaders.filter((header) =>
-      header.toLowerCase().includes(value.toLowerCase()),
-    );
-    autocompleteHeaders.update((h) => {
-      h[index] = filtered;
-      return h;
-    });
-  }
-
-  function selectAutocompleteItem(index: number, suggestion: string) {
-    headers.update((h) => {
-      h[index].key = suggestion;
-      return h;
-    });
-    autocompleteHeaders.update((h) => {
-      h[index] = [];
-      return h;
-    });
-  }
-
   function clearParams() {
     queryParams.set([]);
     updateUrl();
