@@ -1,6 +1,6 @@
 // curlImporter.ts
 
-import type { HistoryItem, Header } from "../components/api-types";  // Varsayılan olarak bu tiplerin tanımlandığını varsayıyoruz
+import type { HistoryItem, Header } from "../types/api-types";  // Varsayılan olarak bu tiplerin tanımlandığını varsayıyoruz
 
 function parseCurlCommand(curlCommand: string): string[] {
   const result: string[] = [];

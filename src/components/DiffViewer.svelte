@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
-  import type { HistoryItem } from "./api-types";
+  import type { HistoryItem } from "../types/api-types";
   import { diffJson, diffLines } from "diff";
   import type { Change } from "diff";
   import Prism from "prismjs";

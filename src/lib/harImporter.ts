@@ -1,5 +1,5 @@
 // harImporter.ts
-import type { HistoryItem, Header, Param } from "../components/api-types";
+import type { HistoryItem, Header, Param } from "../types/api-types";
 
 interface HarEntry {
     startedDateTime: string;

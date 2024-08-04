@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import type { Header, Param } from '../components/api-types';
+import type { Header, Param } from '../types/api-types';
 
 export const headers = writable<Header[]>([]);
 export const queryParams = writable<Param[]>([]);

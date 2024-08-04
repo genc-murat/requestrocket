@@ -1,6 +1,6 @@
 // src/lib/requestModule.ts
 import { invoke } from "@tauri-apps/api/tauri";
-import type { ResponseData, HistoryItem, StatusHistoryItem } from "../components/api-types"; // Yolu doğru şekilde ayarlayın
+import type { ResponseData, HistoryItem, StatusHistoryItem } from "../types/api-types"; // Yolu doğru şekilde ayarlayın
 
 export async function sendRequest(requestData: any, variables: any): Promise<ResponseData> {
     console.log("Sending request with data:", requestData);

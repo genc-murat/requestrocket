@@ -10,8 +10,8 @@
     Connection,
     BlockType,
     SwitchCase,
-  } from "./flow-types";
-  import { blockTypes } from "./flow-types";
+  } from "../types/flow-types";
+  import { blockTypes } from "../types/flow-types";
   import "./APIFlowDesignerStyles.css";
 
   export let initialFlow: Flow | null = null;

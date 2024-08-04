@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher, onMount } from "svelte";
-    import type { HarFile, HarEntry } from "./har-types";
+    import type { HarFile, HarEntry } from "../types/har-types";
     import Icon from "@iconify/svelte";
     import { Chart } from "chart.js/auto";
     import type { ChartType, ChartData, ChartOptions } from "chart.js/auto";

@@ -40,7 +40,7 @@
     Connection,
     BlockType,
     SwitchCase,
-  } from "../components/flow-types";
+  } from "../types/flow-types";
 
   import type {
     HistoryItem,
@@ -49,7 +49,7 @@
     ResponseData,
     StatusHistoryItem,
     ApiDoc,
-  } from "../components/api-types";
+  } from "../types/api-types";
 
   import HttpMethodDropdown from "../components/HttpMethodDropdown.svelte";
 
