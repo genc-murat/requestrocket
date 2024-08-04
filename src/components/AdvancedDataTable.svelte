@@ -30,6 +30,8 @@
         sortDirection,
     );
 
+    $: paginationRange = getPaginationRange(currentPage, totalPages);
+
     function sortRows(
         rows: string[][],
         column: string | null,
@@ -47,12 +49,8 @@
         });
     }
 
-    function nextPage() {
-        if (currentPage < totalPages) currentPage++;
-    }
-
-    function prevPage() {
-        if (currentPage > 1) currentPage--;
+    function goToPage(page: number) {
+        currentPage = Math.max(1, Math.min(page, totalPages));
     }
 
     function sort(column: string) {
@@ -62,6 +60,36 @@
             sortColumn = column;
             sortDirection = "asc";
         }
+    }
+
+    function getPaginationRange(
+        current: number,
+        total: number,
+    ): (number | string)[] {
+        const range: (number | string)[] = [];
+        const delta = 2;
+
+        for (
+            let i = Math.max(2, current - delta);
+            i <= Math.min(total - 1, current + delta);
+            i++
+        ) {
+            range.push(i);
+        }
+
+        if (current - delta > 2) {
+            range.unshift("...");
+        }
+        if (current + delta < total - 1) {
+            range.push("...");
+        }
+
+        range.unshift(1);
+        if (total !== 1) {
+            range.push(total);
+        }
+
+        return range;
     }
 
     const dispatch = createEventDispatcher();
@@ -85,12 +113,46 @@
             />
         </div>
         <div class="pagination">
-            <button on:click={prevPage} disabled={currentPage === 1}>
-                <Icon icon="mdi:chevron-left" width="24" height="24" />
+            <button
+                on:click={() => goToPage(1)}
+                disabled={currentPage === 1}
+                class="page-button"
+            >
+                <Icon icon="mdi:chevron-double-left" width="18" height="18" />
             </button>
-            <span>{currentPage} / {totalPages}</span>
-            <button on:click={nextPage} disabled={currentPage === totalPages}>
-                <Icon icon="mdi:chevron-right" width="24" height="24" />
+            <button
+                on:click={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                class="page-button"
+            >
+                <Icon icon="mdi:chevron-left" width="18" height="18" />
+            </button>
+            {#each paginationRange as page}
+                {#if typeof page === "number"}
+                    <button
+                        on:click={() => goToPage(page)}
+                        class="page-button"
+                        class:active={currentPage === page}
+                    >
+                        {page}
+                    </button>
+                {:else}
+                    <span class="ellipsis">...</span>
+                {/if}
+            {/each}
+            <button
+                on:click={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                class="page-button"
+            >
+                <Icon icon="mdi:chevron-right" width="18" height="18" />
+            </button>
+            <button
+                on:click={() => goToPage(totalPages)}
+                disabled={currentPage === totalPages}
+                class="page-button"
+            >
+                <Icon icon="mdi:chevron-double-right" width="18" height="18" />
             </button>
         </div>
     </div>
@@ -162,19 +224,39 @@
     .pagination {
         display: flex;
         align-items: center;
+        gap: 5px;
     }
 
-    .pagination button {
+    .page-button {
         background: none;
-        border: none;
+        border: 1px solid var(--divider);
+        border-radius: 4px;
         cursor: pointer;
-        padding: 5px;
+        padding: 5px 10px;
+        font-size: 11px;
+        transition:
+            background-color 0.3s,
+            color 0.3s;
     }
 
-    .pagination span {
-        margin: 0 10px;
-        font-weight: bolder;
-        font-size: 0.65rem;
+    .page-button:hover:not(:disabled) {
+        background-color: var(--primary);
+        color: white;
+    }
+
+    .page-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .page-button.active {
+        background-color: var(--primary);
+        color: white;
+    }
+
+    .ellipsis {
+        padding: 5px;
+        color: var(--text-secondary);
     }
 
     .table-container {
