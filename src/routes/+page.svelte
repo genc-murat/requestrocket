@@ -1547,10 +1547,8 @@
     if (savedTheme) {
       applyTheme(savedTheme);
     }
-    const savedLayout = localStorage.getItem("preferredLayout");
-    if (savedLayout === "default" || savedLayout === "alternative") {
-      currentLayout.set(savedLayout);
-    }
+  
+    
     const savedEnvironment = localStorage.getItem("selectedEnvironment");
     if (savedEnvironment) {
       currentEnvironment.set(savedEnvironment);

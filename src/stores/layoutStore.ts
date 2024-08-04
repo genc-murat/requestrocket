@@ -1,3 +1,9 @@
 import { writable } from 'svelte/store';
 
-export const currentLayout = writable('default');
+const storedLayout = localStorage.getItem("preferredLayout") || 'default';
+
+export const currentLayout = writable(storedLayout);
+
+currentLayout.subscribe(value => {
+    localStorage.setItem("preferredLayout", value);
+});
