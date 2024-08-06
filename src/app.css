@@ -563,7 +563,7 @@ pre {
 }
 
 .sending-request {
-  background-color: var(--surface);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .response-tabs {
