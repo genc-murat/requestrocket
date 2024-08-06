@@ -76,12 +76,12 @@ body {
 }
 
 .request-panel {
-  flex: 1 0 32%;
+  flex: 1 0 27%;
   overflow-y: auto;
 }
 
 .response-panel {
-  flex: 1 0 50%;
+  flex: 1 0 55%;
   overflow-y: auto;
 }
 
@@ -310,10 +310,10 @@ textarea {
 
 .status-box {
   border: 1px solid var(--divider);
-  padding: .4rem !important;
+  padding: .16rem !important;
   border-radius: 0.1rem !important;
   margin-bottom: 0.7rem;
-  font-size: 0.75rem;
+  font-size: 0.58rem;
   font-weight: bold;
 }
 

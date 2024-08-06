@@ -5098,4 +5098,349 @@ export const themes: { [key: string]: ThemeProperties } = {
         "--select-focus-border-color": "#B71C1C", // Kırmızı
         "--select-focus-box-shadow": "rgba(183, 28, 28, 0.3)", // Kırmızı gölge
     },
+    manchesterUnitedTheme: {
+        "--background": "#FFFFFF", // Beyaz arka plan
+        "--light-background": "#F2F2F2", // Açık gri yüzey
+        "--surface": "#E0E0E0", // Açık gri
+        "--primary-text": "#212121", // Koyu gri metin
+        "--secondary-text": "#757575", // Orta gri metin
+        "--dark-text": "#000000", // Siyah metin
+        "--divider": "#BDBDBD", // Gri bölücü
+        "--shadow": "rgba(0, 0, 0, 0.1)", // Açık gri gölge
+        "--primary": "#DA291C", // Kırmızı
+        "--secondary": "#F44336", // Koyu Kırmızı
+        "--warning": "#FFC107", // Altın sarısı
+        "--error": "#D32F2F", // Koyu kırmızı
+        "--info": "#29B6F6", // Açık mavi
+        "--success": "#4CAF50", // Yeşil
+        "--dropdown-box-shadow": "rgba(218, 41, 28, 0.5)", // Kırmızı gölge
+        "--group-card-hover": "#F2F2F2", // Açık gri
+        "--seperator": "#BDBDBD", // Gri
+        "--select-background-color": "#E0E0E0", // Açık gri
+        "--select-text-color": "#212121", // Koyu gri
+        "--select-focus-border-color": "#DA291C", // Kırmızı
+        "--select-focus-box-shadow": "rgba(218, 41, 28, 0.3)", // Kırmızı gölge
+    },
+    chelseaTheme: {
+        "--background": "#FFFFFF", // Beyaz arka plan
+        "--light-background": "#F2F2F2", // Açık gri yüzey
+        "--surface": "#E0E0E0", // Açık gri
+        "--primary-text": "#212121", // Koyu gri metin
+        "--secondary-text": "#757575", // Orta gri metin
+        "--dark-text": "#000000", // Siyah metin
+        "--divider": "#BDBDBD", // Gri bölücü
+        "--shadow": "rgba(0, 0, 0, 0.1)", // Açık gri gölge
+        "--primary": "#034694", // Chelsea mavi
+        "--secondary": "#228B22", // Yeşil
+        "--warning": "#FFC107", // Altın sarısı
+        "--error": "#D32F2F", // Koyu kırmızı
+        "--info": "#29B6F6", // Açık mavi
+        "--success": "#4CAF50", // Yeşil
+        "--dropdown-box-shadow": "rgba(3, 70, 148, 0.5)", // Mavi gölge
+        "--group-card-hover": "#F2F2F2", // Açık gri
+        "--seperator": "#BDBDBD", // Gri
+        "--select-background-color": "#E0E0E0", // Açık gri
+        "--select-text-color": "#212121", // Koyu gri
+        "--select-focus-border-color": "#034694", // Chelsea mavi
+        "--select-focus-box-shadow": "rgba(3, 70, 148, 0.3)", // Mavi gölge
+    },
+    ajaxTheme: {
+        "--background": "#FFFFFF", // Beyaz arka plan
+        "--light-background": "#F2F2F2", // Açık gri yüzey
+        "--surface": "#E0E0E0", // Açık gri
+        "--primary-text": "#212121", // Koyu gri metin
+        "--secondary-text": "#757575", // Orta gri metin
+        "--dark-text": "#000000", // Siyah metin
+        "--divider": "#BDBDBD", // Gri bölücü
+        "--shadow": "rgba(0, 0, 0, 0.1)", // Açık gri gölge
+        "--primary": "#D21034", // Ajax Kırmızı
+        "--secondary": "#FFFFFF", // Beyaz
+        "--warning": "#FFC107", // Altın sarısı
+        "--error": "#D32F2F", // Koyu kırmızı
+        "--info": "#29B6F6", // Açık mavi
+        "--success": "#4CAF50", // Yeşil
+        "--dropdown-box-shadow": "rgba(210, 16, 52, 0.5)", // Kırmızı gölge
+        "--group-card-hover": "#F2F2F2", // Açık gri
+        "--seperator": "#BDBDBD", // Gri
+        "--select-background-color": "#E0E0E0", // Açık gri
+        "--select-text-color": "#212121", // Koyu gri
+        "--select-focus-border-color": "#D21034", // Ajax Kırmızı
+        "--select-focus-box-shadow": "rgba(210, 16, 52, 0.3)", // Kırmızı gölge
+    },
+    portoTheme: {
+        "--background": "#FFFFFF", // Beyaz arka plan
+        "--light-background": "#F2F2F2", // Açık gri yüzey
+        "--surface": "#E0E0E0", // Açık gri
+        "--primary-text": "#212121", // Koyu gri metin
+        "--secondary-text": "#757575", // Orta gri metin
+        "--dark-text": "#000000", // Siyah metin
+        "--divider": "#BDBDBD", // Gri bölücü
+        "--shadow": "rgba(0, 0, 0, 0.1)", // Açık gri gölge
+        "--primary": "#003366", // Porto Mavi
+        "--secondary": "#FFFFFF", // Beyaz
+        "--warning": "#FFC107", // Altın sarısı
+        "--error": "#D32F2F", // Koyu kırmızı
+        "--info": "#29B6F6", // Açık mavi
+        "--success": "#4CAF50", // Yeşil
+        "--dropdown-box-shadow": "rgba(0, 51, 102, 0.5)", // Mavi gölge
+        "--group-card-hover": "#F2F2F2", // Açık gri
+        "--seperator": "#BDBDBD", // Gri
+        "--select-background-color": "#E0E0E0", // Açık gri
+        "--select-text-color": "#212121", // Koyu gri
+        "--select-focus-border-color": "#003366", // Porto Mavi
+        "--select-focus-box-shadow": "rgba(0, 51, 102, 0.3)", // Mavi gölge
+    },
+    cyberpunkCityscapeTheme: {
+        "--background": "#141414", // Deep black background with a hint of blue
+        "--light-background": "#1F1F1F", // Dark gray surface
+        "--surface": "#292929", // Slightly lighter dark gray surface for cards
+        "--primary-text": "#E0E0E0", // Light gray text
+        "--secondary-text": "#BDBDBD", // Medium gray text
+        "--dark-text": "#FFFFFF", // White text for emphasis
+        "--divider": "#424242", // Dark gray divider
+        "--shadow": "rgba(0, 0, 0, 0.7)", // Strong black shadow for a futuristic feel
+        "--primary": "#00FFFF", // Cyan primary color inspired by neon lights
+        "--secondary": "#FF00FF", // Magenta secondary color for accents
+        "--warning": "#FFD700", // Bright yellow warning color
+        "--error": "#FF3300", // Bright red error color
+        "--info": "#29B6F6", // Blue info color
+        "--success": "#4CAF50", // Green success color
+        "--dropdown-box-shadow": "rgba(0, 255, 255, 0.5)", // Transparent cyan shadow for dropdown
+        "--group-card-hover": "#1F1F1F", // Slightly lighter hover color for cards
+        "--seperator": "#424242", // Dark gray separator
+        "--select-background-color": "#292929", // Slightly lighter dark gray select background
+        "--select-text-color": "#E0E0E0", // Light gray select text
+        "--select-focus-border-color": "#00FFFF", // Cyan focus border
+        "--select-focus-box-shadow": "rgba(0, 255, 255, 0.3)", // Transparent cyan shadow for select focus
+    },
+    sakuraSpringTheme: {
+        "--background": "#FCE4EC", // Light pink background 
+        "--light-background": "#F8BBD0", // Lighter pink surface
+        "--surface": "#FFF0F5", // Very light pink surface for cards
+        "--primary-text": "#37474F", // Dark blue-gray text for contrast
+        "--secondary-text": "#607D8B", // Medium blue-gray text
+        "--dark-text": "#263238", // Darker blue-gray text for emphasis
+        "--divider": "#F48FB1", // Light pink divider
+        "--shadow": "rgba(244, 143, 177, 0.3)", // Transparent pink shadow for cards
+        "--primary": "#E91E63", // Bright pink primary color
+        "--secondary": "#9C27B0", // Purple secondary color
+        "--warning": "#FFB74D", // Light orange warning color
+        "--error": "#EF5350", // Light red error color
+        "--info": "#64B5F6", // Light blue info color
+        "--success": "#81C784", // Light green success color
+        "--dropdown-box-shadow": "rgba(233, 30, 99, 0.5)", // Transparent pink shadow for dropdown
+        "--group-card-hover": "#FFF8E1", // Very light yellow hover for cards
+        "--seperator": "#F48FB1", // Light pink separator
+        "--select-background-color": "#FFF0F5", // Very light pink select background
+        "--select-text-color": "#37474F", // Dark blue-gray select text
+        "--select-focus-border-color": "#E91E63", // Bright pink focus border
+        "--select-focus-box-shadow": "rgba(233, 30, 99, 0.3)", // Transparent pink shadow for select focus
+    },
+    chocolateMintSwirlTheme: {
+        "--background": "#61483C", // Rich brown background inspired by chocolate
+        "--light-background": "#795548", // Slightly lighter brown surface
+        "--surface": "#A1887F", // Light brown surface for cards
+        "--primary-text": "#FDFEFE", // Off-white text for contrast
+        "--secondary-text": "#D7CCC8", // Light beige text
+        "--dark-text": "#FFFFFF", // White text for emphasis
+        "--divider": "#BCAAA4", // Light brown divider
+        "--shadow": "rgba(93, 64, 55, 0.7)", // Transparent brown shadow for cards
+        "--primary": "#3EB489", // Mint green primary color
+        "--secondary": "#81C784", // Light green secondary color
+        "--warning": "#FBC02D", // Light yellow warning color
+        "--error": "#EF5350", // Light red error color
+        "--info": "#29B6F6", // Blue info color
+        "--success": "#4CAF50", // Green success color
+        "--dropdown-box-shadow": "rgba(62, 180, 137, 0.5)", // Transparent mint green shadow for dropdown
+        "--group-card-hover": "#795548", // Slightly lighter brown hover for cards
+        "--seperator": "#BCAAA4", // Light brown separator
+        "--select-background-color": "#A1887F", // Light brown select background
+        "--select-text-color": "#FDFEFE", // Off-white select text
+        "--select-focus-border-color": "#3EB489", // Mint green focus border
+        "--select-focus-box-shadow": "rgba(62, 180, 137, 0.3)", // Transparent mint green shadow for select focus
+    },
+    abyssTreasureTheme: {
+        "--background": "#001F3F", // Deep ocean blue background
+        "--light-background": "#003366", // Slightly lighter dark blue surface
+        "--surface": "#1A5276", // Deep blue surface for cards with a touch of green
+        "--primary-text": "#D4E6F1", // Light blue text for good contrast
+        "--secondary-text": "#AED6F1", // Medium blue text for softer details
+        "--dark-text": "#FFFFFF", // White text for strong emphasis
+        "--divider": "#5DADE2", // Light blue divider representing water reflections
+        "--shadow": "rgba(0, 31, 63, 0.5)", // Deep ocean blue shadow for a watery feel
+        "--primary": "#00BCD4", // Bright cyan primary color representing bioluminescent creatures
+        "--secondary": "#2980B9", // Deep blue secondary color symbolizing the depth of the ocean
+        "--warning": "#FFD700", // Gold yellow warning color like sunken treasure
+        "--error": "#EF5350", // Coral red error color
+        "--info": "#4FC3F7", // Light blue info color 
+        "--success": "#2ECC71", // Seafoam green success color
+        "--dropdown-box-shadow": "rgba(0, 188, 212, 0.7)", // Stronger cyan shadow for dropdown
+        "--group-card-hover": "#003366", // Slightly lighter dark blue hover for cards
+        "--seperator": "#5DADE2", // Light blue separator
+        "--select-background-color": "#1A5276", // Deep blue select background
+        "--select-text-color": "#D4E6F1", // Light blue select text
+        "--select-focus-border-color": "#00BCD4", // Cyan focus border
+        "--select-focus-box-shadow": "rgba(0, 188, 212, 0.3)", // Transparent cyan shadow for select focus
+    },
+    bayernMunichTheme: {
+        "--background": "#131924", // Koyu mavi-gri arka plan
+        "--light-background": "#222831", // Daha açık mavi-gri yüzey
+        "--surface": "#393E46", // Koyu gri kart yüzeyi
+        "--primary-text": "#FFFFFF", // Beyaz metin
+        "--secondary-text": "#EEEEEE", // Açık gri metin
+        "--dark-text": "#FFFFFF", // Beyaz metin
+        "--divider": "#52575D", // Koyu gri bölücü
+        "--shadow": "rgba(0, 0, 0, 0.3)", // Koyu gölge
+        "--primary": "#DC052D", // Bayern Kırmızı
+        "--secondary": "#0066B2", // Bayern Mavi
+        "--warning": "#FFC107", // Altın sarısı
+        "--error": "#D32F2F", // Koyu kırmızı
+        "--info": "#29B6F6", // Açık mavi
+        "--success": "#4CAF50", // Yeşil
+        "--dropdown-box-shadow": "rgba(220, 5, 45, 0.7)", // Kırmızı gölge
+        "--group-card-hover": "#222831", // Açık mavi-gri
+        "--seperator": "#52575D", // Koyu gri
+        "--select-background-color": "#393E46", // Koyu gri
+        "--select-text-color": "#FFFFFF", // Beyaz
+        "--select-focus-border-color": "#DC052D", // Bayern Kırmızı
+        "--select-focus-box-shadow": "rgba(220, 5, 45, 0.5)", // Kırmızı gölge
+    },
+    dortmundTheme: {
+        "--background": "#000000", // Siyah arka plan
+        "--light-background": "#111111", // Koyu gri yüzey
+        "--surface": "#222222", // Orta koyu gri kart yüzeyi
+        "--primary-text": "#FDE100", // Parlak sarı metin
+        "--secondary-text": "#BDBDBD", // Açık gri metin
+        "--dark-text": "#FFFFFF", // Beyaz metin
+        "--divider": "#333333", // Koyu gri bölücü
+        "--shadow": "rgba(255, 225, 0, 0.3)", // Sarı gölge
+        "--primary": "#FDE100", // Dortmund Sarısı
+        "--secondary": "#000000", // Siyah
+        "--warning": "#FF9800", // Turuncu
+        "--error": "#F44336", // Kırmızı
+        "--info": "#29B6F6", // Açık mavi
+        "--success": "#4CAF50", // Yeşil
+        "--dropdown-box-shadow": "rgba(253, 225, 0, 0.5)", // Sarı gölge
+        "--group-card-hover": "#111111", // Koyu gri
+        "--seperator": "#333333", // Koyu gri
+        "--select-background-color": "#222222", // Orta koyu gri
+        "--select-text-color": "#FDE100", // Sarı
+        "--select-focus-border-color": "#FDE100", // Sarı
+        "--select-focus-box-shadow": "rgba(253, 225, 0, 0.3)", // Sarı gölge
+    },
+    panathinaikosTheme: {
+        "--background": "#11341A", // Koyu yeşil arka plan
+        "--light-background": "#1B5E20", // Orta koyu yeşil yüzey
+        "--surface": "#267338", // Koyu yeşil kart yüzeyi
+        "--primary-text": "#FFFFFF", // Beyaz metin
+        "--secondary-text": "#D0E0D0", // Açık yeşil-gri metin
+        "--dark-text": "#FFFFFF", // Beyaz metin
+        "--divider": "#43A047", // Orta yeşil bölücü
+        "--shadow": "rgba(38, 115, 56, 0.5)", // Koyu yeşil gölge
+        "--primary": "#388E3C", // Panathinaikos yeşili
+        "--secondary": "#FFFFFF", // Beyaz
+        "--warning": "#FFC107", // Altın sarısı
+        "--error": "#D32F2F", // Koyu kırmızı
+        "--info": "#29B6F6", // Açık mavi
+        "--success": "#66BB6A", // Açık yeşil
+        "--dropdown-box-shadow": "rgba(56, 142, 60, 0.7)", // Yeşil gölge
+        "--group-card-hover": "#1B5E20", // Orta koyu yeşil
+        "--seperator": "#43A047", // Orta yeşil
+        "--select-background-color": "#267338", // Koyu yeşil
+        "--select-text-color": "#FFFFFF", // Beyaz
+        "--select-focus-border-color": "#388E3C", // Panathinaikos yeşili
+        "--select-focus-box-shadow": "rgba(56, 142, 60, 0.5)", // Yeşil gölge
+    },
+    qprTheme: {
+        "--background": "#F0F4F8", // Açık gri-mavi arka plan
+        "--light-background": "#FFFFFF", // Beyaz yüzey
+        "--surface": "#D9E2EC", // Açık mavi-gri kart yüzeyi
+        "--primary-text": "#263238", // Koyu gri-mavi metin
+        "--secondary-text": "#607D8B", // Orta gri-mavi metin
+        "--dark-text": "#102A43", // Koyu mavi metin
+        "--divider": "#BCCCDC", // Açık mavi bölücü
+        "--shadow": "rgba(98, 125, 152, 0.3)", // Açık mavi gölge
+        "--primary": "#003366", // QPR Mavi
+        "--secondary": "#FFFFFF", // Beyaz
+        "--warning": "#FFC107", // Altın sarısı
+        "--error": "#EF5350", // Açık kırmızı
+        "--info": "#29B6F6", // Açık mavi
+        "--success": "#43A047", // Yeşil
+        "--dropdown-box-shadow": "rgba(0, 51, 102, 0.7)", // Koyu mavi gölge
+        "--group-card-hover": "#D9E2EC", // Açık mavi-gri
+        "--seperator": "#BCCCDC", // Açık mavi
+        "--select-background-color": "#E3F2FD", // Açık mavi-gri
+        "--select-text-color": "#263238", // Koyu gri-mavi
+        "--select-focus-border-color": "#003366", // QPR Mavi
+        "--select-focus-box-shadow": "rgba(0, 51, 102, 0.5)", // Koyu mavi gölge
+    },
+    palermoTheme: {
+        "--background": "#800020", // Koyu bordo arka plan 
+        "--light-background": "#990033", // Daha açık bordo yüzey
+        "--surface": "#B30047", // Bordo kart yüzeyi
+        "--primary-text": "#FFE5B4", // Açık pembe metin
+        "--secondary-text": "#FFB6C1", // Açık pembe metin
+        "--dark-text": "#FFFFFF", // Beyaz metin
+        "--divider": "#CC3366", // Bordo bölücü
+        "--shadow": "rgba(136, 0, 32, 0.5)", // Koyu bordo gölge
+        "--primary": "#FFD700", // Altın sarısı, Palermo'nun tarihindeki altın çağları temsil ediyor
+        "--secondary": "#000000", // Siyah
+        "--warning": "#FFA500", // Turuncu
+        "--error": "#F44336", // Kırmızı
+        "--info": "#29B6F6", // Açık mavi
+        "--success": "#4CAF50", // Yeşil
+        "--dropdown-box-shadow": "rgba(255, 215, 0, 0.7)", // Altın sarısı gölge
+        "--group-card-hover": "#990033", // Açık bordo
+        "--seperator": "#CC3366", // Bordo
+        "--select-background-color": "#B30047", // Bordo
+        "--select-text-color": "#FFE5B4", // Açık pembe
+        "--select-focus-border-color": "#FFD700", // Altın sarısı
+        "--select-focus-box-shadow": "rgba(255, 215, 0, 0.5)", // Altın sarısı gölge
+      },
+      lecceTheme: {
+        "--background": "#FFFAF0", // Açık krem arka plan
+        "--light-background": "#FFFFF0", // Açık sarı yüzey
+        "--surface": "#FFFFE0", // Açık sarı kart yüzeyi
+        "--primary-text": "#333333", // Koyu gri metin
+        "--secondary-text": "#777777", // Orta gri metin
+        "--dark-text": "#000000", // Siyah metin
+        "--divider": "#FFFF00", // Sarı bölücü
+        "--shadow": "rgba(255, 255, 0, 0.3)", // Sarı gölge
+        "--primary": "#FF4500", // Lecce Kırmızısı
+        "--secondary": "#0000FF", // Lecce Mavisi
+        "--warning": "#FFA500", // Turuncu
+        "--error": "#FF0000", // Kırmızı
+        "--info": "#29B6F6", // Açık mavi
+        "--success": "#4CAF50", // Yeşil
+        "--dropdown-box-shadow": "rgba(255, 69, 0, 0.7)", // Kırmızı gölge
+        "--group-card-hover": "#FFFFF0", // Açık sarı
+        "--seperator": "#FFFF00", // Sarı
+        "--select-background-color": "#FFFFE0", // Açık sarı
+        "--select-text-color": "#333333", // Koyu gri
+        "--select-focus-border-color": "#FF4500", // Lecce Kırmızısı
+        "--select-focus-box-shadow": "rgba(255, 69, 0, 0.5)", // Kırmızı gölge
+    },
+    comoTheme: {
+        "--background": "#263238", // Koyu mavi-gri arka plan, Como Gölü'nün derinliklerini temsil ediyor
+        "--light-background": "#37474F", // Orta koyu mavi-gri yüzey
+        "--surface": "#455A64", // Orta mavi-gri kart yüzeyi
+        "--primary-text": "#FFFFFF", // Beyaz metin
+        "--secondary-text": "#BDBDBD", // Açık gri metin
+        "--dark-text": "#FFFFFF", // Beyaz metin
+        "--divider": "#607D8B", // Koyu mavi-gri bölücü
+        "--shadow": "rgba(68, 90, 100, 0.3)", // Mavi-gri gölge
+        "--primary": "#009688", // Como Mavisi, gölün rengini yansıtıyor
+        "--secondary": "#FFFFFF", // Beyaz
+        "--warning": "#FFC107", // Altın sarısı
+        "--error": "#EF5350", // Açık kırmızı
+        "--info": "#29B6F6", // Açık mavi
+        "--success": "#4CAF50", // Yeşil
+        "--dropdown-box-shadow": "rgba(0, 150, 136, 0.7)", // Como Mavisi gölge
+        "--group-card-hover": "#37474F", // Orta koyu mavi-gri
+        "--seperator": "#607D8B", // Koyu mavi-gri
+        "--select-background-color": "#455A64", // Orta mavi-gri
+        "--select-text-color": "#FFFFFF", // Beyaz
+        "--select-focus-border-color": "#009688", // Como Mavisi
+        "--select-focus-box-shadow": "rgba(0, 150, 136, 0.5)", // Como Mavisi gölge
+    },
 };
