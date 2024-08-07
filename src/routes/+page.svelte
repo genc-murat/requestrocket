@@ -2115,7 +2115,7 @@
                         on:click={() => selectHistoryItem(item)}
                       >
                         <span
-                          class="px-2 py-1 rounded
+                          class="px-2 py-1 rounded h-0.5
                         {item.method === 'GET' ? 'method-get' : ''} 
                         {item.method === 'POST' ? 'method-post' : ''} 
                         {item.method === 'PUT' ? 'method-put' : ''} 
