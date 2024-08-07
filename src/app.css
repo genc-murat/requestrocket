@@ -209,7 +209,7 @@ tr:nth-child(even) {
 .url {
   word-break: break-all;
   overflow-wrap: anywhere;
-  font-size: .67rem;
+  font-size: .63rem;
 }
 
 .button {
@@ -875,7 +875,7 @@ pre {
 /* Custom Checkbox Styles */
 .custom-checkbox {
   position: relative;
-  padding-left: 12px;
+  padding-left: 15px;
   cursor: pointer;
   font-size: 12px;
   user-select: none;
