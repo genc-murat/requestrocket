@@ -53,6 +53,8 @@
 
     h2 {
         margin-top: 0;
+        font-size: 1rem;
+        font-weight: bold;
     }
 
     table {
