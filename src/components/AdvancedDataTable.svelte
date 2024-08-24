@@ -1,6 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
     import Icon from "@iconify/svelte";
+    import Dialog from "./DataDialog.svelte";
 
     export let data: { headers: string[]; rows: string[][] };
     export let itemsPerPage = 10;
@@ -9,6 +10,8 @@
     let searchTerm = "";
     let sortColumn: string | null = null;
     let sortDirection: "asc" | "desc" = "asc";
+    let showDialog = false;
+    let selectedRow: string[] | null = null;
 
     $: totalPages = Math.ceil(filteredAndSortedRows.length / itemsPerPage);
     $: startIndex = (currentPage - 1) * itemsPerPage;
@@ -94,12 +97,14 @@
 
     const dispatch = createEventDispatcher();
 
-    function handleCellClick(rowIndex: number, columnIndex: number) {
-        dispatch("cellClick", {
-            rowIndex: startIndex + rowIndex,
-            columnIndex,
-            value: visibleRows[rowIndex][columnIndex],
-        });
+    function handleRowClick(row: string[]) {
+        selectedRow = row;
+        showDialog = true;
+    }
+
+    function closeDialog() {
+        showDialog = false;
+        selectedRow = null;
     }
 </script>
 
@@ -176,15 +181,10 @@
                 </tr>
             </thead>
             <tbody>
-                {#each visibleRows as row, rowIndex}
-                    <tr>
-                        {#each row as cell, columnIndex}
-                            <td
-                                title={cell}
-                                on:click={() =>
-                                    handleCellClick(rowIndex, columnIndex)}
-                                >{cell}</td
-                            >
+                {#each visibleRows as row}
+                    <tr on:click={() => handleRowClick(row)}>
+                        {#each row as cell}
+                            <td title={cell}>{cell}</td>
                         {/each}
                     </tr>
                 {/each}
@@ -193,6 +193,9 @@
     </div>
 </div>
 
+{#if showDialog && selectedRow}
+    <Dialog headers={data.headers} row={selectedRow} on:close={closeDialog} />
+{/if}
 <style>
     .advanced-data-table {
         display: flex;
