@@ -1,5 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
+    import { fade } from 'svelte/transition';
+    import Icon from "@iconify/svelte";
 
     export let headers: string[];
     export let row: string[];
@@ -8,6 +10,20 @@
 
     function closeDialog() {
         dispatch("close");
+    }
+
+    let copiedIndex: number | null = null;
+
+    async function copyToClipboard(text: string, index: number) {
+        try {
+            await navigator.clipboard.writeText(text);
+            copiedIndex = index;
+            setTimeout(() => {
+                copiedIndex = null;
+            }, 1500);
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
+        }
     }
 </script>
 
@@ -19,7 +35,21 @@
                 {#each headers as header, index}
                     <tr>
                         <th>{header}</th>
-                        <td>{row[index]}</td>
+                        <td>
+                            <div class="cell-content">
+                                <span>{row[index]}</span>
+                                <button 
+                                    class="copy-button" 
+                                    on:click={() => copyToClipboard(row[index], index)}
+                                    title="Copy to clipboard"
+                                >
+                                    <Icon icon="mdi:content-copy" width="14" height="14" />
+                                </button>
+                                {#if copiedIndex === index}
+                                    <span class="copied-message" transition:fade>Copied!</span>
+                                {/if}
+                            </div>
+                        </td>
                     </tr>
                 {/each}
             </tbody>
@@ -69,7 +99,6 @@
     }
 
     th {
-        background-color: #f2f2f2;
         font-weight: bold;
         width: 25%;
         background-color: var(--secondary);
@@ -92,5 +121,30 @@
 
     button:hover {
         background-color: var(--primary-dark);
+    }
+
+    .cell-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .copy-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 2px;
+        margin: 0;
+        color: var(--text-secondary);
+    }
+
+    .copy-button:hover {
+        color: var(--primary);
+    }
+
+    .copied-message {
+        font-size: 1em;
+        color: var(--success);
+        margin-left: 5px;
     }
 </style>
