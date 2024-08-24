@@ -2293,14 +2293,14 @@
               Form Data
               <span class="header-count">{formDataCount}</span>
             </button>
-            <button
+            <!-- <button
               type="button"
               class="tab {$selectedRequestTab === 'group' ? 'active' : ''}"
               on:click={() => selectedRequestTab.set("group")}
               aria-label="Group Tab"
             >
               Group
-            </button>
+            </button> -->
           </div>
           <div class="tab-content">
             {#if $selectedRequestTab === "body"}
@@ -2975,14 +2975,14 @@
                   Form Data
                   <span class="header-count">{formDataCount}</span>
                 </button>
-                <button
+                <!-- <button
                   type="button"
                   class="tab {$selectedRequestTab === 'group' ? 'active' : ''}"
                   on:click={() => selectedRequestTab.set("group")}
                   aria-label="Group Tab"
                 >
                   Group
-                </button>
+                </button> -->
               </div>
               <div class="tab-content" style="overflow-y: hidden !important;">
                 {#if $selectedRequestTab === "body"}
