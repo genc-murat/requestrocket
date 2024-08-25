@@ -91,11 +91,6 @@
 
   import { url, method } from "../stores/urlStore";
 
-  import {
-    urlAutocomplete,
-    headerAutocomplete,
-    queryParamAutocomplete,
-  } from "../stores/autoCompleteStore";
 
   import {
     showModal,
@@ -118,6 +113,10 @@
   }
 
   let showImportMenu = false;
+
+   const urlAutocomplete = writable<string[]>([]);
+ const headerAutocomplete = writable<string[]>([]);
+ const queryParamAutocomplete = writable<string[]>([]);
 
   function handleImport(
     event: CustomEvent<{ type: "har" | "curl" | "postman" }>,
