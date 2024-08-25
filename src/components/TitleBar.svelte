@@ -28,7 +28,7 @@
     </div>
     <div class="buttons">
         <button on:click={toggleLayout} title="Toggle Layout">
-            {#if $currentLayout === "default"}
+            {#if $currentLayout === "alternative"}
                 <Icon icon="fluent:layout-column-two-focus-right-20-filled" width="16" height="16" />
             {:else}
                 <Icon icon="fluent:layout-row-two-focus-bottom-16-filled" width="16" height="16" />
