@@ -2448,8 +2448,8 @@
                       >
                         <Icon
                           icon="material-symbols:delete-outline"
-                          width="24"
-                          height="24"
+                          width="20"
+                          height="20"
                         />
                       </button>
                     </div>
@@ -3152,8 +3152,8 @@
                         >
                           <Icon
                             icon="material-symbols:delete-outline"
-                            width="24"
-                            height="24"
+                            width="20"
+                            height="20"
                           />
                         </button>
                       </div>
