@@ -5396,8 +5396,8 @@ export const themes: { [key: string]: ThemeProperties } = {
         "--select-text-color": "#FFE5B4", // Açık pembe
         "--select-focus-border-color": "#FFD700", // Altın sarısı
         "--select-focus-box-shadow": "rgba(255, 215, 0, 0.5)", // Altın sarısı gölge
-      },
-      lecceTheme: {
+    },
+    lecceTheme: {
         "--background": "#FFFAF0", // Açık krem arka plan
         "--light-background": "#FFFFF0", // Açık sarı yüzey
         "--surface": "#FFFFE0", // Açık sarı kart yüzeyi
@@ -5465,8 +5465,8 @@ export const themes: { [key: string]: ThemeProperties } = {
         "--select-text-color": "#FFFFFF", // Beyaz, seçim metninin okunabilirliğini artırıyor
         "--select-focus-border-color": "#DC143C", // Crimson, odaklanmış seçim kutusunu vurguluyor
         "--select-focus-box-shadow": "rgba(220, 20, 60, 0.5)", // Crimson gölge, odaklanmış seçim kutusuna derinlik katıyor
-      },
-      violetDreamsTheme: {
+    },
+    violetDreamsTheme: {
         "--background": "#4A2563", // Koyu mor arka plan, gizemli ve sofistike bir hava yaratıyor.
         "--light-background": "#673AB7", // Orta koyu mor yüzey, kontrast ve derinlik katıyor.
         "--surface": "#7B1FA2", // Derin mor kart yüzeyi, ana rengi vurguluyor.
@@ -5511,8 +5511,8 @@ export const themes: { [key: string]: ThemeProperties } = {
         "--select-text-color": "#3E2723", // Koyu kahverengi, seçim metninin okunabilirliğini artırıyor.
         "--select-focus-border-color": "#FBC02D", // Açık sarı, odaklanmış seçim kutusunu vurguluyor.
         "--select-focus-box-shadow": "rgba(251, 192, 45, 0.3)", // Açık sarı gölge, odaklanmış seçim kutusuna derinlik katıyor.
-      },
-      arcticBlueTheme: {
+    },
+    arcticBlueTheme: {
         "--background": "#F8F8FF", // Çok açık mavi-gri arka plan, soğuk ve ferah bir his yaratır.
         "--light-background": "#FFFFFF", // Saf beyaz yüzey, temiz ve parlak bir görünüm sağlar.
         "--surface": "#E0E0F0", // Açık gri-mavi kart yüzeyi, içeriği hafifçe öne çıkarır.
@@ -5534,8 +5534,8 @@ export const themes: { [key: string]: ThemeProperties } = {
         "--select-text-color": "#2C3E50", // Koyu gri-mavi, seçim metninin okunabilirliğini artırır.
         "--select-focus-border-color": "#3498DB", // Canlı mavi, odaklanmış seçim kutusunu vurguluyor.
         "--select-focus-box-shadow": "rgba(52, 152, 219, 0.3)", // Açık mavi gölge, odaklanmış seçim kutusuna derinlik katar.
-      },
-      twilightGradientTheme: {
+    },
+    twilightGradientTheme: {
         "--background": "linear-gradient(to bottom, #29323c, #485563)", // Koyu mavi ve gri arasında yumuşak bir geçiş sağlayan degrade arka plan
         "--light-background": "#3e4c59", // Orta koyu mavi-gri, arka plan ile uyumlu bir yüzey 
         "--surface": "#4a5a6a", // Koyu gri-mavi kart yüzeyi, içerik için hafif bir kontrast
@@ -5557,8 +5557,8 @@ export const themes: { [key: string]: ThemeProperties } = {
         "--select-text-color": "#e0e1dd", // Açık gri, seçim metninin okunabilirliğini artırır
         "--select-focus-border-color": "linear-gradient(to right, #8e2de2, #4a00e0)", // Mor ve indigo arasındaki degrade, odaklanmış seçim kutusunu vurguluyor
         "--select-focus-box-shadow": "rgba(142, 45, 226, 0.3)", // Mor gölge, odaklanmış seçim kutusuna derinlik katar
-      },
-      oceanSunriseGradientTheme: {
+    },
+    oceanSunriseGradientTheme: {
         "--background": "linear-gradient(to bottom, #001F3F, #0077B6)", // Derin mavi ve turkuaz arasında geçiş yapan bir okyanus gün doğumu degradesi.
         "--light-background": "#2980b9", // Açık mavi yüzey, arka planla uyumlu ve ferahlatıcı.
         "--surface": "#3498db", // Orta mavi kart yüzeyi, içerik için kontrast sağlar.
@@ -5580,122 +5580,305 @@ export const themes: { [key: string]: ThemeProperties } = {
         "--select-text-color": "#FFFFFF", // Beyaz, seçim metninin okunabilirliğini artırır.
         "--select-focus-border-color": "linear-gradient(to right, #FFA000, #FFC107)", // Turuncu ve sarı arasındaki degrade, odaklanmış seçim kutusunu vurguluyor.
         "--select-focus-box-shadow": "rgba(255, 160, 0, 0.3)", // Turuncu gölge, odaklanmış seçim kutusuna derinlik katar.
-      },
-        deepOceanGradientTheme: {
-            "--background": "linear-gradient(to bottom, #001F3F, #003366)", // Derin okyanus mavisinden koyu maviye geçen bir degrade arka plan.
-            "--light-background": "#003366", // Koyu mavi yüzey, arka planla uyumlu ve derin bir hava yaratır.
-            "--surface": "#005b96", // Orta mavi kart yüzeyi, içerik için kontrast sağlar.
-            "--primary-text": "#AED6F1", // Orta mavi metin, daha yumuşak detaylar için kullanılır.
-            "--secondary-text": "#AED6F1", // Orta mavi metin, daha yumuşak detaylar için kullanılır.
-            "--dark-text": "#FFFFFF", // Beyaz metin, vurgular için kullanılır.
-            "--divider": "#5DADE2", // Orta mavi bölücü, görsel bir ayrım sağlar.
-            "--shadow": "rgba(0, 31, 63, 0.5)", // Derin okyanus mavi gölge, su hissiyatı verir.
-            "--primary": "#00BCD4", // Parlak turkuaz, ana renk olarak kullanılır.
-            "--secondary": "#2980B9", // Koyu mavi, temayı zenginleştirir.
-            "--warning": "#FFD700", // Altın sarısı, uyarı mesajlarını vurguluyor.
-            "--error": "#EF5350", // Mercan kırmızısı, hata mesajlarını belirginleştirir.
-            "--info": "#4FC3F7", // Açık mavi, bilgi mesajları için kullanılır.
-            "--success": "#2ECC71", // Deniz yeşili, başarılı işlemleri belirtir.
-            "--dropdown-box-shadow": "rgba(0, 188, 212, 0.7)", // Parlak turkuaz gölge, açılır menüleri vurgular.
-            "--group-card-hover": "#003366", // Koyu mavi, fareyle üzerine gelindiğinde hafif bir değişiklik sağlar.    
-            "--seperator": "#5DADE2", // Orta mavi, görsel bir ayırıcı olarak kullanılır.
-            "--select-background-color": "#005b96", // Orta mavi, seçim kutusunu arka plana uyumlu hale getirir.
-            "--select-text-color": "#AED6F1", // Orta mavi, seçim metninin okunabilirliğini artırır.
-            "--select-focus-border-color": "#00BCD4", // Parlak turkuaz, odaklanmış seçim kutusunu vurgular.
-            "--select-focus-box-shadow": "rgba(0, 188, 212, 0.5)", // Parlak turkuaz gölge, odaklanmış seçim kutusuna derinlik katar.
-        },
-        emeraldForestGradientTheme: {
-            "--background": "linear-gradient(to bottom, #1B5E20, #388E3C)", // Koyu ve açık yeşil tonları arasında geçiş yapan orman yeşili degradesi.
-            "--light-background": "#4CAF50", // Açık yeşil yüzey, arka planla uyumlu ve doğal bir his yaratır.
-            "--surface": "#66BB6A", // Orta yeşil kart yüzeyi, içerik için kontrast sağlar.
-            "--primary-text": "#FFFFFF", // Beyaz metin, okunabilirliği artırır.
-            "--secondary-text": "#A5D6A7", // Açık yeşil metin, daha ince detaylar için kullanılır.
-            "--dark-text": "#1B5E20", // Koyu yeşil metin, vurgular için kullanılır.
-            "--divider": "#81C784", // Açık yeşil bölücü, görsel bir ayrım sağlar.
-            "--shadow": "rgba(76, 175, 80, 0.3)", // Yeşil gölge, derinlik ekler.
-            "--primary": "linear-gradient(to right, #9C27B0, #673AB7)", // Mor ve koyu mor arasında gizemli bir geçiş sağlayan degrade ana renk.
-            "--secondary": "#AED581", // Açık yeşil-sarı, tamamlayıcı bir doğal renk.
-            "--warning": "#FFEB3B", // Sarı, uyarı mesajlarını vurguluyor.
-            "--error": "#EF5350", // Kırmızı, hata mesajlarını belirginleştirir.
-            "--info": "#42A5F5", // Mavi, bilgi mesajları için kullanılır.
-            "--success": "#689F38", // Koyu yeşil, başarılı işlemleri belirtiyor.
-            "--dropdown-box-shadow": "rgba(156, 39, 176, 0.5)", // Mor gölge, açılır menüleri vurguluyor.
-            "--group-card-hover": "#4CAF50", // Açık yeşil, fareyle üzerine gelindiğinde hafif bir değişiklik sağlar.
-            "--seperator": "#81C784", // Açık yeşil, görsel bir ayırıcı olarak kullanılır.
-            "--select-background-color": "#66BB6A", // Orta yeşil, seçim kutusunu arka plana uyumlu hale getirir.
-            "--select-text-color": "#FFFFFF", // Beyaz, seçim metninin okunabilirliğini artırır.
-            "--select-focus-border-color": "linear-gradient(to right, #9C27B0, #673AB7)", // Mor ve koyu mor arasındaki degrade, odaklanmış seçim kutusunu vurguluyor.
-            "--select-focus-box-shadow": "rgba(156, 39, 176, 0.3)", // Mor gölge, odaklanmış seçim kutusuna derinlik katar.
-          },
-          urbanSunsetGradientTheme: {
-            "--background": "linear-gradient(to bottom, #F44336, #FF9800)", // Canlı kırmızı ve turuncu tonları arasında geçiş yapan bir gün batımı degradesi.
-            "--light-background": "#FF5722", // Parlak turuncu yüzey, enerjik ve sıcak bir his yaratır.
-            "--surface": "#FF7043", // Orta turuncu kart yüzeyi, içerik için kontrast sağlar.
-            "--primary-text": "#FFFFFF", // Beyaz metin, okunabilirliği artırır.
-            "--secondary-text": "#FFCCBC", // Açık turuncu metin, daha ince detaylar için kullanılır.
-            "--dark-text": "#3E2723", // Koyu kahverengi metin, vurgular için kullanılır.
-            "--divider": "#FFA726", // Orta turuncu bölücü, görsel bir ayrım sağlar.
-            "--shadow": "rgba(255, 112, 67, 0.3)", // Turuncu gölge, derinlik ekler.
-            "--primary": "linear-gradient(to right, #2980B9, #3498DB)", // Mavi tonları arasında geçiş yapan degrade ana renk.
-            "--secondary": "#FFC107", // Sarı, tamamlayıcı bir sıcak renk.
-            "--warning": "#FFEB3B", // Açık sarı, uyarı mesajlarını vurguluyor.
-            "--error": "#D32F2F", // Koyu kırmızı, hata mesajlarını belirginleştirir.
-            "--info": "#29B6F6", // Mavi, bilgi mesajları için kullanılır.
-            "--success": "#4CAF50", // Yeşil, başarılı işlemleri belirtiyor.
-            "--dropdown-box-shadow": "rgba(41, 128, 185, 0.5)", // Mavi gölge, açılır menüleri vurguluyor.
-            "--group-card-hover": "#FF5722", // Parlak turuncu, fareyle üzerine gelindiğinde hafif bir değişiklik sağlar.
-            "--seperator": "#FFA726", // Orta turuncu, görsel bir ayırıcı olarak kullanılır.
-            "--select-background-color": "#FF7043", // Orta turuncu, seçim kutusunu arka plana uyumlu hale getirir.
-            "--select-text-color": "#FFFFFF", // Beyaz, seçim metninin okunabilirliğini artırır.
-            "--select-focus-border-color": "linear-gradient(to right, #2980B9, #3498DB)", // Mavi tonları arasındaki degrade, odaklanmış seçim kutusunu vurguluyor.
-            "--select-focus-box-shadow": "rgba(41, 128, 185, 0.3)", // Mavi gölge, odaklanmış seçim kutusuna derinlik katar.
-          },
-           
-          midnightBlackGradientTheme: {
-            "--background": "linear-gradient(to bottom, #000000, #1A1A1A)", // Siyah ve çok koyu gri arasında ince bir geçiş sağlayan degrade arka plan
-            "--light-background": "#212121", // Koyu gri, arka plan ile uyumlu bir yüzey
-            "--surface": "#2E2E2E", // Orta koyu gri kart yüzeyi, içerik için hafif bir kontrast
-            "--primary-text": "#EEEEEE", // Açık gri metin, okunabilirliği artırır
-            "--secondary-text": "#BDBDBD", // Orta gri metin, daha ince detaylar için kullanılır
-            "--dark-text": "#FFFFFF", // Beyaz metin, vurgular için kullanılır
-            "--divider": "#424242", // Koyu gri bölücü, görsel bir ayrım sağlar
-            "--shadow": "rgba(0, 0, 0, 0.7)", // Koyu gölge, derinlik ekler
-            "--primary": "linear-gradient(to right, #4A148C, #673AB7)", // Koyu mor ve mor arasında gizemli bir geçiş sağlayan degrade ana renk
-            "--secondary": "#9E9E9E", // Açık gri, tamamlayıcı bir nötr renk
-            "--warning": "#FFC107", // Sarı, uyarı mesajlarını vurguluyor
-            "--error": "#E53935", // Kırmızı, hata mesajlarını belirginleştirir
-            "--info": "#29B6F6", // Mavi, bilgi mesajları için kullanılır
-            "--success": "#4CAF50", // Yeşil, başarılı işlemleri belirtiyor
-            "--dropdown-box-shadow": "rgba(74, 20, 140, 0.5)", // Mor gölge, açılır menüleri vurguluyor
-            "--group-card-hover": "#212121", // Koyu gri, fareyle üzerine gelindiğinde hafif bir değişiklik sağlar
-            "--seperator": "#424242", // Koyu gri, görsel bir ayırıcı olarak kullanılır
-            "--select-background-color": "#2E2E2E", // Orta koyu gri, seçim kutusunu arka plana uyumlu hale getirir
-            "--select-text-color": "#EEEEEE", // Açık gri, seçim metninin okunabilirliğini artırır
-            "--select-focus-border-color": "linear-gradient(to right, #4A148C, #673AB7)", // Koyu mor ve mor arasındaki degrade, odaklanmış seçim kutusunu vurguluyor
-            "--select-focus-box-shadow": "rgba(74, 20, 140, 0.3)", // Mor gölge, odaklanmış seçim kutusuna derinlik katar
-          },
-          steelGrayGradientTheme: {
-            "--background": "linear-gradient(to bottom, #424242, #616161)", // Koyu gri ve orta koyu gri arasında geçiş yapan degrade arka plan
-            "--light-background": "#757575", // Orta gri yüzey, arka planla uyumlu ve minimalist bir his yaratır.
-            "--surface": "#9E9E9E", // Açık gri kart yüzeyi, içerik için kontrast sağlar.
-            "--primary-text": "#FFFFFF", // Beyaz metin, okunabilirliği artırır.
-            "--secondary-text": "#BDBDBD", // Açık gri metin, daha ince detaylar için kullanılır.
-            "--dark-text": "#000000", // Siyah metin, vurgular için kullanılır.
-            "--divider": "#BDBDBD", // Açık gri bölücü, görsel bir ayrım sağlar.
-            "--shadow": "rgba(66, 66, 66, 0.3)", // Gri gölge, derinlik ekler.
-            "--primary": "linear-gradient(to right, #03A9F4, #4FC3F7)", // Mavi tonları arasında geçiş yapan canlı bir degrade ana renk.
-            "--secondary": "#9E9E9E", // Açık gri, tamamlayıcı bir nötr renk.
-            "--warning": "#FFC107", // Sarı, uyarı mesajlarını vurguluyor.
-            "--error": "#F44336", // Kırmızı, hata mesajlarını belirginleştirir.
-            "--info": "#29B6F6", // Mavi, bilgi mesajları için kullanılır.
-            "--success": "#4CAF50", // Yeşil, başarılı işlemleri belirtiyor.
-            "--dropdown-box-shadow": "rgba(3, 169, 244, 0.5)", // Mavi gölge, açılır menüleri vurguluyor.
-            "--group-card-hover": "#757575", // Orta gri, fareyle üzerine gelindiğinde hafif bir değişiklik sağlar.
-            "--seperator": "#BDBDBD", // Açık gri, görsel bir ayırıcı olarak kullanılır.
-            "--select-background-color": "#9E9E9E", // Açık gri, seçim kutusunu arka plana uyumlu hale getirir.
-            "--select-text-color": "#FFFFFF", // Beyaz, seçim metninin okunabilirliğini artırır.
-            "--select-focus-border-color": "linear-gradient(to right, #03A9F4, #4FC3F7)", // Mavi tonları arasındaki degrade, odaklanmış seçim kutusunu vurguluyor.
-            "--select-focus-box-shadow": "rgba(3, 169, 244, 0.3)", // Mavi gölge, odaklanmış seçim kutusuna derinlik katar.
-          },
-          
+    },
+    deepOceanGradientTheme: {
+        "--background": "linear-gradient(to bottom, #001F3F, #003366)", // Derin okyanus mavisinden koyu maviye geçen bir degrade arka plan.
+        "--light-background": "#003366", // Koyu mavi yüzey, arka planla uyumlu ve derin bir hava yaratır.
+        "--surface": "#005b96", // Orta mavi kart yüzeyi, içerik için kontrast sağlar.
+        "--primary-text": "#AED6F1", // Orta mavi metin, daha yumuşak detaylar için kullanılır.
+        "--secondary-text": "#AED6F1", // Orta mavi metin, daha yumuşak detaylar için kullanılır.
+        "--dark-text": "#FFFFFF", // Beyaz metin, vurgular için kullanılır.
+        "--divider": "#5DADE2", // Orta mavi bölücü, görsel bir ayrım sağlar.
+        "--shadow": "rgba(0, 31, 63, 0.5)", // Derin okyanus mavi gölge, su hissiyatı verir.
+        "--primary": "#00BCD4", // Parlak turkuaz, ana renk olarak kullanılır.
+        "--secondary": "#2980B9", // Koyu mavi, temayı zenginleştirir.
+        "--warning": "#FFD700", // Altın sarısı, uyarı mesajlarını vurguluyor.
+        "--error": "#EF5350", // Mercan kırmızısı, hata mesajlarını belirginleştirir.
+        "--info": "#4FC3F7", // Açık mavi, bilgi mesajları için kullanılır.
+        "--success": "#2ECC71", // Deniz yeşili, başarılı işlemleri belirtir.
+        "--dropdown-box-shadow": "rgba(0, 188, 212, 0.7)", // Parlak turkuaz gölge, açılır menüleri vurgular.
+        "--group-card-hover": "#003366", // Koyu mavi, fareyle üzerine gelindiğinde hafif bir değişiklik sağlar.    
+        "--seperator": "#5DADE2", // Orta mavi, görsel bir ayırıcı olarak kullanılır.
+        "--select-background-color": "#005b96", // Orta mavi, seçim kutusunu arka plana uyumlu hale getirir.
+        "--select-text-color": "#AED6F1", // Orta mavi, seçim metninin okunabilirliğini artırır.
+        "--select-focus-border-color": "#00BCD4", // Parlak turkuaz, odaklanmış seçim kutusunu vurgular.
+        "--select-focus-box-shadow": "rgba(0, 188, 212, 0.5)", // Parlak turkuaz gölge, odaklanmış seçim kutusuna derinlik katar.
+    },
+    emeraldForestGradientTheme: {
+        "--background": "linear-gradient(to bottom, #1B5E20, #388E3C)", // Koyu ve açık yeşil tonları arasında geçiş yapan orman yeşili degradesi.
+        "--light-background": "#4CAF50", // Açık yeşil yüzey, arka planla uyumlu ve doğal bir his yaratır.
+        "--surface": "#66BB6A", // Orta yeşil kart yüzeyi, içerik için kontrast sağlar.
+        "--primary-text": "#FFFFFF", // Beyaz metin, okunabilirliği artırır.
+        "--secondary-text": "#A5D6A7", // Açık yeşil metin, daha ince detaylar için kullanılır.
+        "--dark-text": "#1B5E20", // Koyu yeşil metin, vurgular için kullanılır.
+        "--divider": "#81C784", // Açık yeşil bölücü, görsel bir ayrım sağlar.
+        "--shadow": "rgba(76, 175, 80, 0.3)", // Yeşil gölge, derinlik ekler.
+        "--primary": "linear-gradient(to right, #9C27B0, #673AB7)", // Mor ve koyu mor arasında gizemli bir geçiş sağlayan degrade ana renk.
+        "--secondary": "#AED581", // Açık yeşil-sarı, tamamlayıcı bir doğal renk.
+        "--warning": "#FFEB3B", // Sarı, uyarı mesajlarını vurguluyor.
+        "--error": "#EF5350", // Kırmızı, hata mesajlarını belirginleştirir.
+        "--info": "#42A5F5", // Mavi, bilgi mesajları için kullanılır.
+        "--success": "#689F38", // Koyu yeşil, başarılı işlemleri belirtiyor.
+        "--dropdown-box-shadow": "rgba(156, 39, 176, 0.5)", // Mor gölge, açılır menüleri vurguluyor.
+        "--group-card-hover": "#4CAF50", // Açık yeşil, fareyle üzerine gelindiğinde hafif bir değişiklik sağlar.
+        "--seperator": "#81C784", // Açık yeşil, görsel bir ayırıcı olarak kullanılır.
+        "--select-background-color": "#66BB6A", // Orta yeşil, seçim kutusunu arka plana uyumlu hale getirir.
+        "--select-text-color": "#FFFFFF", // Beyaz, seçim metninin okunabilirliğini artırır.
+        "--select-focus-border-color": "linear-gradient(to right, #9C27B0, #673AB7)", // Mor ve koyu mor arasındaki degrade, odaklanmış seçim kutusunu vurguluyor.
+        "--select-focus-box-shadow": "rgba(156, 39, 176, 0.3)", // Mor gölge, odaklanmış seçim kutusuna derinlik katar.
+    },
+    urbanSunsetGradientTheme: {
+        "--background": "linear-gradient(to bottom, #F44336, #FF9800)", // Canlı kırmızı ve turuncu tonları arasında geçiş yapan bir gün batımı degradesi.
+        "--light-background": "#FF5722", // Parlak turuncu yüzey, enerjik ve sıcak bir his yaratır.
+        "--surface": "#FF7043", // Orta turuncu kart yüzeyi, içerik için kontrast sağlar.
+        "--primary-text": "#FFFFFF", // Beyaz metin, okunabilirliği artırır.
+        "--secondary-text": "#FFCCBC", // Açık turuncu metin, daha ince detaylar için kullanılır.
+        "--dark-text": "#3E2723", // Koyu kahverengi metin, vurgular için kullanılır.
+        "--divider": "#FFA726", // Orta turuncu bölücü, görsel bir ayrım sağlar.
+        "--shadow": "rgba(255, 112, 67, 0.3)", // Turuncu gölge, derinlik ekler.
+        "--primary": "linear-gradient(to right, #2980B9, #3498DB)", // Mavi tonları arasında geçiş yapan degrade ana renk.
+        "--secondary": "#FFC107", // Sarı, tamamlayıcı bir sıcak renk.
+        "--warning": "#FFEB3B", // Açık sarı, uyarı mesajlarını vurguluyor.
+        "--error": "#D32F2F", // Koyu kırmızı, hata mesajlarını belirginleştirir.
+        "--info": "#29B6F6", // Mavi, bilgi mesajları için kullanılır.
+        "--success": "#4CAF50", // Yeşil, başarılı işlemleri belirtiyor.
+        "--dropdown-box-shadow": "rgba(41, 128, 185, 0.5)", // Mavi gölge, açılır menüleri vurguluyor.
+        "--group-card-hover": "#FF5722", // Parlak turuncu, fareyle üzerine gelindiğinde hafif bir değişiklik sağlar.
+        "--seperator": "#FFA726", // Orta turuncu, görsel bir ayırıcı olarak kullanılır.
+        "--select-background-color": "#FF7043", // Orta turuncu, seçim kutusunu arka plana uyumlu hale getirir.
+        "--select-text-color": "#FFFFFF", // Beyaz, seçim metninin okunabilirliğini artırır.
+        "--select-focus-border-color": "linear-gradient(to right, #2980B9, #3498DB)", // Mavi tonları arasındaki degrade, odaklanmış seçim kutusunu vurguluyor.
+        "--select-focus-box-shadow": "rgba(41, 128, 185, 0.3)", // Mavi gölge, odaklanmış seçim kutusuna derinlik katar.
+    },
+
+    midnightBlackGradientTheme: {
+        "--background": "linear-gradient(to bottom, #000000, #1A1A1A)", // Siyah ve çok koyu gri arasında ince bir geçiş sağlayan degrade arka plan
+        "--light-background": "#212121", // Koyu gri, arka plan ile uyumlu bir yüzey
+        "--surface": "#2E2E2E", // Orta koyu gri kart yüzeyi, içerik için hafif bir kontrast
+        "--primary-text": "#EEEEEE", // Açık gri metin, okunabilirliği artırır
+        "--secondary-text": "#BDBDBD", // Orta gri metin, daha ince detaylar için kullanılır
+        "--dark-text": "#FFFFFF", // Beyaz metin, vurgular için kullanılır
+        "--divider": "#424242", // Koyu gri bölücü, görsel bir ayrım sağlar
+        "--shadow": "rgba(0, 0, 0, 0.7)", // Koyu gölge, derinlik ekler
+        "--primary": "linear-gradient(to right, #4A148C, #673AB7)", // Koyu mor ve mor arasında gizemli bir geçiş sağlayan degrade ana renk
+        "--secondary": "#9E9E9E", // Açık gri, tamamlayıcı bir nötr renk
+        "--warning": "#FFC107", // Sarı, uyarı mesajlarını vurguluyor
+        "--error": "#E53935", // Kırmızı, hata mesajlarını belirginleştirir
+        "--info": "#29B6F6", // Mavi, bilgi mesajları için kullanılır
+        "--success": "#4CAF50", // Yeşil, başarılı işlemleri belirtiyor
+        "--dropdown-box-shadow": "rgba(74, 20, 140, 0.5)", // Mor gölge, açılır menüleri vurguluyor
+        "--group-card-hover": "#212121", // Koyu gri, fareyle üzerine gelindiğinde hafif bir değişiklik sağlar
+        "--seperator": "#424242", // Koyu gri, görsel bir ayırıcı olarak kullanılır
+        "--select-background-color": "#2E2E2E", // Orta koyu gri, seçim kutusunu arka plana uyumlu hale getirir
+        "--select-text-color": "#EEEEEE", // Açık gri, seçim metninin okunabilirliğini artırır
+        "--select-focus-border-color": "linear-gradient(to right, #4A148C, #673AB7)", // Koyu mor ve mor arasındaki degrade, odaklanmış seçim kutusunu vurguluyor
+        "--select-focus-box-shadow": "rgba(74, 20, 140, 0.3)", // Mor gölge, odaklanmış seçim kutusuna derinlik katar
+    },
+    steelGrayGradientTheme: {
+        "--background": "linear-gradient(to bottom, #424242, #616161)", // Koyu gri ve orta koyu gri arasında geçiş yapan degrade arka plan
+        "--light-background": "#757575", // Orta gri yüzey, arka planla uyumlu ve minimalist bir his yaratır.
+        "--surface": "#9E9E9E", // Açık gri kart yüzeyi, içerik için kontrast sağlar.
+        "--primary-text": "#FFFFFF", // Beyaz metin, okunabilirliği artırır.
+        "--secondary-text": "#BDBDBD", // Açık gri metin, daha ince detaylar için kullanılır.
+        "--dark-text": "#000000", // Siyah metin, vurgular için kullanılır.
+        "--divider": "#BDBDBD", // Açık gri bölücü, görsel bir ayrım sağlar.
+        "--shadow": "rgba(66, 66, 66, 0.3)", // Gri gölge, derinlik ekler.
+        "--primary": "linear-gradient(to right, #03A9F4, #4FC3F7)", // Mavi tonları arasında geçiş yapan canlı bir degrade ana renk.
+        "--secondary": "#9E9E9E", // Açık gri, tamamlayıcı bir nötr renk.
+        "--warning": "#FFC107", // Sarı, uyarı mesajlarını vurguluyor.
+        "--error": "#F44336", // Kırmızı, hata mesajlarını belirginleştirir.
+        "--info": "#29B6F6", // Mavi, bilgi mesajları için kullanılır.
+        "--success": "#4CAF50", // Yeşil, başarılı işlemleri belirtiyor.
+        "--dropdown-box-shadow": "rgba(3, 169, 244, 0.5)", // Mavi gölge, açılır menüleri vurguluyor.
+        "--group-card-hover": "#757575", // Orta gri, fareyle üzerine gelindiğinde hafif bir değişiklik sağlar.
+        "--seperator": "#BDBDBD", // Açık gri, görsel bir ayırıcı olarak kullanılır.
+        "--select-background-color": "#9E9E9E", // Açık gri, seçim kutusunu arka plana uyumlu hale getirir.
+        "--select-text-color": "#FFFFFF", // Beyaz, seçim metninin okunabilirliğini artırır.
+        "--select-focus-border-color": "linear-gradient(to right, #03A9F4, #4FC3F7)", // Mavi tonları arasındaki degrade, odaklanmış seçim kutusunu vurguluyor.
+        "--select-focus-box-shadow": "rgba(3, 169, 244, 0.3)", // Mavi gölge, odaklanmış seçim kutusuna derinlik katar.
+    },
+    cyberpunkMatrixTheme: {
+        "--background": "#000000", // Siyah arka plan
+        "--light-background": "#111111", // Çok koyu gri yüzey
+        "--surface": "#222222", // Koyu gri yüzey
+        "--primary-text": "#00FF00", // Parlak yeşil metin
+        "--secondary-text": "#7CFC00", // Açık yeşil metin
+        "--dark-text": "#FFFFFF", // Beyaz metin
+        "--divider": "#333333", // Koyu gri bölücü
+        "--shadow": "rgba(0, 255, 0, 0.3)", // Yeşil gölge
+        "--primary": "#00FF00", // Parlak yeşil
+        "--secondary": "#7CFC00", // Açık yeşil
+        "--warning": "#FFFF00", // Sarı
+        "--error": "#FF0000", // Kırmızı
+        "--info": "#00FFFF", // Turkuaz
+        "--success": "#008000", // Koyu yeşil
+        "--dropdown-box-shadow": "rgba(0, 255, 0, 0.5)", // Parlak yeşil gölge
+        "--group-card-hover": "#111111", // Çok koyu gri
+        "--seperator": "#444444", // Koyu gri
+        "--select-background-color": "#222222", // Koyu gri
+        "--select-text-color": "#00FF00", // Parlak yeşil
+        "--select-focus-border-color": "#00FF00", // Parlak yeşil
+        "--select-focus-box-shadow": "rgba(0, 255, 0, 0.5)", // Parlak yeşil gölge
+    },
+    pixelDelightTheme: {
+        "--background": "#222", // Koyu gri arka plan, eski CRT monitörleri çağrıştırıyor
+        "--light-background": "#333", // Daha açık gri yüzey
+        "--surface": "#444", // Koyu gri kart yüzeyi
+        "--primary-text": "#eee", // Açık gri metin
+        "--secondary-text": "#aaa", // Orta gri metin
+        "--dark-text": "#fff", // Beyaz metin vurguları için
+        "--divider": "#555", // Koyu gri bölücü
+        "--shadow": "3px 3px 5px #000", // Pikselli gölge efekti
+        "--primary": "#0f0", // Parlak yeşil, retro oyunlarda sık kullanılan bir renk
+        "--secondary": "#f90", // Turuncu, bir diğer nostaljik oyun rengi
+        "--warning": "#ff0", // Sarı, uyarılar için klasik bir renk
+        "--error": "#f00", // Kırmızı, hataları belirginleştirmek için
+        "--info": "#0ff", // Açık mavi, bilgi mesajları için
+        "--success": "#080", // Koyu yeşil, başarılı eylemleri belirtmek için
+        "--dropdown-box-shadow": "0 0 5px #0f0", // Yeşil gölgeli açılır menü
+        "--group-card-hover": "#333", // Fareyle üzerine gelindiğinde hafif bir aydınlatma
+        "--seperator": "#666", // Koyu gri ayırıcı
+        "--select-background-color": "#444", // Koyu gri seçim kutusu arka planı
+        "--select-text-color": "#eee", // Açık gri seçim metni
+        "--select-focus-border-color": "#0f0", // Yeşil odaklanmış kenarlık
+        "--select-focus-box-shadow": "0 0 5px #0f0", // Yeşil gölgeli odak kutusu
+    },
+    neonDreamsTheme: {
+        "--background": "#000", // Siyah arka plan, neon ışıkların parlaklığını vurguluyor
+        "--light-background": "#111", // Çok koyu gri yüzey
+        "--surface": "#222", // Koyu gri yüzey
+        "--primary-text": "#fff", // Beyaz metin
+        "--secondary-text": "#aaa", // Orta gri metin
+        "--dark-text": "#fff", // Beyaz metin
+        "--divider": "#333", // Koyu gri bölücü
+        "--shadow": "0 0 10px #0f0", // Neon yeşili gölge
+        "--primary": "#0f0", // Neon yeşili ana renk
+        "--secondary": "#f0f", // Neon moru, tamamlayıcı bir renk
+        "--warning": "#ff0", // Sarı, uyarılar için klasik bir renk
+        "--error": "#f00", // Kırmızı, hataları belirginleştirmek için
+        "--info": "#00f", // Mavi, bilgi mesajları için
+        "--success": "#0f0", // Yeşil, başarılı eylemleri belirtmek için
+        "--dropdown-box-shadow": "0 0 10px #0f0", // Neon yeşili gölgeli açılır menü
+        "--group-card-hover": "#111", // Fareyle üzerine gelindiğinde hafif bir aydınlatma  
+        "--seperator": "#444", // Koyu gri ayırıcı
+        "--select-background-color": "#222", // Koyu gri seçim kutusu arka planı
+        "--select-text-color": "#fff", // Beyaz seçim metni
+        "--select-focus-border-color": "#0f0", // Neon yeşili odaklanmış kenarlık
+        "--select-focus-box-shadow": "0 0 10px #0f0", // Neon yeşili gölgeli odak kutusu
+    },
+    impressionistTheme: {
+        "--background": "#E0FFFF", // Açık mavi arka plan, gökyüzünü andırıyor
+        "--light-background": "#FFFFFF", // Beyaz yüzey, tuval etkisi yaratıyor
+        "--surface": "#D8DEE9", // Açık gri-mavi kart yüzeyi, hafif bir gölge efekti
+        "--primary-text": "#222831", // Koyu gri-mavi metin, iyi okunabilirlik sağlıyor
+        "--secondary-text": "#4F5D75", // Orta gri-mavi metin, daha ince detaylar için
+        "--dark-text": "#111827", // Koyu mavi, vurgular için 
+        "--divider": "#B0BEC5", // Açık mavi-gri bölücü, görsel bir ayrım
+        "--shadow": "rgba(0, 0, 0, 0.1)", // Hafif gölge, İzlenimcilik resimlerindeki yumuşak gölgeleri andırıyor
+        "--primary": "#6699CC", // Mavinin pastel tonu, su ve gökyüzünü temsil ediyor
+        "--secondary": "#99CC66", // Yeşilin pastel tonu, doğayı ve bitki örtüsünü temsil ediyor
+        "--warning": "#FFCC33", // Açık sarı, uyarıları nazikçe vurguluyor
+        "--error": "#FF6666", // Açık kırmızı, hataları belli ediyor
+        "--info": "#66CCFF", // Açık mavi, bilgi mesajları için
+        "--success": "#99CC99", // Açık yeşil, başarılı eylemleri belirtmek için
+        "--dropdown-box-shadow": "rgba(102, 153, 204, 0.5)", // Mavi gölgeli açılır menü
+        "--group-card-hover": "#E0E0F0", // Fareyle üzerine gelindiğinde hafif bir aydınlatma
+        "--seperator": "#B0C4DE", // Açık gri-mavi ayırıcı
+        "--select-background-color": "#FFFFFF", // Beyaz seçim kutusu, tuval hissi
+        "--select-text-color": "#222831", // Koyu gri-mavi seçim metni
+        "--select-focus-border-color": "#6699CC", // Mavi odaklanmış kenarlık
+        "--select-focus-box-shadow": "rgba(102, 153, 204, 0.3)", // Mavi gölgeli odak kutusu
+    },
+    artDecoTheme: {
+        "--background": "#F5F5F5", // Açık gri arka plan, nötr ve sofistike
+        "--light-background": "#FFFFFF", // Saf beyaz yüzey, kontrast ve temizlik sağlıyor
+        "--surface": "#EEEEEE", // Açık gri kart yüzeyi, hafif bir gölge efekti
+        "--primary-text": "#212121", // Koyu gri metin, okunabilirlik için ideal
+        "--secondary-text": "#757575", // Orta gri metin, daha ince detaylar için
+        "--dark-text": "#000000", // Siyah, vurgu ve başlıklar için
+        "--divider": "#BDBDBD", // Açık gri bölücü, görsel bir ayrım yaratıyor
+        "--shadow": "0 4px 8px rgba(0,0,0,0.2)", // Hafif gölge, Art Deco'nun zarafetini yansıtıyor
+        "--primary": "#D4AF37", // Altın sarısı, Art Deco'nun ikonik rengi, lüks ve ihtişamı temsil ediyor
+        "--secondary": "#212121", // Koyu gri, kontrast ve denge sağlıyor
+        "--warning": "#FFC107", // Açık sarı, uyarıları nazikçe vurguluyor
+        "--error": "#B71C1C", // Bordo, hataları güçlü bir şekilde gösteriyor
+        "--info": "#3F51B5", // İndigo, bilgi mesajları için sofistike bir ton
+        "--success": "#4CAF50", // Yeşil, başarılı eylemleri gösteriyor
+        "--dropdown-box-shadow": "0 8px 16px rgba(212, 175, 55, 0.3)", // Altın sarısı gölge, açılır menülere dikkat çekiyor
+        "--group-card-hover": "#FAFAFA", // Fareyle üzerine gelindiğinde kartları hafifçe aydınlatıyor
+        "--seperator": "#E0E0E0", // Açık gri ayırıcı, düzeni koruyor
+        "--select-background-color": "#FFFFFF", // Beyaz seçim kutusu arka planı, temiz ve sade
+        "--select-text-color": "#212121", // Koyu gri seçim metni, okunaklılığı artırıyor
+        "--select-focus-border-color": "#D4AF37", // Altın sarısı odaklanmış kenarlık, lüks bir dokunuş
+        "--select-focus-box-shadow": "0 0 8px rgba(212, 175, 55, 0.5)", // Altın sarısı gölgeli odak kutusu, seçimi vurguluyor
+    },
+    interestingTimesTheme: {
+        "--background": "#000", // Siyah arka plan, gizemli ve dramatik
+        "--light-background": "#111", // Çok koyu gri yüzey
+        "--surface": "#222", // Koyu gri yüzey
+        "--primary-text": "#fff", // Beyaz metin
+        "--secondary-text": "#aaa", // Orta gri metin
+        "--dark-text": "#fff", // Beyaz metin
+        "--divider": "#333", // Koyu gri bölücü
+        "--shadow": "0 0 10px #f00", // Kırmızı gölge
+        "--primary": "#f00", // Kırmızı ana renk
+        "--secondary": "#0f0", // Yeşil, tamamlayıcı bir renk
+        "--warning": "#ff0", // Sarı, uyarıları vurguluyor
+        "--error": "#f00", // Kırmızı, hataları belirginleştiriyor
+        "--info": "#00f", // Mavi, bilgi mesajları için
+        "--success": "#0f0", // Yeşil, başarılı eylemleri belirtiyor
+        "--dropdown-box-shadow": "0 0 10px #f00", // Kırmızı gölgeli açılır menü
+        "--group-card-hover": "#111", // Çok koyu gri, fareyle üzerine gelindiğinde hafif bir aydınlatma
+        "--seperator": "#444", // Koyu gri ayırıcı
+        "--select-background-color": "#222", // Koyu gri seçim kutusu arka planı
+        "--select-text-color": "#fff", // Beyaz seçim metni
+        "--select-focus-border-color": "#f00", // Kırmızı odaklanmış kenarlık
+        "--select-focus-box-shadow": "0 0 10px #f00", // Kırmızı gölgeli odak kutusu
+    },
+    wonderfulWorldTheme: {
+        "--background": "#F0F4C3", // Açık sarı arka plan, sıcak ve davetkar
+        "--light-background": "#FFFFFF", // Saf beyaz yüzey, temiz ve düzenli
+        "--surface": "#FFECB3", // Açık sarı kart yüzeyi, içerik için kontrast sağlıyor
+        "--primary-text": "#212121", // Koyu gri metin, okunabilirlik için ideal
+        "--secondary-text": "#757575", // Orta gri metin, daha ince detaylar için
+        "--dark-text": "#000000", // Siyah, vurgular için
+        "--divider": "#BDBDBD", // Açık gri bölücü, görsel bir ayrım
+        "--shadow": "0 4px 8px rgba(0,0,0,0.2)", // Hafif gölge, düz ve temiz bir görünüm
+        "--primary": "#FFD54F", // Açık sarı, ana renk olarak kullanılıyor
+        "--secondary": "#FFA000", // Turuncu, tamamlayıcı bir renk
+        "--warning": "#FFC107", // Açık sarı, uyarıları vurguluyor
+        "--error": "#F44336", // Kırmızı, hataları belirginleştiriyor
+        "--info": "#2196F3", // Mavi, bilgi mesajları için
+        "--success": "#4CAF50", // Yeşil, başarılı eylemleri belirtiyor
+        "--dropdown-box-shadow": "0 8px 16px rgba(255, 213, 79, 0.3)", // Açık sarı gölgeli açılır menü
+        "--group-card-hover": "#FAFAFA", // Fareyle üzerine gelindiğinde hafif bir aydınlatma
+        "--seperator": "#E0E0E0", // Açık gri ayırıcı, düzeni koruyor
+        "--select-background-color": "#FFFFFF", // Beyaz seçim kutusu arka planı, temiz ve sade
+        "--select-text-color": "#212121", // Koyu gri seçim metni, okunaklılığı artırıyor
+        "--select-focus-border-color": "#FFD54F", // Açık sarı odaklanmış kenarlık, dikkat çekici
+        "--select-focus-box-shadow": "0 0 8px rgba(255, 213, 79, 0.5)", // Açık sarı gölgeli odak kutusu, seçimi vurguluyor
+    },
+    popArtTheme: {
+        "--background": "#FFFFFF", // Beyaz arka plan, Pop Art eserlerinin sıkça kullandığı boş tuvali temsil eder.
+        "--light-background": "#FFFFE0", // Açık sarı yüzey, hafif bir vurgu ve sıcaklık sağlar.
+        "--surface": "#FFFACD", // Daha açık sarı kart yüzeyi, içerik için hafif bir kontrast yaratır.
+        "--primary-text": "#000000", // Siyah metin, Pop Art'ın kalın çizgilerini ve kontrastını yansıtır.
+        "--secondary-text": "#424242", // Koyu gri metin, daha ince detaylar için kullanılır.
+        "--dark-text": "#000000", // Siyah, vurgular için kullanılır.
+        "--divider": "#FFCC00", // Parlak sarı bölücü, görsel bir ayrım yaratır ve Pop Art'ın canlılığını yansıtır.
+        "--shadow": "5px 5px 10px rgba(0, 0, 0, 0.5)", // Belirgin gölge, Pop Art'ın grafiksel tarzını vurgular.
+        "--primary": "#FF0000", // Parlak kırmızı, Pop Art'ın en ikonik renklerinden biridir, enerji ve tutkuyu temsil eder.
+        "--secondary": "#00FF00", // Parlak yeşil, kırmızı ile güçlü bir kontrast oluşturur ve canlılık katmaktadır.
+        "--warning": "#FFD700", // Parlak sarı, uyarıları etkili bir şekilde vurgular.
+        "--error": "#FF3300", // Parlak turuncu, hataları belirgin bir şekilde gösterir.
+        "--info": "#00FFFF", // Turkuaz, bilgi mesajları için kullanılır ve temaya bir retro dokunuş katar.
+        "--success": "#32CD32", // Parlak yeşil, başarılı eylemleri belirginleştirir.
+        "--dropdown-box-shadow": "0 8px 16px rgba(255, 0, 0, 0.3)", // Kırmızı gölge, açılır menülere dikkat çeker.
+        "--group-card-hover": "#FFFFE0", // Fareyle üzerine gelindiğinde kartları hafifçe aydınlatır.
+        "--seperator": "#FFCC00", // Parlak sarı ayırıcı, görsel ilgiyi artırır.
+        "--select-background-color": "#FFFACD", // Açık sarı seçim kutusu arka planı, temayla uyumludur.
+        "--select-text-color": "#000000", // Siyah seçim metni, okunabilirliği sağlar.
+        "--select-focus-border-color": "#FF0000", // Kırmızı odaklanmış kenarlık, seçili öğeyi vurgular.
+        "--select-focus-box-shadow": "0 0 8px rgba(255, 0, 0, 0.5)", // Kırmızı gölgeli odak kutusu, Pop Art'ın grafiksel tarzını yansıtır.
+    },
 };
