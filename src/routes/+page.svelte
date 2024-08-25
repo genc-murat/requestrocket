@@ -2391,30 +2391,28 @@
                             </div>
                           {/if}
                         </div>
-                        <input
-                          type="text"
-                          placeholder="Value"
-                          bind:value={header.value}
-                          class="header-input"
-                          on:input={(e) => handleHeaderValueInput(e, index)}
-                          disabled={!header.selected}
-                        />
-                        {#if $headerValueAutocomplete.length > 0}
-                          <div class="autocomplete-suggestions">
-                            {#each $headerValueAutocomplete as suggestion}
-                              <div
-                                class="autocomplete-suggestion"
-                                on:mousedown={() =>
-                                  selectHeaderValueSuggestion(
-                                    index,
-                                    suggestion,
-                                  )}
-                              >
-                                {suggestion}
-                              </div>
-                            {/each}
-                          </div>
-                        {/if}
+                        <div class="input-container">
+                          <input
+                            type="text"
+                            placeholder="Value"
+                            bind:value={header.value}
+                            class="header-input"
+                            on:input={(e) => handleHeaderValueInput(e, index)}
+                            disabled={!header.selected}
+                          />
+                          {#if $headerValueAutocomplete.length > 0}
+                            <div class="autocomplete-suggestions">
+                              {#each $headerValueAutocomplete as suggestion}
+                                <div
+                                  class="autocomplete-suggestion"
+                                  on:mousedown={() => selectHeaderValueSuggestion(index, suggestion)}
+                                >
+                                  {suggestion}
+                                </div>
+                              {/each}
+                            </div>
+                          {/if}
+                        </div>
                       </div>
                       <button
                         type="button"
@@ -3093,30 +3091,28 @@
                               </div>
                             {/if}
                           </div>
-                          <input
-                            type="text"
-                            placeholder="Value"
-                            bind:value={header.value}
-                            class="header-input"
-                            on:input={(e) => handleHeaderValueInput(e, index)}
-                            disabled={!header.selected}
-                          />
-                          {#if $headerValueAutocomplete.length > 0}
-                            <div class="autocomplete-suggestions">
-                              {#each $headerValueAutocomplete as suggestion}
-                                <div
-                                  class="autocomplete-suggestion"
-                                  on:mousedown={() =>
-                                    selectHeaderValueSuggestion(
-                                      index,
-                                      suggestion,
-                                    )}
-                                >
-                                  {suggestion}
-                                </div>
-                              {/each}
-                            </div>
-                          {/if}
+                          <div class="input-container">
+                            <input
+                              type="text"
+                              placeholder="Value"
+                              bind:value={header.value}
+                              class="header-input"
+                              on:input={(e) => handleHeaderValueInput(e, index)}
+                              disabled={!header.selected}
+                            />
+                            {#if $headerValueAutocomplete.length > 0}
+                              <div class="autocomplete-suggestions">
+                                {#each $headerValueAutocomplete as suggestion}
+                                  <div
+                                    class="autocomplete-suggestion"
+                                    on:mousedown={() => selectHeaderValueSuggestion(index, suggestion)}
+                                  >
+                                    {suggestion}
+                                  </div>
+                                {/each}
+                              </div>
+                            {/if}
+                          </div>
                         </div>
                         <button
                           type="button"
