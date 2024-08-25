@@ -17,7 +17,15 @@ export async function sendRequest(requestData: any, variables: any): Promise<Res
     }
 }
 
-export function prepareRequestData(url: string, method: string, headers: any[], body: string, pathParams: any[], queryParams: any[], formParams: any[], bodyType: string, variables: any, requestTimeout: number): any {
+export function prepareRequestData(url: string,
+    method: string,
+    headers: any[],
+    body: string, pathParams: any[],
+    queryParams: any[],
+    formParams: any[],
+    bodyType: string,
+    variables: { [key: string]: string },
+    requestTimeout: number): any {
     const actualHeaders = headers
         .filter((header) => header.selected)
         .map((header) => ({

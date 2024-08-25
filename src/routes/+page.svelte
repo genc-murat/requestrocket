@@ -956,7 +956,20 @@
       console.error("Error updating URL:", error);
     }
   }
-
+  function filterVariablesByEnvironment(
+    variables: EnvVariable[],
+    currentEnvironment: string,
+  ): { [key: string]: string } {
+    return variables.reduce(
+      (acc, variable) => {
+        if (variable.values[currentEnvironment] !== undefined) {
+          acc[variable.key] = variable.values[currentEnvironment];
+        }
+        return acc;
+      },
+      {} as { [key: string]: string },
+    );
+  }
   async function handleSendRequest() {
     if (!$url.trim()) {
       showStatusMessage("URL cannot be empty", "error");
@@ -965,6 +978,12 @@
 
     isSending.set(true);
     const actualUrl = $url;
+
+    // Geçerli ortama göre değişkenleri filtrele
+    const filteredVariables = filterVariablesByEnvironment(
+      $envVariables,
+      $currentEnvironment,
+    );
 
     const requestData = prepareRequestData(
       actualUrl,
@@ -975,7 +994,7 @@
       $queryParams,
       $formParams,
       $bodyType,
-      $variables,
+      filteredVariables,
       $requestTimeout,
     );
 
@@ -2405,7 +2424,11 @@
                               {#each $headerValueAutocomplete as suggestion}
                                 <div
                                   class="autocomplete-suggestion"
-                                  on:mousedown={() => selectHeaderValueSuggestion(index, suggestion)}
+                                  on:mousedown={() =>
+                                    selectHeaderValueSuggestion(
+                                      index,
+                                      suggestion,
+                                    )}
                                 >
                                   {suggestion}
                                 </div>
@@ -3105,7 +3128,11 @@
                                 {#each $headerValueAutocomplete as suggestion}
                                   <div
                                     class="autocomplete-suggestion"
-                                    on:mousedown={() => selectHeaderValueSuggestion(index, suggestion)}
+                                    on:mousedown={() =>
+                                      selectHeaderValueSuggestion(
+                                        index,
+                                        suggestion,
+                                      )}
                                   >
                                     {suggestion}
                                   </div>
