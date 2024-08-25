@@ -1,4 +1,3 @@
-// src/lib/requestModule.ts
 import { invoke } from "@tauri-apps/api/tauri";
 import type { ResponseData, HistoryItem, StatusHistoryItem } from "../types/api-types"; // Yolu doğru şekilde ayarlayın
 
