@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
-    import { fade } from 'svelte/transition';
+    import { fade } from "svelte/transition";
     import Icon from "@iconify/svelte";
 
     export let headers: string[];
@@ -10,6 +10,12 @@
 
     function closeDialog() {
         dispatch("close");
+    }
+
+    function handleKeydown(event: KeyboardEvent, callback: () => void) {
+        if (event.key === "Enter") {
+            callback();
+        }
     }
 
     let copiedIndex: number | null = null;
@@ -22,13 +28,24 @@
                 copiedIndex = null;
             }, 1500);
         } catch (err) {
-            console.error('Failed to copy text: ', err);
+            console.error("Failed to copy text: ", err);
         }
     }
 </script>
 
-<div class="dialog-overlay" on:click={closeDialog}>
-    <div class="dialog-content" on:click|stopPropagation>
+<div
+    class="dialog-overlay"
+    on:click={closeDialog}
+    role="button"
+    tabindex="0"
+    on:keydown={(e) => handleKeydown(e, () => closeDialog())}
+>
+    <div
+        class="dialog-content"
+        on:click|stopPropagation
+        role="button"
+        tabindex="0"
+    >
         <h2>Row Details</h2>
         <table>
             <tbody>
@@ -38,15 +55,22 @@
                         <td>
                             <div class="cell-content">
                                 <span>{row[index]}</span>
-                                <button 
-                                    class="copy-button" 
-                                    on:click={() => copyToClipboard(row[index], index)}
+                                <button
+                                    class="copy-button"
+                                    on:click={() =>
+                                        copyToClipboard(row[index], index)}
                                     title="Copy to clipboard"
                                 >
-                                    <Icon icon="mdi:content-copy" width="14" height="14" />
+                                    <Icon
+                                        icon="mdi:content-copy"
+                                        width="14"
+                                        height="14"
+                                    />
                                 </button>
                                 {#if copiedIndex === index}
-                                    <span class="copied-message" transition:fade>Copied!</span>
+                                    <span class="copied-message" transition:fade
+                                        >Copied!</span
+                                    >
                                 {/if}
                             </div>
                         </td>
@@ -92,7 +116,8 @@
         border-collapse: collapse;
     }
 
-    th, td {
+    th,
+    td {
         padding: 8px;
         border: 1px solid #ddd;
         text-align: left;
