@@ -91,7 +91,6 @@
 
   import { url, method } from "../stores/urlStore";
 
-
   import {
     showModal,
     itemToDelete,
@@ -114,9 +113,9 @@
 
   let showImportMenu = false;
 
-   const urlAutocomplete = writable<string[]>([]);
- const headerAutocomplete = writable<string[]>([]);
- const queryParamAutocomplete = writable<string[]>([]);
+  const urlAutocomplete = writable<string[]>([]);
+  const headerAutocomplete = writable<string[]>([]);
+  const queryParamAutocomplete = writable<string[]>([]);
 
   function handleImport(
     event: CustomEvent<{ type: "har" | "curl" | "postman" }>,
@@ -220,6 +219,35 @@
       }
     })();
     return value;
+  }
+
+  let headerValueAutocomplete = writable<string[]>([]);
+
+  function handleHeaderValueInput(event: Event, index: number) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    const lastOpenBrace = value.lastIndexOf("{{");
+    if (lastOpenBrace !== -1 && lastOpenBrace > value.lastIndexOf("}}")) {
+      const partial = value.slice(lastOpenBrace + 2);
+      const suggestions = getVariableSuggestions(partial);
+      headerValueAutocomplete.set(suggestions);
+    } else {
+      headerValueAutocomplete.set([]);
+    }
+  }
+
+  function selectHeaderValueSuggestion(index: number, suggestion: string) {
+    headers.update((h) => {
+      const lastOpenBrace = h[index].value.lastIndexOf("{{");
+      if (lastOpenBrace !== -1) {
+        h[index].value =
+          h[index].value.slice(0, lastOpenBrace) + "{{" + suggestion + "}}";
+      } else {
+        h[index].value = "{{" + suggestion + "}}";
+      }
+      return h;
+    });
+    headerValueAutocomplete.set([]);
   }
 
   async function exportResponseToPDF() {
@@ -2368,8 +2396,25 @@
                           placeholder="Value"
                           bind:value={header.value}
                           class="header-input"
+                          on:input={(e) => handleHeaderValueInput(e, index)}
                           disabled={!header.selected}
                         />
+                        {#if $headerValueAutocomplete.length > 0}
+                          <div class="autocomplete-suggestions">
+                            {#each $headerValueAutocomplete as suggestion}
+                              <div
+                                class="autocomplete-suggestion"
+                                on:mousedown={() =>
+                                  selectHeaderValueSuggestion(
+                                    index,
+                                    suggestion,
+                                  )}
+                              >
+                                {suggestion}
+                              </div>
+                            {/each}
+                          </div>
+                        {/if}
                       </div>
                       <button
                         type="button"
@@ -3053,8 +3098,25 @@
                             placeholder="Value"
                             bind:value={header.value}
                             class="header-input"
+                            on:input={(e) => handleHeaderValueInput(e, index)}
                             disabled={!header.selected}
                           />
+                          {#if $headerValueAutocomplete.length > 0}
+                            <div class="autocomplete-suggestions">
+                              {#each $headerValueAutocomplete as suggestion}
+                                <div
+                                  class="autocomplete-suggestion"
+                                  on:mousedown={() =>
+                                    selectHeaderValueSuggestion(
+                                      index,
+                                      suggestion,
+                                    )}
+                                >
+                                  {suggestion}
+                                </div>
+                              {/each}
+                            </div>
+                          {/if}
                         </div>
                         <button
                           type="button"
