@@ -200,7 +200,7 @@
     .advanced-data-table {
         display: flex;
         flex-direction: column;
-        height: 100%;
+        height: 95%;
     }
 
     .table-controls {
