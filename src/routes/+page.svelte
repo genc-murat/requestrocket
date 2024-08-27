@@ -111,6 +111,8 @@
     showHarAnalyzerModal = true;
   }
 
+  //let autocompleteHeaders = writable<AutocompleteHeaders>([]);
+
   let showImportMenu = false;
 
   const urlAutocomplete = writable<string[]>([]);
@@ -1110,38 +1112,41 @@
   }
 
   function handleHeaderInput(event: Event, index: number) {
-    const input = event.target as HTMLInputElement;
-    const value = input.value;
-    const lastOpenBrace = value.lastIndexOf("{{");
-    if (lastOpenBrace !== -1 && lastOpenBrace > value.lastIndexOf("}}")) {
-      const partial = value.slice(lastOpenBrace + 2);
-      const suggestions = getVariableSuggestions(partial);
-      headerAutocomplete.set(suggestions);
-    } else {
-      const suggestions = [
-        ...knownHeaders,
-        ...$customHeaders.map((h) => h.name),
-      ].filter((header) => header.toLowerCase().includes(value.toLowerCase()));
-      headerAutocomplete.set(suggestions);
-    }
-  }
-
-  function selectHeaderSuggestion(index: number, suggestion: string) {
-    headers.update((h) => {
-      const lastOpenBrace = h[index].key.lastIndexOf("{{");
-      if (
-        lastOpenBrace !== -1 &&
-        lastOpenBrace > h[index].key.lastIndexOf("}}")
-      ) {
-        h[index].key =
-          h[index].key.slice(0, lastOpenBrace) + "{{" + suggestion + "}}";
-      } else {
-        h[index].key = suggestion;
-      }
-      return h;
+  const input = event.target as HTMLInputElement;
+  const value = input.value;
+  const lastOpenBrace = value.lastIndexOf("{{");
+  if (lastOpenBrace !== -1 && lastOpenBrace > value.lastIndexOf("}}")) {
+    const partial = value.slice(lastOpenBrace + 2);
+    const suggestions = getVariableSuggestions(partial);
+    autocompleteHeaders.update(headers => {
+      headers[index] = suggestions;
+      return headers;
     });
-    headerAutocomplete.set([]);
+  } else {
+    const suggestions = [...knownHeaders, ...$customHeaders.map(h => h.name)]
+      .filter(header => header.toLowerCase().includes(value.toLowerCase()));
+    autocompleteHeaders.update(headers => {
+      headers[index] = suggestions;
+      return headers;
+    });
   }
+}
+
+function selectHeaderSuggestion(index: number, suggestion: string) {
+  headers.update(h => {
+    const lastOpenBrace = h[index].key.lastIndexOf("{{");
+    if (lastOpenBrace !== -1 && lastOpenBrace > h[index].key.lastIndexOf("}}")) {
+      h[index].key = h[index].key.slice(0, lastOpenBrace) + "{{" + suggestion + "}}";
+    } else {
+      h[index].key = suggestion;
+    }
+    return h;
+  });
+  autocompleteHeaders.update(headers => {
+    headers[index] = [];
+    return headers;
+  });
+}
 
   function selectUrlSuggestion(suggestion: string) {
     const lastOpenBrace = $url.lastIndexOf("{{");
@@ -2396,19 +2401,18 @@
                             class="header-input"
                             disabled={!header.selected}
                           />
-                          {#if $headerAutocomplete.length > 0}
-                            <div class="autocomplete-suggestions">
-                              {#each $headerAutocomplete as suggestion}
-                                <div
-                                  class="autocomplete-suggestion"
-                                  on:mousedown={() =>
-                                    selectHeaderSuggestion(index, suggestion)}
-                                >
-                                  {suggestion}
-                                </div>
-                              {/each}
-                            </div>
-                          {/if}
+                          {#if $autocompleteHeaders[index] && $autocompleteHeaders[index].length > 0}
+                          <div class="autocomplete-suggestions">
+                            {#each $autocompleteHeaders[index] as suggestion}
+                              <div
+                                class="autocomplete-suggestion"
+                                on:mousedown={() => selectHeaderSuggestion(index, suggestion)}
+                              >
+                                {suggestion}
+                              </div>
+                            {/each}
+                          </div>
+                        {/if}
                         </div>
                         <div class="input-container">
                           <input
@@ -3100,19 +3104,18 @@
                               class="header-input"
                               disabled={!header.selected}
                             />
-                            {#if $headerAutocomplete.length > 0}
-                              <div class="autocomplete-suggestions">
-                                {#each $headerAutocomplete as suggestion}
-                                  <div
-                                    class="autocomplete-suggestion"
-                                    on:mousedown={() =>
-                                      selectHeaderSuggestion(index, suggestion)}
-                                  >
-                                    {suggestion}
-                                  </div>
-                                {/each}
-                              </div>
-                            {/if}
+                            {#if $autocompleteHeaders[index] && $autocompleteHeaders[index].length > 0}
+                            <div class="autocomplete-suggestions">
+                              {#each $autocompleteHeaders[index] as suggestion}
+                                <div
+                                  class="autocomplete-suggestion"
+                                  on:mousedown={() => selectHeaderSuggestion(index, suggestion)}
+                                >
+                                  {suggestion}
+                                </div>
+                              {/each}
+                            </div>
+                          {/if}
                           </div>
                           <div class="input-container">
                             <input
