@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import type { Writable } from 'svelte/store';
 
-interface SecurityScanConfig {
+export interface SecurityScanConfig {
   id: string;
   name: string;
   url: string;
@@ -24,7 +24,7 @@ interface SecurityVulnerability {
   cwe?: string; // Common Weakness Enumeration
 }
 
-interface SecurityScanResult {
+export interface SecurityScanResult {
   configId: string;
   timestamp: number;
   vulnerabilities: SecurityVulnerability[];

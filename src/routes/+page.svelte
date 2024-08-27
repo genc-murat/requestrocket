@@ -105,7 +105,55 @@
 
   import AdvancedDataTable from "../components/AdvancedDataTable.svelte";
 
+  import { runSecurityScan } from "$lib/securityScan";
+
+  import type { SecurityScanConfig,SecurityScanResult  } from "$lib/securityScan";
+
   let showHarAnalyzerModal = false;
+
+  const securityScanResult = writable<SecurityScanResult | null>(null);
+
+  async function runSecurity() {
+  const config: SecurityScanConfig = {
+    id: crypto.randomUUID(), // Benzersiz bir ID oluştur
+    name: "Security Scan", // Veya daha açıklayıcı bir isim
+    url: $url,
+    method: $method, // Mevcut HTTP metodunu kullan
+    headers: $headers.reduce((acc, header) => {
+      if (header.selected) {
+        acc[header.key] = header.value;
+      }
+      return acc;
+    }, {} as Record<string, string>),
+    body: $body // Eğer body varsa
+  };
+
+  try {
+    const result = await runSecurityScan(config);
+    securityScanResult.set(result);
+  } catch (error) {
+    console.error("Security scan failed:", error);
+    securityScanResult.set(null); // Hata durumunda null olarak ayarla
+    showStatusMessage("Security scan failed", "error");
+  }
+}
+
+type Severity = 'Low' | 'Medium' | 'High' | 'Critical';
+
+function getSeverityClass(severity: Severity): string {
+  switch (severity) {
+    case 'Low':
+      return 'text-yellow-600';
+    case 'Medium':
+      return 'text-orange-600';
+    case 'High':
+      return 'text-red-600';
+    case 'Critical':
+      return 'text-red-800 font-bold';
+    default:
+      return 'text-gray-600';
+  }
+}
 
   function openHarAnalyzerModal() {
     showHarAnalyzerModal = true;
@@ -1057,6 +1105,9 @@
           return newHistory;
         });
       }
+
+await runSecurity();
+
     } catch (error) {
       console.error("Request failed:", error);
       let errorMessage = error instanceof Error ? error.message : String(error);
@@ -2754,6 +2805,14 @@
               >
                 Curl Command
               </button>
+              <button
+              type="button"
+              class="tab {$selectedTab === 'security' ? 'active' : ''}"
+              on:click={() => selectedTab.set("security")}
+              aria-label="Security Results Tab"
+            >
+              Security Results
+            </button>
             </div>
 
             <div class="tab-content">
@@ -2815,6 +2874,36 @@
                   >
                     <Icon icon="mingcute:copy-line" width="18" height="18" />
                   </button>
+                </div>
+
+                {:else if $selectedTab === "security"}
+                <div class="security-results">
+                  <h3 class="text-lg font-semibold mb-2">Security Analysis</h3>
+                  {#if $securityScanResult}
+                    <div class="mb-4">
+                      <p><strong>Overall Score:</strong> {$securityScanResult.overallScore}/100</p>
+                      <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mt-2">
+                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: {$securityScanResult.overallScore}%"></div>
+                      </div>
+                    </div>
+                    <h4 class="text-md font-semibold mb-2">Vulnerabilities:</h4>
+                    {#if $securityScanResult.vulnerabilities.length === 0}
+                      <p class="text-green-600">No vulnerabilities detected.</p>
+                    {:else}
+                      <ul class="list-disc pl-5">
+                        {#each $securityScanResult.vulnerabilities as vulnerability}
+                          <li class="mb-2">
+                            <span class="font-semibold">{vulnerability.type}</span> - 
+                            <span class="{getSeverityClass(vulnerability.severity)}">{vulnerability.severity}</span>
+                            <p class="text-sm">{vulnerability.description}</p>
+                            <p class="text-sm text-gray-600">Recommendation: {vulnerability.recommendation}</p>
+                          </li>
+                        {/each}
+                      </ul>
+                    {/if}
+                  {:else}
+                    <p>No security scan results available. Run a security scan to see results.</p>
+                  {/if}
                 </div>
               {/if}
             </div>
@@ -3483,6 +3572,7 @@
                   >
                     Curl Command
                   </button>
+              
                 </div>
 
                 <div class="tab-content">
