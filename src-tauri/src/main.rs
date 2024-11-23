@@ -109,7 +109,8 @@ async fn send_request(
         "OPTIONS" => client.request(reqwest::Method::OPTIONS, &url),
         "HEAD" => client.head(&url),
         _ => return Err("Unsupported method".to_string()),
-    }.timeout(timeout_duration);
+    }
+    .timeout(timeout_duration);
 
     // Set the Content-Type header and body according to the content type
     if let Some(content_type) = request_data.content_type {
@@ -200,6 +201,9 @@ async fn cancel_request(state: State<'_, AppState>) -> Result<(), String> {
 #[tokio::main]
 async fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_http::init())
+        .plugin(tauri_plugin_fs::init())
         .manage(AppState {
             client: Client::new(),
             cancel_sender: Arc::new(Mutex::new(None)),

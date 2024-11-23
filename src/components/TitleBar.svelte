@@ -1,8 +1,9 @@
 <script lang="ts">
-    import { appWindow } from "@tauri-apps/api/window";
+    import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
     import logo from "../assets/32x32.png";
     import Icon from "@iconify/svelte";
     import { currentLayout } from '../stores/layoutStore';
+const appWindow = getCurrentWebviewWindow()
 
     async function minimize() {
         await appWindow.minimize();

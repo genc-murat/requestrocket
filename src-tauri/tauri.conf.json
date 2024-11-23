@@ -2,81 +2,53 @@
   "build": {
     "beforeBuildCommand": "npm run build",
     "beforeDevCommand": "npm run dev",
-    "devPath": "http://localhost:5173",
-    "distDir": "../build",
-    "withGlobalTauri":false
+    "frontendDist": "../build",
+    "devUrl": "http://localhost:5173"
   },
-  "package": {
-    "productName": "requestrocket",
-    "version": "0.5.1"
-  },
-  "tauri": {
-    "allowlist": {
-      "fs": {
-        "all": true
+  "bundle": {
+    "active": true,
+    "category": "DeveloperTool",
+    "copyright": "",
+    "targets": "all",
+    "externalBin": [],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "embedBootstrapper"
       },
-      "dialog": {
-        "all": true
-      },
-      "http": {
-        "all": true,
-        "request": true,
-        "scope": ["https://**", "http://**"]
-      },
-      "window": {
-        "all": false,
-        "close": true,
-        "hide": true,
-        "show": true,
-        "maximize": true,
-        "minimize": true,
-        "unmaximize": true,
-        "unminimize": true,
-        "startDragging": true
-      }
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": ""
     },
-    "bundle": {
-      "active": true,
-      "category": "DeveloperTool",
-      "copyright": "",
+    "longDescription": "",
+    "macOS": {
+      "entitlements": null,
+      "exceptionDomain": "",
+      "frameworks": [],
+      "providerShortName": null,
+      "signingIdentity": null
+    },
+    "resources": [],
+    "shortDescription": "",
+    "linux": {
       "deb": {
         "depends": []
-      },
-      "externalBin": [],
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "identifier": "com.gencmurat.requestrocket",
-      "longDescription": "",
-      "macOS": {
-        "entitlements": null,
-        "exceptionDomain": "",
-        "frameworks": [],
-        "providerShortName": null,
-        "signingIdentity": null
-      },
-      "resources": [],
-      "shortDescription": "",
-      "targets": "all",
-      "windows": {
-        "webviewInstallMode": {
-          "type": "embedBootstrapper"
-        },
-        "certificateThumbprint": null,
-        "digestAlgorithm": "sha256",
-        "timestampUrl": ""
       }
-    },
-    "security": {
-      "csp": null
-    },
-    "updater": {
-      "active": false
-    },
+    }
+  },
+  "productName": "requestrocket",
+  "mainBinaryName": "requestrocket",
+  "version": "0.5.1",
+  "identifier": "com.gencmurat.requestrocket",
+  "plugins": {},
+  "app": {
+    "withGlobalTauri": false,
     "windows": [
       {
         "fullscreen": false,
@@ -86,8 +58,12 @@
         "width": 1280,
         "minWidth": 1280,
         "minHeight": 800,
-        "decorations": false
+        "decorations": false,
+        "useHttpsScheme": true
       }
-    ]
+    ],
+    "security": {
+      "csp": null
+    }
   }
 }

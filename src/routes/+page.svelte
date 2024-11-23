@@ -6,15 +6,15 @@
   import "prismjs/components/prism-markup";
   import { openDB } from "idb";
   import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
-  import { invoke } from "@tauri-apps/api/tauri";
+  import { invoke } from "@tauri-apps/api/core";
 
   import Icon from "@iconify/svelte";
   import {
     writeTextFile,
     readTextFile,
-    writeBinaryFile,
-  } from "@tauri-apps/api/fs";
-  import { dialog } from "@tauri-apps/api";
+    writeFile,
+  } from "@tauri-apps/plugin-fs";
+  import {  } from "@tauri-apps/api";
   import JSONEditor from "../components/JSONEditor.svelte";
   import APIFlowDesigner from "../components/APIFlowDesigner.svelte";
   import {
@@ -108,6 +108,7 @@
   import { runSecurityScan } from "$lib/securityScan";
 
   import type { SecurityScanConfig,SecurityScanResult  } from "$lib/securityScan";
+import * as dialog from "@tauri-apps/plugin-dialog"
 
   let showHarAnalyzerModal = false;
 
@@ -364,7 +365,7 @@ function getSeverityClass(severity: Severity): string {
       });
 
       if (filePath) {
-        await writeBinaryFile(filePath, pdfBytes);
+        await writeFile(filePath, pdfBytes);
         console.log("PDF file saved successfully:", filePath);
         showStatusMessage("PDF file saved successfully.");
       }

@@ -1,4 +1,4 @@
-import { invoke } from "@tauri-apps/api/tauri";
+import { invoke } from "@tauri-apps/api/core";
 import type { ResponseData, HistoryItem, StatusHistoryItem } from "../types/api-types"; // Yolu doğru şekilde ayarlayın
 
 export async function sendRequest(requestData: any, variables: any): Promise<ResponseData> {
