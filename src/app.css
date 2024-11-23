@@ -209,7 +209,7 @@ tr:nth-child(even) {
 .url {
   word-break: break-all;
   overflow-wrap: anywhere;
-  font-size: .63rem;
+  font-size: .75rem;
 }
 
 .button {
